@@ -17,7 +17,7 @@ As of today, there is no roadmap to merge this with version 1. Version 1 has a s
 ZoneMinder-v2 base is originally developed by [Philip Coombes](https://github.com/web2wire), the original developer of ZoneMinder.
 The codebase will be maintained by Phil and [Pliable Pixels](https://github.com/pliablepixels) and other key contributors who will be added soon.
 
-ZoneMinder-v2 base library is part of solution suite being developed by [Ozone Network](http://ozone.network)
+ZoneMinder-v2 base library is part of a solution suite being developed by [Ozone Network](http://ozone.network). The full solution suite will eventually include a server framework (this code), a mobile framework for white-labelled apps and a reference solution using them.
 
 Zoneminder-v2 is dual-licensed.
 Please refer to the [LICENSING](LICENSE.md) file for details.
