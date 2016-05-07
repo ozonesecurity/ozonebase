@@ -5,7 +5,7 @@ This is the next generation of ZoneMinder. Completely re-written and more modern
 
 ## What is the goal?
 
-ZoneMinder v2 headless library is a more modern take and has been re-architected to serve as a UI-less headless library. Our vision is that this will form the base of many security solutions - developers can use this library to accelerate their own vision of security software. Oer time, we will also offer our own fully running UI enabled version running over NodeJS/Angular.
+ZoneMinder v2 headless library is a more modern take and has been re-architected to serve as a UI-less headless library. Our hope is that this will form the base of many security solutions - developers can use this library to accelerate their own vision of security software. Over time, we will also offer our own fully running UI enabled version running over NodeJS/Angular.
 
 ## Intended audience
 
