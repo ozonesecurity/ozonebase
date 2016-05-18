@@ -410,7 +410,7 @@ int Video4LinuxInput::run()
 
     Debug( 3, "Starting video stream" );
     //enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    enum v4l2_buf_type type = v4l2Data.fmt.type;
+    enum v4l2_buf_type type = (v4l2_buf_type)v4l2Data.fmt.type;
     if ( vidioctl( vidFd, VIDIOC_STREAMON, &type ) < 0 )
         Fatal( "Failed to start capture stream: %s", strerror(errno) );
     Debug( 3, "Started video stream" );
@@ -432,7 +432,7 @@ int Video4LinuxInput::run()
     {
         int captureFrame = -1;
 
-        static struct v4l2_buffer vid_buf;
+        struct v4l2_buffer vid_buf;
         memset( &vid_buf, 0, sizeof(vid_buf) );
 
         vid_buf.type = v4l2Data.fmt.type;

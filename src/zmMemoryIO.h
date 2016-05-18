@@ -21,6 +21,7 @@ protected:
         PixelFormat imageFormat;
         uint16_t    imageWidth;
         uint16_t    imageHeight;
+        FrameRate	frameRate;
         int         imageCount;
     } SharedData;
 

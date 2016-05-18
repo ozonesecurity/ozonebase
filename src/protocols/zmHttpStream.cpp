@@ -7,61 +7,16 @@
 #include "../zmFeedFrame.h"
 #include "../encoders/zmJpegEncoder.h"
 
-HttpStream::HttpStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality ) :
-    Stream( cClass(), stringtf( "%X", httpSession->session() ), connection, provider ),
+HttpStream::HttpStream( const std::string &tag, HttpSession *httpSession, Connection *connection, FeedProvider *provider ) :
+    Stream( tag, stringtf( "%X", httpSession->session() ), connection, provider ),
     Thread( identity() ),
     mHttpSession( httpSession )
 {
     Debug( 2, "New HTTP stream" );
-    std::string encoderKey = JpegEncoder::getPoolKey( provider->identity(), width, height, frameRate, quality );
-    if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
-    {
-        JpegEncoder *jpegEncoder = new JpegEncoder( provider->identity(), width, height, frameRate, quality );
-        jpegEncoder->registerProvider( *provider );
-        Encoder::poolEncoder( jpegEncoder );
-        jpegEncoder->start();
-        mEncoder = jpegEncoder;
-    }
-    registerProvider( *mEncoder );
 }
 
 HttpStream::~HttpStream()
 {
-    deregisterProvider( *mEncoder );
-}
-
-bool HttpStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
-{
-    const ByteBuffer &packet = frame->buffer();
-
-    std::string txHeaders = "--imgboundary\r\n";
-    txHeaders += "Content-Type: image/jpeg\r\n";
-    txHeaders += stringtf( "Content-Length: %zd\r\n\r\n", packet.size() );
-
-    ByteBuffer txBuffer;
-    txBuffer.reserve( packet.size()+128 );
-    txBuffer.append( txHeaders.c_str(), txHeaders.size() );
-    txBuffer.append( packet.data(), packet.size() );
-    txBuffer.append( "\r\n", 2 );
-
-    for ( Select::CommsList::iterator iter = writeable.begin(); iter != writeable.end(); iter++ )
-    {
-        if ( TcpInetSocket *socket = dynamic_cast<TcpInetSocket *>(*iter) )
-        {
-            if ( socket == mConnection->socket() )
-            {
-                int nBytes = socket->write( txBuffer.data(), txBuffer.size() );
-                Debug( 4, "Wrote %d bytes on sd %d", nBytes, socket->getWriteDesc() );
-                if ( nBytes != txBuffer.size() )
-                {
-                    Error( "Incomplete write, %d bytes instead of %zd", nBytes, packet.size() );
-                    mStop = true;
-                    return( false );
-                }
-            }
-        }
-    }
-    return( true );
 }
 
 int HttpStream::run()
@@ -98,4 +53,97 @@ int HttpStream::run()
     }
 
     return( 0 );
+}
+
+HttpImageStream::HttpImageStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality ) :
+    HttpStream( cClass(), httpSession, connection, provider )
+{
+    Debug( 2, "New HTTP image stream" );
+    std::string encoderKey = JpegEncoder::getPoolKey( provider->identity(), width, height, frameRate, quality );
+    if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
+    {
+        JpegEncoder *jpegEncoder = new JpegEncoder( provider->identity(), width, height, frameRate, quality );
+        jpegEncoder->registerProvider( *provider );
+        Encoder::poolEncoder( jpegEncoder );
+        jpegEncoder->start();
+        mEncoder = jpegEncoder;
+    }
+    registerProvider( *mEncoder );
+}
+
+HttpImageStream::~HttpImageStream()
+{
+    deregisterProvider( *mEncoder );
+}
+
+bool HttpImageStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
+{
+    const ByteBuffer &packet = frame->buffer();
+
+    std::string txHeaders = "--imgboundary\r\n";
+    txHeaders += "Content-Type: image/jpeg\r\n";
+    txHeaders += stringtf( "Content-Length: %zd\r\n\r\n", packet.size() );
+
+    ByteBuffer txBuffer;
+    txBuffer.reserve( packet.size()+128 );
+    txBuffer.append( txHeaders.c_str(), txHeaders.size() );
+    txBuffer.append( packet.data(), packet.size() );
+    txBuffer.append( "\r\n", 2 );
+
+    for ( Select::CommsList::iterator iter = writeable.begin(); iter != writeable.end(); iter++ )
+    {
+        if ( TcpInetSocket *socket = dynamic_cast<TcpInetSocket *>(*iter) )
+        {
+            if ( socket == mConnection->socket() )
+            {
+                int nBytes = socket->write( txBuffer.data(), txBuffer.size() );
+                const FeedFrame *sourceFrame = frame->sourceFrame();
+                Debug( 4, "Wrote %d bytes on sd %d, frame %lld<-%lld", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
+                if ( nBytes != txBuffer.size() )
+                {
+                    Error( "Incomplete write, %d bytes instead of %zd", nBytes, packet.size() );
+                    mStop = true;
+                    return( false );
+                }
+            }
+        }
+    }
+    return( true );
+}
+
+HttpDataStream::HttpDataStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider ) :
+    HttpStream( cClass(), httpSession, connection, provider )
+{
+    Debug( 2, "New HTTP data stream" );
+    registerProvider( *provider );
+}
+
+HttpDataStream::~HttpDataStream()
+{
+    deregisterProvider( *mProvider );
+}
+
+bool HttpDataStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
+{
+    const ByteBuffer &packet = frame->buffer();
+
+    for ( Select::CommsList::iterator iter = writeable.begin(); iter != writeable.end(); iter++ )
+    {
+        if ( TcpInetSocket *socket = dynamic_cast<TcpInetSocket *>(*iter) )
+        {
+            if ( socket == mConnection->socket() )
+            {
+                int nBytes = socket->write( packet.data(), packet.size() );
+                const FeedFrame *sourceFrame = frame->sourceFrame();
+                Debug( 4, "Wrote %d bytes on sd %d, frame %lld<-%lld", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
+                if ( nBytes != packet.size() )
+                {
+                    Error( "Incomplete write, %d bytes instead of %zd", nBytes, packet.size() );
+                    mStop = true;
+                    return( false );
+                }
+            }
+        }
+    }
+    return( true );
 }

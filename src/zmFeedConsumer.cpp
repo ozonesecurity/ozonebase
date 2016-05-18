@@ -172,6 +172,27 @@ bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
     return( result );
 }
 
+DataConsumer::DataConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
+    FeedConsumer( providerLimit )
+{
+     setIdentity( cl4ss, name );
+}
+
+DataConsumer::DataConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
+    FeedConsumer( provider, link )
+{
+     setIdentity( cl4ss, provider.name() );
+}
+
+DataConsumer::DataConsumer()
+{
+}
+
+DataProvider *DataConsumer::dataProvider() const
+{
+    return( mProviders.empty() ? NULL : dynamic_cast<DataProvider *>(mProviders.begin()->first) );
+}
+
 VideoConsumer::VideoConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
@@ -186,11 +207,6 @@ VideoConsumer::VideoConsumer( const std::string &cl4ss, FeedProvider &provider, 
 
 VideoConsumer::VideoConsumer()
 {
-}
-
-bool VideoConsumer::registerProvider( FeedProvider &provider, const FeedLink &link  )
-{
-    return( FeedConsumer::registerProvider( provider, link ) );
 }
 
 VideoProvider *VideoConsumer::videoProvider() const
@@ -214,12 +230,23 @@ AudioConsumer::AudioConsumer()
 {
 }
 
-bool AudioConsumer::registerProvider( FeedProvider &provider, const FeedLink &link  )
-{
-    return( FeedConsumer::registerProvider( provider, link ) );
-}
-
 AudioProvider *AudioConsumer::audioProvider() const
 {
     return( mProviders.empty() ? NULL : dynamic_cast<AudioProvider *>(mProviders.begin()->first) );
+}
+
+GeneralConsumer::GeneralConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
+    FeedConsumer( providerLimit )
+{
+     setIdentity( cl4ss, name );
+}
+
+GeneralConsumer::GeneralConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
+    FeedConsumer( provider, link )
+{
+     setIdentity( cl4ss, provider.name() );
+}
+
+GeneralConsumer::GeneralConsumer()
+{
 }

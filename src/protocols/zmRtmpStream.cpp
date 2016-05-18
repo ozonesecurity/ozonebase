@@ -6,8 +6,9 @@
 #include "zmRtmpSession.h"
 #include "zmRtmpRequest.h"
 #include "zmRtmpConnection.h"
-#include "../encoders/zmH264Encoder.h"
+#include "../encoders/zmH264Relay.h"
 #include "../zmFeedFrame.h"
+#include "../zmFfmpeg.h"
 
 RtmpStream::RtmpStream( RtmpSession *rtmpSession, RtmpConnection *connection, int id, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality ) :
     Stream( "RtmpStream", stringtf( "%X", rtmpSession->session() ), connection, provider ),
@@ -15,22 +16,22 @@ RtmpStream::RtmpStream( RtmpSession *rtmpSession, RtmpConnection *connection, in
     mRtmpSession( rtmpSession ),
     mRtmpConnection( connection ),
     mStreamId( id ),
-    mH264Encoder( NULL ),
+    mH264Relay( NULL ),
     mFirstFrame( true ),
     mInitialFrames( 40 )
 {
     Debug( 2, "New RTMP stream, id %d, identity %s", mStreamId, mProvider->cidentity() );
 
-    std::string encoderKey = H264Encoder::getPoolKey( mProvider->identity(), width, height, frameRate, bitRate, quality );
+    std::string encoderKey = H264Relay::getPoolKey( mProvider->identity(), width, height, frameRate, bitRate, quality );
     if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
     {
-        mEncoder = mH264Encoder = new H264Encoder( mProvider->identity(), width, height, frameRate, bitRate, quality );
+        mEncoder = mH264Relay = new H264Relay( mProvider->identity(), width, height, frameRate, bitRate, quality );
         mEncoder->registerProvider( *mProvider );
-        Encoder::poolEncoder( mH264Encoder );
-        mH264Encoder->start();
+        Encoder::poolEncoder( mH264Relay );
+        mH264Relay->start();
     }
     else
-        mH264Encoder = dynamic_cast<H264Encoder *>(mEncoder);
+        mH264Relay = dynamic_cast<H264Relay *>(mEncoder);
     registerProvider( *mEncoder );
 }
 
@@ -110,8 +111,10 @@ bool RtmpStream::sendFrame( FramePtr frame )
 
     const unsigned char *startPos = frame->buffer().head();
 
+    Hexdump( 2, frame->buffer().data(), frame->buffer().size()>256?256:frame->buffer().size() );
+
     //FIXME - Make this member data
-    uint32_t timestampDelta = (1000*mH264Encoder->frameRate().den)/mH264Encoder->frameRate().num;
+    uint32_t timestampDelta = (1000*mH264Relay->frameRate().den)/mH264Relay->frameRate().num;
     //uint32_t timestampDelta = 50;
     if ( mFirstFrame )
     {
@@ -122,12 +125,12 @@ bool RtmpStream::sendFrame( FramePtr frame )
         payload.append( 0x00 );
         payload.append( 0x00 );
         payload.append( 0x01 );
-        payload.append( mH264Encoder->avcProfile() );
+        payload.append( mH264Relay->avcProfile() );
         payload.append( 0x00 );
-        payload.append( mH264Encoder->avcLevel() ); // AVC Level
+        payload.append( mH264Relay->avcLevel() ); // AVC Level
         payload.append( 0x03 );
 
-        startPos = H264Encoder::findStartCode( startPos, frame->buffer().tail() );
+        startPos = h264StartCode( startPos, frame->buffer().tail() );
                 //bool firstPacketFrame = true;
         bool cuedIn = false;
         while ( startPos < frame->buffer().tail() )
@@ -135,7 +138,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
             while( !*(startPos++) )
                 ;
             Debug( 4, "Got startpos at %zd", startPos-frame->buffer().head() );
-            const unsigned char *nextStartPos = H264Encoder::findStartCode( startPos, frame->buffer().tail() );
+            const unsigned char *nextStartPos = h264StartCode( startPos, frame->buffer().tail() );
 
             int frameSize = nextStartPos-startPos;
 
@@ -144,7 +147,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
             Debug( 1, "Type %d, NRI %d (%02x), %d bytes", type, nri, startPos[0], frameSize );
 
             //if ( type != 7 && type != 8 && type != 6 )
-            if ( type == 7 || type == 8 )
+            if ( type == NAL_SPS || type == NAL_PPS )
             {
                 Debug( 4, "Cued in" );
                 cuedIn = true;
@@ -173,7 +176,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
     }
 
     if ( startPos == frame->buffer().head() )
-        startPos = H264Encoder::findStartCode( startPos, frame->buffer().tail() );
+        startPos = h264StartCode( startPos, frame->buffer().tail() );
             //bool firstPacketFrame = true;
     while ( startPos < frame->buffer().tail() )
     {
@@ -181,7 +184,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
             while( !*(startPos++) )
                 ;
         Debug( 4, "Got startpos at %zd", startPos-frame->buffer().head() );
-        const unsigned char *nextStartPos = H264Encoder::findStartCode( startPos, frame->buffer().tail() );
+        const unsigned char *nextStartPos = h264StartCode( startPos, frame->buffer().tail() );
 
         int frameSize = nextStartPos-startPos;
 
@@ -284,14 +287,14 @@ int RtmpStream::run()
         strftime( timeString, sizeof(timeString), "%a %b %d %H:%M:%S %Y", localtime( &now ) );
         amfData.addRecord( "creationDate", Amf0Record( timeString ) );
         amfData.addRecord( "videoDevice", Amf0Record( "USIOne Camera" ) );
-        amfData.addRecord( "frameRate", Amf0Record( (int)mH264Encoder->frameRate() ) );
-        amfData.addRecord( "width", Amf0Record( mH264Encoder->width() ) );
-        amfData.addRecord( "height", Amf0Record( mH264Encoder->height() ) );
+        amfData.addRecord( "frameRate", Amf0Record( (int)mH264Relay->frameRate() ) );
+        amfData.addRecord( "width", Amf0Record( mH264Relay->width() ) );
+        amfData.addRecord( "height", Amf0Record( mH264Relay->height() ) );
         amfData.addRecord( "videocodecid", Amf0Record( "avc1" ) );
-        amfData.addRecord( "videodatarate", Amf0Record( (int)mH264Encoder->bitRate() ) );
-        amfData.addRecord( "avclevel", Amf0Record( mH264Encoder->avcLevel() ) );
-        amfData.addRecord( "avcprofile", Amf0Record( mH264Encoder->avcProfile() ) );
-        amfData.addRecord( "videokeyframe_frequency", Amf0Record( int(mH264Encoder->gopSize()/mH264Encoder->frameRate().toInt() ) ) );
+        amfData.addRecord( "videodatarate", Amf0Record( (int)mH264Relay->bitRate() ) );
+        amfData.addRecord( "avclevel", Amf0Record( mH264Relay->avcLevel() ) );
+        amfData.addRecord( "avcprofile", Amf0Record( mH264Relay->avcProfile() ) );
+        amfData.addRecord( "videokeyframe_frequency", Amf0Record( int(mH264Relay->gopSize()/mH264Relay->frameRate().toInt() ) ) );
 
         ByteBuffer payload;
         amfNotify.encode( payload );

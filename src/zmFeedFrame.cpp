@@ -133,3 +133,42 @@ DataFrame::DataFrame( const DataFrame &frame ) :
 }
 */
 
+#if 0
+DataFrame::DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+    FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp, buffer ),
+    mDataProvider( provider )
+{
+}
+
+DataFrame::DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+    FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp, buffer, size ),
+    mDataProvider( provider )
+{
+}
+
+DataFrame::DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+    FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer ),
+    mDataProvider( provider )
+{
+}
+
+DataFrame::DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+    FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer, size ),
+    mDataProvider( provider )
+{
+}
+
+DataFrame::DataFrame( DataProvider *provider, FramePtr parent ) :
+    FeedFrame( provider, parent ),
+    mDataProvider( provider )
+{
+}
+
+/*
+DataFrame::DataFrame( const DataFrame &frame ) :
+    FeedFrame( frame ),
+    mDataProvider( frame.mDataProvider ),
+{
+}
+*/
+#endif

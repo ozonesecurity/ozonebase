@@ -20,6 +20,7 @@ protected:
     PixelFormat mImageFormat;
     uint16_t    mImageWidth;
     uint16_t    mImageHeight;
+    FrameRate	mFrameRate;
 
 protected:
     int run();
@@ -33,6 +34,7 @@ public:
     PixelFormat pixelFormat() const { return( mImageFormat ); }
     uint16_t width() const { return( mImageWidth ); }
     uint16_t height() const { return( mImageHeight ); }
+    FrameRate frameRate() const { return( mFrameRate ); }
 };
 
 #endif // ZM_MEMORY_INPUT_H

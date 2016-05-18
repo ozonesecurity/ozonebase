@@ -8,6 +8,9 @@ lib_LIBRARIES = \
     libprocessors.a
 
 libprocessors_a_SOURCES = \
+	zmDelayBuffer.cpp \
+	zmFilterSwapUV.cpp \
+	zmImageConvert.cpp \
 	zmImageTimestamper.cpp \
 	zmMotionDetector.cpp \
 	zmQuadVideo.cpp \
@@ -16,6 +19,9 @@ libprocessors_a_SOURCES = \
 	zmVideoFilter.cpp
 
 pkginclude_HEADERS = \
+	zmDelayBuffer.h \
+	zmFilterSwapUV.h \
+	zmImageConvert.h \
 	zmImageTimestamper.h \
 	zmMotionDetector.h \
 	zmQuadVideo.h \

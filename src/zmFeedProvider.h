@@ -131,6 +131,19 @@ public:
 };
 
 ///
+/// Specialised abstract base class for providers of DataFrame objects
+///
+class DataProvider : virtual public FeedProvider
+{
+protected:
+    DataProvider( const std::string &tag, const std::string &id );
+    DataProvider() { }
+    ~DataProvider() { }
+
+public:
+};
+
+///
 /// Specialised abstract base class for providers of VideoFrame objects
 ///
 class VideoProvider : virtual public FeedProvider
@@ -176,6 +189,19 @@ public:
 protected:
     AudioVideoProvider( const std::string &tag, const std::string &id );
     ~AudioVideoProvider() { }
+};
+
+///
+/// General abstract base class for providers of all frame objects
+///
+class GeneralProvider : virtual public FeedProvider
+{
+protected:
+    GeneralProvider( const std::string &tag, const std::string &id );
+    GeneralProvider() { }
+    ~GeneralProvider() { }
+
+public:
 };
 
 #endif // ZM_FEED_PROVIDER_H

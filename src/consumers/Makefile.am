@@ -12,11 +12,13 @@ libconsumers_a_SOURCES = \
 	zmLocalFileDump.cpp \
 	zmLocalFileOutput.cpp \
 	zmMemoryOutput.cpp \
-	zmMovieFileOutput.cpp
+	zmMovieFileOutput.cpp \
+	zmMp4FileOutput.cpp
 
 pkginclude_HEADERS = \
 	zmEventRecorder.h \
 	zmLocalFileDump.h \
 	zmLocalFileOutput.h \
 	zmMemoryOutput.h \
-	zmMovieFileOutput.h
+	zmMovieFileOutput.h \
+	zmMp4FileOutput.h

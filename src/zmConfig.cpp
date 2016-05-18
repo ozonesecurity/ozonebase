@@ -251,7 +251,7 @@ void Config::Load()
 void Config::Assign()
 {
 ZM_CFG_ASSIGN_LIST
-
+#if 0
     if ( extra_debug )
     {
         static char extra_level_env[PATH_MAX] = "";
@@ -271,6 +271,7 @@ ZM_CFG_ASSIGN_LIST
 
         dbgReinit( extra_debug_target );
     }
+#endif
 }
 
 const ConfigItem &Config::Item( int id )

@@ -3,9 +3,11 @@
 
 #include "../zmAlarmFrame.h"
 #include "../zmZone.h"
+
 #include <sys/time.h>
 
 bool writeImages = false;
+std::string writeLocation = "/tmp/debug";
 
 void MotionDetector::construct()
 {
@@ -44,10 +46,10 @@ MotionDetector::MotionDetector( const std::string &name ) :
 {
     construct();
 
-    mCompImageSlave = new SlaveVideo( "compImage" );
-    mRefImageSlave = new SlaveVideo( "refImage" );
-    mDeltaImageSlave = new SlaveVideo( "deltaImage" );
-    mVarImageSlave = new SlaveVideo( "varImage" );
+    mCompImageSlave = new SlaveVideo( name+"-compImage" );
+    mRefImageSlave = new SlaveVideo( name+"-refImage" );
+    mDeltaImageSlave = new SlaveVideo( name+"-deltaImage" );
+    mVarImageSlave = new SlaveVideo( name+"-varImage" );
 }
 
 MotionDetector::~MotionDetector()
@@ -107,10 +109,10 @@ int MotionDetector::run()
                     if ( mRefImage.empty() )
                     {
                         if ( writeImages )
-                            image.writeJpeg( "/transfer/image1.jpg", 100 );
+                            image.writeJpeg( stringtf( "%s/image-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                         mRefImage.assign( Image( Image::FMT_RGB48, image ) );
                         if ( writeImages )
-                            mRefImage.writeJpeg( "/transfer/image1ref.jpg", 100 );
+                            mRefImage.writeJpeg( stringtf( "%s/ref-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                     }
 
                     //struct timeval *timestamp = new struct timeval;
@@ -172,7 +174,7 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
         StringSetMap noteSetMap;
 
         ZoneSet detectedZones;
-        uint32_t long motionScore = detectMotion( *compImage, detectedZones );
+        uint64_t motionScore = detectMotion( *compImage, detectedZones );
         if ( motionScore )
         {
             Info( "Score: %ld", motionScore );
@@ -263,7 +265,7 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
 uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZones )
 {
     bool alarm = false;
-    uint32_t long score = 0;
+    uint64_t score = 0;
 
     if ( mZones.size() <= 0 ) return( alarm );
 
@@ -272,11 +274,11 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mCompImageSlave->relayImage( compImage );
         //compImage.writeJpeg( stringtf( "%s/diag-c.jpg", config.dir_events ) );
         if ( writeImages )
-            compImage.writeJpeg( stringtf( "%s/debug/diag-%04lld-c.jpg", config.dir_events, mFrameCount-mReadyCount ) );
+            compImage.writeJpeg( stringtf( "%s/comp-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
         mRefImageSlave->relayImage( mRefImage );
         //mRefImage.writeJpeg( stringtf( "%s/diag-r.jpg", config.dir_events ) );
         if ( writeImages )
-            mRefImage.writeJpeg( stringtf( "%s/debug/diag-%04lld-r.jpg", config.dir_events, mFrameCount-mReadyCount ) );
+            mRefImage.writeJpeg( stringtf( "%s/ref2-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
 
     // Get the difference between the captured image and the reference image
@@ -296,7 +298,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mDeltaImageSlave->relayImage( *deltaImage );
         //deltaImage->writeJpeg( stringtf( "%s/diag-d.jpg", config.dir_events ), 100 );
         if ( writeImages )
-            deltaImage->writeJpeg( stringtf( "%s/debug/diag-%04lld-d.jpg", config.dir_events, mFrameCount-mReadyCount ), 100 );
+            deltaImage->writeJpeg( stringtf( "%s/delta-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     // Pre-populate the variance buffer with noise
     if ( mVarBuffer.empty() )
@@ -403,7 +405,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         {
             uint16_t delta = (((uint16_t)*pDelta)<<8)+*(pDelta+1);
             //uint32_t long deltaSq = delta*delta*2;
-            uint32_t long deltaSq = delta*delta;
+            uint64_t deltaSq = delta*delta;
             *pBuf = *pBuf - (*pBuf >> varBufShift) + (deltaSq >> varDeltaShift);
             // Add a noise threshold
             if ( *pBuf < mNoiseLevelSq )
@@ -447,7 +449,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mVarImageSlave->relayImage( *mVarImage );
         //mVarImage->writeJpeg( stringtf( "%s/diag-v.jpg", config.dir_events ), 100 );
         if ( writeImages )
-            mVarImage->writeJpeg( stringtf( "%s/debug/diag-%04lld-v.jpg", config.dir_events, mFrameCount-mReadyCount ), 100 );
+            mVarImage->writeJpeg( stringtf( "%s/var-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     delete deltaImage;
     //mRefImage.blend( compImage, mRefBlend );

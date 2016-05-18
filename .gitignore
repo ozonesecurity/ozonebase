@@ -1,0 +1,6 @@
+*.o
+*.a
+.*.sw?
+.deps
+Makefile
+Makefile.in

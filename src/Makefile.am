@@ -17,7 +17,30 @@ SUBDIRS = \
 bin_PROGRAMS = \
 	zmx
 
-zmx_SOURCES = zmx.cpp zmFeedBase.cpp zmFeedFrame.cpp zmFeedProvider.cpp zmFeedConsumer.cpp zmMotionData.cpp zmAlarmFrame.cpp zmMotionFrame.cpp zmMemoryIO.cpp zmConfig.cpp zmDb.cpp zmRegion.cpp zmZone.cpp zmEncoder.cpp zmStream.cpp zmListener.cpp zmSignal.cpp zmController.cpp zmConnection.cpp zmFfmpeg.cpp
+zmx_SOURCES = \
+    zmx.cpp \
+    zmApp.cpp \
+    zmFeedBase.cpp \
+    zmFeedFrame.cpp \
+    zmFeedProvider.cpp \
+    zmFeedConsumer.cpp \
+    zmMotionData.cpp \
+    zmAlarmFrame.cpp \
+    zmMotionFrame.cpp \
+    zmMemoryIO.cpp \
+    zmMemoryIOV1.cpp \
+    zmConfig.cpp \
+    zmDb.cpp \
+    zmRegion.cpp \
+    zmZone.cpp \
+    zmEncoder.cpp \
+    zmStream.cpp \
+    zmListener.cpp \
+    zmSignal.cpp \
+    zmController.cpp \
+    zmConnection.cpp \
+    zmFfmpeg.cpp
+
 zmx_DEPENDENCIES = */*.a
 zmx_LDADD = \
 	-L./protocols -lprotocols \

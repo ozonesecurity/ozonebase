@@ -1,4 +1,5 @@
 #include "zm.h"
+#include "zmApp.h"
 #include "zmFeedProvider.h"
 #include "zmFeedConsumer.h"
 #include "providers/zmLocalVideoInput.h"
@@ -6,20 +7,23 @@
 #include "providers/zmRemoteVideoInput.h"
 #include "providers/zmNetworkAVInput.h"
 #include "providers/zmMemoryInput.h"
+#include "providers/zmMemoryInputV1.h"
 #include "providers/zmVideo4LinuxInput.h"
-#include "providers/zmYuanInput.h"
+#include "providers/zmRawH264Input.h"
 #include "processors/zmImageTimestamper.h"
 #include "processors/zmSignalChecker.h"
 #include "processors/zmMotionDetector.h"
 #include "processors/zmVideoFilter.h"
 #include "processors/zmRateLimiter.h"
 #include "processors/zmQuadVideo.h"
+#include "processors/zmFilterSwapUV.h"
 #include "encoders/zmJpegEncoder.h"
 #include "consumers/zmLocalFileOutput.h"
 #include "consumers/zmLocalFileDump.h"
 #include "consumers/zmMemoryOutput.h"
 #include "consumers/zmEventRecorder.h"
 #include "consumers/zmMovieFileOutput.h"
+//#include "consumers/zmMp4FileOutput.h"
 #include "zmListener.h"
 #include "protocols/zmHttpController.h"
 #include "protocols/zmRtspController.h"
@@ -28,295 +32,97 @@
 
 #include "libgen/libgenDebug.h"
 
-VideoProvider *gInput = 0;
-
-int main( int argc, const char *argv[] )
+//
+// Capture from local V4L2 device and write to ZM V2 compatible shared memory
+//
+void example1()
 {
-    debugInitialise( "zmx", "", 5 );
+    Application app;
 
-    Info( "Starting" );
+    LocalVideoInput input( "input1", "/dev/video0" );
+    app.addThread( &input );
 
-    srand( time( NULL ) );
-
-    zmSetDefaultTermHandler();
-
-    //setDefaultDieHandler();
-
-    ffmpegInit();
-
-    typedef std::deque<Thread *> ThreadList;
-
-    ThreadList threads;
-
-#if 0
-    //LocalVideoInput input( "/dev/video2" );
-    //RemoteVideoInput input( "http://axis210.home/axis-cgi/mjpg/video.cgi?resolution=320x240", "mjpeg" );
-    RemoteVideoInput input( "rtsp://test:test123@axis207.home/mpeg4/media.amp" );
-    MemoryOutput memoryOutput( "/dev/shm", 100 );
-
+    MemoryOutput memoryOutput( input.cname(), "/dev/shm", 10 );
     memoryOutput.registerProvider( input );
+    app.addThread( &memoryOutput );
 
-    input.start();
-    memoryOutput.start();
+    app.run();
+}
 
-    // Do stuff
-    while( true )
-        sleep( 1 );
-  
-    memoryOutput.join();
-    input.join();
-#endif
+//
+// Fetch frames from shared mempory and run motion detection
+//
+void example2()
+{
+    Application app;
 
-#if 0
-    MemoryInput memoryInput( "/dev/shm", 100 );
-    LocalFileOutput fileOutput( "/transfer" );
+    const int maxMonitors = 1;
+    for ( int monitor = 1; monitor <= maxMonitors; monitor++ )
+    {
+        char idString[32] = "";
 
-    fileOutput.registerProvider( memoryInput );
+        // Get the individual images from shared memory
+        sprintf( idString, "imageInput%d", monitor );
+        MemoryInput *imageInput = new MemoryInput( idString, "/dev/shm", monitor );
+        app.addThread( imageInput );
 
-    memoryInput.start();
-    fileOutput.start();
+        // Run motion detection on the images
+        sprintf( idString, "detector%d", monitor );
+        MotionDetector *detector = new MotionDetector( idString );
+        detector->registerProvider( *imageInput );
+        app.addThread( detector );
 
-    // Do stuff
-    while( true )
-        sleep( 1 );
-  
-    fileOutput.join();
-    memoryInput.join();
-#endif
+        // Frame based event recorder, only writes images when alarmed
+        sprintf( idString, "recorder%d", monitor );
+        EventRecorder *recorder = new EventRecorder( idString, "/tmp" );
+        recorder->registerProvider( *detector );
+        app.addThread( recorder );
 
-#if 0
-    //LocalVideoInput input( "/dev/video2" );
-    //RemoteVideoInput input( "http://axis210.home/axis-cgi/mjpg/video.cgi?resolution=320x240", "mjpeg" );
-    RemoteVideoInput input( "rtsp://test:test123@axis207.home/mpeg4/media.amp" );
-    //RemoteVideoInput input( "http://test:test123@axis207.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
+        // File output
+        sprintf( idString, "output%d", monitor );
+        LocalFileOutput *output = new LocalFileOutput( idString, "/tmp" );
+        output->registerProvider( *imageInput );
+        app.addThread( output );
+    }
 
-    SignalChecker signalChecker;
-    MotionDetector motionDetector;
-    //LocalFileOutput fileOutput( stringtf( "/transfer/zmx-%d", getpid() ) );
-    LocalFileOutput fileOutput( "/transfer/zmx" );
-    EventRecorder eventRecorder( "/transfer/zmx" );
-    MemoryOutput memoryOutput( "/dev/shm", 100 );
+    app.run();
+}
 
-    signalChecker.registerProvider( input );
-    fileOutput.registerProvider( signalChecker, SignalChecker::signalInvalid );
-    memoryOutput.registerProvider( signalChecker, SignalChecker::signalValid );
-    motionDetector.registerProvider( signalChecker, SignalChecker::signalValid );
-    eventRecorder.registerProvider( motionDetector );
-    LocalFileOutput fileOutput( "/transfer/zmx" );
-    fileOutput.registerProvider( motionDetector, MotionDetector::inAlarm );
-    fileOutput.registerProvider( motionDetector, MotionDetector::inAlarm );
-    //fileOutput.registerProvider( input );
+//
+// Load images from network video, timestamp image, write to MP4 file
+//
+void example3()
+{
+    Application app;
 
-    srand( time( NULL ) );
-
-    input.start();
-    signalChecker.start();
-    motionDetector.start();
-    fileOutput.start();
-    eventRecorder.start();
-    memoryOutput.start();
-
-    // Do stuff
-    while( !gZmTerminate )
-        sleep( 1 );
-  
-    memoryOutput.stop();
-    eventRecorder.stop();
-    fileOutput.stop();
-    motionDetector.stop();
-    signalChecker.stop();
-    input.stop();
-
-    memoryOutput.join();
-    eventRecorder.join();
-    fileOutput.join();
-    motionDetector.join();
-    signalChecker.join();
-    input.join();
-#endif
-
-#if 0
     //RemoteVideoInput input( "rtsp://test:test123@axis207.home/mpeg4/media.amp" );
-    //RemoteVideoInput input( "rtsp://axisp3301.home/mpeg4/media.amp" );
-    //RemoteVideoInput input( "http://axisp3301.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
-    //NetworkAVInput input( "rtsp://test:test123@axis207.home/mpeg4/media.amp" );
+    NetworkAVInput input( "input1", "rtsp://test:test@webcam.com/mpeg4/media.amp" );
+    app.addThread( &input );
 
-    LocalVideoInput video0( "video0", "/dev/video0" );
-    //threads.push_back( &video0 );
-    Video4LinuxInput video2( "video2", "/dev/video2", V4L2_STD_PAL, V4L2_PIX_FMT_YUV420, 640, 480 );
-    //threads.push_back( &video2 );
+    ImageTimestamper timestamper( input.cname() );
+    app.addThread( &timestamper );
 
-    RemoteVideoInput axis207( "axis207", "http://test:test123@axis207.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
-    threads.push_back( &axis207 );
-    RemoteVideoInput axis210( "axis210", "http://axis210.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
-    threads.push_back( &axis210 );
-    NetworkAVInput p3301( "p3301", "rtsp://axisp3301.home/axis-media/media.amp" );
-    //threads.push_back( &p3301 );
-    NetworkAVInput axis206m( "axis206m", "http://axis206m.home/axis-cgi/mjpg/video.cgi?resolution=352x288&req_fps=10", "mjpeg" );
-    threads.push_back( &axis206m );
-    NetworkAVInput acti4200( "acti4200", "rtsp://admin:123456@acti4200.home:7070" );
-    //threads.push_back( &acti4200 );
-    NetworkAVInput acti7300( "acti7300", "rtsp://Admin:123456@acti7300.home:7070" );
-    //threads.push_back( &acti7300 );
-
-    ImageTimestamper imageTimestamper1( axis207.cname() );
-    imageTimestamper1.registerProvider( axis207 );
-    threads.push_back( &imageTimestamper1 );
-    ImageTimestamper imageTimestamper2( p3301, p3301.videoFramesOnly );
-    threads.push_back( &imageTimestamper2 );
-    ImageTimestamper imageTimestamper3( axis210 );
-    threads.push_back( &imageTimestamper3 );
-
-    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-    quadVideo.registerProvider( axis207 );
-    //quadVideo.registerProvider( video0 );
-    quadVideo.registerProvider( axis210 );
-    quadVideo.registerProvider( axis206m );
-    //threads.push_back( &quadVideo );
-
-    //PolledRateLimiter rateLimiter( 1.0, imageTimestamper2 );
-    VideoParms videoParms;
+    VideoParms videoParms( 640, 480 );
     AudioParms audioParms;
-    MovieFileOutput movieOutput( "movie", "/tmp", "mp4", 300, videoParms, audioParms );
-    movieOutput.registerProvider( axis206m );
-    threads.push_back( &movieOutput );
+    MovieFileOutput output( input.cname(), "/tmp", "mp4", 300, videoParms, audioParms );
+    output.registerProvider( timestamper );
+    app.addThread( &output );
 
-    //QueuedVideoFilter videoFilter( p3301 );
+    app.run();
+}
 
-    //Listener listener( "127.0.0.1" );
-    Listener listener;
-    threads.push_back( &listener );
+//
+// Read video file and stream over Http and RTSP
+//
+void example4()
+{
+    Application app;
 
-    HttpController httpController( "p8080", 8080 );
-    //RtspController rtspController( "p8554", 8554, RtspController::PortRange( 58000, 58998 ) );
-    RtmpController rtmpController( "p1935", 1935 );
-
-    httpController.addStream( "live", ImageTimestamper::cClass() );
-    httpController.addStream( "raw", NetworkAVInput::cClass() );
-    //rtspController.addStream( "live", imageTimestamper1 );
-    //rtspController.addStream( "live", imageTimestamper2 );
-    rtmpController.addStream( "live", ImageTimestamper::cClass() );
-    rtmpController.addStream( "live", imageTimestamper2 );
-    rtmpController.addStream( "live", imageTimestamper3 );
-    rtmpController.addStream( "raw", axis207 );
-    rtmpController.addStream( "raw", p3301 );
-    rtmpController.addStream( "raw", axis210 );
-    rtmpController.addStream( "raw", video0 );
-    rtmpController.addStream( "raw", video2 );
-    rtmpController.addStream( "raw", acti4200 );
-    rtmpController.addStream( "raw", acti7300 );
-    rtmpController.addStream( "raw", axis206m );
-    rtmpController.addStream( "quad", quadVideo );
-    httpController.addStream( "quad", quadVideo );
-    //httpController.addStream( "slow", rateLimiter );
-    //rtmpController.addStream( "raw", videoFilter );
-    //rtspController.addStream( "raw", p3301 );
-
-    listener.addController( &httpController );
-    //listener.addController( &rtspController );
-    listener.addController( &rtmpController );
-#endif
-
-#if 0
-    //LocalVideoInput video1( "video1", "/dev/video1" );
-    //threads.push_back( &video1 );
-    //Video4LinuxInput video2( "video2", "/dev/video2", V4L2_STD_PAL, V4L2_PIX_FMT_YUV420, 640, 480 );
-    //threads.push_back( &video2 );
-
-    //RemoteVideoInput axis207( "axis207", "http://test:test123@axis207.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
-    //threads.push_back( &axis207 );
-    //RemoteVideoInput axis210( "axis210", "http://axis210.home/axis-cgi/mjpg/video.cgi?resolution=320x240&req_fps=5", "mjpeg" );
-    //threads.push_back( &axis210 );
-    //NetworkAVInput axis210( "axis210", "rtsp://axis210.home/mpeg/media.amp" );
-    //threads.push_back( &axis210 );
-    //threads.push_back( &p3301 );
-
-#if 1
-    //NetworkAVInput motionInput( "motionInput", "rtsp://axisp3301.home/axis-media/media.amp" );
-    //NetworkAVInput motionInput( "axis206m", "http://axis206m.home/axis-cgi/mjpg/video.cgi?resolution=352x288&req_fps=10", "mjpeg" );
-    LocalVideoInput motionInput( "motionInput", "/dev/video0" );
-    threads.push_back( &motionInput );
-#else
-    NetworkAVInput file( "file", "/transfer/video0-1326362926.mp4" );
-    //LocalFileInput file( "file", "/var/www/html/zm/events/PTZ/12/01/12/08/21/12/???-capture.jpg", 10 );
-    threads.push_back( &file );
-    RateLimiter motionInput( 25, false, file );
-    threads.push_back( &motionInput );
-#endif
-
-    MotionDetector motionDetector( "modect" );
-    motionDetector.registerProvider( motionInput );
-    //EventRecorder eventRecorder( "/transfer/zmx" );
-    threads.push_back( &motionDetector );
-
-    //LocalFileOutput fileOutput( "zmxout", "/transfer/zmx" );
-    //fileOutput.registerProvider( motionDetector, MotionDetector::inAlarm );
-    //threads.push_back( &fileOutput );
-
-    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-    quadVideo.registerProvider( *motionDetector.refImageSlave() );
-    quadVideo.registerProvider( *motionDetector.compImageSlave() );
-    quadVideo.registerProvider( *motionDetector.deltaImageSlave() );
-    quadVideo.registerProvider( *motionDetector.varImageSlave() );
-    threads.push_back( &quadVideo );
+    NetworkAVInput input( "input", "/tmp/movie.mp4" );
+    app.addThread( &input );
 
     Listener listener;
-    threads.push_back( &listener );
-
-    HttpController httpController( "p8080", 8080 );
-    RtspController rtspController( "p8554", 8554, RtspController::PortRange( 58000, 58998 ) );
-    RtmpController rtmpController( "p1935", 1935 );
-
-    httpController.addStream( "raw", motionInput );
-    httpController.addStream( "debug", SlaveVideo::cClass() );
-    httpController.addStream( "debug", quadVideo );
-    httpController.addStream( "debug", motionDetector );
-    rtspController.addStream( "raw", motionInput );
-    rtspController.addStream( "debug", SlaveVideo::cClass() );
-    rtspController.addStream( "debug", quadVideo );
-    rtspController.addStream( "debug", motionDetector );
-    rtmpController.addStream( "raw", motionInput );
-    rtmpController.addStream( "debug", SlaveVideo::cClass() );
-    rtmpController.addStream( "debug", quadVideo );
-    rtmpController.addStream( "debug", motionDetector );
-
-    listener.addController( &httpController );
-    listener.addController( &rtspController );
-    listener.addController( &rtmpController );
-#endif
-
-#if 0
-    // Read from analogue video and write to video files, 5 mins each
-    LocalVideoInput video0( "video0", "/dev/video0" );
-    threads.push_back( &video0 );
-
-    VideoParms videoParms( 352, 288 );
-    AudioParms audioParms;
-    MovieFileOutput movieOutput( "video0", "/transfer", "mp4", 300, videoParms, audioParms );
-    movieOutput.registerProvider( video0 );
-    threads.push_back( &movieOutput );
-#endif
-
-#if 1
-    // RTSP/H.264 Streaming
-
-    //NetworkAVInput input( "input", "rtsp://axisp3301.home/axis-media/media.amp" );
-    //NetworkAVInput input( "input", "http://axis206m.home/axis-cgi/mjpg/video.cgi?resolution=352x288&req_fps=10", "mjpeg" );
-    //LocalVideoInput input( "input", "/dev/video0" );
-    //Video4LinuxInput input( "input", "/dev/video0", V4L2_STD_PAL, V4L2_PIX_FMT_YUV420, 720, 576 );
-    //YuanInput input( "input", "/dev/video0", V4L2_STD_PAL, V4L2_PIX_FMT_YVU420, 1920, 1080, false );
-    YuanInput input( "input", "/dev/video1", V4L2_STD_PAL, V4L2_PIX_FMT_UYVY, 1920, 1080, true );
-    //Video4LinuxInput input( "input", "/dev/video0", V4L2_STD_PAL, V4L2_PIX_FMT_YUYV, 1024, 768 );
-    //Video4LinuxInput input( "input", "/dev/video0", V4L2_STD_PAL, V4L2_PIX_FMT_RGB24, 1024, 768 );
-    //NetworkAVInput input( "input", "/transfer/video0-1326362926.mp4" );
-    threads.push_back( &input );
-
-    LocalFileDump fileDump( "dump", "/transfer" );
-    fileDump.registerProvider( input );
-    threads.push_back( &fileDump );
-
-    Listener listener;
-    threads.push_back( &listener );
+    app.addThread( &listener );
 
     RtspController rtspController( "p8554", 8554, RtspController::PortRange( 58000, 58998 ) );
     HttpController httpController( "p8080", 8080 );
@@ -326,17 +132,151 @@ int main( int argc, const char *argv[] )
 
     listener.addController( &rtspController );
     listener.addController( &httpController );
-#endif
-    for ( ThreadList::iterator iter = threads.begin(); iter != threads.end(); iter++ )
-        (*iter)->start();
+}
 
-    // Do stuff
-    while( !gZmTerminate )
-        sleep( 1 );
+//
+// Load one file, one V4L and two network streams, combine to quad video available over RTSP
+//
+void example5()
+{
+    Application app;
 
-    for ( ThreadList::iterator iter = threads.begin(); iter != threads.end(); iter++ )
-        (*iter)->stop();
+    LocalVideoInput input1( "input1", "/dev/video0" );
+    app.addThread( &input1 );
+    NetworkAVInput input2( "input1", "rtsp://test:test@webcam1/mpeg4/media.amp" );
+    app.addThread( &input2 );
+    NetworkAVInput input3( "input1", "rtsp://test:test@webcam2/mpeg4/media.amp" );
+    app.addThread( &input3 );
+    NetworkAVInput input4( "input", "/tmp/movie.mp4" );
+    app.addThread( &input4 );
 
-    for ( ThreadList::iterator iter = threads.begin(); iter != threads.end(); iter++ )
-        (*iter)->join();
+    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    quadVideo.registerProvider( input1 );
+    quadVideo.registerProvider( input2 );
+    quadVideo.registerProvider( input3 );
+    quadVideo.registerProvider( input4 );
+    app.addThread( &quadVideo );
+
+    Listener listener;
+    app.addThread( &listener );
+
+    RtspController rtspController( "p8554", 8554, RtspController::PortRange( 58000, 58998 ) );
+    listener.addController( &rtspController );
+
+    rtspController.addStream( "input1", input1 );
+    rtspController.addStream( "input2", input2 );
+    rtspController.addStream( "input3", input3 );
+    rtspController.addStream( "input4", input4 );
+    rtspController.addStream( "quad", quadVideo );
+
+    app.run();
+}
+
+//
+// Run motion detection on a saved file, provide debug images in quad mode over HTTP
+//
+void example6()
+{
+    Application app;
+
+    NetworkAVInput input( "input", "/tmp/movie.mp4" );
+    app.addThread( &input );
+
+    MotionDetector motionDetector( "modect" );
+    motionDetector.registerProvider( input );
+    //EventRecorder eventRecorder( "/transfer/zmx" );
+    app.addThread( &motionDetector );
+
+    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    quadVideo.registerProvider( *motionDetector.refImageSlave() );
+    quadVideo.registerProvider( *motionDetector.compImageSlave() );
+    quadVideo.registerProvider( *motionDetector.deltaImageSlave() );
+    quadVideo.registerProvider( *motionDetector.varImageSlave() );
+    app.addThread( &quadVideo );
+
+    Listener listener;
+    app.addThread( &listener );
+
+    HttpController httpController( "p8080", 8080 );
+    listener.addController( &httpController );
+
+    httpController.addStream( "file", input );
+    httpController.addStream( "debug", SlaveVideo::cClass() );
+    httpController.addStream( "debug", quadVideo );
+    httpController.addStream( "debug", motionDetector );
+
+    app.run();
+}
+
+//
+// Relay H.264 packets directly from source
+//
+void example7()
+{
+    Application app;
+
+    RawH264Input input( "input", "rtsp://Admin:123456@10.10.10.10:7070" );
+    app.addThread( &input );
+
+    Listener listener;
+    app.addThread( &listener );
+
+    RtspController rtspController( "p8554", 8554, RtspController::PortRange( 58000, 58998 ) );
+    listener.addController( &rtspController );
+
+    rtspController.addStream( "raw", input );
+
+    app.run();
+}
+
+//
+// Make images from ZM V1 shared memory available over the network
+// You have to manually tune the shared mmemory sizes etc to match
+//
+void example8()
+{
+    Application app;
+
+    Listener listener;
+    app.addThread( &listener );
+
+    RtspController rtspController( "p8554", 8554, RtspController::PortRange( 28000, 28998 ) );
+    listener.addController( &rtspController );
+
+    HttpController httpController( "p8080", 8080 );
+    listener.addController( &httpController );
+
+    const int maxMonitors = 1;
+    for ( int monitor = 1; monitor <= maxMonitors; monitor++ )
+    {
+        char idString[32] = "";
+
+        // Get the individual images from shared memory
+        sprintf( idString, "input%d", monitor );
+        MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 75, PIX_FMT_RGB24, 1920, 1080 );
+        app.addThread( input );
+
+        rtspController.addStream( "raw", *input );
+        httpController.addStream( "raw", *input );
+    }
+
+    app.run();
+}
+
+int main( int argc, const char *argv[] )
+{
+    debugInitialise( "zmx", "", 5 );
+
+    Info( "Starting" );
+
+    ffmpegInit();
+
+    example1();
+    example2();
+    example3();
+    example4();
+    example5();
+    example6();
+    example7();
+    example8();
 }

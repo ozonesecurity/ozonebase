@@ -87,6 +87,23 @@ public:
     //virtual bool writeFrame( const FeedFrame * )=0;
 };
 
+class DataProvider;
+
+///
+/// Specialised base class for video consumers
+///
+class DataConsumer : public FeedConsumer
+{
+protected:
+    DataConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
+    DataConsumer( const std::string &tag, FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
+    DataConsumer();
+
+public:
+    /// Return the first provider cast appropriately, shortcut for when providers == 1 
+    DataProvider *dataProvider() const;
+};
+
 class VideoProvider;
 
 ///
@@ -100,8 +117,6 @@ protected:
     VideoConsumer();
 
 public:
-    bool registerProvider( FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
- 
     /// Return the first provider cast appropriately, shortcut for when providers == 1 
     VideoProvider *videoProvider() const;
 };
@@ -119,10 +134,19 @@ protected:
     AudioConsumer();
 
 public:
-    bool registerProvider( FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
- 
     /// Return the first provider cast appropriately, shortcut for when providers == 1 
     AudioProvider *audioProvider() const;
+};
+
+///
+/// General base class for consumers of all frames
+///
+class GeneralConsumer : public FeedConsumer
+{
+protected:
+	GeneralConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
+	GeneralConsumer( const std::string &tag, FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
+	GeneralConsumer();
 };
 
 #endif // ZM_FEED_CONSUMER_H

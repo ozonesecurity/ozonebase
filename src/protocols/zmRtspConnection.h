@@ -27,6 +27,8 @@ public:
 
 public:
     FeedProvider *validateRequestUrl( const std::string &url, std::string *host=NULL, std::string *app=NULL, std::string *stream=NULL, int *track=NULL );
+    bool handleRequest( const ByteBuffer &buffer );
+    bool handleRequest( const std::string &request );
     bool recvRequest( ByteBuffer &request );
     bool sendResponse( Headers &headers, std::string payload="", int statusCode=200, std::string statusText="OK" );
     bool sendInterleavedPacket( uint8_t channel, const ByteBuffer &packet );

@@ -7,6 +7,8 @@
 #include "zmRtpData.h"
 #include "../zmEncoder.h"
 #include "../encoders/zmH264Encoder.h"
+#include "../encoders/zmH264Relay.h"
+#include "../encoders/zmMpegEncoder.h"
 
 #include "../libgen/libgenUtils.h"
 #include "../libgen/libgenTime.h"
@@ -57,57 +59,26 @@ FeedProvider *RtspConnection::validateRequestUrl( const std::string &url, std::s
     return( provider );
 }
 
-// Receive, assemble and handle RTSP commands that are not related to established streams
-bool RtspConnection::recvRequest( ByteBuffer &buffer )
+// Handle interleaved RTP commands that are not related to established streams
+bool RtspConnection::handleRequest( const ByteBuffer &buffer )
 {
-    if ( buffer[0] == '$' || (!mRequest.empty() && mRequest[0] == '$') )
-    {
-        // Interleaved request
-        if ( mRequest )
-        {
-            buffer = mRequest+buffer;
-            mRequest.clear();
-            Debug( 6, "Merging with saved request, total bytes: %zd", buffer.size() );
-        }
-        Debug( 2, "Got %zd byte interleaved request", buffer.size() );
-        if ( buffer.size() < 4 )
-        {
-            Debug( 6, "Request is incomplete, storing" );
-            mRequest = buffer;
-            return( true );
-        }
-        int channel= buffer[1];
-        uint16_t rawLength;
-        memcpy( &rawLength, &buffer[2], sizeof(rawLength) );
-        uint16_t length = be16toh( rawLength );
-        Debug( 2, "Got %d byte packet on channel %d", length, channel );
-        Hexdump( 2, buffer+4, length );
-        return( true );
-    }
+    int channel= buffer[1];
+    uint16_t length = buffer.size()-4;
+    Debug( 2, "Got %d byte packet on channel %d", length, channel );
+    Hexdump( 2, buffer+4, length );
+    return( true );
+}
 
-    std::string request( reinterpret_cast<const char *>(buffer.data()), buffer.size() );
-
-    Debug( 2, "Received RTSP request: %s (%zd bytes)", request.c_str(), request.size() );
-
-    if ( mRequest.size() > 0 )
-    {
-        //request = mRequest+request;
-        request = std::string( reinterpret_cast<const char *>(mRequest.data()), mRequest.size() )+request;
-        mRequest.clear();
-        Debug( 6, "Merging with saved request, total: %s", request.c_str() );
-    }
+// Handle RTSP commands that are not related to established streams
+bool RtspConnection::handleRequest( const std::string &request )
+{
+    Debug( 2, "Handling RTSP request: %s (%zd bytes)", request.c_str(), request.size() );
 
     StringTokenList lines( request, "\r\n" );
     if ( lines.size() <= 0 )
     {
         Error( "Unable to split request '%s' into tokens", request.c_str() );
         return( false );
-    }
-    if ( lines[lines.size()-1].size() != 0 )
-    {
-        Error( "Request '%s' is incomplete, storing", request.c_str() );
-        mRequest = ByteBuffer( reinterpret_cast<const unsigned char *>(request.data()), request.size() );
-        return( true );
     }
 
     StringTokenList parts( lines[0], " " );
@@ -131,7 +102,7 @@ bool RtspConnection::recvRequest( ByteBuffer &buffer )
 
     // Extract headers from request
     Headers requestHeaders;
-    for ( int i = 1; i < (lines.size()-1); i++ )
+    for ( int i = 1; i < lines.size(); i++ )
     {
         StringTokenList parts( lines[i], ": " );
         if ( parts.size() != 2 )
@@ -166,18 +137,21 @@ bool RtspConnection::recvRequest( ByteBuffer &buffer )
     }
     else if ( requestType == "DESCRIBE" )
     {
-        if ( !validateRequestUrl( requestUrl ) )
+        FeedProvider *provider = validateRequestUrl( requestUrl );
+
+        if ( !provider )
         {
             sendResponse( responseHeaders, "", 404, "Not Found" );
             return( false );
         }
 
-        FeedProvider *provider = validateRequestUrl( requestUrl );
+        const VideoProvider *videoProvider = dynamic_cast<const VideoProvider *>(provider);
 
         int codec = CODEC_ID_H264;
-        int width = 320;
-        int height = 240;
-        FrameRate frameRate = 10;
+        int width = videoProvider->width();
+        int height = videoProvider->height();
+        FrameRate frameRate = 15;
+        //FrameRate frameRate = videoProvider->frameRate();
         int bitRate = 90000;
         int quality = 70;
 
@@ -199,19 +173,51 @@ bool RtspConnection::recvRequest( ByteBuffer &buffer )
 
         if ( codec == CODEC_ID_H264 )
         {
-            std::string encoderKey = H264Encoder::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
+            //if ( provider->cl4ss() == "RawH264Input" )
+            {
+                std::string encoderKey = H264Relay::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
+                if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
+                {
+                    H264Relay *h264Relay = NULL;
+                    mEncoder = h264Relay = new H264Relay( provider->identity(), width, height, frameRate, bitRate, quality );
+                    mEncoder->registerProvider( *provider );
+                    Encoder::poolEncoder( mEncoder );
+                    h264Relay->start();
+                }
+                sdpString += mEncoder->sdpString( 1 ); // XXX - Should be variable
+                responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
+            }
+            /*
+            else
+            {
+                std::string encoderKey = H264Encoder::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
+                if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
+                {
+                    H264Encoder *h264Encoder = NULL;
+                    mEncoder = h264Encoder = new H264Encoder( provider->identity(), width, height, frameRate, bitRate, quality );
+                    mEncoder->registerProvider( *provider );
+                    Encoder::poolEncoder( mEncoder );
+                    h264Encoder->start();
+                }
+                sdpString += mEncoder->sdpString( 1 ); // XXX - Should be variable
+                responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
+            }
+            */
+        }
+        else if ( codec == CODEC_ID_MPEG4 )
+        {
+            std::string encoderKey = MpegEncoder::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
             if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
             {
-                H264Encoder *h264Encoder = NULL;
-                mEncoder = h264Encoder = new H264Encoder( provider->identity(), width, height, frameRate, bitRate, quality );
+                MpegEncoder *mpegEncoder = NULL;
+                mEncoder = mpegEncoder = new MpegEncoder( provider->identity(), width, height, frameRate, bitRate, quality );
                 mEncoder->registerProvider( *provider );
                 Encoder::poolEncoder( mEncoder );
-                h264Encoder->start();
+                mpegEncoder->start();
             }
-            sdpString += mEncoder->sdpString();
+            sdpString += mEncoder->sdpString( 1 ); // XXX - Should be variable
             responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
         }
-
         return( sendResponse( responseHeaders, sdpString ) );
     }
     else if ( requestType == "SETUP" )
@@ -244,6 +250,78 @@ bool RtspConnection::recvRequest( ByteBuffer &buffer )
     }
     Error( "Unrecognised RTSP command '%s'", requestType.c_str() );
     return( sendResponse( responseHeaders, "", 405, "Method not implemented" ) );
+}
+
+// Receive, assemble and handle RTSP commands that are not related to established streams
+bool RtspConnection::recvRequest( ByteBuffer &buffer )
+{
+    Debug( 2, "Received RTSP message, %zd bytes", buffer.size() );
+
+    while( !buffer.empty() )
+    {
+        if ( buffer[0] == '$' || (!mRequest.empty() && mRequest[0] == '$') )
+        {
+            // Interleaved request
+            if ( mRequest )
+            {
+                buffer = mRequest+buffer;
+                mRequest.clear();
+                Debug( 6, "Merging with saved request, total bytes: %zd", buffer.size() );
+            }
+            Debug( 2, "Got RTP interleaved request" );
+            if ( buffer.size() <= 4 )
+            {
+                Debug( 6, "Request is incomplete, storing" );
+                mRequest = buffer;
+                return( true );
+            }
+            //int channel= buffer[1];
+            uint16_t rawLength;
+            memcpy( &rawLength, &buffer[2], sizeof(rawLength) );
+            uint16_t length = be16toh( rawLength );
+            if ( (length+2) > buffer.size() )
+            {
+                Debug( 6, "Request is incomplete, storing" );
+    Hexdump( 2, buffer.data(), buffer.size() );
+                mRequest = buffer;
+                return( true );
+            }
+            ByteBuffer request = buffer.range( 0, 4+length );
+            buffer.consume( 4+length );
+            if ( !handleRequest( request ) )
+                return( false );
+        }
+        else
+        {
+            Debug( 2, "Got RTSP request" );
+
+            std::string request( reinterpret_cast<const char *>(buffer.data()), buffer.size() );
+
+            if ( mRequest.size() > 0 )
+            {
+                //request = mRequest+request;
+                request = std::string( reinterpret_cast<const char *>(mRequest.data()), mRequest.size() )+request;
+                mRequest.clear();
+                Debug( 6, "Merging with saved request, total: %s", request.c_str() );
+            }
+
+            const char *endOfMessage = strstr( request.c_str(), "\r\n\r\n" );
+
+            if ( !endOfMessage )
+            {
+                Debug( 6, "Request '%s' is incomplete, storing", request.c_str() );
+                mRequest = ByteBuffer( reinterpret_cast<const unsigned char *>(request.data()), request.size() );
+                return( true );
+            }
+
+            size_t messageLen = endOfMessage-request.c_str();
+            request.erase( messageLen );
+            buffer.consume( messageLen+4 );
+            if ( !handleRequest( request ) )
+                return( false );
+        }
+    }
+    return( true );
 }
 
 // Transmit an RTSP response message over an established connection

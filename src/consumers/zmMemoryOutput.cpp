@@ -38,7 +38,7 @@ int MemoryOutput::run()
         uint16_t width = videoProvider()->width();
         uint16_t height = videoProvider()->height();
 
-        attachMemory( 10, pixelFormat, width, height );
+        attachMemory( 40, pixelFormat, width, height );
         while( !mStop )
         {
             mQueueMutex.lock();
@@ -73,6 +73,8 @@ bool MemoryOutput::storeFrame( FramePtr frame )
 
     mSharedData->lastWriteIndex = index;
     mSharedData->lastWriteTime = videoFrame->timestamp();
+
+    mSharedData->frameRate = videoProvider()->frameRate();
 
     mImageCount++;
 

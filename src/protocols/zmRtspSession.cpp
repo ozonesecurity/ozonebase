@@ -4,7 +4,6 @@
 #include "zmRtsp.h"
 #include "zmRtspController.h"
 #include "zmRtspStream.h"
-#include "../encoders/zmH264Encoder.h"
 #include "../libgen/libgenUtils.h"
 
 RtspSession::RtspSession( int session, RtspConnection *connection, Encoder *encoder ) :
@@ -144,7 +143,7 @@ RtspStream *RtspSession::newStream( int trackId, Encoder *encoder, const std::st
     if ( transportParts.size() < 1 )
     {
         Error( "Unable to parse transport data from transport '%s'", transportSpec.c_str() );
-        return( false );
+        return( NULL );
     }
 
     const std::string &protocolSpec = transportParts[0];
@@ -152,7 +151,7 @@ RtspStream *RtspSession::newStream( int trackId, Encoder *encoder, const std::st
     if ( protocolParts.size() < 2 )
     {
         Error( "Unable to parse transport data from protocol '%s'", protocolSpec.c_str() );
-        return( false );
+        return( NULL );
     }
 
     const std::string transport = protocolParts[0];

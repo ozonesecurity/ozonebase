@@ -479,6 +479,9 @@ protected:
     static void initialise();
     static void copyYUVP2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height, int densityX, int densityY, bool expand=true );
     static void copyYUYV2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height );
+    static void copyUYVY2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height );
+    static void copyYUYV2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height );
+    static void copyUYVY2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height );
     static void copyRGBP2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height, int rBits, int gBits, int bBits );
     static void copyBGR2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height );
 

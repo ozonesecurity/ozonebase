@@ -6,7 +6,8 @@
 
 #include <string>
 #include <pthread.h>
-#include <syscall.h>
+#include <unistd.h>
+#include <sys/syscall.h>
 
 class ThreadException : public Exception
 {
@@ -270,7 +271,7 @@ protected:
     {
         return( (pid_t)syscall(SYS_gettid) );
     }
-    void exit( int status = 0 )
+    void exit( long int status = 0 )
     {
         pthread_exit( (void *)status );
     }

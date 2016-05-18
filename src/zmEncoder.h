@@ -48,7 +48,7 @@ public:
 
     bool queueFrame( FramePtr, FeedProvider * );
 
-    virtual const std::string &sdpString() const ///< Virtual as some encoders may need to generate it first
+    virtual const std::string &sdpString( int trackId ) const ///< Virtual as some encoders may need to generate it first
     {
         return( mSdpString );
     }

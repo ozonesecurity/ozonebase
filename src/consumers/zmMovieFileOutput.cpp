@@ -183,7 +183,7 @@ int MovieFileOutput::run()
                 /* open the output file, if needed */
                 if ( !(outputFormat->flags & AVFMT_NOFILE) )
                 {
-                    if ( avio_open( &outputContext->pb, filename.c_str(), URL_WRONLY ) < 0 )
+                    if ( avio_open( &outputContext->pb, filename.c_str(), AVIO_FLAG_WRITE ) < 0 )
                     {
                         Fatal( "Could not open output filename '%s'", filename.c_str() );
                     }

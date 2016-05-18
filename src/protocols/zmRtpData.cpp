@@ -29,13 +29,12 @@ void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t 
 {
     if ( !mTimestampBase )
         mTimestampBase = timecode;
-    uint32_t timestamp = timecode-mTimestampBase;
-    //uint32_t timestamp = av_rescale_q( frame.timestamp - mTimestampBase, mFrameRate, mClockRate );
-    //uint32_t timestampDelta = (timecode - mTimestampBase);
-    //double timestampFactor = (double)mClockRate.den/1000000.0;
-    //Debug( 6, "Packet QTSd = %d", timestampDelta );
-    //uint32_t timestamp = timestampDelta*timestampFactor;
-    //Debug( 6, "Packet QTS = %d", timestamp );
+    //uint32_t timestamp = av_rescale_q( timecode - mTimestampBase, mFrameRate, mClockRate );
+    uint32_t timestampDelta = (timecode - mTimestampBase);
+    double timestampFactor = (double)mClockRate.den/1000000.0;
+    Debug( 6, "Packet QTSd = %d", timestampDelta );
+    uint32_t timestamp = timestampDelta*timestampFactor;
+    Debug( 6, "Packet QTS = %d", timestamp );
 
     RtpDataHeader rtpHeader;
     rtpHeader.version = ZM_RTP_VERSION;
@@ -45,7 +44,7 @@ void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t 
     rtpHeader.m = last; // Marker
     rtpHeader.pt = mPayloadType;
     rtpHeader.seqN = htons(mSeq);
-    rtpHeader.timestampN = htonl(timecode);
+    rtpHeader.timestampN = htonl(timestamp);
     rtpHeader.ssrcN = ntohl(mRtpSession.ssrc());
 
     ByteBuffer *packet = new ByteBuffer( sizeof(RtpDataHeader)+size );
@@ -57,6 +56,6 @@ void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t 
 
     mQueueMutex.lock();
     mPacketQueue.push_back( packet );
-    Debug( 1, "Wrote %zd byte RTP data packet to queue, size = %zd", packet->size(), mPacketQueue.size() );
+    Debug( 5, "Wrote %zd byte RTP data packet to queue, size = %zd", packet->size(), mPacketQueue.size() );
     mQueueMutex.unlock();
 }

@@ -47,7 +47,7 @@ bool EventRecorder::processFrame( FramePtr frame )
             for ( FrameStore::const_iterator iter = mFrameStore.begin(); iter != mFrameStore.end(); iter++ )
             {
                 const MotionFrame *frame = dynamic_cast<const MotionFrame *>( iter->get() );
-                std::string path = stringtf( "%s/img%d-%lld.jpg", mLocation.c_str(), mEventCount, frame->id() );
+                std::string path = stringtf( "%s/img-%s-%d-%lld.jpg", mLocation.c_str(), mName.c_str(), mEventCount, frame->id() );
                 //Info( "PF:%d @ %dx%d", frame->pixelFormat(), frame->width(), frame->height() );
                 Image image( frame->pixelFormat(), frame->width(), frame->height(), frame->buffer().data() );
                 image.writeJpeg( path.c_str() );
@@ -69,11 +69,11 @@ bool EventRecorder::processFrame( FramePtr frame )
         std::string path;
         if ( mState == ALARM )
         {
-            path = stringtf( "%s/img%d-%lld-A.jpg", mLocation.c_str(), mEventCount, motionFrame->id() );
+            path = stringtf( "%s/img-%s-%d-%lld-A.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
         }
         else if ( mState == ALERT )
         {
-            path = stringtf( "%s/img%d-%lld.jpg", mLocation.c_str(), mEventCount, motionFrame->id() );
+            path = stringtf( "%s/img-%s-%d-%lld.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
         }
         Info( "PF:%d @ %dx%d", motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height() );
         Image image( motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height(), motionFrame->buffer().data() );

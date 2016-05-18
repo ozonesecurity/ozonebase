@@ -94,8 +94,6 @@ const std::string stringtf( const char *format, ... )
 
     va_list args;
     va_start( args, format );
-    va_list argsCopy;
-    va_copy( argsCopy, args );
     int bytesReqd = vsnprintf( buffer, sizeof(buffer), format, args );
     if ( bytesReqd < sizeof(buffer) )
         return( std::string( buffer ) );
@@ -105,15 +103,26 @@ const std::string stringtf( const char *format, ... )
         vsnprintf( bigBuffer, sizeof(bigBuffer), format, args );
         return( std::string( bigBuffer ) );
     }
-    //va_end( args );
+    va_end( args );
 }
 
 const std::string stringtf( const std::string &format, ... )
 {
+    char buffer[BUFSIZ];
+
     va_list args;
     va_start( args, format );
-    return( stringtf( format.c_str(), args ) );
-    //va_end(ap);
+    //return( stringtf( format.c_str(), args ) );
+    int bytesReqd = vsnprintf( buffer, sizeof(buffer), format.c_str(), args );
+    if ( bytesReqd < sizeof(buffer) )
+        return( std::string( buffer ) );
+    else
+    {
+        char bigBuffer[bytesReqd+1];
+        vsnprintf( bigBuffer, sizeof(bigBuffer), format.c_str(), args );
+        return( std::string( bigBuffer ) );
+    }
+    va_end( args );
 }
 
 std::string toLower( const std::string &upperStr )

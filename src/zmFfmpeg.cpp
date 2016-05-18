@@ -82,6 +82,52 @@ AVRational double2Rational( double input, long maxden )
     return( answer1 );
 }
 
+// This section extracted from ffmpeg code. Should be moved or rewritten.
+static const uint8_t *_h264StartCode( const uint8_t *p, const uint8_t *end )
+{
+    const uint8_t *a = p + 4 - ((intptr_t)p & 3);
+
+    for ( end -= 3; p < a && p < end; p++ )
+        if ( p[0] == 0 && p[1] == 0 && p[2] == 1 )
+            return( p );
+
+    for ( end -= 3; p < end; p += 4 )
+    {
+        uint32_t x = *(const uint32_t*)p;
+        if ( (x - 0x01010101) & (~x) & 0x80808080 )
+        {
+            if ( p[1] == 0 )
+            {
+                if ( p[0] == 0 && p[2] == 1 )
+                    return( p );
+                if ( p[2] == 0 && p[3] == 1 )
+                    return( p+1 );
+            }
+            if ( p[3] == 0)
+            {
+                if ( p[2] == 0 && p[4] == 1 )
+                    return( p+2 );
+                if ( p[4] == 0 && p[5] == 1 )
+                    return( p+3 );
+            }
+        }
+    }
+
+    for ( end += 3; p < end; p++ )
+        if ( p[0] == 0 && p[1] == 0 && p[2] == 1 )
+            return( p );
+
+    return( end + 3 );
+}
+
+const uint8_t *h264StartCode( const uint8_t *p, const uint8_t *end )
+{
+    const uint8_t *out = _h264StartCode( p, end );
+    if ( p<out && out<end && !out[-1] )
+        out--;
+    return( out );
+}
+
 static int ffmpegLockManager( void **mutex, enum AVLockOp op ) 
 { 
     //pthread_mutex_t** pmutex = (pthread_mutex_t**) mutex;
@@ -169,266 +215,10 @@ void avDictSet( AVDictionary **dict, const char *name, double value )
 /// This must be called _after_ preset function below to have any effect
 void avSetH264Profile( AVDictionary **dict, const std::string &profile )
 {
-    if ( profile == "baseline" )
-    {
-        // x264 Baseline
-        av_dict_set( dict, "coder", "0", 0 );
-        av_dict_set( dict, "bf", "0", 0 );
-        av_dict_set( dict, "flags2", "-wpred-dct8x8", AV_DICT_APPEND );
-        av_dict_set( dict, "wpredp", "0", 0 );
-    }
-    else if ( profile == "main" )
-    {
-        av_dict_set( dict, "flags2", "-dct8x8", AV_DICT_APPEND );
-    }
-    else if ( profile == "high" )
-    {
-        // No limitations
-    }
-    else
-    {
-        Fatal( "Unexpected H.264 profile '%s'", profile.c_str() );
-    }
+    av_dict_set( dict, "profile", profile.c_str(), 0 );
 }
 
 void avSetH264Preset( AVDictionary **dict, const std::string &preset )
 {
-    if ( preset == "default" )
-    {
-        // x264 Default
-        av_dict_set( dict, "coder", "1", 0 );
-        av_dict_set( dict, "flags", "+loop", 0 );
-        av_dict_set( dict, "cmp", "+chroma", 0 );
-        av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-        av_dict_set( dict, "me_method", "hex", 0 );
-        av_dict_set( dict, "subq", "7", 0 );
-        av_dict_set( dict, "me_range", "16", 0 );
-        av_dict_set( dict, "g", "250", 0 );
-        av_dict_set( dict, "keyint_min", "25", 0 );
-        av_dict_set( dict, "sc_threshold", "40", 0 );
-        av_dict_set( dict, "i_qfactor", "0.71", 0 );
-        av_dict_set( dict, "b_strategy", "1", 0 );
-        av_dict_set( dict, "qcomp", "0.6", 0 );
-        av_dict_set( dict, "qmin", "10", 0 );
-        av_dict_set( dict, "qmax", "51", 0 );
-        av_dict_set( dict, "qdiff", "4", 0 );
-        av_dict_set( dict, "bf", "3", 0 );
-        av_dict_set( dict, "refs", "3", 0 );
-        av_dict_set( dict, "directpred", "1", 0 );
-        av_dict_set( dict, "trellis", "1", 0 );
-        av_dict_set( dict, "flags2", "+mixed_refs+wpred+dct8x8+fastpskip", 0 );
-        av_dict_set( dict, "wpredp", "2", 0 );
-    }
-    else if ( preset == "normal" )
-    {
-        // x264 Normal
-        av_dict_set( dict, "coder", "1", 0 );
-        av_dict_set( dict, "flags", "+loop", 0 );
-        av_dict_set( dict, "cmp", "+chroma", 0 );
-        av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-        av_dict_set( dict, "me_method", "hex", 0 );
-        av_dict_set( dict, "subq", "6", 0 );
-        av_dict_set( dict, "me_range", "16", 0 );
-        av_dict_set( dict, "g", "250", 0 );
-        av_dict_set( dict, "keyint_min", "25", 0 );
-        av_dict_set( dict, "sc_threshold", "40", 0 );
-        av_dict_set( dict, "i_qfactor", "0.71", 0 );
-        av_dict_set( dict, "b_strategy", "1", 0 );
-        av_dict_set( dict, "qcomp", "0.6", 0 );
-        av_dict_set( dict, "qmin", "10", 0 );
-        av_dict_set( dict, "qmax", "51", 0 );
-        av_dict_set( dict, "qdiff", "4", 0 );
-        av_dict_set( dict, "bf", "3", 0 );
-        av_dict_set( dict, "refs", "2", 0 );
-        av_dict_set( dict, "directpred", "3", 0 );
-        av_dict_set( dict, "trellis", "0", 0 );
-        av_dict_set( dict, "flags2", "+wpred+dct8x8+fastpskip", 0 );
-        av_dict_set( dict, "wpredp", "2", 0 );
-    }
-    else if ( preset == "medium" )
-    {
-        // x264 Medium
-        av_dict_set( dict, "coder", "1", 0 );
-        av_dict_set( dict, "flags", "+loop", 0 );
-        av_dict_set( dict, "cmp", "+chroma", 0 );
-        av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-        av_dict_set( dict, "me_method", "hex", 0 );
-        av_dict_set( dict, "subq", "7", 0 );
-        av_dict_set( dict, "me_range", "16", 0 );
-        av_dict_set( dict, "g", "250", 0 );
-        av_dict_set( dict, "keyint_min", "25", 0 );
-        av_dict_set( dict, "sc_threshold", "40", 0 );
-        av_dict_set( dict, "i_qfactor", "0.71", 0 );
-        av_dict_set( dict, "b_strategy", "1", 0 );
-        av_dict_set( dict, "qcomp", "0.6", 0 );
-        av_dict_set( dict, "qmin", "10", 0 );
-        av_dict_set( dict, "qmax", "51", 0 );
-        av_dict_set( dict, "qdiff", "4", 0 );
-        av_dict_set( dict, "bf", "3", 0 );
-        av_dict_set( dict, "refs", "3", 0 );
-        av_dict_set( dict, "directpred", "1", 0 );
-        av_dict_set( dict, "trellis", "1", 0 );
-        av_dict_set( dict, "flags2", "+bpyramid+mixed_refs+wpred+dct8x8+fastpskip", 0 );
-        av_dict_set( dict, "wpredp", "2", 0 );
-    }
-    else if ( preset == "hq" )
-    {
-		av_dict_set( dict, "coder", "1", 0 );
-		av_dict_set( dict, "flags", "+loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-		av_dict_set( dict, "me_method", "umh", 0 );
-		av_dict_set( dict, "subq", "8", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "40", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "2", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "3", 0 );
-		av_dict_set( dict, "refs", "4", 0 );
-		av_dict_set( dict, "directpred", "3", 0 );
-		av_dict_set( dict, "trellis", "1", 0 );
-		av_dict_set( dict, "flags2", "+wpred+mixed_refs+dct8x8+fastpskip", 0 );
-		av_dict_set( dict, "wpredp", "2", 0 );
-    }
-    else if ( preset == "fast" )
-    {
-		av_dict_set( dict, "coder", "1", 0 );
-		av_dict_set( dict, "flags", "+loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-		av_dict_set( dict, "me_method", "hex", 0 );
-		av_dict_set( dict, "subq", "6", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "40", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "1", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "3", 0 );
-		av_dict_set( dict, "refs", "2", 0 );
-		av_dict_set( dict, "directpred", "1", 0 );
-		av_dict_set( dict, "trellis", "1", 0 );
-		av_dict_set( dict, "flags2", "+bpyramid+mixed_refs+wpred+dct8x8+fastpskip", 0 );
-		av_dict_set( dict, "wpredp", "2", 0 );
-		av_dict_set( dict, "rc_lookahead", "30", 0 );
-    }
-    else if ( preset == "faster" )
-    {
-		av_dict_set( dict, "coder", "1", 0 );
-		av_dict_set( dict, "flags", "+loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-		av_dict_set( dict, "me_method", "hex", 0 );
-		av_dict_set( dict, "subq", "4", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "40", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "1", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "3", 0 );
-		av_dict_set( dict, "refs", "2", 0 );
-		av_dict_set( dict, "directpred", "1", 0 );
-		av_dict_set( dict, "trellis", "1", 0 );
-		av_dict_set( dict, "flags2", "+bpyramid-mixed_refs+wpred+dct8x8+fastpskip", 0 );
-		av_dict_set( dict, "wpredp", "1", 0 );
-		av_dict_set( dict, "rc_lookahead", "20", 0 );
-    }
-    else if ( preset == "veryfast" )
-    {
-		av_dict_set( dict, "coder", "1", 0 );
-		av_dict_set( dict, "flags", "+loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "+parti8x8+parti4x4+partp8x8+partb8x8", 0 );
-		av_dict_set( dict, "me_method", "hex", 0 );
-		av_dict_set( dict, "subq", "2", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "40", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "1", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "3", 0 );
-		av_dict_set( dict, "refs", "1", 0 );
-		av_dict_set( dict, "directpred", "1", 0 );
-		av_dict_set( dict, "trellis", "0", 0 );
-		av_dict_set( dict, "flags2", "+bpyramid-mixed_refs+wpred+dct8x8+fastpskip", 0 );
-		av_dict_set( dict, "wpredp", "0", 0 );
-		av_dict_set( dict, "rc_lookahead", "10", 0 );
-    }
-    else if ( preset == "superfast" )
-    {
-		av_dict_set( dict, "coder", "1", 0 );
-		av_dict_set( dict, "flags", "+loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "+parti8x8+parti4x4-partp8x8-partb8x8", 0 );
-		av_dict_set( dict, "me_method", "dia", 0 );
-		av_dict_set( dict, "subq", "1", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "40", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "1", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "3", 0 );
-		av_dict_set( dict, "refs", "1", 0 );
-		av_dict_set( dict, "directpred", "1", 0 );
-		av_dict_set( dict, "trellis", "0", 0 );
-		av_dict_set( dict, "flags2", "+bpyramid-mixed_refs+wpred+dct8x8+fastpskip-mbtree", 0 );
-		av_dict_set( dict, "wpredp", "0", 0 );
-		av_dict_set( dict, "rc_lookahead", "0", 0 );
-    }
-    else if ( preset == "ultrafast" )
-    {
-		av_dict_set( dict, "coder", "0", 0 );
-		av_dict_set( dict, "flags", "-loop", 0 );
-		av_dict_set( dict, "cmp", "+chroma", 0 );
-		av_dict_set( dict, "partitions", "-parti8x8-parti4x4-partp8x8-partb8x8", 0 );
-		av_dict_set( dict, "me_method", "dia", 0 );
-		av_dict_set( dict, "subq", "0", 0 );
-		av_dict_set( dict, "me_range", "16", 0 );
-		av_dict_set( dict, "g", "250", 0 );
-		av_dict_set( dict, "keyint_min", "25", 0 );
-		av_dict_set( dict, "sc_threshold", "0", 0 );
-		av_dict_set( dict, "i_qfactor", "0.71", 0 );
-		av_dict_set( dict, "b_strategy", "0", 0 );
-		av_dict_set( dict, "qcomp", "0.6", 0 );
-		av_dict_set( dict, "qmin", "10", 0 );
-		av_dict_set( dict, "qmax", "51", 0 );
-		av_dict_set( dict, "qdiff", "4", 0 );
-		av_dict_set( dict, "bf", "0", 0 );
-		av_dict_set( dict, "refs", "1", 0 );
-		av_dict_set( dict, "directpred", "1", 0 );
-		av_dict_set( dict, "trellis", "0", 0 );
-		av_dict_set( dict, "flags2", "-bpyramid-mixed_refs-wpred-dct8x8+fastpskip-mbtree", 0 );
-		av_dict_set( dict, "wpredp", "0", 0 );
-		av_dict_set( dict, "aq_mode", "0", 0 );
-		av_dict_set( dict, "rc_lookahead", "0", 0 );
-    }
-    else
-    {
-        Fatal( "Unexpected H.264 preset '%s'", preset.c_str() );
-    }
+    av_dict_set( dict, "preset", preset.c_str(), 0 );
 }

@@ -185,9 +185,9 @@ int QuadVideo::run()
                         }
                     }
                 }
-                    Debug( 3, "Queueing frame %lld", mFrameCount );
-                    VideoFrame *outputVideoFrame = new VideoFrame( this, ++mFrameCount, currTime*1000000LL, outputBuffer );
-                    distributeFrame( FramePtr( outputVideoFrame ) );
+                Debug( 3, "Queueing frame %lld", mFrameCount );
+                VideoFrame *outputVideoFrame = new VideoFrame( this, ++mFrameCount, currTime*1000000LL, outputBuffer );
+                distributeFrame( FramePtr( outputVideoFrame ) );
             }
 
             // Clear queue to prevent it filling up, proper polled interface should not use queues

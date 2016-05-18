@@ -10,6 +10,7 @@ extern "C" {
 #include <sys/time.h>
 
 class FeedProvider;
+class DataProvider;
 class VideoProvider;
 class AudioProvider;
 
@@ -139,17 +140,17 @@ public:
     //ByteBuffer &buffer() { return( mBuffer ); }
     //virtual const AVCodecContext *codecContext() const=0;
 
-    FramePtr parentFrame() const { return( mParent ); }             ///< Return the parent frame (if present)
-    FramePtr sourceFrame() const                                    /// Return the ultimate ancestor frame
+    const FeedFrame *parentFrame() const { return( mParent.get() ); }             ///< Return the parent frame (if present)
+    const FeedFrame *sourceFrame() const                                    /// Return the ultimate ancestor frame
     {
+        //FramePtr parent( mParent );
+        //while ( parent.get() )
+            //parent = parent->mParent;
+        //return( FramePtr( parent ) );
         const FeedFrame *source = this;
         while ( source->mParent.get() )
             source = source->mParent.get();
-        return( FramePtr( source ) );
-        //FramePtr source( this );
-        //while ( source->mParent.get() )
-            //source = source->mParent;
-        //return( source );
+        return( source );
     }
 };
 
@@ -215,5 +216,25 @@ public:
     DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
     DataFrame( FeedProvider *provider, FramePtr parent );
 };
+
+#if 0 // Not used a data frame should probably be able to come from anywhere, maybe.
+///
+/// Class representing an arbitrary data frame
+///
+class DataFrame : public FeedFrame
+{
+protected:
+    DataProvider   *mDataProvider;          ///< Specialised pointer to the data provider
+
+public:
+    DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
+    DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
+    DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( DataProvider *provider, FramePtr parent );
+
+    const DataProvider *dataProvider() const { return( mDataProvider ); }
+};
+#endif
 
 #endif // ZM_FEED_FRAME_H

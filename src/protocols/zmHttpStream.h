@@ -11,20 +11,44 @@ class HttpSession;
 // Class representing an HTTP stream.
 class HttpStream : public Stream, public Thread
 {
-CLASSID(HttpStream);
-
-private:
+protected:
     HttpSession *mHttpSession;      // Pointer to the current HTTP session
+
+protected:
+    virtual bool sendFrame( Select::CommsList &writeable, FramePtr frame ) = 0;
+
+protected:
+    HttpStream( const std::string &tag, HttpSession *session, Connection *connection, FeedProvider *provider );
+
+public:
+    ~HttpStream();
+    int run();
+};
+
+// Class representing an HTTP image stream.
+class HttpImageStream : public HttpStream
+{
+CLASSID(HttpImageStream);
 
 protected:
     bool sendFrame( Select::CommsList &writeable, FramePtr frame );
 
 public:
-    HttpStream( HttpSession *session, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality );
-    ~HttpStream();
+    HttpImageStream( HttpSession *session, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality );
+    ~HttpImageStream();
+};
+
+// Class representing an HTTP stream.
+class HttpDataStream : public HttpStream
+{
+CLASSID(HttpDataStream);
 
 protected:
-    int run();
+    bool sendFrame( Select::CommsList &writeable, FramePtr frame );
+
+public:
+    HttpDataStream( HttpSession *session, Connection *connection, FeedProvider *provider );
+    ~HttpDataStream();
 };
 
 #endif // ZM_HTTP_STREAM_H

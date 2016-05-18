@@ -364,7 +364,7 @@ public:
             Panic( "Cannot extract range starting at position %d, buffer only %zd long", index, mSize );
         const T *start = mHead + index;
         const T *end = start + size;
-        if ( end >= mTail )
+        if ( end > mTail )
             Panic( "Cannot extract range %d + %zd, buffer only %zd long", index, size, mSize );
         return( Buffer( start, size ) );
     }
@@ -373,7 +373,7 @@ public:
         if ( start < mHead || start >= mTail )
             Panic( "Cannot extract range starting at %p, outside of assigned memory", start );
         const T *end = start + size;
-        if ( end >= mTail )
+        if ( end > mTail )
             Panic( "Cannot extract range %zd, buffer only %zd long", size, mSize );
         return( Buffer( start, size ) );
     }

@@ -8,7 +8,10 @@
 #include "zmRtpCtrl.h"
 #include "zmRtpData.h"
 #include "../encoders/zmH264Encoder.h"
+#include "../encoders/zmH264Relay.h"
+#include "../encoders/zmMpegEncoder.h"
 #include "../zmFeedFrame.h"
+#include "../zmFfmpeg.h"
 
 RtspStream::RtspStream( RtspSession *rtspSession, int trackId, RtspConnection *connection, Encoder *encoder, const std::string &transport, const std::string &profile, const std::string &lowerTransport, const StringTokenList::TokenList &transportParms ) :
     Stream( "RtspStream", stringtf( "%X-%d ", rtspSession->session(), trackId ), connection, encoder ),
@@ -109,7 +112,7 @@ RtspStream::RtspStream( RtspSession *rtspSession, int trackId, RtspConnection *c
         //else if ( name == "server_port" )
         //{
             //StringTokenList ports( value, "-" );
-            //if ( ports.size() <= 0 || ports.size() > 2 )
+            //if ( ports.size() <= -2 || ports.size() > 2 )
                 //throw RtspException( stringtf( "Unable to parse RTSP transport server_port specification: %s", value.c_str() ) );
             //mSourcePorts[0] = strtol( ports[0].c_str(), NULL, 10 );
             //mSourcePorts[1] = strtol( ports[1].c_str(), NULL, 10 );
@@ -161,12 +164,14 @@ void RtspStream::packetiseFrame( FramePtr frame )
 {
     Debug( 1, "Got %zd byte frame to packetise", frame->buffer().size() );
 
-    const unsigned char *startPos = H264Encoder::findStartCode( frame->buffer().head(), frame->buffer().tail() );
+    if ( mEncoder->cl4ss() == "H264Encoder" || mEncoder->cl4ss() == "H264Relay" )
+    {
+    const unsigned char *startPos = h264StartCode( frame->buffer().head(), frame->buffer().tail() );
     while ( startPos < frame->buffer().tail() )
     {
         while( !*(startPos++) )
             ;
-        const unsigned char *nextStartPos = H264Encoder::findStartCode( startPos, frame->buffer().tail() );
+        const unsigned char *nextStartPos = h264StartCode( startPos, frame->buffer().tail() );
 
         //nal_send(s1, r, r1 - r, (r1 == buf1 + size));
         //static void nal_send(AVFormatContext *s1, const uint8_t *buf, int size, int last)
@@ -175,6 +180,11 @@ void RtspStream::packetiseFrame( FramePtr frame )
 
         if ( frameSize <= ZM_RTP_MAX_PACKET_SIZE )
         {
+            unsigned char type = startPos[0] & 0x1F;
+            unsigned char nri = startPos[0] & 0x60;
+
+            Debug( 2, "Packet type %d, nri %0x, size %d", type, nri, frameSize );
+
             //ff_rtp_send_data(s1, buf, size, last);
             mRtpData->buildPacket( startPos, frameSize, frame->timestamp(), (nextStartPos == frame->buffer().tail()) );
         }
@@ -184,6 +194,8 @@ void RtspStream::packetiseFrame( FramePtr frame )
 
             unsigned char type = startPos[0] & 0x1F;
             unsigned char nri = startPos[0] & 0x60;
+
+            Debug( 2, "Packet type %d, nri %0x, size %d", type, nri, frameSize );
 
             tempBuffer[0] = 28;        /* FU Indicator; Type = 28 ---> FU-A */
             tempBuffer[0] |= nri;
@@ -205,6 +217,30 @@ void RtspStream::packetiseFrame( FramePtr frame )
             mRtpData->buildPacket( tempBuffer, frameSize+2, frame->timestamp(), (nextStartPos == frame->buffer().tail()) );
         }
         startPos = nextStartPos;
+    }
+    }
+    else
+    {
+        if ( frame->buffer().size() <= ZM_RTP_MAX_PACKET_SIZE )
+        {
+            //ff_rtp_send_data(s1, buf, size, last);
+            mRtpData->buildPacket( frame->buffer().data(), frame->buffer().size(), frame->timestamp(), true );
+        }
+        else
+        {
+            unsigned char tempBuffer[ZM_RTP_MAX_PACKET_SIZE];
+            uint8_t *frameDataPtr = frame->buffer().data();
+            uint32_t frameSize = frame->buffer().size();
+            while ( frameSize > ZM_RTP_MAX_PACKET_SIZE )
+            {
+                memcpy( tempBuffer, frameDataPtr, ZM_RTP_MAX_PACKET_SIZE );
+                mRtpData->buildPacket( tempBuffer, ZM_RTP_MAX_PACKET_SIZE, frame->timestamp(), false );
+                frameDataPtr += ZM_RTP_MAX_PACKET_SIZE;
+                frameSize -= ZM_RTP_MAX_PACKET_SIZE;
+            }
+            memcpy( tempBuffer, frameDataPtr, frameSize );
+            mRtpData->buildPacket( tempBuffer, frameSize, frame->timestamp(), true );
+        }
     }
 }
 
@@ -235,14 +271,14 @@ int RtspStream::run()
             Fatal( "Failed to bind RTP ctrl socket" );
         Debug( 3, "Bound RTP ctrl to :%d", mSourcePorts[1] );
 
+        Debug( 3, "Connecting RTP data to %s:%d", mDestAddr.c_str(), mDestPorts[0] );
         remoteDataAddr.resolve( mDestAddr.c_str(), mDestPorts[0], "udp" );
         if ( !rtpDataSocket.connect( remoteDataAddr ) )
             Fatal( "Failed to connect RTP data socket" );
-        Debug( 3, "Connected RTP data to %s:%d", mDestAddr.c_str(), mDestPorts[0] );
-        remoteDataAddr.resolve( mDestAddr.c_str(), mDestPorts[1], "udp" );
+        Debug( 3, "Connecting RTP ctrl to %s:%d", mDestAddr.c_str(), mDestPorts[1] );
+        remoteCtrlAddr.resolve( mDestAddr.c_str(), mDestPorts[1], "udp" );
         if ( !rtpCtrlSocket.connect( remoteCtrlAddr ) )
             Fatal( "Failed to connect RTP ctrl socket" );
-        Debug( 3, "Connected RTP ctrl to %s:%d", mDestAddr.c_str(), mDestPorts[1] );
 
         // This timeout selected originally in case wanted to kill stream if no Receiver Report
         // received. As we now have a writer on the select will never get to that time.
@@ -287,7 +323,7 @@ int RtspStream::run()
                         {
                             const ByteBuffer *packet = *packetIter;
                             int nBytes = rtpDataSocket.write( packet->data(), packet->size() );
-                            Debug( 1, "Wrote %zd byte packet to socket", packet->size() );
+                            Debug( 5, "Wrote %zd byte packet to socket", packet->size() );
                             delete *packetIter;
                         }
                         packetQueue.clear();

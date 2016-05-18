@@ -148,6 +148,13 @@ FramePtr FeedProvider::pollFrame() const
     return( frame );
 }
 
+DataProvider::DataProvider( const std::string &cl4ss, const std::string &name )
+{
+    setIdentity( cl4ss, name );
+    addToMap();
+    //Info( "DataProvider : %s + %s", mTag.c_str(), mId.c_str() );
+}
+
 VideoProvider::VideoProvider( const std::string &cl4ss, const std::string &name )
 {
     mHasVideo = true;
@@ -181,4 +188,11 @@ bool AudioVideoProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
 {
     const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame.get());
     return( audioFrame != NULL );
+}
+
+GeneralProvider::GeneralProvider( const std::string &cl4ss, const std::string &name )
+{
+    setIdentity( cl4ss, name );
+    addToMap();
+    //Info( "GeneralProvider : %s + %s", mTag.c_str(), mId.c_str() );
 }

@@ -9,7 +9,7 @@
 
 class RtmpConnection;
 class RtmpSession;
-class H264Encoder;
+class H264Relay;
 
 // Class representing an RTMP stream.
 class RtmpStream : public Stream, public Thread
@@ -25,7 +25,7 @@ private:
     //std::string     mAppName;           // Name of stream
     //std::string     mStreamName;        // Name of stream
 
-    H264Encoder     *mH264Encoder;
+    H264Relay     *mH264Relay;
 
     bool            mFirstFrame;
     int             mInitialFrames;

@@ -6,6 +6,7 @@
 #include <deque>
 
 #include <string.h>
+#include <stdlib.h>
 #include <stdint.h>
 
 inline int max( int a, int b )

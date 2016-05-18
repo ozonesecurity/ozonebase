@@ -40,17 +40,17 @@ int RemoteVideoInput::run()
 
     while ( !mStop )
     {
-        AVFormatParameters *formatParameters = 0;
+        AVDictionary *dict = NULL;
         AVFormatContext *formatContext = NULL;
-        if ( av_open_input_file( &formatContext, mSource.c_str(), inputFormat, 0, formatParameters ) !=0 )
+        if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, &dict ) !=0 )
             Fatal( "Unable to open input %s due to: %s", mSource.c_str(), strerror(errno) );
 
         // Locate stream info from input
-        if ( av_find_stream_info( formatContext ) < 0 )
+        if ( avformat_find_stream_info( formatContext, /*&dict*/NULL ) < 0 )
             Fatal( "Unable to find stream info from %s due to: %s", mSource.c_str(), strerror(errno) );
         
-        if ( dbgLevel > DBG_INF )
-            dump_format(formatContext, 0, mSource.c_str(), 0);
+        //if ( dbgLevel > DBG_INF )
+            //dump_format(formatContext, 0, mSource.c_str(), 0);
 
         // Find first video stream present
         int videoStreamId = -1;
@@ -74,7 +74,7 @@ int RemoteVideoInput::run()
             Fatal( "Can't find codec for video stream from %s", mSource.c_str() );
 
         // Open the codec
-        if ( avcodec_open( mCodecContext, codec ) < 0 )
+        if ( avcodec_open2( mCodecContext, codec, /*&dict*/NULL ) < 0 )
             Fatal( "Unable to open codec for video stream from %s", mSource.c_str() );
 
         // Allocate space for the native video frame
@@ -135,7 +135,7 @@ int RemoteVideoInput::run()
         }
         if ( formatContext )
         {
-            av_close_input_file( formatContext );
+            avformat_close_input( &formatContext );
             formatContext = NULL;
             //av_free( formatContext );
         }

@@ -2,54 +2,9 @@
 #include "zmH264Encoder.h"
 
 #include "../zmFeedFrame.h"
+#include "../zmFfmpeg.h"
 #include "../libgen/libgenTime.h"
 #include <sys/time.h>
-
-// This section extracted from ffmpeg code. Should be moved or rewritten.
-const uint8_t *H264Encoder::_findStartCode( const uint8_t *p, const uint8_t *end )
-{
-    const uint8_t *a = p + 4 - ((intptr_t)p & 3);
-
-    for ( end -= 3; p < a && p < end; p++ )
-        if ( p[0] == 0 && p[1] == 0 && p[2] == 1 )
-            return( p );
-
-    for ( end -= 3; p < end; p += 4 )
-    {
-        uint32_t x = *(const uint32_t*)p;
-        if ( (x - 0x01010101) & (~x) & 0x80808080 )
-        {
-            if ( p[1] == 0 )
-            {
-                if ( p[0] == 0 && p[2] == 1 )
-                    return( p );
-                if ( p[2] == 0 && p[3] == 1 )
-                    return( p+1 );
-            }
-            if ( p[3] == 0)
-            {
-                if ( p[2] == 0 && p[4] == 1 )
-                    return( p+2 );
-                if ( p[4] == 0 && p[5] == 1 )
-                    return( p+3 );
-            }
-        }
-    }
-
-    for ( end += 3; p < end; p++ )
-        if ( p[0] == 0 && p[1] == 0 && p[2] == 1 )
-            return( p );
-
-    return( end + 3 );
-}
-
-const uint8_t *H264Encoder::findStartCode( const uint8_t *p, const uint8_t *end )
-{
-    const uint8_t *out = _findStartCode( p, end );
-    if ( p<out && out<end && !out[-1] )
-        out--;
-    return( out );
-}
 
 std::string H264Encoder::getPoolKey( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality )
 {
@@ -85,11 +40,11 @@ const std::string &H264Encoder::sdpString( int trackId ) const
             "a=rtpmap:96 H264/90000\r\n"    ///< FIXME - Check if this ever gets used
             //"a=fmtp:96 packetization-mode=1; profile-level-id=%02x00%02x; sprop-parameter-sets: %s\r\n"
             "a=fmtp:96 packetization-mode=1; profile-level-id=%02x00%02x%s\r\n"
-            "a=control:trackID=1\r\n";
+            "a=control:trackID=%d\r\n";
         std::string spsString;
         if ( !mSps.empty() )
             spsString = "; sprop-parameter-sets: "+base64Encode( mSps );
-        mSdpString = stringtf( sdpFormatString, mFrameRate.toDouble(), mAvcProfile, mAvcLevel, spsString.c_str() );
+        mSdpString = stringtf( sdpFormatString, mFrameRate.toDouble(), mAvcProfile, mAvcLevel, spsString.c_str(), trackId );
     }
     return( mSdpString );
 }
@@ -124,9 +79,12 @@ int H264Encoder::run()
     // TODO - This section needs to be rewritten to read the configuration from the values saved
     // for the streams via the web gui
     AVDictionary *opts = NULL;
-    avSetH264Preset( &opts, "default" );
-    avSetH264Profile( &opts, "main" );
+    //avSetH264Preset( &opts, "default" );
+    //avSetH264Profile( &opts, "main" );
     //avDictSet( &opts, "level", "4.1" );
+    avSetH264Preset( &opts, "ultrafast" );
+    //avSetH264Profile( &opts, "baseline" );
+    avDictSet( &opts, "level", "31" );
     avDictSet( &opts, "g", "24" );
     //avDictSet( &opts, "b", (int)mBitRate );
     //avDictSet( &opts, "bitrate", (int)mBitRate );
@@ -226,7 +184,7 @@ int H264Encoder::run()
                 const FeedFrame *frame = framePtr.get();
                 const VideoFrame *inputVideoFrame = dynamic_cast<const VideoFrame *>(frame);
 
-                //Info( "Provider: %s, Source: %s, Frame: %p", inputVideoFrame->provider()->cidentity(), inputVideoFrame->originator()->cidentity(), inputVideoFrame );
+                //Info( "Provider: %s, Source: %s, Frame: %d", inputVideoFrame->provider()->cidentity(), inputVideoFrame->originator()->cidentity(), inputVideoFrame->id() );
                 //Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
 
                 avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
@@ -244,19 +202,19 @@ int H264Encoder::run()
                 Debug( 5, "Encoding reports %d bytes", outSize );
                 if ( outSize > 0 )
                 {
-                Info( "CPTS: %jd", mCodecContext->coded_frame->pts );
+                    //Info( "CPTS: %jd", mCodecContext->coded_frame->pts );
                     outputBuffer.size( outSize );
                     //Debug( 5, "PTS2 %lld", mCodecContext->coded_frame->pts );
                     if ( mInitialFrame.empty() )
                     {
                         Debug( 3, "Looking for H.264 stream info" );
                         const uint8_t *startPos = outputBuffer.head();
-                        startPos = H264Encoder::findStartCode( startPos, outputBuffer.tail() );
+                        startPos = h264StartCode( startPos, outputBuffer.tail() );
                         while ( startPos < outputBuffer.tail() )
                         {
                             while( !*(startPos++) )
                                 ;
-                            const uint8_t *nextStartPos = H264Encoder::findStartCode( startPos, outputBuffer.tail() );
+                            const uint8_t *nextStartPos = h264StartCode( startPos, outputBuffer.tail() );
 
                             int frameSize = nextStartPos-startPos;
 
