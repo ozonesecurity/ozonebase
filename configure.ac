@@ -3,6 +3,7 @@ AC_INIT(zm,2.0.0a,support@zoneminder.com,ZoneMinder,http://www.zoneminder.com/do
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR(src/zm.h)
 AM_CONFIG_HEADER(config.h)
+AC_CONFIG_MACRO_DIR([m4])
 
 PATH_BUILD=`pwd`
 AC_SUBST(PATH_BUILD)
