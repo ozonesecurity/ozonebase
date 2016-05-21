@@ -4,8 +4,8 @@ Ozone is the next generation of ZoneMinder.
 Completely re-written and more modern in architecture. While [Version 1](https://github.com/zoneminder) is still used by many, we felt its time to take a fresh approach as a lot of the code is legacy and hard to extend, not to mention that over the last 10 years, technology has evolved significantly.
 Ozone comprises of:
 
-* serverbase - base framework for developing security and surveilllance servers (like ZoneMinder, for example)
-* clientbase - base framework for developing mobile apps for remote control (like zmNinja, for example)
+* server - base framework for developing security and surveilllance servers (like ZoneMinder, for example)
+* client - base framework for developing mobile apps for remote control (like zmNinja, for example)
 * examples - reference implementations to get  you started
 
 
