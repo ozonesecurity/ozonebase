@@ -235,7 +235,7 @@ int NetworkAVInput::run()
             if ( mVideoCodecContext )
             {
                 avcodec_close( mVideoCodecContext );
-                mVideoCodecContext = NULL; // Freed by av_close_input_file
+                mVideoCodecContext = NULL; // Freed by avformat_close_input
             }
         }
         if ( mHasAudio )
@@ -245,12 +245,12 @@ int NetworkAVInput::run()
             if ( mAudioCodecContext )
             {
                 avcodec_close( mAudioCodecContext );
-                mAudioCodecContext = NULL; // Freed by av_close_input_file
+                mAudioCodecContext = NULL; // Freed by avformat_close_input
             }
         }
         if ( formatContext )
         {
-            av_close_input_file( formatContext );
+            avformat_close_input( &formatContext );
             formatContext = NULL;
             //av_free( formatContext );
         }

@@ -242,7 +242,7 @@ int RawH264Input::run()
         }
         if ( formatContext )
         {
-            av_close_input_file( formatContext );
+            avformat_close_input( &formatContext );
             formatContext = NULL;
             //av_free( formatContext );
         }
