@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMemoryInputV1.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 
 MemoryInputV1::MemoryInputV1( const std::string &id,
                               const std::string &location,

@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmH264Encoder.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFfmpeg.h"
 #include "../libgen/libgenTime.h"
 #include <sys/time.h>
 

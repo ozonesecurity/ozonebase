@@ -1,10 +1,10 @@
 #ifndef ZM_EVENT_RECORDER_H
 #define ZM_EVENT_RECORDER_H
 
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedConsumer.h"
 #include "../libgen/libgenThread.h"
 
-#include "../zmMotionFrame.h"
+#include "../base/zmMotionFrame.h"
 
 #include <deque>
 

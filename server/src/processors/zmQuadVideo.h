@@ -1,9 +1,9 @@
 #ifndef ZM_QUAD_VIDEO_H
 #define ZM_QUAD_VIDEO_H
 
-#include "../zmFeedBase.h"
-#include "../zmFeedProvider.h"
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedBase.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedConsumer.h"
 
 ///
 /// Processor that amalgamates up to four video streams into a 2x2 quad video matrix. Can easily

@@ -1,9 +1,9 @@
 #ifndef ZM_RATE_LIMITER_H
 #define ZM_RATE_LIMITER_H
 
-#include "../zmFeedBase.h"
-#include "../zmFeedProvider.h"
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedBase.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedConsumer.h"
 
 #include "../libgen/libgenThread.h"
 

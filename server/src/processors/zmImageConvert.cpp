@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmImageConvert.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 
 ImageConvert::ImageConvert( const std::string &name, PixelFormat pixelFormat, int width, int height ) :
     VideoProvider( cClass(), name ),

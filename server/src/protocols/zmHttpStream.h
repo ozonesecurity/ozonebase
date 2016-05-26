@@ -1,10 +1,10 @@
 #ifndef ZM_HTTP_STREAM_H
 #define ZM_HTTP_STREAM_H
 
-#include "../zmStream.h"
+#include "../base/zmStream.h"
 #include "../libgen/libgenThread.h"
 #include "../libgen/libgenComms.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 
 class HttpSession;
 

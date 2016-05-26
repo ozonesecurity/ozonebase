@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmLocalFileDump.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
 
 LocalFileDump::LocalFileDump( const std::string &name, const std::string &location ) :
     FeedConsumer(),

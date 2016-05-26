@@ -1,9 +1,9 @@
 #ifndef ZM_VIDEO_FILTER_H
 #define ZM_VIDEO_FILTER_H
 
-#include "../zmFeedBase.h"
-#include "../zmFeedProvider.h"
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedBase.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedConsumer.h"
 
 ///
 /// Processor that filters out non-video frames and accesses them directly

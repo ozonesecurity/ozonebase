@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMpegEncoder.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 #include "../libgen/libgenTime.h"
 #include <sys/time.h>
 

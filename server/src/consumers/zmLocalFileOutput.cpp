@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmLocalFileOutput.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
 
 int LocalFileOutput::run()
 {

@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMemoryOutput.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
 #include "../libgen/libgenTime.h"
 
 //#include <sys/types.h>

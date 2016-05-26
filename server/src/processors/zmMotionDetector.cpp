@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMotionDetector.h"
 
-#include "../zmAlarmFrame.h"
-#include "../zmZone.h"
+#include "../base/zmAlarmFrame.h"
+#include "../base/zmZone.h"
 
 #include <sys/time.h>
 

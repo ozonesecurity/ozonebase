@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmEventRecorder.h"
 
-#include "../zmMotionFrame.h"
+#include "../base/zmMotionFrame.h"
 #include "../libgen/libgenTime.h"
 
 int EventRecorder::run()

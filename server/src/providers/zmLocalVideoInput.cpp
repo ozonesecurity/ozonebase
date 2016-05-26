@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmLocalVideoInput.h"
 
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
 LocalVideoInput::LocalVideoInput( const std::string &id, const std::string &source ) :

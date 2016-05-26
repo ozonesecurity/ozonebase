@@ -1,7 +1,7 @@
 AC_PREREQ(2.59)
 AC_INIT(zm,2.0.0a,support@zoneminder.com,ZoneMinder,http://www.zoneminder.com/downloads.html)
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR(src/zm.h)
+AC_CONFIG_SRCDIR(src/base)
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -273,7 +273,20 @@ AC_SUBST(ZM_PID,"$ZM_RUNDIR/zm.pid")
 AC_DEFINE_DIR([SYSCONFDIR],[sysconfdir],[Expanded configuration directory])
 AC_SUBST(ZM_CONFIG,"$SYSCONFDIR/zm.conf")
 
-AC_CONFIG_FILES([Makefile src/Makefile src/zmConfig.h src/libgen/Makefile src/libimg/Makefile src/consumers/Makefile src/encoders/Makefile src/processors/Makefile src/protocols/Makefile src/providers/Makefile])
+AC_CONFIG_FILES([
+    Makefile
+    src/Makefile
+    src/libgen/Makefile
+    src/libimg/Makefile
+    src/base/Makefile
+    src/base/zmConfig.h
+    src/consumers/Makefile
+    src/encoders/Makefile
+    src/processors/Makefile
+    src/protocols/Makefile
+    src/providers/Makefile
+    src/examples/Makefile
+])
 
 # Create the definitions for compilation and defaults for the database
 AC_CONFIG_COMMANDS([src/zmConfigDefines.h],[perl ./zmconfgen.pl])

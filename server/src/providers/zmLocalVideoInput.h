@@ -1,8 +1,8 @@
 #ifndef ZM_LOCAL_VIDEO_INPUT_H
 #define ZM_LOCAL_VIDEO_INPUT_H
 
-#include "../zmFeedProvider.h"
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
 #include "../libgen/libgenThread.h"
 
 ///

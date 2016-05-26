@@ -1,7 +1,7 @@
 #ifndef ZM_JPEG_ENCODER_H
 #define ZM_JPEG_ENCODER_H
 
-#include "../zmEncoder.h"
+#include "../base/zmEncoder.h"
 #include "../libgen/libgenThread.h"
 
 ///

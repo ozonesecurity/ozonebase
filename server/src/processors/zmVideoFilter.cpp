@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmVideoFilter.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
 DirectVideoFilter::DirectVideoFilter( AudioVideoProvider &provider ) :

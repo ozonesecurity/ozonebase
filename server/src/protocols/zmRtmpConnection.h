@@ -1,7 +1,7 @@
 #ifndef ZM_RTMP_CONNECTION_H
 #define ZM_RTMP_CONNECTION_H
 
-#include "../zmConnection.h"
+#include "../base/zmConnection.h"
 #include "zmRtmpRequest.h"
 
 #include "../libgen/libgenThread.h"

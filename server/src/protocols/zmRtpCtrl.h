@@ -1,7 +1,7 @@
 #ifndef ZM_RTP_CTRL_H
 #define ZM_RTP_CTRL_H
 
-#include "../zmStream.h"
+#include "../base/zmStream.h"
 #include "../libgen/libgenThread.h"
 
 extern "C" {

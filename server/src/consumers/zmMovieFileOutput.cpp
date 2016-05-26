@@ -1,8 +1,8 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMovieFileOutput.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846

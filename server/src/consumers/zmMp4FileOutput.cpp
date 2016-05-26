@@ -1,9 +1,9 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMp4FileOutput.h"
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
-#include "../zmMotionFrame.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmMotionFrame.h"
 #include "../libgen/libgenTime.h"
 
 AVFormatContext *Mp4FileOutput::openFile( AVOutputFormat *outputFormat )

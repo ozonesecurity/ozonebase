@@ -1,8 +1,8 @@
 #ifndef ZM_VIDEO_4_LINUX_INPUT_H
 #define ZM_VIDEO_4_LINUX_INPUT_H
 
-#include "../zmFeedProvider.h"
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
 #include "../libgen/libgenThread.h"
 
 #ifdef HAVE_LINUX_VIDEODEV2_H

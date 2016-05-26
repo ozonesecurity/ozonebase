@@ -1,8 +1,8 @@
 #ifndef ZM_MEMORY_OUTPUT_H
 #define ZM_MEMORY_OUTPUT_H
 
-#include "../zmFeedConsumer.h"
-#include "../zmMemoryIO.h"
+#include "../base/zmFeedConsumer.h"
+#include "../base/zmMemoryIO.h"
 #include "../libgen/libgenThread.h"
 
 class Image;

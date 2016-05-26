@@ -1,8 +1,8 @@
 #ifndef ZM_NETWORK_AV_INPUT_H
 #define ZM_NETWORK_AV_INPUT_H
 
-#include "../zmFeedFrame.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFeedProvider.h"
 #include "../libgen/libgenThread.h"
 
 ///

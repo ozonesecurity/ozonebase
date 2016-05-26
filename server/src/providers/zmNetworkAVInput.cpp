@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmNetworkAVInput.h"
 
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
 NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format ) :

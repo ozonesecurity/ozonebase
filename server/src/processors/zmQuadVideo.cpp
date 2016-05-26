@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmQuadVideo.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 
 QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
     VideoConsumer( cClass(), name, xTiles*yTiles ),

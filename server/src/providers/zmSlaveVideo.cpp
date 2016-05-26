@@ -1,4 +1,4 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmSlaveVideo.h"
 
 SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate ) :

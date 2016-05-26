@@ -1,7 +1,7 @@
 #ifndef ZM_RTMP_SESSION_H
 #define ZM_RTMP_SESSION_H
 
-#include "../zmConnection.h"
+#include "../base/zmConnection.h"
 
 #include <map>
 

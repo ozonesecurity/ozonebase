@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmSignalChecker.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
 SignalChecker::SignalChecker( const std::string &name ) :

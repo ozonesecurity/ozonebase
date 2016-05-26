@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmDelayBuffer.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 
 DelayBufferFilter::DelayBufferFilter( const std::string &name, double delay ) :
     GeneralProvider( cClass(), name ),

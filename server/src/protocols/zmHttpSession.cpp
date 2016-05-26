@@ -1,11 +1,11 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmHttpSession.h"
 
 #include "zmHttp.h"
 #include "zmHttpController.h"
 #include "zmHttpConnection.h"
 #include "zmHttpStream.h"
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedProvider.h"
 
 #include "../libgen/libgenUtils.h"
 #include <stdlib.h>

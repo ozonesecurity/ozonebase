@@ -1,9 +1,9 @@
 #ifndef ZM_DELAY_BUFFER_H
 #define ZM_DELAY_BUFFER_H
 
-#include "../zmFeedBase.h"
-#include "../zmFeedProvider.h"
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedBase.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedConsumer.h"
 
 ///
 /// Processor that delays frames for a specified period

@@ -1,7 +1,7 @@
 #ifndef ZM_SLAVE_VIDEO_H
 #define ZM_SLAVE_VIDEO_H
 
-#include "../zmFeedProvider.h"
+#include "../base/zmFeedProvider.h"
 
 class Image;
 

@@ -1,7 +1,7 @@
 #ifndef ZM_HTTP_SESSION_H
 #define ZM_HTTP_SESSION_H
 
-#include "../zmConnection.h"
+#include "../base/zmConnection.h"
 
 class HttpController;
 class HttpConnection;

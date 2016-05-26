@@ -5,7 +5,7 @@
 // Class representing the RTSP connection
 //
 
-#include "../zmConnection.h"
+#include "../base/zmConnection.h"
 
 class FeedProvider;
 class RtspController;

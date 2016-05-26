@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmImageTimestamper.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
 ImageTimestamper::ImageTimestamper( const std::string &name ) :

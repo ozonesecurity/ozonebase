@@ -7,7 +7,7 @@
 // http://www.ietf.org/rfc/rfc3984.txt for H.264 specific considerations
 //
 
-#include "../zmStream.h"
+#include "../base/zmStream.h"
 #include "../libgen/libgenBuffer.h"
 #include "../libgen/libgenThread.h"
 

@@ -1,7 +1,7 @@
 #ifndef ZM_HTTP_CONNECTION_H
 #define ZM_HTTP_CONNECTION_H
 
-#include "../zmConnection.h"
+#include "../base/zmConnection.h"
 
 // Class representing a single TCP connection to the HTTP server. This does not correlate with a specific
 // session but is used primarily to maintain state and content between requests, especially partial ones,

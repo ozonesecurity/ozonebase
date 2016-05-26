@@ -1,7 +1,7 @@
 #ifndef ZM_LOCAL_FILE_DUMP_H
 #define ZM_LOCAL_FILE_DUMP_H
 
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedConsumer.h"
 #include "../libgen/libgenThread.h"
 
 ///

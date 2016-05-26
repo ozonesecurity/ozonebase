@@ -5,7 +5,7 @@
 // Class for H.264 encoder threads.
 //
 
-#include "../zmEncoder.h"
+#include "../base/zmEncoder.h"
 
 #include "../libgen/libgenBuffer.h"
 

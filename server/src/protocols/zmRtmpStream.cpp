@@ -1,4 +1,4 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmRtmpStream.h"
 
 #include "zmRtmp.h"
@@ -7,8 +7,8 @@
 #include "zmRtmpRequest.h"
 #include "zmRtmpConnection.h"
 #include "../encoders/zmH264Relay.h"
-#include "../zmFeedFrame.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFfmpeg.h"
 
 RtmpStream::RtmpStream( RtmpSession *rtmpSession, RtmpConnection *connection, int id, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality ) :
     Stream( "RtmpStream", stringtf( "%X", rtmpSession->session() ), connection, provider ),

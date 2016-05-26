@@ -1,9 +1,9 @@
 #ifndef ZM_MP4_FILE_OUTPUT_H
 #define ZM_MP4_FILE_OUTPUT_H
 
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedConsumer.h"
 #include "../libgen/libgenThread.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 
 ///
 /// Video generation parameters

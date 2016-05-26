@@ -1,4 +1,4 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmRtspStream.h"
 
 #include "zmRtsp.h"
@@ -10,8 +10,8 @@
 #include "../encoders/zmH264Encoder.h"
 #include "../encoders/zmH264Relay.h"
 #include "../encoders/zmMpegEncoder.h"
-#include "../zmFeedFrame.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFeedFrame.h"
+#include "../base/zmFfmpeg.h"
 
 RtspStream::RtspStream( RtspSession *rtspSession, int trackId, RtspConnection *connection, Encoder *encoder, const std::string &transport, const std::string &profile, const std::string &lowerTransport, const StringTokenList::TokenList &transportParms ) :
     Stream( "RtspStream", stringtf( "%X-%d ", rtspSession->session(), trackId ), connection, encoder ),

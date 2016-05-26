@@ -1,10 +1,10 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmHttpStream.h"
 
 #include "zmHttp.h"
 #include "zmHttpSession.h"
-#include "../zmConnection.h"
-#include "../zmFeedFrame.h"
+#include "../base/zmConnection.h"
+#include "../base/zmFeedFrame.h"
 #include "../encoders/zmJpegEncoder.h"
 
 HttpStream::HttpStream( const std::string &tag, HttpSession *httpSession, Connection *connection, FeedProvider *provider ) :

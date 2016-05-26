@@ -1,4 +1,4 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmRtmpConnection.h"
 
 #include "zmRtmp.h"

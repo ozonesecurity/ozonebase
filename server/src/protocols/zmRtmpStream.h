@@ -1,11 +1,11 @@
 #ifndef ZM_RTMP_STREAM_H
 #define ZM_RTMP_STREAM_H
 
-#include "../zmStream.h"
+#include "../base/zmStream.h"
 #include "../libgen/libgenThread.h"
 #include "../libgen/libgenComms.h"
 #include "../libgen/libgenBuffer.h"
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 
 class RtmpConnection;
 class RtmpSession;

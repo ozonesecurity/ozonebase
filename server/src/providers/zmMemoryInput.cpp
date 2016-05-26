@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmMemoryInput.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 
 MemoryInput::MemoryInput( const std::string &id, const std::string &location, int memoryKey ) :
     VideoProvider( cClass(), id ),

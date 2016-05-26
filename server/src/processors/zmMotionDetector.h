@@ -1,8 +1,8 @@
 #ifndef ZM_MOTION_DETECTOR_H
 #define ZM_MOTION_DETECTOR_H
 
-#include "../zmFeedProvider.h"
-#include "../zmFeedConsumer.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmFeedConsumer.h"
 #include "../libimg/libimgImage.h"
 #include "../providers/zmSlaveVideo.h"
 

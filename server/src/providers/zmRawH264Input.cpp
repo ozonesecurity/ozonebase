@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmRawH264Input.h"
 
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
 RawH264Input::RawH264Input( const std::string &name, const std::string &source, const std::string &format ) :

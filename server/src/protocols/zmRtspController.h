@@ -1,7 +1,7 @@
 #ifndef ZM_RTSP_CONTROLLER_H
 #define ZM_RTSP_CONTROLLER_H
 
-#include "../zmController.h"
+#include "../base/zmController.h"
 
 #include <map>
 #include <set>

@@ -1,8 +1,8 @@
 #ifndef ZM_MEMORY_INPUT_V1_H
 #define ZM_MEMORY_INPUT_V1_H
 
-#include "../zmFeedProvider.h"
-#include "../zmMemoryIOV1.h"
+#include "../base/zmFeedProvider.h"
+#include "../base/zmMemoryIOV1.h"
 #include "../libgen/libgenThread.h"
 
 class Image;

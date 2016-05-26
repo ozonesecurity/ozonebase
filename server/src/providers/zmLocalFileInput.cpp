@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmLocalFileInput.h"
 
-#include "../zmFfmpeg.h"
+#include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
 #include <sys/types.h>

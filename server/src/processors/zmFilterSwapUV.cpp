@@ -1,7 +1,7 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmFilterSwapUV.h"
 
-#include "../zmFeedFrame.h"
+#include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
 FilterSwapUV::FilterSwapUV( const std::string &name ) :

@@ -1,11 +1,11 @@
-#include "../zm.h"
+#include "../base/zm.h"
 #include "zmRtspConnection.h"
 
 #include "zmRtsp.h"
 #include "zmRtspSession.h"
 #include "zmRtpSession.h"
 #include "zmRtpData.h"
-#include "../zmEncoder.h"
+#include "../base/zmEncoder.h"
 #include "../encoders/zmH264Encoder.h"
 #include "../encoders/zmH264Relay.h"
 #include "../encoders/zmMpegEncoder.h"
