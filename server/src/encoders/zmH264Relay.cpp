@@ -96,17 +96,17 @@ int H264Relay::run()
     Debug( 2, "Time base = %d/%d", mCodecContext->time_base.num, mCodecContext->time_base.den );
     Debug( 2, "Pix fmt = %d", mCodecContext->pix_fmt );
 
-    const unsigned char startCode[] = { 0x00, 0x00, 0x00, 0x01 };
+    //const unsigned char startCode[] = { 0x00, 0x00, 0x00, 0x01 };
 
     Info( "%s:Waiting", cidentity() );
     if ( waitForProviders() )
     {
         Info( "%s:Waited", cidentity() );
 
-        uint16_t inputWidth = videoProvider()->width();
-        uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
-        FrameRate inputFrameRate = videoProvider()->frameRate();
+        //uint16_t inputWidth = videoProvider()->width();
+        //uint16_t inputHeight = videoProvider()->height();
+        //PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        //FrameRate inputFrameRate = videoProvider()->frameRate();
 
         uint64_t startTime = 0;
         while ( !mStop )

@@ -31,7 +31,7 @@ int RawH264Input::run()
             Fatal( "Can't load input format" );
     }
 
-    AVDictionary *dict = NULL;
+    //AVDictionary *dict = NULL;
     //int dictRet = av_dict_set(&dict,"xxx","yyy",0);
     //int dictRet = av_dict_set(&dict,"standard","ntsc",0);
     //dictRet = av_dict_set(&dict,"video_size","320x240",0);

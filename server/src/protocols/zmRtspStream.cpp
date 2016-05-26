@@ -322,7 +322,7 @@ int RtspStream::run()
                         for ( PacketQueue::iterator packetIter = packetQueue.begin(); packetIter != packetQueue.end(); packetIter++ )
                         {
                             const ByteBuffer *packet = *packetIter;
-                            int nBytes = rtpDataSocket.write( packet->data(), packet->size() );
+                            /*int nBytes = */rtpDataSocket.write( packet->data(), packet->size() );
                             Debug( 5, "Wrote %zd byte packet to socket", packet->size() );
                             delete *packetIter;
                         }

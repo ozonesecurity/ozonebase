@@ -137,15 +137,15 @@ int QuadVideo::run()
                                     if ( interFrame->linesize[plane] )
                                     {
                                         int planeHeight;
-                                        int planeWidth;
+                                        //int planeWidth;
                                         if ( plane == 0 )
                                         {
-                                            planeWidth = interWidth;
+                                            //planeWidth = interWidth;
                                             planeHeight = interHeight;
                                         }
                                         else
                                         {
-                                            planeWidth = -((-interWidth ) >> interFormatDesc.log2_chroma_w);
+                                            //planeWidth = -((-interWidth ) >> interFormatDesc.log2_chroma_w);
                                             planeHeight = -((-interHeight ) >> interFormatDesc.log2_chroma_h);
                                         }
                                         Debug( 5, "Moving image %d, plane %d", i, plane );

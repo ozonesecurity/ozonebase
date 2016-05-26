@@ -110,7 +110,7 @@ bool HttpConnection::recvRequest( std::string &request )
     {
         StringTokenList urlParts( requestUrl, "/?&",  StringTokenList::STLF_ALTCHARS|StringTokenList::STLF_MULTI );
         const std::string &streamName = urlParts[0];
-        const std::string &streamSource = urlParts[1];
+        //const std::string &streamSource = urlParts[1];
         if ( !mController->verifyStreamName( streamName ) )
         {
             Error( "Invalid request stream name '%s'", streamName.c_str() );

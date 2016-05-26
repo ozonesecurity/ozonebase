@@ -31,7 +31,7 @@ int EventRecorder::run()
 bool EventRecorder::processFrame( FramePtr frame )
 {
     const MotionFrame *motionFrame = dynamic_cast<const MotionFrame *>(frame.get());
-    const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
+    //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
 
     AlarmState lastState = mState;
     uint64_t now = time64();

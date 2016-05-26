@@ -131,7 +131,7 @@ int H264Encoder::run()
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
         PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
-        FrameRate inputFrameRate = videoProvider()->frameRate();
+        //FrameRate inputFrameRate = videoProvider()->frameRate();
         //Info( "CONVERT: %d-%dx%d -> %d-%dx%d",
             //inputPixelFormat, inputWidth, inputHeight,
             //mPixelFormat, mWidth, mHeight
