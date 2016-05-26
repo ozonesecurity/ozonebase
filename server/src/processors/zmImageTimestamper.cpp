@@ -45,7 +45,7 @@ int ImageTimestamper::run()
                     //FramePtr framePtr( *iter );
                     const FeedFrame *frame = (*iter).get();
 
-                    Info( "%s / Provider: %s, Source: %s, Frame: %p (%lld / %.3f) - %d", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
+                    Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
                     Image image( inputPixelFormat, inputWidth, inputHeight, frame->buffer().data() );
 

@@ -74,7 +74,7 @@ bool FeedConsumer::waitForProviders()
         readyCount = 0;
         badCount = 0;
         mProviderMutex.lock();
-        Info( "%s: Got %d providers", cidentity(), mProviders.size() );
+        Info( "%s: Got %lu providers", cidentity(), mProviders.size() );
         for ( ProviderMap::const_iterator iter = mProviders.begin(); iter != mProviders.end(); iter++ )
         {
             if ( iter->first->ready() )
@@ -161,7 +161,7 @@ bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
     mQueueMutex.lock();
     if ( mFrameQueue.size() > MAX_QUEUE_SIZE )
     {
-        Error( "%s: Maximum queue size exceeded, got %d frames, not running?", cidentity(), mFrameQueue.size() );
+        Error( "%s: Maximum queue size exceeded, got %lu frames, not running?", cidentity(), mFrameQueue.size() );
         result = false;
     }
     else

@@ -107,7 +107,7 @@ ByteBuffer *RtmpStream::buildPacket( uint32_t chunkStreamStreamId, uint8_t messa
 
 bool RtmpStream::sendFrame( FramePtr frame )
 {
-    Debug( 1, "Got %zd byte frame to packetise, timestamp %lld", frame->buffer().size(), frame->timestamp() );
+    Debug( 1, "Got %zd byte frame to packetise, timestamp %jd", frame->buffer().size(), frame->timestamp() );
 
     const unsigned char *startPos = frame->buffer().head();
 

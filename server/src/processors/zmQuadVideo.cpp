@@ -181,11 +181,11 @@ int QuadVideo::run()
 
                             // Reformat the input frame to fit the desired output format
                             if ( sws_scale( mConvertContexts[i], inputFrame->data, inputFrame->linesize, 0, inputHeight, mInterFrames[i]->data, mInterFrames[i]->linesize ) < 0 )
-                                Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %lld", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, interWidth, interHeight, mFrameCount );
+                                Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, interWidth, interHeight, mFrameCount );
                         }
                     }
                 }
-                Debug( 3, "Queueing frame %lld", mFrameCount );
+                Debug( 3, "Queueing frame %ju", mFrameCount );
                 VideoFrame *outputVideoFrame = new VideoFrame( this, ++mFrameCount, currTime*1000000LL, outputBuffer );
                 distributeFrame( FramePtr( outputVideoFrame ) );
             }
@@ -287,7 +287,7 @@ int QuadVideo::run()
             {
                 const VideoFrame *inputFrame = dynamic_cast<const VideoFrame *>(iter->get());
 
-                Info( "%s / Provider: %s, Source: %s, Frame: %p (%lld / %.3f) - %d", cid(), inputFrame->provider()->cidentity(), inputFrame->originator()->cidentity(), inputFrame, inputFrame->id(), inputFrame->age(), inputFrame->buffer().size() );
+                Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %d", cid(), inputFrame->provider()->cidentity(), inputFrame->originator()->cidentity(), inputFrame, inputFrame->id(), inputFrame->age(), inputFrame->buffer().size() );
 
                 avInputFrameSize = avpicture_get_size( inputFrame->pixelFormat(), inputFrame->width(), inputFrame->height() );
                 avcodec_get_frame_defaults( &avInputFrame );

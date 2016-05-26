@@ -109,10 +109,10 @@ int MotionDetector::run()
                     if ( mRefImage.empty() )
                     {
                         if ( writeImages )
-                            image.writeJpeg( stringtf( "%s/image-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
+                            image.writeJpeg( stringtf( "%s/image-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                         mRefImage.assign( Image( Image::FMT_RGB48, image ) );
                         if ( writeImages )
-                            mRefImage.writeJpeg( stringtf( "%s/ref-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
+                            mRefImage.writeJpeg( stringtf( "%s/ref-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                     }
 
                     //struct timeval *timestamp = new struct timeval;
@@ -205,7 +205,7 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
         {
             if ( !mAlarmed )
             {
-                Info( "%03lld - Gone into alarm state", mFrameCount );
+                Info( "%03ju - Gone into alarm state", mFrameCount );
                 mAlarmed = true;
             }
         }
@@ -213,7 +213,7 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
         {
             if ( mAlarmed )
             {
-                Info( "%03lld - Left alarm state", mFrameCount );
+                Info( "%03ju - Left alarm state", mFrameCount );
                 mAlarmed = false;
             }
         }
@@ -274,11 +274,11 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mCompImageSlave->relayImage( compImage );
         //compImage.writeJpeg( stringtf( "%s/diag-c.jpg", config.dir_events ) );
         if ( writeImages )
-            compImage.writeJpeg( stringtf( "%s/comp-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+            compImage.writeJpeg( stringtf( "%s/comp-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
         mRefImageSlave->relayImage( mRefImage );
         //mRefImage.writeJpeg( stringtf( "%s/diag-r.jpg", config.dir_events ) );
         if ( writeImages )
-            mRefImage.writeJpeg( stringtf( "%s/ref2-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+            mRefImage.writeJpeg( stringtf( "%s/ref2-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
 
     // Get the difference between the captured image and the reference image
@@ -298,7 +298,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mDeltaImageSlave->relayImage( *deltaImage );
         //deltaImage->writeJpeg( stringtf( "%s/diag-d.jpg", config.dir_events ), 100 );
         if ( writeImages )
-            deltaImage->writeJpeg( stringtf( "%s/delta-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+            deltaImage->writeJpeg( stringtf( "%s/delta-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     // Pre-populate the variance buffer with noise
     if ( mVarBuffer.empty() )
@@ -389,7 +389,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
 
     if ( topScore > 0 )
     {
-        Info( "Got alarm centre at %d,%d, at count %lld", alarmCentre.x(), alarmCentre.y(), mFrameCount );
+        Info( "Got alarm centre at %d,%d, at count %ju", alarmCentre.x(), alarmCentre.y(), mFrameCount );
     }
 
     // Update the variance buffer based on the delta image
@@ -449,7 +449,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         mVarImageSlave->relayImage( *mVarImage );
         //mVarImage->writeJpeg( stringtf( "%s/diag-v.jpg", config.dir_events ), 100 );
         if ( writeImages )
-            mVarImage->writeJpeg( stringtf( "%s/var-%s-%lld.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+            mVarImage->writeJpeg( stringtf( "%s/var-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     delete deltaImage;
     //mRefImage.blend( compImage, mRefBlend );

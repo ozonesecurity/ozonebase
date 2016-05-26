@@ -98,7 +98,7 @@ bool HttpImageStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
             {
                 int nBytes = socket->write( txBuffer.data(), txBuffer.size() );
                 const FeedFrame *sourceFrame = frame->sourceFrame();
-                Debug( 4, "Wrote %d bytes on sd %d, frame %lld<-%lld", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
+                Debug( 4, "Wrote %d bytes on sd %d, frame %ju<-%ju", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
                 if ( nBytes != txBuffer.size() )
                 {
                     Error( "Incomplete write, %d bytes instead of %zd", nBytes, packet.size() );
@@ -135,7 +135,7 @@ bool HttpDataStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
             {
                 int nBytes = socket->write( packet.data(), packet.size() );
                 const FeedFrame *sourceFrame = frame->sourceFrame();
-                Debug( 4, "Wrote %d bytes on sd %d, frame %lld<-%lld", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
+                Debug( 4, "Wrote %d bytes on sd %d, frame %ju<-%ju", nBytes, socket->getWriteDesc(), frame->id(), sourceFrame->id() );
                 if ( nBytes != packet.size() )
                 {
                     Error( "Incomplete write, %d bytes instead of %zd", nBytes, packet.size() );

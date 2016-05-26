@@ -2845,7 +2845,7 @@ bool Image::unzip( const Bytef *inbuffer, unsigned long inbufferSize )
     }
     if ( zipSize != mBuffer.size() )
     {
-        Error( "Unzip failed, size mismatch, expected %d bytes, got %ld", mBuffer.size(), zipSize );
+        Error( "Unzip failed, size mismatch, expected %lu bytes, got %ld", mBuffer.size(), zipSize );
         return( false );
     }
     return( true );

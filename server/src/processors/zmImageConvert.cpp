@@ -69,13 +69,13 @@ int ImageConvert::run()
                     if ( mWidth != inputWidth || mHeight != inputHeight || mPixelFormat != inputPixelFormat )
                     {
                         // Requires conversion
-                        Info( "%s / Provider: %s, Source: %s, Frame: %p (%lld / %.3f) - %d", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
+                        Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
                         avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
 
                         // Reformat the input frame to fit the desired output format
                         if ( sws_scale( mConvertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %lld", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, mWidth, mHeight, mFrameCount );
+                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, mWidth, mHeight, mFrameCount );
 
                         VideoFrame *videoFrame = new VideoFrame( this, *iter, mFrameCount, frame->timestamp(), outputBuffer );
                         distributeFrame( FramePtr( videoFrame ) );

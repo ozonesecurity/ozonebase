@@ -40,11 +40,11 @@ int SignalChecker::run()
                     mSignal = checkSignal( image );
                     if ( mSignal && !lastSignal )
                     {
-                        Info( "Signal Reacquired @ %lld", mFrameCount );
+                        Info( "Signal Reacquired @ %ju", mFrameCount );
                     }
                     else if ( !mSignal && lastSignal )
                     {
-                        Info( "Signal Lost @ %lld", mFrameCount );
+                        Info( "Signal Lost @ %ju", mFrameCount );
                     }
 
                     // Can probably just distribute original frame, depends if we want trail of processors

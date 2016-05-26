@@ -121,13 +121,13 @@ int LocalVideoInput::run()
             {
                 frameComplete = false;
                 if ( avcodec_decode_video2( mCodecContext, frame, &frameComplete, &packet ) < 0 )
-                    Fatal( "Unable to decode frame at frame %lld", mFrameCount );
+                    Fatal( "Unable to decode frame at frame %ju", mFrameCount );
 
-                Debug( 3, "Decoded video packet at frame %lld, pts %jd", mFrameCount, packet.pts );
+                Debug( 3, "Decoded video packet at frame %ju, pts %jd", mFrameCount, packet.pts );
 
                 if ( frameComplete )
                 {
-                    Debug( 3, "Got frame %d, pts %lld (%.3f)", mCodecContext->frame_number, frame->pkt_pts, (((double)(packet.pts-mStream->start_time)*mStream->time_base.num)/mStream->time_base.den) );
+                    Debug( 3, "Got frame %d, pts %jd (%.3f)", mCodecContext->frame_number, frame->pkt_pts, (((double)(packet.pts-mStream->start_time)*mStream->time_base.num)/mStream->time_base.den) );
 
                     avpicture_layout( (AVPicture *)frame, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, frameBuffer.data(), frameBuffer.capacity() );
 

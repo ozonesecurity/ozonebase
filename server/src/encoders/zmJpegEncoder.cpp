@@ -119,7 +119,7 @@ int JpegEncoder::run()
                     // Reformat the input frame to fit the desired output format
                     Info( "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
                     if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                        Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %lld", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
+                        Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 
                     // Encode the image
                     outSize = avcodec_encode_video( mCodecContext, outputBuffer.data(), outputBuffer.capacity(), outputFrame );
@@ -128,7 +128,7 @@ int JpegEncoder::run()
                     {
                         outputBuffer.size( outSize );
                         Debug( 5, "PTS2 %jd", mCodecContext->coded_frame->pts );
-                        Debug( 3, "Queueing frame %lld, outSize = %d", mFrameCount, outSize );
+                        Debug( 3, "Queueing frame %ju, outSize = %d", mFrameCount, outSize );
         /*
                         if ( mBaseTimestamp == 0 )
                         {

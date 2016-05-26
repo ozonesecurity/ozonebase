@@ -182,19 +182,19 @@ int NetworkAVInput::run()
                 {
                     videoFrameComplete = false;
                     if ( avcodec_decode_video2( mVideoCodecContext, avVideoFrame, &videoFrameComplete, &packet ) < 0 )
-                        Fatal( "%s: Unable to decode video frame at frame %lld", cidentity(), VideoProvider::mFrameCount );
+                        Fatal( "%s: Unable to decode video frame at frame %ju", cidentity(), VideoProvider::mFrameCount );
 
-                    Debug( 3, "%s: Decoded video packet at frame %d, pts %lld", cidentity(), mVideoCodecContext->frame_number, packet.pts );
+                    Debug( 3, "%s: Decoded video packet at frame %d, pts %jd", cidentity(), mVideoCodecContext->frame_number, packet.pts );
 
                     if ( videoFrameComplete )
                     {
                         double timeOffset = (((double)packet.pts*mVideoStream->time_base.num)/mVideoStream->time_base.den);
-                        Debug( 3, "%s: Got video frame %d, pts %lld (%.3f)", cidentity(), mVideoCodecContext->frame_number, avVideoFrame->pkt_pts, timeOffset );
+                        Debug( 3, "%s: Got video frame %d, pts %jd (%.3f)", cidentity(), mVideoCodecContext->frame_number, avVideoFrame->pkt_pts, timeOffset );
 
                         avpicture_layout( (AVPicture *)avVideoFrame, mVideoCodecContext->pix_fmt, mVideoCodecContext->width, mVideoCodecContext->height, videoFrameBuffer.data(), videoFrameBuffer.capacity() );
 
                         uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
-                        Info( "%ld: TS: %lld, TS1: %lld, TS2: %lld, TS3: %.3f", time( 0 ), timestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
+                        Info( "%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
      
                         VideoFrame *videoFrame = new VideoFrame( this, mVideoCodecContext->frame_number, timestamp, videoFrameBuffer );
                         distributeFrame( FramePtr( videoFrame ) );
@@ -204,9 +204,9 @@ int NetworkAVInput::run()
                 {
                     audioFrameComplete = false;
                     if ( avcodec_decode_audio4( mAudioCodecContext, avAudioFrame, &audioFrameComplete, &packet ) < 0 )
-                        Fatal( "Unable to decode audio frame at frame %lld", AudioProvider::mFrameCount );
+                        Fatal( "Unable to decode audio frame at frame %ju", AudioProvider::mFrameCount );
 
-                    Debug( 3, "Decoded audio packet at frame %d, pts %lld", mAudioCodecContext->frame_number, packet.pts );
+                    Debug( 3, "Decoded audio packet at frame %d, pts %jd", mAudioCodecContext->frame_number, packet.pts );
 
                     if ( audioFrameComplete )
                     {
@@ -215,10 +215,10 @@ int NetworkAVInput::run()
                         audioFrameSize = av_samples_get_buffer_size( avAudioFrame->linesize, mAudioCodecContext->channels, avAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 ) + FF_INPUT_BUFFER_PADDING_SIZE;
                         audioFrameBuffer.size( audioFrameSize );
 
-                        Debug( 3, "Got audio frame %d, pts %lld (%.3f)", mAudioCodecContext->frame_number, avAudioFrame->pkt_pts, timeOffset );
+                        Debug( 3, "Got audio frame %d, pts %jd (%.3f)", mAudioCodecContext->frame_number, avAudioFrame->pkt_pts, timeOffset );
 
                         uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
-                        //Debug( 3, "%d: TS: %lld, TS1: %lld, TS2: %lld, TS3: %.3f", time( 0 ), timestamp, packet.pts, ((1000000LL*packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den), (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den) );
+                        //Debug( 3, "%d: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, ((1000000LL*packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den), (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den) );
 
                         AudioFrame *audioFrame = new AudioFrame( this, mAudioCodecContext->frame_number, timestamp, audioFrameBuffer, avAudioFrame->nb_samples );
                         distributeFrame( FramePtr( audioFrame ) );

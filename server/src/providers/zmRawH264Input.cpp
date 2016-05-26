@@ -179,7 +179,7 @@ int RawH264Input::run()
                 }
                 if ( mHasVideo && (packet.stream_index == videoStreamId) )
                 {
-                    Debug( 3, "%s: Got video packet %d, pts %lld", cidentity(), videoFrameCount, packet.pts );
+                    Debug( 3, "%s: Got video packet %d, pts %jd", cidentity(), videoFrameCount, packet.pts );
 
                     //DataFrame *dataFrame = new DataFrame( this, videoFrameCount, packet.pts, packet.data, packet.size );
                     //distributeFrame( FramePtr( dataFrame ) );

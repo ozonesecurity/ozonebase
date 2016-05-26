@@ -139,7 +139,7 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
         //if ( !motionData.refScore )
             //motionData.refScore = (unsigned long long)motionData.score<<32;
         //Debug( 3, "s:%lu,rS:%llu,sP:%lu,sT:%llu", mMotionData->score, mMotionData->refScore>>32, mMotionData->alarmPixels, scoreTotal );
-        Debug( 3, "s:%u,sP:%u,sT:%llu", mScore, alarmPixels, scoreTotal );
+        Debug( 3, "s:%u,sP:%u,sT:%ju", mScore, alarmPixels, scoreTotal );
     }
 
     /*
@@ -164,7 +164,7 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
             if ( mMotionData )
             {
                 mMotionImage = mThresImage->highlightEdges( RGB_RED, mMask );
-                Debug( 3, "Got %d blobs @ %d x %d", blobGroup.blobList().size(), blobGroup.centre().x(), blobGroup.centre().y() );
+                Debug( 3, "Got %lu blobs @ %d x %d", blobGroup.blobList().size(), blobGroup.centre().x(), blobGroup.centre().y() );
                 for ( int b = 0; b < blobGroup.blobList().size(); b++ )
                 {
                     const Image::Blob *blob = blobGroup.blobList()[b];

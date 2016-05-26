@@ -47,7 +47,7 @@ bool EventRecorder::processFrame( FramePtr frame )
             for ( FrameStore::const_iterator iter = mFrameStore.begin(); iter != mFrameStore.end(); iter++ )
             {
                 const MotionFrame *frame = dynamic_cast<const MotionFrame *>( iter->get() );
-                std::string path = stringtf( "%s/img-%s-%d-%lld.jpg", mLocation.c_str(), mName.c_str(), mEventCount, frame->id() );
+                std::string path = stringtf( "%s/img-%s-%d-%ju.jpg", mLocation.c_str(), mName.c_str(), mEventCount, frame->id() );
                 //Info( "PF:%d @ %dx%d", frame->pixelFormat(), frame->width(), frame->height() );
                 Image image( frame->pixelFormat(), frame->width(), frame->height(), frame->buffer().data() );
                 image.writeJpeg( path.c_str() );
@@ -69,11 +69,11 @@ bool EventRecorder::processFrame( FramePtr frame )
         std::string path;
         if ( mState == ALARM )
         {
-            path = stringtf( "%s/img-%s-%d-%lld-A.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
+            path = stringtf( "%s/img-%s-%d-%ju-A.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
         }
         else if ( mState == ALERT )
         {
-            path = stringtf( "%s/img-%s-%d-%lld.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
+            path = stringtf( "%s/img-%s-%d-%ju.jpg", mLocation.c_str(), mName.c_str(), mEventCount, motionFrame->id() );
         }
         Info( "PF:%d @ %dx%d", motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height() );
         Image image( motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height(), motionFrame->buffer().data() );
@@ -81,11 +81,11 @@ bool EventRecorder::processFrame( FramePtr frame )
     }
 
     // Clear out old frames
-    Debug( 5, "Got %d frames in store", mFrameStore.size() );
+    Debug( 5, "Got %lu frames in store", mFrameStore.size() );
     while( !mFrameStore.empty() )
     {
         FramePtr tempFrame = *(mFrameStore.begin());
-        Debug( 5, "Frame %lld age %.2lf", tempFrame->id(), tempFrame->age() );
+        Debug( 5, "Frame %ju age %.2lf", tempFrame->id(), tempFrame->age() );
         if ( tempFrame->age() <= MAX_EVENT_HEAD_AGE )
             break;
         Debug( 5, "Deleting" );

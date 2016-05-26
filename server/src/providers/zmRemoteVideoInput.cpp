@@ -96,13 +96,13 @@ int RemoteVideoInput::run()
                 {
                     frameComplete = false;
                     if ( avcodec_decode_video2( mCodecContext, frame, &frameComplete, &packet ) < 0 )
-                        Fatal( "Unable to decode frame at frame %lld", mFrameCount );
+                        Fatal( "Unable to decode frame at frame %ju", mFrameCount );
 
-                    Debug( 3, "Decoded video packet at frame %lld, pts %jd", mFrameCount, packet.pts );
+                    Debug( 3, "Decoded video packet at frame %ju, pts %jd", mFrameCount, packet.pts );
 
                     if ( frameComplete )
                     {
-                        Debug( 3, "Got frame %lld", mFrameCount );
+                        Debug( 3, "Got frame %ju", mFrameCount );
 
                         //Hexdump( DBG_INFO, frame->data[0], 128 );
 

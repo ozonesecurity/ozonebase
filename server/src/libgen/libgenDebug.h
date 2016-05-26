@@ -23,13 +23,13 @@
 #define DBG_SYSLOG      DBG_INF 
 
 #define dbgPrintf(level,params...)  {\
-                    if (level <= dbgLevel)\
+                    if ((level) <= dbgLevel)\
                         dbgOutput( 0, __FILE__, __LINE__, level, ##params );\
                 }
 
 #define dbgHexdump(level,data,len)  {\
-                    if (level <= dbgLevel)\
-                        dbgOutput( 1, __FILE__, __LINE__, level, "%p (%d)", data, len );\
+                    if ((level) <= dbgLevel)\
+                        dbgOutput( 1, __FILE__, __LINE__, level, "%p (%lu)", data, (size_t)(len) );\
                 }
 
 /* Turn off debug here */

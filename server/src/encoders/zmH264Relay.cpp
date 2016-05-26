@@ -182,10 +182,10 @@ int H264Relay::run()
                     mInitialFrame = frameBuffer;
                     startTime = frame->timestamp();
                 }
-                Debug( 2, "Frame TS: %lld", frame->timestamp() );
+                Debug( 2, "Frame TS: %jd", frame->timestamp() );
                 //VideoFrame *videoFrame = new VideoFrame( this, ++mFrameCount, mCodecContext->coded_frame->pts, frameBuffer );
                 VideoFrame *videoFrame = new VideoFrame( this, frame->id(), frame->timestamp()-startTime, frameBuffer );
-                Debug( 2, "Video Frame TS: %lld", videoFrame->timestamp() );
+                Debug( 2, "Video Frame TS: %jd", videoFrame->timestamp() );
                 distributeFrame( FramePtr( videoFrame ) );
             }
             checkProviders();

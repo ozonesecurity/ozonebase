@@ -195,7 +195,7 @@ int H264Encoder::run()
                 // Reformat the input frame to fit the desired output format
                 //Info( "SCALE: %d -> %d", int(inputFrame->data[0])%16, int(outputFrame->data[0])%16 );
                 if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %lld", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
+                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 
                 // Encode the image
                 outSize = avcodec_encode_video( mCodecContext, outputBuffer.data(), outputBuffer.capacity(), outputFrame );
@@ -204,7 +204,7 @@ int H264Encoder::run()
                 {
                     //Info( "CPTS: %jd", mCodecContext->coded_frame->pts );
                     outputBuffer.size( outSize );
-                    //Debug( 5, "PTS2 %lld", mCodecContext->coded_frame->pts );
+                    //Debug( 5, "PTS2 %jd", mCodecContext->coded_frame->pts );
                     if ( mInitialFrame.empty() )
                     {
                         Debug( 3, "Looking for H.264 stream info" );

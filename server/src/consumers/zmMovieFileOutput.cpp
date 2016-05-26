@@ -215,7 +215,7 @@ int MovieFileOutput::run()
 
                             if ( ( !audioStream || (audioTimeOffset >= mMaxLength) ) && ( !videoStream || (videoTimeOffset >= mMaxLength) ) )
                                 fileComplete = true;
-                            Info( "PTS: %lf, %lld, %lld", videoTimeOffset, videoCodecContext->coded_frame->pts, videoStream->pts.val );
+                            Info( "PTS: %lf, %jd, %jd", videoTimeOffset, videoCodecContext->coded_frame->pts, videoStream->pts.val );
 
                             const FeedFrame *frame = iter->get();
                             /* write interleaved audio and video frames */
@@ -263,7 +263,7 @@ int MovieFileOutput::run()
                                     if ( convertContext )
                                     {
                                         if ( sws_scale( convertContext, avInputFrame->data, avInputFrame->linesize, 0, inputHeight, avInterFrame->data, avInterFrame->linesize ) < 0 )
-                                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %lld", inputPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, videoFrameCount );
+                                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, videoFrameCount );
                                         avOutputFrame = avInterFrame;
                                         avInterFrame->pts = avInputFrame->pts;
                                     }

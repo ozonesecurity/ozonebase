@@ -66,19 +66,19 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
     }
     else if ( mapStat.st_size < memSize ) // Is allowed to be larger as not querying whole thing
     {
-        Error( "Got unexpected memory map file size %ld, expected %d", mapStat.st_size, memSize );
+        Error( "Got unexpected memory map file size %lu, expected %lu", mapStat.st_size, memSize );
     }
 
     memPtr = (unsigned char *)mmap( NULL, memSize, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, mapFd, 0 );
     if ( memPtr == MAP_FAILED )
         if ( errno == EAGAIN )
         {
-            Debug( 1, "Unable to map file %s (%d bytes) to locked memory, trying unlocked", memFile, memSize );
+            Debug( 1, "Unable to map file %s (%lu bytes) to locked memory, trying unlocked", memFile, memSize );
             memPtr = (unsigned char *)mmap( NULL, memSize, PROT_READ|PROT_WRITE, MAP_SHARED, mapFd, 0 );
         }
     if ( memPtr == MAP_FAILED )
     {
-        Debug( 3, "Can't map file %s (%d bytes) to memory: %s(%d)", memFile, memSize, strerror(errno), errno );
+        Debug( 3, "Can't map file %s (%lu bytes) to memory: %s(%d)", memFile, memSize, strerror(errno), errno );
         if ( munmap( memPtr, memSize ) < 0 )
             Fatal( "Can't munmap: %s", strerror(errno) );
         close( mapFd );

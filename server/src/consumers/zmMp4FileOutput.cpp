@@ -146,7 +146,7 @@ int Mp4FileOutput::run()
                                 {
                                     // Create new event
                                     eventCount++;
-                                    std::string path = stringtf( "%s/img-%s-%d-%lld.jpg", mLocation.c_str(), mName.c_str(), eventCount, motionFrame->id() );
+                                    std::string path = stringtf( "%s/img-%s-%d-%ju.jpg", mLocation.c_str(), mName.c_str(), eventCount, motionFrame->id() );
                                     //Info( "PF:%d @ %dx%d", motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height() );
                                     Image image( motionFrame->pixelFormat(), motionFrame->width(), motionFrame->height(), motionFrame->buffer().data() );
                                     image.writeJpeg( path.c_str() );
@@ -182,7 +182,7 @@ int Mp4FileOutput::run()
 
 								unsigned char type = startPos[0] & 0x1F;
 								unsigned char nri = startPos[0] & 0x60;
-								Debug( 3, "Frame Type %d, NRI %d (%02x), %d bytes, ts %lld", type, nri>>5, startPos[0], frameSize, frame->timestamp() );
+								Debug( 3, "Frame Type %d, NRI %d (%02x), %d bytes, ts %jd", type, nri>>5, startPos[0], frameSize, frame->timestamp() );
 
 								if ( type == NAL_IDR_SLICE )
 									keyFrame = true;
@@ -228,7 +228,7 @@ int Mp4FileOutput::run()
 								packet.size = frame->buffer().size();
 								//packet.pts = packet.dts = AV_NOPTS_VALUE;
 								packet.pts = packet.dts = (videoFrameCount * mVideoParms.frameRate().num * videoCodecContext->time_base.den) / (mVideoParms.frameRate().den * videoCodecContext->time_base.num);
-								Info( "vfc: %lld, vto: %.2lf, kf: %d, pts: %lld", videoFrameCount, videoTimeOffset, keyFrame, packet.pts );
+								Info( "vfc: %ju, vto: %.2lf, kf: %d, pts: %jd", videoFrameCount, videoTimeOffset, keyFrame, packet.pts );
 
 								int result = av_interleaved_write_frame(outputContext, &packet);
 								if ( result != 0 )
