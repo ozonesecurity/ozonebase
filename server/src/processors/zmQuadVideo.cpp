@@ -19,9 +19,9 @@ QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int widt
     for ( int i = 0; i < mProviderLimit; i++ )
         mProviderList[i] = NULL;
     mInterFrames = new AVFrame *[mTiles];
-    memset( mInterFrames, 0, sizeof(mInterFrames) );
+    memset( mInterFrames, 0, sizeof(*mInterFrames)*mTiles );
     mConvertContexts = new struct SwsContext *[mTiles];
-    memset( mConvertContexts, 0, sizeof(mConvertContexts) );
+    memset( mConvertContexts, 0, sizeof(*mConvertContexts)*mTiles );
 }
 
 QuadVideo::~QuadVideo()
