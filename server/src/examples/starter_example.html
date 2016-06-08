@@ -1,0 +1,35 @@
+<!-- REPLACE THE IP ADDRESS WITH YOUR SERVER IP -->
+<html>
+<body>
+  <table>
+    <h1>Example of the amazing simplicity of ozone server framework<h1>
+    <h5>Source code:<a href="https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp">here</a></h5>
+    <th>Live Feeds, 2 traffic cameras</th>
+     <tr>
+        <!-- live frames -->
+        <td>
+            <img src="http://192.168.1.224:9292/watchcam1/cam1" />
+        </td>
+        <td>
+            <img src="http://192.168.1.224:9292/watchcam2/cam2" />
+        </td>
+     </tr>
+     <!-- debug frames -->
+     <tr>
+        <td>
+          Modect on cam1:<br/>
+          <img src="http://192.168.1.224:9292/debug/modectcam1" />
+        </td>
+        <td>
+          Modect on cam2:<br/>
+          <img src="http://192.168.1.224:9292/debug/modectcam2" />
+        </td>
+    </tr>
+  </table>
+ 
+<h2> Muxed 4x4 stream of camera 1 and 2 and its debug frames</h2>
+ <img src="http://192.168.1.224:9292/debug/quadcammux" />
+
+
+</body>
+</html>
