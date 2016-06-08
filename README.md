@@ -62,35 +62,46 @@ Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/s
 
 
 ```
-Application app;
+	Application app;
 
-    NetworkAVInput input( "input", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
-    app.addThread( &input );
+   	// Two RTSP sources 
+    NetworkAVInput cam1( "cam1", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
+    NetworkAVInput cam2("cam2","rtsp://170.93.143.139:1935/rtplive/e0ffa81e00a200ab0050fa36c4235c0a");
+    app.addThread( &cam1 );
+    app.addThread( &cam2 );
 
-	MotionDetector motionDetector( "modect" );
-  	motionDetector.registerProvider( input );
-   	app.addThread( &motionDetector );
+	// motion detect for cam1
+	MotionDetector motionDetector1( "modectcam1" );
+  	motionDetector1.registerProvider( cam1 );
+   	app.addThread( &motionDetector1 );
 
-	QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-   	quadVideo.registerProvider( *motionDetector.refImageSlave() );
-   	quadVideo.registerProvider( *motionDetector.compImageSlave() );
-   	quadVideo.registerProvider( *motionDetector.deltaImageSlave() );
-   	quadVideo.registerProvider( *motionDetector.varImageSlave() );
+	// motion detect for cam1
+	MotionDetector motionDetector2( "modectcam2" );
+  	motionDetector2.registerProvider( cam2 );
+   	app.addThread( &motionDetector2 );
+
+	// Let's make a mux/stitched handler for cam1 and cam2 and its debugs
+	QuadVideo quadVideo( "quadcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+   	quadVideo.registerProvider( cam1 );
+   	quadVideo.registerProvider( *motionDetector1.deltaImageSlave() );
+   	quadVideo.registerProvider( cam2 );
+   	quadVideo.registerProvider( *motionDetector2.deltaImageSlave() );
    	app.addThread( &quadVideo );
 
-    Listener listener;
+	Listener listener;
     app.addThread( &listener );
 
     HttpController httpController( "watch", 9292 );
-    httpController.addStream("watch",input);
+    httpController.addStream("watchcam1",cam1);
+    httpController.addStream("watchcam2",cam2);
 
-	httpController.addStream( "file", input );
+	httpController.addStream( "file", cam1 );
    	httpController.addStream( "debug", SlaveVideo::cClass() );
    	httpController.addStream( "debug", quadVideo );
-   	httpController.addStream( "debug", motionDetector );
+   	httpController.addStream( "debug", motionDetector1 );
+   	httpController.addStream( "debug", motionDetector2 );
 	
     listener.addController( &httpController );
-
 
     app.run();
 ```
