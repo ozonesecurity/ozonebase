@@ -24,7 +24,8 @@ bin_PROGRAMS = \
 	example5 \
 	example6 \
 	example7 \
-	example8
+	example8 \
+	starter_example
 
 example1_SOURCES = example1.cpp
 example1_DEPENDENCIES = $(all_deps)
@@ -57,5 +58,9 @@ example7_LDADD = $(all_libs)
 example8_SOURCES = example8.cpp
 example8_DEPENDENCIES = $(all_deps)
 example8_LDADD = $(all_libs)
+
+starter_example_SOURCES = starter_example.cpp
+starter_example_DEPENDENCIES = $(all_deps)
+starter_example_LDADD = $(all_libs)
 
 noinst_HEADERS = 
