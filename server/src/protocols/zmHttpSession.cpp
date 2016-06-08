@@ -98,13 +98,15 @@ bool HttpSession::recvRequest( HttpConnection *connection, const std::string &re
         responseHeaders.insert( Connection::Headers::value_type( "Cache-Control", "no-cache" ) );
         responseHeaders.insert( Connection::Headers::value_type( "Pragma", "no-cache" ) );
         responseHeaders.insert( Connection::Headers::value_type( "Expires-Control", "Thu, 01 Dec 1994 16:00:00 GMT" ) );
-        //responseHeaders.insert( Connection::Headers::value_type( "Connection", "close" ) );
         responseHeaders.insert( Connection::Headers::value_type( "Access-Control-Allow-Origin", "*" ) );
-        //responseHeaders.insert( Connection::Headers::value_type( "Content-Type", "multipart/x-mixed-replace; boundary=--imgboundary" ) );
 
-        //if ( streamProvider->hasVideo() )
-            //mHttpStream = new HttpImageStream( this, connection, streamProvider, width, height, FrameRate( rate ), quality );
-        //else
+        if ( streamProvider->hasVideo() )
+        {
+            responseHeaders.insert( Connection::Headers::value_type( "Connection", "close" ) );
+            responseHeaders.insert( Connection::Headers::value_type( "Content-Type", "multipart/x-mixed-replace; boundary=--imgboundary" ) );
+            mHttpStream = new HttpImageStream( this, connection, streamProvider, width, height, FrameRate( rate ), quality );
+        }
+        else
             mHttpStream = new HttpDataStream( this, connection, streamProvider );
 
         mHttpStream->start();

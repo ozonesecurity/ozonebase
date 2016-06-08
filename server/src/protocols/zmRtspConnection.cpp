@@ -173,7 +173,7 @@ bool RtspConnection::handleRequest( const std::string &request )
 
         if ( codec == CODEC_ID_H264 )
         {
-            //if ( provider->cl4ss() == "RawH264Input" )
+            if ( provider->cl4ss() == "RawH264Input" )
             {
                 std::string encoderKey = H264Relay::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
                 if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
@@ -187,7 +187,6 @@ bool RtspConnection::handleRequest( const std::string &request )
                 sdpString += mEncoder->sdpString( 1 ); // XXX - Should be variable
                 responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
             }
-            /*
             else
             {
                 std::string encoderKey = H264Encoder::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
@@ -202,7 +201,6 @@ bool RtspConnection::handleRequest( const std::string &request )
                 sdpString += mEncoder->sdpString( 1 ); // XXX - Should be variable
                 responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
             }
-            */
         }
         else if ( codec == CODEC_ID_MPEG4 )
         {
