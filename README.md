@@ -10,6 +10,7 @@
 
 **Answer: The output**
 
+[![ozone server video](http://img.youtube.com/vi/Ic2HXUjxRnU/0.jpg)](http://www.youtube.com/watch?v=Ic2HXUjxRnU "ozone server example")
 <iframe width="420" height="315" src="https://www.youtube.com/embed/Ic2HXUjxRnU" frameborder="0" allowfullscreen></iframe>
 
 
