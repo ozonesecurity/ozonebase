@@ -108,8 +108,11 @@ Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/s
 ```
 
 
-Ozone is the next generation of ZoneMinder.
-Completely re-written and more modern in architecture. While [Version 1](https://github.com/zoneminder) is still used by many, we felt its time to take a fresh approach as a lot of the code is legacy and hard to extend, not to mention that over the last 10 years, technology has evolved significantly.
+## Excited? Want to know more?
+
+Ozone is is rockstar framework to make development of custom security and surveillance products much easier than today.
+Completely re-written and more modern in architecture. Ozone is created by the original developer of ZoneMinder, Phil Coombes.
+
 Ozone comprises of:
 
 * server - base framework for developing security and surveilllance servers (like ZoneMinder, for example)
