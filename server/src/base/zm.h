@@ -10,6 +10,8 @@ extern "C"
 #include <stdint.h>
 #include <assert.h>
 
+#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
+
 extern "C"
 {
 #if !HAVE_DECL_ROUND
