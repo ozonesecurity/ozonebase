@@ -147,7 +147,7 @@ bool RtspConnection::handleRequest( const std::string &request )
 
         const VideoProvider *videoProvider = dynamic_cast<const VideoProvider *>(provider);
 
-        int codec = CODEC_ID_H264;
+        int codec = CODEC_ID_MPEG4;
         int width = videoProvider->width();
         int height = videoProvider->height();
         FrameRate frameRate = 15;
