@@ -8,14 +8,57 @@
 **Problem Statement 2: Oh yeah, in 10 minutes.**
 
 
-**Answer: The output**
+**Answer: Tap on the image below to see a recording of a live video**
+
+What's happening here is we wrote a simple server and client app. The server app connects to two traffic cameras, converts RTSP to MJPEG so it can show on the browser. It also creates motion detection streams and a stiched quad frame to show you it rocks. And in less that 22 lines of core code. 
 
 [![ozone server video](http://img.youtube.com/vi/Ic2HXUjxRnU/0.jpg)](http://www.youtube.com/watch?v=Ic2HXUjxRnU "ozone server example")
-<iframe width="420" height="315" src="https://www.youtube.com/embed/Ic2HXUjxRnU" frameborder="0" allowfullscreen></iframe>
 
 
+The client (HTML) code that renders the images above:
+Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.html)
 
-[This code](https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp), produces this output:
+```
+<!-- REPLACE THE IP ADDRESS WITH YOUR SERVER IP -->
+<html>
+<body>
+  <table>
+    <h1>Example of the amazing simplicity of ozone server framework<h1>
+    <h5>Source code:<a href="https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp">here</a></h5>
+    <th>Live Feeds, 2 traffic cameras</th>
+     <tr>
+        <!-- live frames -->
+        <td>
+            <img src="http://192.168.1.224:9292/watchcam1/cam1" />
+        </td>
+        <td>
+            <img src="http://192.168.1.224:9292/watchcam2/cam2" />
+        </td>
+     </tr>
+     <!-- debug frames -->
+     <tr>
+        <td>
+          Modect on cam1:<br/>
+          <img src="http://192.168.1.224:9292/debug/modectcam1" />
+        </td>
+        <td>
+          Modect on cam2:<br/>
+          <img src="http://192.168.1.224:9292/debug/modectcam2" />
+        </td>
+    </tr>
+  </table>
+ 
+<h2> Muxed 4x4 stream of camera 1 and 2 and its debug frames</h2>
+ <img src="http://192.168.1.224:9292/debug/quadcammux" />
+
+
+</body>
+</html>
+```
+
+
+The servercode that generates the images above:
+Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp)
 
 
 ```
