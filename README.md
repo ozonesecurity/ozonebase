@@ -3,8 +3,20 @@
 
 ### First an example:
 
-[This code](https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp):
-snippet:
+**Problem Statement 1: How about we tap into two public RTSP cameras, and display them on a browser (no RTSP support), run live motion detection on them, show motion frames and, yeah, while we are at it, stitch the two camera images and their live debug frames into a 4x4 muxed image?**
+
+**Problem Statement 2: Oh yeah, in 10 minutes.**
+
+
+**Answer: The output**
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/Ic2HXUjxRnU" frameborder="0" allowfullscreen></iframe>
+
+
+
+[This code](https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp), produces this output:
+
+
 ```
 Application app;
 
