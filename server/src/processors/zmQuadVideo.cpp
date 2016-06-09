@@ -81,6 +81,8 @@ int QuadVideo::run()
     // Wait for video source to be ready
     if ( waitForProviders() )
     {
+        setReady();
+
         // Make space for anything that is going to be output
         ByteBuffer outputBuffer;
         outputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
