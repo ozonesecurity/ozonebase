@@ -4,3 +4,5 @@
 .deps
 Makefile
 Makefile.in
+server/src/examples/*.
+server/src/zmConfigDefines.h
