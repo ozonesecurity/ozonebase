@@ -89,6 +89,11 @@ bool HttpSession::recvRequest( HttpConnection *connection, const std::string &re
             connection->sendResponse( responseHeaders, "", 404, "Invalid Source" );
             return( false );
         }
+        if ( !streamProvider->ready() )
+        {
+            connection->sendResponse( responseHeaders, "", 503, "Stream not ready" );
+            return( false );
+        }
         if ( width == -1 || height == -1 )
         {
             const VideoProvider *videoProvider = dynamic_cast<const VideoProvider *>(streamProvider);

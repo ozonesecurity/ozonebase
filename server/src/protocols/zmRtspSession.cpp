@@ -4,6 +4,8 @@
 #include "zmRtsp.h"
 #include "zmRtspController.h"
 #include "zmRtspStream.h"
+#include "../base/zmFeedProvider.h"
+
 #include "../libgen/libgenUtils.h"
 
 RtspSession::RtspSession( int session, RtspConnection *connection, Encoder *encoder ) :
@@ -33,6 +35,11 @@ bool RtspSession::recvRequest( const std::string &requestType, const std::string
         if ( !provider )
         {
             mConnection->sendResponse( responseHeaders, "", 404, "Not Found" );
+            return( false );
+        }
+        if ( !provider->ready() )
+        {
+            mConnection->sendResponse( responseHeaders, "", 503, "Stream not ready" );
             return( false );
         }
  
