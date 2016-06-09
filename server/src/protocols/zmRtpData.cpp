@@ -29,12 +29,15 @@ void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t 
 {
     if ( !mTimestampBase )
         mTimestampBase = timecode;
+    uint32_t timestamp = timecode - mTimestampBase;
     //uint32_t timestamp = av_rescale_q( timecode - mTimestampBase, mFrameRate, mClockRate );
+#if 0
     uint32_t timestampDelta = (timecode - mTimestampBase);
     double timestampFactor = (double)mClockRate.den/1000000.0;
     Debug( 6, "Packet QTSd = %d", timestampDelta );
     uint32_t timestamp = timestampDelta*timestampFactor;
     Debug( 6, "Packet QTS = %d", timestamp );
+#endif
 
     RtpDataHeader rtpHeader;
     rtpHeader.version = ZM_RTP_VERSION;
