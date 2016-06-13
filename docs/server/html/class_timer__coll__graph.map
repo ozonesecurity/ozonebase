@@ -1,5 +1,0 @@
-<map id="Timer" name="Timer">
-<area shape="rect" id="node3" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="65,95,127,121"/>
-<area shape="rect" id="node4" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="5,5,64,32"/>
-<area shape="rect" id="node5" href="$class_condition.html" title="Condition" alt="" coords="119,5,196,32"/>
-</map>

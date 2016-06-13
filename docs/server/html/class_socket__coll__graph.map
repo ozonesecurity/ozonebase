@@ -1,4 +1,0 @@
-<map id="Socket" name="Socket">
-<area shape="rect" id="node2" href="$class_comms_base.html" title="Base class for all the Socket and Pipe classes. " alt="" coords="5,5,104,32"/>
-<area shape="rect" id="node3" href="$class_sock_addr.html" title="Class representing a general socket address. " alt="" coords="129,5,207,32"/>
-</map>

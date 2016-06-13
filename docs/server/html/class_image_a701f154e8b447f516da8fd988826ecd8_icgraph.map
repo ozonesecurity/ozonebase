@@ -1,9 +1,0 @@
-<map id="Image::u" name="Image::u">
-<area shape="rect" id="node2" href="$class_image.html#aec40cc68cfa85a1bd296a1c55756bd3c" title="Image::copyYUYV2RGB" alt="" coords="127,5,293,32"/>
-<area shape="rect" id="node3" href="$class_image.html#aa00ef418b82e560e82560be03b73bb71" title="Image::copyUYVY2RGB" alt="" coords="127,56,293,83"/>
-<area shape="rect" id="node4" href="$class_image.html#ab2816efdcfe535cb0bbcd920c9f04115" title="Image::u" alt="" coords="173,107,247,133"/>
-<area shape="rect" id="node5" href="$class_image.html#a48e2ce7a0e50d31e5ad1b1699281af8e" title="Image::delta2" alt="" coords="159,157,261,184"/>
-<area shape="rect" id="node6" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="341,157,536,184"/>
-<area shape="rect" id="node7" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="584,157,748,184"/>
-<area shape="rect" id="node8" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="796,157,933,184"/>
-</map>

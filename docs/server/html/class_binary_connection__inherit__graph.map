@@ -1,5 +1,0 @@
-<map id="BinaryConnection" name="BinaryConnection">
-<area shape="rect" id="node3" href="$class_rtmp_connection.html" title="RtmpConnection" alt="" coords="5,155,125,181"/>
-<area shape="rect" id="node4" href="$class_rtsp_connection.html" title="RtspConnection" alt="" coords="150,155,266,181"/>
-<area shape="rect" id="node2" href="$class_connection.html" title="Connection" alt="" coords="92,5,180,32"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="Encoder::unpoolEncoder" name="Encoder::unpoolEncoder">
-<area shape="rect" id="node2" href="$class_encoder.html#a59605bf58500542f1a15d25629ac3922" title="Tidy up relationships with providers etc before destruction. " alt="" coords="217,81,340,108"/>
-<area shape="rect" id="node3" href="$class_h264_encoder.html#a48d38071526f547986d4e61084a23433" title="H264Encoder::run" alt="" coords="389,5,515,32"/>
-<area shape="rect" id="node4" href="$class_h264_relay.html#a78d8b75067ae59ecbe807f9f98924f27" title="H264Relay::run" alt="" coords="395,56,509,83"/>
-<area shape="rect" id="node5" href="$class_jpeg_encoder.html#a05e016fec90d083cfa68a282be27743c" title="JpegEncoder::run" alt="" coords="390,107,514,133"/>
-<area shape="rect" id="node6" href="$class_mpeg_encoder.html#a0fa085fc6da907f0d9b90065ffcd80cf" title="MpegEncoder::run" alt="" coords="388,157,516,184"/>
-</map>

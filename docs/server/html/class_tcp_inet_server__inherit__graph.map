@@ -1,8 +1,0 @@
-<map id="TcpInetServer" name="TcpInetServer">
-<area shape="rect" id="node2" href="$class_tcp_inet_socket.html" title="Class representing a TCP internet socket. " alt="" coords="68,229,175,256"/>
-<area shape="rect" id="node3" href="$class_inet_socket.html" title="Class representing a general socket using internet addressing. " alt="" coords="12,155,97,181"/>
-<area shape="rect" id="node4" href="$class_socket.html" title="Class representing a general Unix socket. " alt="" coords="23,80,86,107"/>
-<area shape="rect" id="node5" href="$class_comms_base.html" title="Base class for all the Socket and Pipe classes. " alt="" coords="5,5,104,32"/>
-<area shape="rect" id="node6" href="$class_tcp_socket_protocol.html" title="Class representing the TCP socket protocol. " alt="" coords="121,155,255,181"/>
-<area shape="rect" id="node7" href="$class_socket_protocol.html" title="Abstract base class representing a socket protocol. " alt="" coords="133,80,243,107"/>
-</map>

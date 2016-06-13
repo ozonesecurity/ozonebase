@@ -1,5 +1,0 @@
-<map id="Zone::checkMotion" name="Zone::checkMotion">
-<area shape="rect" id="node2" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="187,5,381,32"/>
-<area shape="rect" id="node3" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="429,5,593,32"/>
-<area shape="rect" id="node4" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="641,5,779,32"/>
-</map>

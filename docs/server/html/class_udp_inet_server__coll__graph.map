@@ -1,9 +1,0 @@
-<map id="UdpInetServer" name="UdpInetServer">
-<area shape="rect" id="node2" href="$class_udp_inet_socket.html" title="Class representing a UDP internet socket. " alt="" coords="136,261,245,288"/>
-<area shape="rect" id="node3" href="$class_inet_socket.html" title="Class representing a general socket using internet addressing. " alt="" coords="68,185,153,212"/>
-<area shape="rect" id="node4" href="$class_socket.html" title="Class representing a general Unix socket. " alt="" coords="79,109,142,136"/>
-<area shape="rect" id="node5" href="$class_comms_base.html" title="Base class for all the Socket and Pipe classes. " alt="" coords="5,5,104,32"/>
-<area shape="rect" id="node6" href="$class_sock_addr.html" title="Class representing a general socket address. " alt="" coords="129,5,207,32"/>
-<area shape="rect" id="node7" href="$class_udp_socket_protocol.html" title="Class representing the UDP socket protocol. " alt="" coords="178,185,313,212"/>
-<area shape="rect" id="node8" href="$class_socket_protocol.html" title="Abstract base class representing a socket protocol. " alt="" coords="190,109,301,136"/>
-</map>

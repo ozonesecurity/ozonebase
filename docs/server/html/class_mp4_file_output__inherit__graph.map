@@ -1,6 +1,0 @@
-<map id="Mp4FileOutput" name="Mp4FileOutput">
-<area shape="rect" id="node2" href="$class_data_consumer.html" title="DataConsumer" alt="" coords="5,155,116,181"/>
-<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="5,80,116,107"/>
-<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="20,5,101,32"/>
-<area shape="rect" id="node5" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="140,155,203,181"/>
-</map>

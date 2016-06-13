@@ -1,5 +1,0 @@
-<map id="Image::annotate" name="Image::annotate">
-<area shape="rect" id="node2" href="$class_image.html#a5dccace46f47fd2c1fa1248985436aa4" title="Image::timestamp" alt="" coords="207,5,334,32"/>
-<area shape="rect" id="node3" href="$class_image_timestamper.html#a87b0016cf59e9370f3fed0da2207e73e" title="ImageTimestamper::timestamp\lImage" alt="" coords="169,57,372,98"/>
-<area shape="rect" id="node4" href="$class_image_timestamper.html#aa36263a77e76737f883c4a868eeddeaf" title="ImageTimestamper::run" alt="" coords="420,64,580,91"/>
-</map>

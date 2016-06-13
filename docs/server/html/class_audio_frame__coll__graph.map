@@ -1,9 +1,0 @@
-<map id="AudioFrame" name="AudioFrame">
-<area shape="rect" id="node2" href="$class_feed_frame.html" title="FeedFrame" alt="" coords="347,109,435,136"/>
-<area shape="rect" id="node3" href="$classlinked__ptr.html" title="linked_ptr\&lt; const FeedFrame \&gt;" alt="" coords="195,5,399,32"/>
-<area shape="rect" id="node6" href="$class_feed_provider.html" title="FeedProvider" alt="" coords="95,109,194,136"/>
-<area shape="rect" id="node4" href="$class_buffer.html" title="Buffer\&lt; uint8_t \&gt;" alt="" coords="423,5,543,32"/>
-<area shape="rect" id="node5" href="$class_audio_provider.html" title="AudioProvider" alt="" coords="193,185,296,212"/>
-<area shape="rect" id="node7" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,5,87,32"/>
-<area shape="rect" id="node8" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="111,5,170,32"/>
-</map>

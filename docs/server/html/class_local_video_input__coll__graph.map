@@ -1,9 +1,0 @@
-<map id="LocalVideoInput" name="LocalVideoInput">
-<area shape="rect" id="node2" href="$class_video_provider.html" title="VideoProvider" alt="" coords="292,185,395,212"/>
-<area shape="rect" id="node3" href="$class_feed_provider.html" title="FeedProvider" alt="" coords="174,109,273,136"/>
-<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,5,87,32"/>
-<area shape="rect" id="node5" href="$classlinked__ptr.html" title="linked_ptr\&lt; const FeedFrame \&gt;" alt="" coords="111,5,315,32"/>
-<area shape="rect" id="node6" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="387,5,446,32"/>
-<area shape="rect" id="node7" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="432,109,495,136"/>
-<area shape="rect" id="node8" href="$class_condition.html" title="Condition" alt="" coords="547,5,625,32"/>
-</map>

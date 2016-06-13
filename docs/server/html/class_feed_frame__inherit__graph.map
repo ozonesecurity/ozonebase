@@ -1,7 +1,0 @@
-<map id="FeedFrame" name="FeedFrame">
-<area shape="rect" id="node2" href="$class_audio_frame.html" title="AudioFrame" alt="" coords="5,80,97,107"/>
-<area shape="rect" id="node3" href="$class_data_frame.html" title="DataFrame" alt="" coords="121,80,208,107"/>
-<area shape="rect" id="node4" href="$class_video_frame.html" title="VideoFrame" alt="" coords="232,80,324,107"/>
-<area shape="rect" id="node5" href="$class_alarm_frame.html" title="AlarmFrame" alt="" coords="231,155,325,181"/>
-<area shape="rect" id="node6" href="$class_motion_frame.html" title="MotionFrame" alt="" coords="229,229,327,256"/>
-</map>

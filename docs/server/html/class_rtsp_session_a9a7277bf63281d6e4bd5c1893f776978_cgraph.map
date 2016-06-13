@@ -1,9 +1,0 @@
-<map id="RtspSession::recvRequest" name="RtspSession::recvRequest">
-<area shape="rect" id="node2" href="$class_rtsp_connection.html#ab2cde45424b4b147a6276bb054a6cf6f" title="RtspConnection::validate\lRequestUrl" alt="" coords="253,23,422,65"/>
-<area shape="rect" id="node7" href="$class_rtsp_connection.html#aa3b7807cf3e5e112ee2246729caec6b3" title="RtspConnection::sendResponse" alt="" coords="232,89,443,116"/>
-<area shape="rect" id="node8" href="$class_rtsp_session.html#aab38c3a0dcd44c6fb6fa2ca1799f3b6e" title="RtspSession::newStream" alt="" coords="252,140,423,167"/>
-<area shape="rect" id="node3" href="$class_controller.html#a8023c903e8826ff80a1815a4ed2fcadb" title="Controller::verifyStreamName" alt="" coords="491,5,685,32"/>
-<area shape="rect" id="node4" href="$class_controller.html#a05fce63816dc0d68201e530ad3101816" title="Controller::findStream" alt="" coords="513,56,663,83"/>
-<area shape="rect" id="node5" href="$class_feed_base.html#a27d113ac55879058cd684e0c16bf4b1a" title="Build identity from the class and name strings. " alt="" coords="733,31,897,57"/>
-<area shape="rect" id="node6" href="$class_feed_provider.html#a2e4659092e97cbf0ec02badf93b34354" title="Locate a provider with the given identity. " alt="" coords="751,81,879,108"/>
-</map>

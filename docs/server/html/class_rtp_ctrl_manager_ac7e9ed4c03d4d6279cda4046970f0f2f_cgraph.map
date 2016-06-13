@@ -1,7 +1,0 @@
-<map id="RtpCtrlManager::recvPackets" name="RtpCtrlManager::recvPackets">
-<area shape="rect" id="node2" href="$class_rtp_ctrl_manager.html#a9201896427d6b66ec0918e4444106c9f" title="RtpCtrlManager::recvPacket" alt="" coords="248,81,436,108"/>
-<area shape="rect" id="node3" href="$class_rtp_session.html#adaf2fd6484b0e5e29e173eeeb215573f" title="RtpSession::updateRtcpData" alt="" coords="489,5,682,32"/>
-<area shape="rect" id="node4" href="$class_rtp_ctrl_manager.html#a830accf197466adb33612c0c4410bfde" title="RtpCtrlManager::generateRr" alt="" coords="492,56,679,83"/>
-<area shape="rect" id="node5" href="$class_rtp_ctrl_manager.html#a5f0782da96cddb01bb7a635d7e16e551" title="RtpCtrlManager::generateSdes" alt="" coords="484,107,687,133"/>
-<area shape="rect" id="node6" href="$class_thread.html#abd50159ecd409936f454c2321f673616" title="Stop the thread, by setting the mStop flag. Thread is responsible for actually existing. " alt="" coords="538,157,633,184"/>
-</map>

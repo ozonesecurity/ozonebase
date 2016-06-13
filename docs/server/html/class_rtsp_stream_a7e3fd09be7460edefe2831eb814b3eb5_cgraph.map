@@ -1,4 +1,0 @@
-<map id="RtspStream::packetiseFrame" name="RtspStream::packetiseFrame">
-<area shape="rect" id="node2" href="$class_feed_base.html#aa59409b5f2ed4f9e5357590c101d860d" title="Return the class string. " alt="" coords="285,5,405,32"/>
-<area shape="rect" id="node3" href="$class_rtp_data_manager.html#a436cfaedc808a1d6b0452ebf308b46e6" title="RtpDataManager::buildPacket" alt="" coords="247,56,444,83"/>
-</map>

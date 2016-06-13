@@ -1,6 +1,0 @@
-<map id="SlaveVideo::prepare" name="SlaveVideo::prepare">
-<area shape="rect" id="node2" href="$class_slave_video.html#aa5281d915aeff5e8a0ddd6ab88ec2946" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="211,5,337,32"/>
-<area shape="rect" id="node3" href="$class_slave_video.html#abf4a4d7fec9b8694cfa13b867f5d1225" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="209,56,339,83"/>
-<area shape="rect" id="node4" href="$class_slave_video.html#aca92fa7a0dfdefbcb8b6c9ac243fdebe" title="Return the image format of video frames supplied by this provider. " alt="" coords="192,107,356,133"/>
-<area shape="rect" id="node5" href="$class_slave_video.html#acb7da1116f09518e8ab4ef1cbe756088" title="Return the frame rate at this this provider supplies frames. May not be available or accurate..." alt="" coords="195,157,353,184"/>
-</map>

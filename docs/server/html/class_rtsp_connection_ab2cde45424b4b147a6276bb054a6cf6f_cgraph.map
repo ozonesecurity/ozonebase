@@ -1,6 +1,0 @@
-<map id="RtspConnection::validateRequestUrl" name="RtspConnection::validateRequestUrl">
-<area shape="rect" id="node2" href="$class_controller.html#a8023c903e8826ff80a1815a4ed2fcadb" title="Controller::verifyStreamName" alt="" coords="223,5,417,32"/>
-<area shape="rect" id="node3" href="$class_controller.html#a05fce63816dc0d68201e530ad3101816" title="Controller::findStream" alt="" coords="245,56,395,83"/>
-<area shape="rect" id="node4" href="$class_feed_base.html#a27d113ac55879058cd684e0c16bf4b1a" title="Build identity from the class and name strings. " alt="" coords="465,31,629,57"/>
-<area shape="rect" id="node5" href="$class_feed_provider.html#a2e4659092e97cbf0ec02badf93b34354" title="Locate a provider with the given identity. " alt="" coords="483,81,611,108"/>
-</map>

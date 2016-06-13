@@ -1,4 +1,0 @@
-<map id="MpegEncoder::getPoolKey" name="MpegEncoder::getPoolKey">
-<area shape="rect" id="node2" href="$class_mpeg_encoder.html#aa2421304570639858828ac5c1c19ad58" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="233,5,374,32"/>
-<area shape="rect" id="node3" href="$class_mpeg_encoder.html#a1637e6699240d7f6b6410351461f48ef" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="231,56,376,83"/>
-</map>
