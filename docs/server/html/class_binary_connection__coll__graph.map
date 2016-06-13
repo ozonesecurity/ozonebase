@@ -1,0 +1,16 @@
+<map id="BinaryConnection" name="BinaryConnection">
+<area shape="rect" id="node2" href="$class_connection.html" title="Connection" alt="" coords="155,351,243,377"/>
+<area shape="rect" id="node3" href="$class_controller.html" title="Controller" alt="" coords="104,261,183,288"/>
+<area shape="rect" id="node4" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="82,185,197,212"/>
+<area shape="rect" id="node5" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="84,109,195,136"/>
+<area shape="rect" id="node6" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,5,87,32"/>
+<area shape="rect" id="node7" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="111,5,170,32"/>
+<area shape="rect" id="node8" href="$class_tcp_inet_socket.html" title="Class representing a TCP internet socket. " alt="" coords="210,261,317,288"/>
+<area shape="rect" id="node9" href="$class_inet_socket.html" title="Class representing a general socket using internet addressing. " alt="" coords="221,185,306,212"/>
+<area shape="rect" id="node10" href="$class_socket.html" title="Class representing a general Unix socket. " alt="" coords="232,109,295,136"/>
+<area shape="rect" id="node11" href="$class_comms_base.html" title="Base class for all the Socket and Pipe classes. " alt="" coords="213,5,311,32"/>
+<area shape="rect" id="node12" href="$class_sock_addr.html" title="Class representing a general socket address. " alt="" coords="336,5,415,32"/>
+<area shape="rect" id="node13" href="$class_tcp_socket_protocol.html" title="Class representing the TCP socket protocol. " alt="" coords="330,185,463,212"/>
+<area shape="rect" id="node14" href="$class_socket_protocol.html" title="Abstract base class representing a socket protocol. " alt="" coords="341,109,452,136"/>
+<area shape="rect" id="node15" href="$class_buffer.html" title="Buffer\&lt; uint8_t \&gt;" alt="" coords="267,351,387,377"/>
+</map>

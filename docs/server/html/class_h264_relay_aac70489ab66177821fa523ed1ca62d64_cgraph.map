@@ -1,0 +1,4 @@
+<map id="H264Relay::getPoolKey" name="H264Relay::getPoolKey">
+<area shape="rect" id="node2" href="$class_h264_relay.html#abc5f8713d4e754d27de135370bc82ac7" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="218,5,345,32"/>
+<area shape="rect" id="node3" href="$class_h264_relay.html#a018806adaf984689af50848a5cfdfc04" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="216,56,347,83"/>
+</map>

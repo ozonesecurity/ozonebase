@@ -1,0 +1,7 @@
+<map id="Connection" name="Connection">
+<area shape="rect" id="node2" href="$class_binary_connection.html" title="Class representing binary protocol, e.g. RTMP. " alt="" coords="143,80,268,107"/>
+<area shape="rect" id="node5" href="$class_text_connection.html" title="Class representing text based protocol, e.g. HTTP. " alt="" coords="292,80,407,107"/>
+<area shape="rect" id="node3" href="$class_rtmp_connection.html" title="RtmpConnection" alt="" coords="5,155,125,181"/>
+<area shape="rect" id="node4" href="$class_rtsp_connection.html" title="RtspConnection" alt="" coords="150,155,266,181"/>
+<area shape="rect" id="node6" href="$class_http_connection.html" title="HttpConnection" alt="" coords="293,155,406,181"/>
+</map>

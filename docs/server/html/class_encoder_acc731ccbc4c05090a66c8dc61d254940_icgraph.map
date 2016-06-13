@@ -1,0 +1,6 @@
+<map id="Encoder::distributeFrame" name="Encoder::distributeFrame">
+<area shape="rect" id="node2" href="$class_h264_encoder.html#a48d38071526f547986d4e61084a23433" title="H264Encoder::run" alt="" coords="222,5,349,32"/>
+<area shape="rect" id="node3" href="$class_h264_relay.html#a78d8b75067ae59ecbe807f9f98924f27" title="H264Relay::run" alt="" coords="229,56,342,83"/>
+<area shape="rect" id="node4" href="$class_jpeg_encoder.html#a05e016fec90d083cfa68a282be27743c" title="JpegEncoder::run" alt="" coords="223,107,347,133"/>
+<area shape="rect" id="node5" href="$class_mpeg_encoder.html#a0fa085fc6da907f0d9b90065ffcd80cf" title="MpegEncoder::run" alt="" coords="221,157,349,184"/>
+</map>

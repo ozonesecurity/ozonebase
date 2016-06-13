@@ -1,0 +1,16 @@
+<map id="HttpImageStream::HttpImageStream" name="HttpImageStream::HttpImageStream">
+<area shape="rect" id="node2" href="$class_jpeg_encoder.html#afba361b50d33286a476af803dab46a99" title="JpegEncoder::getPoolKey" alt="" coords="267,31,440,57"/>
+<area shape="rect" id="node5" href="$class_feed_base.html#aada1551e2fc238c1435be539ae27588a" title="Return the identity string. " alt="" coords="288,81,419,108"/>
+<area shape="rect" id="node6" href="$class_encoder.html#aaf8c767c8d75c360c985a1468b603ddb" title="Encoder::getPooledEncoder" alt="" coords="261,132,445,159"/>
+<area shape="rect" id="node7" href="$class_feed_consumer.html#a5eac06a868f4dc353d34589207ab99f6" title="FeedConsumer::registerProvider" alt="" coords="248,183,459,209"/>
+<area shape="rect" id="node12" href="$class_encoder.html#aa85c291345bdc0d71dbf096491ac0b04" title="Add the supplied encoder to the encoder pool. " alt="" coords="278,233,429,260"/>
+<area shape="rect" id="node13" href="$class_thread.html#a1f53ee62bd30a7924186ef26150ce262" title="Start the thread and invoke the run method, called by invoker. " alt="" coords="305,284,401,311"/>
+<area shape="rect" id="node3" href="$class_jpeg_encoder.html#a0670493958fa5fec7e4df33d43d6f908" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="543,5,681,32"/>
+<area shape="rect" id="node4" href="$class_jpeg_encoder.html#a06f3552d2214c3e31d8d1ca1829df562" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="541,56,683,83"/>
+<area shape="rect" id="node8" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="790,157,929,184"/>
+<area shape="rect" id="node9" href="$class_feed_provider.html#a55fc4d795ba5c0055eaa9f77465139c1" title="FeedProvider::hasConsumer" alt="" coords="518,183,706,209"/>
+<area shape="rect" id="node10" href="$class_feed_provider.html#a4c7c45fb518c4d5469ac43649fe09c1b" title="FeedProvider::registerConsumer" alt="" coords="507,233,717,260"/>
+<area shape="rect" id="node11" href="$class_feed_consumer.html#a02aefeb0dd9715a0c62a79f0ab18c8c5" title="FeedConsumer::hasProvider" alt="" coords="765,233,953,260"/>
+<area shape="rect" id="node14" href="$class_thread.html#ab5f7d5149ad02ecb5e64df84c811779d" title="Thread::mThreadFunc" alt="" coords="537,284,687,311"/>
+<area shape="rect" id="node15" href="$class_thread.html#af4a66c44c91ab79cbd830511f622c4e8" title="Thread code, must be overriden to do actual thread work. " alt="" coords="815,284,903,311"/>
+</map>

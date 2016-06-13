@@ -1,0 +1,24 @@
+<map id="FeedConsumer::waitForProviders" name="FeedConsumer::waitForProviders">
+<area shape="rect" id="node2" href="$class_event_recorder.html#a84137d6f676655852a6c306f9931ae5f" title="EventRecorder::run" alt="" coords="283,5,418,32"/>
+<area shape="rect" id="node3" href="$class_local_file_dump.html#a1aa8d343f94f9c0e5aef79d1ccd3e133" title="LocalFileDump::run" alt="" coords="283,56,418,83"/>
+<area shape="rect" id="node4" href="$class_local_file_output.html#acd87a7f0a0aaed0663590c0192483adf" title="LocalFileOutput::run" alt="" coords="281,107,420,133"/>
+<area shape="rect" id="node5" href="$class_memory_output.html#ad78a4a552afecace71b15cb3c248d206" title="MemoryOutput::run" alt="" coords="283,157,418,184"/>
+<area shape="rect" id="node6" href="$class_movie_file_output.html#aadab693b67ea6cf88fff6c5e4ab1b4a8" title="MovieFileOutput::run" alt="" coords="279,208,422,235"/>
+<area shape="rect" id="node7" href="$class_mp4_file_output.html#ac6e4a6cfab05633098e83d5c8404306c" title="Mp4FileOutput::run" alt="" coords="284,259,417,285"/>
+<area shape="rect" id="node8" href="$class_h264_encoder.html#a48d38071526f547986d4e61084a23433" title="H264Encoder::run" alt="" coords="287,309,414,336"/>
+<area shape="rect" id="node9" href="$class_h264_relay.html#a78d8b75067ae59ecbe807f9f98924f27" title="H264Relay::run" alt="" coords="294,360,407,387"/>
+<area shape="rect" id="node10" href="$class_jpeg_encoder.html#a05e016fec90d083cfa68a282be27743c" title="JpegEncoder::run" alt="" coords="289,411,413,437"/>
+<area shape="rect" id="node11" href="$class_mpeg_encoder.html#a0fa085fc6da907f0d9b90065ffcd80cf" title="MpegEncoder::run" alt="" coords="287,461,415,488"/>
+<area shape="rect" id="node12" href="$class_delay_buffer_filter.html#ae11002a478c6a99daaa687116c4eb0be" title="DelayBufferFilter::run" alt="" coords="277,512,424,539"/>
+<area shape="rect" id="node13" href="$class_filter_swap_u_v.html#a8f2ada0785b3dc45f7f9c01862188953" title="FilterSwapUV::run" alt="" coords="286,563,415,589"/>
+<area shape="rect" id="node14" href="$class_image_convert.html#ab1eda5b14ac0ae1f07cad4230dc90fc2" title="ImageConvert::run" alt="" coords="285,613,416,640"/>
+<area shape="rect" id="node15" href="$class_image_timestamper.html#aa36263a77e76737f883c4a868eeddeaf" title="ImageTimestamper::run" alt="" coords="271,664,431,691"/>
+<area shape="rect" id="node16" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="282,715,419,741"/>
+<area shape="rect" id="node17" href="$class_quad_video.html#a82407168ee00d3c18c5baf625dc96ea0" title="QuadVideo::run" alt="" coords="295,765,407,792"/>
+<area shape="rect" id="node18" href="$class_rate_limiter.html#a89b9a7cc39202bf79c975a90e15aec33" title="RateLimiter::run" alt="" coords="293,816,408,843"/>
+<area shape="rect" id="node19" href="$class_signal_checker.html#a0d7e5f8cd72dc90cbc3c37444962bf57" title="SignalChecker::run" alt="" coords="284,867,417,893"/>
+<area shape="rect" id="node20" href="$class_queued_video_filter.html#ac2b2270ec298f5b243bf893048a99f16" title="QueuedVideoFilter::run" alt="" coords="273,917,428,944"/>
+<area shape="rect" id="node21" href="$class_http_stream.html#a40617245576269e0ab65ba80485ec1ae" title="HttpStream::run" alt="" coords="293,968,408,995"/>
+<area shape="rect" id="node22" href="$class_rtmp_stream.html#a7cffd1820173a7603f5ca0bf49551e4c" title="Thread code, must be overriden to do actual thread work. " alt="" coords="289,1019,412,1045"/>
+<area shape="rect" id="node23" href="$class_rtsp_stream.html#a2062f21b96866c4c92f552c660728711" title="RtspStream::run" alt="" coords="291,1069,410,1096"/>
+</map>

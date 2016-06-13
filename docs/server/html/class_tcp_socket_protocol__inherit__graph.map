@@ -1,0 +1,6 @@
+<map id="TcpSocketProtocol" name="TcpSocketProtocol">
+<area shape="rect" id="node3" href="$class_tcp_inet_socket.html" title="Class representing a TCP internet socket. " alt="" coords="65,155,171,181"/>
+<area shape="rect" id="node2" href="$class_socket_protocol.html" title="Abstract base class representing a socket protocol. " alt="" coords="63,5,173,32"/>
+<area shape="rect" id="node4" href="$class_tcp_inet_client.html" title="Class representing a TCP internet client socket. " alt="" coords="5,229,105,256"/>
+<area shape="rect" id="node5" href="$class_tcp_inet_server.html" title="Class representing a TCP internet server socket. " alt="" coords="130,229,234,256"/>
+</map>

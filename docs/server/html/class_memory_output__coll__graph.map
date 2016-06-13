@@ -1,0 +1,21 @@
+<map id="MemoryOutput" name="MemoryOutput">
+<area shape="rect" id="node2" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="859,147,973,173"/>
+<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="432,147,543,173"/>
+<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="167,56,249,83"/>
+<area shape="rect" id="node5" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="179,151,237,177"/>
+<area shape="rect" id="node8" href="$class_image.html" title="Image" alt="" coords="458,339,517,365"/>
+<area shape="rect" id="node20" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="456,91,519,117"/>
+<area shape="rect" id="node6" href="$class_memory_i_o.html" title="MemoryIO" alt="" coords="997,384,1080,411"/>
+<area shape="rect" id="node7" href="$struct_memory_i_o_1_1_snapshot.html" title="MemoryIO::Snapshot" alt="" coords="681,384,828,411"/>
+<area shape="rect" id="node11" href="$class_mask.html" title="Mask" alt="" coords="727,293,782,320"/>
+<area shape="rect" id="node9" href="$struct_image_1_1_y_u_v2_r_g_b.html" title="Image::YUV2RGB" alt="" coords="143,481,273,508"/>
+<area shape="rect" id="node10" href="$struct_image_1_1_r_g_b2_y_u_v.html" title="Image::RGB2YUV" alt="" coords="143,265,273,292"/>
+<area shape="rect" id="node12" href="$struct_mask_1_1_range.html" title="Mask::Range" alt="" coords="437,248,537,275"/>
+<area shape="rect" id="node13" href="$class_buffer.html" title="Buffer\&lt; uint8_t \&gt;" alt="" coords="148,316,268,343"/>
+<area shape="rect" id="node14" href="$struct_image_1_1_lookups.html" title="Image::Lookups" alt="" coords="151,367,265,393"/>
+<area shape="rect" id="node15" href="$structlocal__error__mgr.html" title="local_error_mgr" alt="" coords="153,421,263,448"/>
+<area shape="rect" id="node16" href="$struct_memory_i_o_1_1_shared_data.html" title="MemoryIO::SharedData" alt="" coords="675,457,835,484"/>
+<area shape="rect" id="node17" href="$class_frame_rate.html" title="FrameRate" alt="" coords="444,516,531,543"/>
+<area shape="rect" id="node18" href="$class_rational.html" title="Rational" alt="" coords="173,532,243,559"/>
+<area shape="rect" id="node21" href="$class_condition.html" title="Condition" alt="" coords="169,5,247,32"/>
+</map>

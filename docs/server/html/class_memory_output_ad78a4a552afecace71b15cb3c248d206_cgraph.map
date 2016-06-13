@@ -1,0 +1,15 @@
+<map id="MemoryOutput::run" name="MemoryOutput::run">
+<area shape="rect" id="node2" href="$class_feed_consumer.html#a80b6eb167765c37712347db232c8e41d" title="FeedConsumer::waitForProviders" alt="" coords="188,316,405,343"/>
+<area shape="rect" id="node4" href="$class_video_consumer.html#a843010ada945a86ff979dae0d667435c" title="Return the first provider cast appropriately, shortcut for when providers == 1. " alt="" coords="453,12,656,39"/>
+<area shape="rect" id="node5" href="$class_video_provider.html#a1bb6fc416559db01b839fb7d94dd5575" title="Return the image format of video frames supplied by this provider. " alt="" coords="207,113,386,140"/>
+<area shape="rect" id="node6" href="$class_video_provider.html#a025b965717f76ea6abc267626238d493" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="225,164,368,191"/>
+<area shape="rect" id="node7" href="$class_video_provider.html#a4594d6b84217ad16434bb3ff382a6022" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="223,215,370,241"/>
+<area shape="rect" id="node8" href="$class_memory_i_o.html#a7bda1139918948debcc8074bfc41fdb7" title="MemoryIO::attachMemory" alt="" coords="209,265,384,292"/>
+<area shape="rect" id="node9" href="$class_memory_output.html#aa2a0a962daba743c700cf2553e8400eb" title="MemoryOutput::storeFrame" alt="" coords="205,63,388,89"/>
+<area shape="rect" id="node12" href="$class_feed_consumer.html#a691943c77143c693193555f8dc21c0c9" title="Verify that providers exist and are in good condition. " alt="" coords="192,367,401,393"/>
+<area shape="rect" id="node14" href="$class_feed_consumer.html#a5d1815f55c448c80392e2f28a36cde3a" title="Tidy up relationships with providers etc before destruction. " alt="" coords="215,417,379,444"/>
+<area shape="rect" id="node3" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="485,316,624,343"/>
+<area shape="rect" id="node10" href="$class_image.html#ad51ca575663b7e8f15900ee4f044ac13" title="Image::copy" alt="" coords="507,113,602,140"/>
+<area shape="rect" id="node11" href="$class_video_provider.html#a5b5ad2235e3bb94f6f21bf82ea0fd9ec" title="Return the frame rate at this this provider supplies frames. May not be available or accurate..." alt="" coords="469,63,641,89"/>
+<area shape="rect" id="node13" href="$class_thread.html#abd50159ecd409936f454c2321f673616" title="Stop the thread, by setting the mStop flag. Thread is responsible for actually existing. " alt="" coords="507,367,602,393"/>
+</map>

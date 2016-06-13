@@ -1,0 +1,7 @@
+<map id="Exception" name="Exception">
+<area shape="rect" id="node2" href="$class_comms_exception.html" title="CommsException" alt="" coords="5,80,132,107"/>
+<area shape="rect" id="node3" href="$class_http_exception.html" title="HttpException" alt="" coords="156,80,261,107"/>
+<area shape="rect" id="node4" href="$class_rtmp_exception.html" title="RtmpException" alt="" coords="285,80,397,107"/>
+<area shape="rect" id="node5" href="$class_rtsp_exception.html" title="RtspException" alt="" coords="421,80,529,107"/>
+<area shape="rect" id="node6" href="$class_thread_exception.html" title="ThreadException" alt="" coords="554,80,674,107"/>
+</map>

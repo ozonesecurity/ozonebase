@@ -1,0 +1,11 @@
+<map id="MemoryIO::Snapshot" name="MemoryIO::Snapshot">
+<area shape="rect" id="node2" href="$class_image.html" title="Image" alt="" coords="309,165,367,192"/>
+<area shape="rect" id="node6" href="$class_mask.html" title="Mask" alt="" coords="566,120,621,147"/>
+<area shape="rect" id="node3" href="$struct_image_1_1_y_u_v2_r_g_b.html" title="Image::YUV2RGB" alt="" coords="5,23,136,49"/>
+<area shape="rect" id="node4" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="41,83,100,109"/>
+<area shape="rect" id="node5" href="$struct_image_1_1_r_g_b2_y_u_v.html" title="Image::RGB2YUV" alt="" coords="5,137,136,164"/>
+<area shape="rect" id="node7" href="$struct_mask_1_1_range.html" title="Mask::Range" alt="" coords="288,75,388,101"/>
+<area shape="rect" id="node8" href="$class_buffer.html" title="Buffer\&lt; uint8_t \&gt;" alt="" coords="11,188,131,215"/>
+<area shape="rect" id="node9" href="$struct_image_1_1_lookups.html" title="Image::Lookups" alt="" coords="13,239,128,265"/>
+<area shape="rect" id="node10" href="$structlocal__error__mgr.html" title="local_error_mgr" alt="" coords="15,296,126,323"/>
+</map>

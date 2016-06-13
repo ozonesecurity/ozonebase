@@ -1,0 +1,8 @@
+<map id="LocalFileDump::run" name="LocalFileDump::run">
+<area shape="rect" id="node2" href="$class_feed_consumer.html#a80b6eb167765c37712347db232c8e41d" title="FeedConsumer::waitForProviders" alt="" coords="188,5,405,32"/>
+<area shape="rect" id="node3" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="453,56,592,83"/>
+<area shape="rect" id="node4" href="$class_feed_frame.html#afbd33229a1867f0ba6d907bfb00a264d" title="Return the provider of this frame. " alt="" coords="225,107,368,133"/>
+<area shape="rect" id="node5" href="$class_feed_consumer.html#a691943c77143c693193555f8dc21c0c9" title="Verify that providers exist and are in good condition. " alt="" coords="192,157,401,184"/>
+<area shape="rect" id="node7" href="$class_feed_consumer.html#a5d1815f55c448c80392e2f28a36cde3a" title="Tidy up relationships with providers etc before destruction. " alt="" coords="215,208,379,235"/>
+<area shape="rect" id="node6" href="$class_thread.html#abd50159ecd409936f454c2321f673616" title="Stop the thread, by setting the mStop flag. Thread is responsible for actually existing. " alt="" coords="475,157,570,184"/>
+</map>

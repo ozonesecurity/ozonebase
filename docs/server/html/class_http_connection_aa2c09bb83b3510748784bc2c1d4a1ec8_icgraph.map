@@ -1,0 +1,4 @@
+<map id="HttpConnection::sendResponse" name="HttpConnection::sendResponse">
+<area shape="rect" id="node2" href="$class_http_connection.html#aabe9a61240e8456705cc62c0d524812e" title="HttpConnection::recvRequest" alt="" coords="485,5,680,32"/>
+<area shape="rect" id="node3" href="$class_http_session.html#a2cedb4e7d2d45c012732291b5e7e4d25" title="HttpSession::recvRequest" alt="" coords="261,31,437,57"/>
+</map>

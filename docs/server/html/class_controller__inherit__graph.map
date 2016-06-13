@@ -1,0 +1,8 @@
+<map id="Controller" name="Controller">
+<area shape="rect" id="node5" href="$class_http_controller.html" title="HttpController" alt="" coords="5,304,108,331"/>
+<area shape="rect" id="node6" href="$class_rtmp_controller.html" title="RtmpController" alt="" coords="132,304,243,331"/>
+<area shape="rect" id="node7" href="$class_rtsp_controller.html" title="RtspController" alt="" coords="267,304,374,331"/>
+<area shape="rect" id="node2" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="130,155,245,181"/>
+<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="132,80,243,107"/>
+<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="147,5,228,32"/>
+</map>

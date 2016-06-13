@@ -1,0 +1,18 @@
+<map id="Image::y" name="Image::y">
+<area shape="rect" id="node2" href="$class_image.html#aa3c908f15e0376b5b1119ce4d9528db4" title="Image::copyYUVP2YUVP" alt="" coords="127,5,301,32"/>
+<area shape="rect" id="node4" href="$class_image.html#a4641c5597fc90cfba82b9f3666e9c8e7" title="Image::y" alt="" coords="177,56,251,83"/>
+<area shape="rect" id="node5" href="$class_image.html#ae7bec14013410d3a2dade2ef57b339b1" title="Image::dump" alt="" coords="165,107,263,133"/>
+<area shape="rect" id="node6" href="$class_image.html#ada453ff34b5a240a14cc1656e2c3dc95" title="Image::highlightEdges" alt="" coords="139,208,289,235"/>
+<area shape="rect" id="node11" href="$class_image.html#ae9f1ab10c0871eeaa472f8caa7484f15" title="Image::crop" alt="" coords="169,157,259,184"/>
+<area shape="rect" id="node14" href="$class_image.html#af800b8a9e1e01ce573f7dd05b2b1935a" title="Image::despeckleFilter" alt="" coords="137,259,291,285"/>
+<area shape="rect" id="node15" href="$class_image.html#abb6d736b70f7fe25cdc1520d6930f258" title="Image::locateBlobs" alt="" coords="147,309,281,336"/>
+<area shape="rect" id="node16" href="$class_image.html#a48e2ce7a0e50d31e5ad1b1699281af8e" title="Image::delta2" alt="" coords="382,360,483,387"/>
+<area shape="rect" id="node17" href="$class_image.html#addbc4491f38d8e4e62e2a49a851ce306" title="Image::outline" alt="" coords="162,411,266,437"/>
+<area shape="rect" id="node3" href="$class_image.html#a283d7e656d2dadbc5e9b151357341c0e" title="Image::Image" alt="" coords="381,5,484,32"/>
+<area shape="rect" id="node7" href="$class_zone.html#a6e88d4cdbfec2ae9853e539df56e0548" title="Zone::checkMotion" alt="" coords="366,309,499,336"/>
+<area shape="rect" id="node8" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="564,335,759,361"/>
+<area shape="rect" id="node9" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="807,335,971,361"/>
+<area shape="rect" id="node10" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="1019,335,1156,361"/>
+<area shape="rect" id="node12" href="$class_image_mask.html#afc4414bc095c6ccad1ff61dcca28e9b9" title="ImageMask::ImageMask" alt="" coords="349,183,516,209"/>
+<area shape="rect" id="node13" href="$class_image.html#aa257256af4aa8ed68df619a31a29570e" title="Image::crop" alt="" coords="387,132,478,159"/>
+</map>

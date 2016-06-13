@@ -1,0 +1,5 @@
+<map id="MotionFrame" name="MotionFrame">
+<area shape="rect" id="node2" href="$class_alarm_frame.html" title="AlarmFrame" alt="" coords="8,155,101,181"/>
+<area shape="rect" id="node3" href="$class_video_frame.html" title="VideoFrame" alt="" coords="9,80,101,107"/>
+<area shape="rect" id="node4" href="$class_feed_frame.html" title="FeedFrame" alt="" coords="11,5,99,32"/>
+</map>

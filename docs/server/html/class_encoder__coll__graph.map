@@ -1,0 +1,9 @@
+<map id="Encoder" name="Encoder">
+<area shape="rect" id="node2" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="294,185,409,212"/>
+<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="303,109,413,136"/>
+<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="453,5,535,32"/>
+<area shape="rect" id="node7" href="$class_feed_provider.html" title="FeedProvider" alt="" coords="166,109,265,136"/>
+<area shape="rect" id="node5" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="282,5,341,32"/>
+<area shape="rect" id="node6" href="$class_video_provider.html" title="VideoProvider" alt="" coords="167,185,269,212"/>
+<area shape="rect" id="node8" href="$classlinked__ptr.html" title="linked_ptr\&lt; const FeedFrame \&gt;" alt="" coords="5,5,209,32"/>
+</map>

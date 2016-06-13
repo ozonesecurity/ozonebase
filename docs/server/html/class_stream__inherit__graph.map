@@ -1,0 +1,10 @@
+<map id="Stream" name="Stream">
+<area shape="rect" id="node5" href="$class_http_stream.html" title="HttpStream" alt="" coords="91,304,181,331"/>
+<area shape="rect" id="node8" href="$class_rtmp_stream.html" title="RtmpStream" alt="" coords="205,304,301,331"/>
+<area shape="rect" id="node9" href="$class_rtsp_stream.html" title="RtspStream" alt="" coords="326,304,418,331"/>
+<area shape="rect" id="node2" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="196,155,311,181"/>
+<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="198,80,309,107"/>
+<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="213,5,294,32"/>
+<area shape="rect" id="node6" href="$class_http_data_stream.html" title="HttpDataStream" alt="" coords="5,379,123,405"/>
+<area shape="rect" id="node7" href="$class_http_image_stream.html" title="HttpImageStream" alt="" coords="147,379,272,405"/>
+</map>

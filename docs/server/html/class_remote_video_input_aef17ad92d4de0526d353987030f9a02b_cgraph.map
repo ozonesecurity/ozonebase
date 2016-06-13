@@ -1,0 +1,11 @@
+<map id="RemoteVideoInput::run" name="RemoteVideoInput::run">
+<area shape="rect" id="node2" href="$class_feed_provider.html#a99d747e444a2efd7bdcbc533d9124072" title="Pass a frame on to all registered consumers. " alt="" coords="209,85,369,127"/>
+<area shape="rect" id="node4" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="931,147,1070,174"/>
+<area shape="rect" id="node8" href="$class_feed_provider.html#a9e6dfca4261b1f3e67fca4543dc24f27" title="Tidy up relations before destruction. " alt="" coords="213,223,365,250"/>
+<area shape="rect" id="node3" href="$class_feed_provider.html#a351ebd59ac16f8f7522aad379e5f3cf1" title="FeedProvider::deregister\lConsumer" alt="" coords="438,64,602,105"/>
+<area shape="rect" id="node5" href="$class_feed_consumer.html#a02aefeb0dd9715a0c62a79f0ab18c8c5" title="FeedConsumer::hasProvider" alt="" coords="671,71,859,98"/>
+<area shape="rect" id="node6" href="$class_feed_consumer.html#ab88de12bdfc4be4476fd138e59a8cda1" title="FeedConsumer::deregister\lProvider" alt="" coords="677,5,853,47"/>
+<area shape="rect" id="node7" href="$class_feed_provider.html#a55fc4d795ba5c0055eaa9f77465139c1" title="FeedProvider::hasConsumer" alt="" coords="907,13,1095,39"/>
+<area shape="rect" id="node9" href="$class_feed_provider.html#a0e59944ab9228929539fde3da0fe65ef" title="Remove this provider from the static provider map. " alt="" coords="417,223,623,250"/>
+<area shape="rect" id="node10" href="$class_feed_base.html#aada1551e2fc238c1435be539ae27588a" title="Return the identity string. " alt="" coords="699,274,830,301"/>
+</map>

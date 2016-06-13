@@ -1,0 +1,6 @@
+<map id="Image::swell" name="Image::swell">
+<area shape="rect" id="node2" href="$class_zone.html#a6e88d4cdbfec2ae9853e539df56e0548" title="Zone::checkMotion" alt="" coords="149,5,283,32"/>
+<area shape="rect" id="node3" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="331,5,525,32"/>
+<area shape="rect" id="node4" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="573,5,737,32"/>
+<area shape="rect" id="node5" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="785,5,923,32"/>
+</map>

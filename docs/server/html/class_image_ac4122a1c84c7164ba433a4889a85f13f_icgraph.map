@@ -1,0 +1,13 @@
+<map id="Image::total" name="Image::total">
+<area shape="rect" id="node2" href="$class_image.html#aa3c908f15e0376b5b1119ce4d9528db4" title="Image::copyYUVP2YUVP" alt="" coords="144,5,319,32"/>
+<area shape="rect" id="node4" href="$class_image.html#a3bcf6b8c6423d56f6ccae50b3672fb48" title="Image::total" alt="" coords="186,56,277,83"/>
+<area shape="rect" id="node5" href="$class_image.html#aaa0c6c84bcad391b6bb086df1b5a2c59" title="Image::shrink" alt="" coords="367,132,469,159"/>
+<area shape="rect" id="node9" href="$class_image.html#af441830a49260ab63c14d56602e6f7c9" title="Image::delta" alt="" coords="371,189,465,216"/>
+<area shape="rect" id="node10" href="$class_image.html#a48e2ce7a0e50d31e5ad1b1699281af8e" title="Image::delta2" alt="" coords="367,252,469,279"/>
+<area shape="rect" id="node11" href="$class_image.html#a4d5375debb9def62f7ba3c031a629353" title="Image::yDelta" alt="" coords="179,208,283,235"/>
+<area shape="rect" id="node12" href="$class_image.html#ad2d6d0dc402e8cc4694fd44255725b1f" title="Image::yDelta2" alt="" coords="176,309,287,336"/>
+<area shape="rect" id="node3" href="$class_image.html#a283d7e656d2dadbc5e9b151357341c0e" title="Image::Image" alt="" coords="367,5,469,32"/>
+<area shape="rect" id="node6" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="517,252,712,279"/>
+<area shape="rect" id="node7" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="760,252,924,279"/>
+<area shape="rect" id="node8" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="972,252,1109,279"/>
+</map>

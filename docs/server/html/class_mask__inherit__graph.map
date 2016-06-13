@@ -1,0 +1,5 @@
+<map id="Mask" name="Mask">
+<area shape="rect" id="node2" href="$class_box_mask.html" title="BoxMask" alt="" coords="5,80,83,107"/>
+<area shape="rect" id="node3" href="$class_image_mask.html" title="ImageMask" alt="" coords="107,80,197,107"/>
+<area shape="rect" id="node4" href="$class_poly_mask.html" title="PolyMask" alt="" coords="221,80,301,107"/>
+</map>

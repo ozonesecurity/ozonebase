@@ -1,0 +1,10 @@
+<map id="LocalFileOutput::run" name="LocalFileOutput::run">
+<area shape="rect" id="node2" href="$class_feed_consumer.html#a80b6eb167765c37712347db232c8e41d" title="FeedConsumer::waitForProviders" alt="" coords="192,80,409,107"/>
+<area shape="rect" id="node4" href="$class_local_file_output.html#ae400b2bcc1b66792250925ef0b7f0a2b" title="LocalFileOutput::writeFrame" alt="" coords="207,29,394,56"/>
+<area shape="rect" id="node7" href="$class_feed_consumer.html#a691943c77143c693193555f8dc21c0c9" title="Verify that providers exist and are in good condition. " alt="" coords="196,131,405,157"/>
+<area shape="rect" id="node9" href="$class_feed_consumer.html#a5d1815f55c448c80392e2f28a36cde3a" title="Tidy up relationships with providers etc before destruction. " alt="" coords="219,181,383,208"/>
+<area shape="rect" id="node3" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="457,80,596,107"/>
+<area shape="rect" id="node5" href="$class_image.html#a5af802879f05abe0ad9b5988e21a5b97" title="Image::writeJpeg" alt="" coords="465,29,588,56"/>
+<area shape="rect" id="node6" href="$class_image.html#a8875c3989c38ea02ecacbe757c4565c1" title="Image::jpegCcInfo" alt="" coords="644,29,773,56"/>
+<area shape="rect" id="node8" href="$class_thread.html#abd50159ecd409936f454c2321f673616" title="Stop the thread, by setting the mStop flag. Thread is responsible for actually existing. " alt="" coords="479,131,574,157"/>
+</map>

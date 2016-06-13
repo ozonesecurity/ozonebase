@@ -1,0 +1,32 @@
+<map id="FeedProvider" name="FeedProvider">
+<area shape="rect" id="node3" href="$class_audio_provider.html" title="AudioProvider" alt="" coords="287,107,390,133"/>
+<area shape="rect" id="node6" href="$class_data_provider.html" title="DataProvider" alt="" coords="289,56,388,83"/>
+<area shape="rect" id="node7" href="$class_general_provider.html" title="GeneralProvider" alt="" coords="281,5,396,32"/>
+<area shape="rect" id="node9" href="$class_video_provider.html" title="VideoProvider" alt="" coords="287,512,390,539"/>
+<area shape="rect" id="node2" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,81,87,108"/>
+<area shape="rect" id="node4" href="$class_audio_video_provider.html" title="AudioVideoProvider" alt="" coords="444,81,580,108"/>
+<area shape="rect" id="node5" href="$class_network_a_v_input.html" title="NetworkAVInput" alt="" coords="628,81,747,108"/>
+<area shape="rect" id="node8" href="$class_delay_buffer_filter.html" title="DelayBufferFilter" alt="" coords="452,5,572,32"/>
+<area shape="rect" id="node10" href="$class_direct_video_filter.html" title="DirectVideoFilter" alt="" coords="453,233,571,260"/>
+<area shape="rect" id="node11" href="$class_encoder.html" title="Encoder" alt="" coords="477,284,547,311"/>
+<area shape="rect" id="node16" href="$class_filter_swap_u_v.html" title="FilterSwapUV" alt="" coords="461,335,563,361"/>
+<area shape="rect" id="node17" href="$class_image_convert.html" title="ImageConvert" alt="" coords="460,385,564,412"/>
+<area shape="rect" id="node18" href="$class_image_timestamper.html" title="ImageTimestamper" alt="" coords="445,436,579,463"/>
+<area shape="rect" id="node19" href="$class_local_file_input.html" title="LocalFileInput" alt="" coords="461,487,563,513"/>
+<area shape="rect" id="node20" href="$class_local_video_input.html" title="LocalVideoInput" alt="" coords="455,537,569,564"/>
+<area shape="rect" id="node21" href="$class_memory_input.html" title="MemoryInput" alt="" coords="463,588,561,615"/>
+<area shape="rect" id="node22" href="$class_memory_input_v1.html" title="MemoryInputV1" alt="" coords="455,639,569,665"/>
+<area shape="rect" id="node23" href="$class_motion_detector.html" title="MotionDetector" alt="" coords="457,689,567,716"/>
+<area shape="rect" id="node24" href="$class_quad_video.html" title="QuadVideo" alt="" coords="469,740,555,767"/>
+<area shape="rect" id="node25" href="$class_queued_video_filter.html" title="QueuedVideoFilter" alt="" coords="447,791,577,817"/>
+<area shape="rect" id="node26" href="$class_rate_limiter.html" title="RateLimiter" alt="" coords="467,841,557,868"/>
+<area shape="rect" id="node27" href="$class_raw_h264_input.html" title="RawH264Input" alt="" coords="457,892,567,919"/>
+<area shape="rect" id="node28" href="$class_remote_video_input.html" title="RemoteVideoInput" alt="" coords="447,943,577,969"/>
+<area shape="rect" id="node29" href="$class_signal_checker.html" title="SignalChecker" alt="" coords="459,993,565,1020"/>
+<area shape="rect" id="node30" href="$class_slave_video.html" title="SlaveVideo" alt="" coords="468,132,556,159"/>
+<area shape="rect" id="node31" href="$class_video4_linux_input.html" title="Video4LinuxInput" alt="" coords="451,183,573,209"/>
+<area shape="rect" id="node12" href="$class_h264_encoder.html" title="H264Encoder" alt="" coords="637,259,738,285"/>
+<area shape="rect" id="node13" href="$class_h264_relay.html" title="H264Relay" alt="" coords="644,309,731,336"/>
+<area shape="rect" id="node14" href="$class_jpeg_encoder.html" title="JpegEncoder" alt="" coords="638,360,737,387"/>
+<area shape="rect" id="node15" href="$class_mpeg_encoder.html" title="MpegEncoder" alt="" coords="636,208,739,235"/>
+</map>
