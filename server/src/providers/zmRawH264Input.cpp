@@ -4,6 +4,13 @@
 #include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param source
+* @param format
+*/
 RawH264Input::RawH264Input( const std::string &name, const std::string &source, const std::string &format ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -17,10 +24,18 @@ RawH264Input::RawH264Input( const std::string &name, const std::string &source, 
 {
 }
 
+/**
+* @brief 
+*/
 RawH264Input::~RawH264Input()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int RawH264Input::run()
 {
     AVInputFormat *inputFormat = 0;

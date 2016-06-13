@@ -6,11 +6,31 @@
 
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param quality
+*
+* @return 
+*/
 std::string JpegEncoder::getPoolKey( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality )
 {
     return( stringtf( "%s-jpeg-%dx%d@%d/%d(%d)", name.c_str(), width, height, frameRate.num, frameRate.den, quality ) );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param quality
+*/
 JpegEncoder::JpegEncoder( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality ) :
     Encoder( cClass(), getPoolKey( name, width, height, frameRate, quality ) ),
     Thread( identity() ),
@@ -22,10 +42,18 @@ JpegEncoder::JpegEncoder( const std::string &name, uint16_t width, uint16_t heig
 {
 }
 
+/**
+* @brief 
+*/
 JpegEncoder::~JpegEncoder()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int JpegEncoder::run()
 {
     // Make sure ffmpeg is compiled with mpjpeg support

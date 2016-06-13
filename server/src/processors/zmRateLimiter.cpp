@@ -5,6 +5,13 @@
 
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param frameRate
+* @param skip
+*/
 RateLimiter::RateLimiter( const std::string &name, FrameRate frameRate, bool skip ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -13,6 +20,14 @@ RateLimiter::RateLimiter( const std::string &name, FrameRate frameRate, bool ski
 {
 }
 
+/**
+* @brief 
+*
+* @param frameRate
+* @param skip
+* @param provider
+* @param link
+*/
 RateLimiter::RateLimiter( FrameRate frameRate, bool skip,  VideoProvider &provider, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
@@ -22,10 +37,18 @@ RateLimiter::RateLimiter( FrameRate frameRate, bool skip,  VideoProvider &provid
 {
 }
 
+/**
+* @brief 
+*/
 RateLimiter::~RateLimiter()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int RateLimiter::run()
 {
     if ( waitForProviders() )

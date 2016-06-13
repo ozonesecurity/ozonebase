@@ -26,6 +26,11 @@ static char gmtMons[][4] = {
 };
 
 /// Internet date/time according to RFC1123
+/**
+* @brief 
+*
+* @return 
+*/
 std::string datetimeInet() 
 {
     time_t now = time( NULL );

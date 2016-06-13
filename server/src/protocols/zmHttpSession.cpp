@@ -10,6 +10,11 @@
 #include "../libgen/libgenUtils.h"
 #include <stdlib.h>
 
+/**
+* @brief 
+*
+* @param session
+*/
 HttpSession::HttpSession( int session ) :
     mSession( session ),
     mHttpStream( 0 )
@@ -17,6 +22,9 @@ HttpSession::HttpSession( int session ) :
     Debug( 2, "New HTTP session %X", session );
 }
 
+/**
+* @brief 
+*/
 HttpSession::~HttpSession()
 {
     Debug( 1, "Closing HTTP session" );
@@ -32,6 +40,17 @@ HttpSession::~HttpSession()
 
 // Handle HTTP commands once session established.
 // Otherwise HTTP commands are handled in HTTP connection class
+/**
+* @brief 
+*
+* @param connection
+* @param requestType
+* @param requestUrl
+* @param requestHeaders
+* @param responseHeaders
+*
+* @return 
+*/
 bool HttpSession::recvRequest( HttpConnection *connection, const std::string &requestType, const std::string &requestUrl, const Connection::Headers &requestHeaders, Connection::Headers &responseHeaders )
 {
     Debug( 2, "Session %X - Processing HTTP request: %s", mSession, requestType.c_str() );

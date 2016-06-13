@@ -5,11 +5,33 @@
 #include "../libgen/libgenTime.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param bitRate
+* @param quality
+*
+* @return 
+*/
 std::string MpegEncoder::getPoolKey( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality )
 {
     return( stringtf( "%s-mpeg-%dx%d@%d/%d-%d(%d)", name.c_str(), width, height, frameRate.num, frameRate.den, bitRate, quality ) );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param bitRate
+* @param quality
+*/
 MpegEncoder::MpegEncoder( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality ) :
     Encoder( cClass(), getPoolKey( name, width, height, frameRate, bitRate, quality ) ),
     Thread( identity() ),
@@ -23,10 +45,20 @@ MpegEncoder::MpegEncoder( const std::string &name, uint16_t width, uint16_t heig
 {
 }
 
+/**
+* @brief 
+*/
 MpegEncoder::~MpegEncoder()
 {
 }
 
+/**
+* @brief 
+*
+* @param trackId
+*
+* @return 
+*/
 const std::string &MpegEncoder::sdpString( int trackId ) const
 {
     if ( true || mSdpString.empty() )
@@ -45,6 +77,11 @@ const std::string &MpegEncoder::sdpString( int trackId ) const
     return( mSdpString );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MpegEncoder::gopSize() const
 {
     return( mCodecContext->gop_size );
@@ -66,6 +103,11 @@ bool MpegEncoder::deregisterConsumer( FeedConsumer &consumer, bool reciprocate )
 }
 #endif
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MpegEncoder::run()
 {
     // TODO - This section needs to be rewritten to read the configuration from the values saved

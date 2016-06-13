@@ -5,6 +5,13 @@
 
 #if HAVE_LIBPCRE
 
+/**
+* @brief 
+*
+* @param pattern
+* @param flags
+* @param maxMatches
+*/
 RegExpr::RegExpr( const char *pattern, int flags, int maxMatches ) : mMaxMatches( maxMatches ), mMatchBuffers( 0 ), mMatchLengths( 0 ), mMatchValid( 0 )
 {
     const char *errStr;
@@ -34,6 +41,9 @@ RegExpr::RegExpr( const char *pattern, int flags, int maxMatches ) : mMaxMatches
     mNumMatches = 0;
 }
 
+/**
+* @brief 
+*/
 RegExpr::~RegExpr()
 {
     for ( int i = 0; i < mMaxMatches; i++ )
@@ -49,6 +59,15 @@ RegExpr::~RegExpr()
     delete[] mMatchVectors;
 }
 
+/**
+* @brief 
+*
+* @param subjectString
+* @param subjectLength
+* @param flags
+*
+* @return 
+*/
 int RegExpr::match( const char *subjectString, int subjectLength, int flags )
 {
     mMatchString = subjectString;
@@ -70,6 +89,13 @@ int RegExpr::match( const char *subjectString, int subjectLength, int flags )
     return( mNumMatches );
 }
 
+/**
+* @brief 
+*
+* @param matchIndex
+*
+* @return 
+*/
 const char *RegExpr::matchString( int matchIndex ) const
 {
     if ( matchIndex > mNumMatches )
@@ -91,6 +117,13 @@ const char *RegExpr::matchString( int matchIndex ) const
     return( mMatchBuffers[matchIndex] );
 }
 
+/**
+* @brief 
+*
+* @param matchIndex
+*
+* @return 
+*/
 int RegExpr::matchLength( int matchIndex ) const
 {
     if ( matchIndex > mNumMatches )

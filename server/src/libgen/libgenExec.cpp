@@ -17,6 +17,14 @@ static SvrInitHandlersByPri    *termHandlers = 0;
 
 static SvrSigHandlersBySig     *sigHandlers = 0;
 
+/**
+* @brief 
+*
+* @param func
+* @param priority
+*
+* @return 
+*/
 bool addSvrInitFunc( SvrInitHandler func, int priority )
 {
     if ( !initHandlers )
@@ -25,6 +33,11 @@ bool addSvrInitFunc( SvrInitHandler func, int priority )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool svrInit()
 {
     Info( "Running init functions" );
@@ -38,6 +51,14 @@ bool svrInit()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param func
+* @param priority
+*
+* @return 
+*/
 bool addSvrTermFunc( SvrInitHandler func, int priority )
 {
     if ( !termHandlers )
@@ -46,6 +67,11 @@ bool addSvrTermFunc( SvrInitHandler func, int priority )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool svrTerm()
 {
     Info( "Running term functions" );
@@ -72,6 +98,15 @@ bool svrTerm()
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param signal
+* @param func
+* @param priority
+*
+* @return 
+*/
 bool addSvrSigHandlerFunc( int signal, SvrSigHandler func, int priority )
 {
     if ( !sigHandlers )
@@ -97,6 +132,11 @@ bool addSvrSigHandlerFunc( int signal, SvrSigHandler func, int priority )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param signal
+*/
 static void hupHandler( int signal )
 {
     Info( "Got HUP signal, looking for handlers" );
@@ -109,6 +149,11 @@ static void hupHandler( int signal )
     }
 }
 
+/**
+* @brief 
+*
+* @param signal
+*/
 static void termHandler( int signal )
 {
     Info( "Got TERM signal, looking for handlers" );
@@ -123,6 +168,11 @@ static void termHandler( int signal )
     //exit( 0 );
 }
 
+/**
+* @brief 
+*
+* @param signal
+*/
 static void intHandler( int signal )
 {
     Info( "Got INT signal, looking for handlers" );
@@ -138,11 +188,31 @@ static void intHandler( int signal )
 }
 
 #if HAVE_STRUCT_SIGCONTEXT
+/**
+* @brief 
+*
+* @param signal
+* @param HAVE_SIGINFO_T && HAVE_UCONTEXT_T 
+* @param info
+* @param 
+*/
 static void dieHandler( int signal, struct sigcontext context )
 #elif ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T )
 #include <ucontext.h>
+/**
+* @brief 
+*
+* @param signal
+* @param info
+* @param 
+*/
 static void dieHandler( int signal, siginfo_t *info, void *context )
 #else
+/**
+* @brief 
+*
+* @param signal
+*/
 static void dieHandler( int signal )
 #endif
 {
@@ -194,6 +264,11 @@ static void dieHandler( int signal )
     exit( signal );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 static bool initSignalHandlers()
 {
     Info( "Initialising Signal Handlers" );
@@ -231,6 +306,11 @@ static bool initSignalHandlers()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 static bool termSignalHandlers()
 {
     Info( "Terminating Signal Handlers" );
@@ -256,6 +336,9 @@ static bool termSignalHandlers()
     return( true );
 }
 
+/**
+* @brief 
+*/
 SvrExecRegistration::SvrExecRegistration()
 {
     addSvrInitFunc( initSignalHandlers );

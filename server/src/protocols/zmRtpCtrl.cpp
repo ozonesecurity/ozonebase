@@ -6,12 +6,21 @@
 #include "../libgen/libgenComms.h"
 #include "../libgen/libgenTime.h"
 
+/**
+* @brief 
+*
+* @param rtspStream
+* @param rtpSession
+*/
 RtpCtrlManager::RtpCtrlManager( RtspStream &rtspStream, RtpSession &rtpSession ) :
     mRtspStream( rtspStream ),
     mRtpSession( rtpSession )
 {
 }
 
+/**
+* @brief 
+*/
 RtpCtrlManager::~RtpCtrlManager()
 {
     mQueueMutex.lock();
@@ -21,6 +30,14 @@ RtpCtrlManager::~RtpCtrlManager()
     mQueueMutex.unlock();
 }
 
+/**
+* @brief 
+*
+* @param packet
+* @param packetLen
+*
+* @return 
+*/
 int RtpCtrlManager::recvPacket( const unsigned char *packet, ssize_t packetLen )
 {
     const RtcpPacket *rtcpPacket;
@@ -148,6 +165,14 @@ int RtpCtrlManager::recvPacket( const unsigned char *packet, ssize_t packetLen )
     return( consumed );
 }
 
+/**
+* @brief 
+*
+* @param packet
+* @param packetLen
+*
+* @return 
+*/
 int RtpCtrlManager::generateRr( const unsigned char *packet, ssize_t packetLen )
 {
     RtcpPacket *rtcpPacket = (RtcpPacket *)packet;
@@ -181,6 +206,14 @@ int RtpCtrlManager::generateRr( const unsigned char *packet, ssize_t packetLen )
     return( wordLen*sizeof(uint32_t) );
 }
 
+/**
+* @brief 
+*
+* @param packet
+* @param packetLen
+*
+* @return 
+*/
 int RtpCtrlManager::generateSdes( const unsigned char *packet, ssize_t packetLen )
 {
     RtcpPacket *rtcpPacket = (RtcpPacket *)packet;
@@ -204,6 +237,14 @@ int RtpCtrlManager::generateSdes( const unsigned char *packet, ssize_t packetLen
     return( wordLen*sizeof(uint32_t) );
 }
 
+/**
+* @brief 
+*
+* @param packet
+* @param packetLen
+*
+* @return 
+*/
 int RtpCtrlManager::generateBye( const unsigned char *packet, ssize_t packetLen )
 {
     RtcpPacket *rtcpPacket = (RtcpPacket *)packet;
@@ -222,6 +263,14 @@ int RtpCtrlManager::generateBye( const unsigned char *packet, ssize_t packetLen 
     return( wordLen*sizeof(uint32_t) );
 }
 
+/**
+* @brief 
+*
+* @param buffer
+* @param nBytes
+*
+* @return 
+*/
 int RtpCtrlManager::recvPackets( unsigned char *buffer, ssize_t nBytes )
 {
     unsigned char *bufferPtr = buffer;

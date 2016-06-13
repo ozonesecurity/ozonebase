@@ -4,6 +4,11 @@
 #include "../base/zmMotionFrame.h"
 #include "../libgen/libgenTime.h"
 
+/**
+* @brief 
+*
+* @return 
+*/
 int EventRecorder::run()
 {
     if ( waitForProviders() )
@@ -28,6 +33,13 @@ int EventRecorder::run()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param frame
+*
+* @return 
+*/
 bool EventRecorder::processFrame( FramePtr frame )
 {
     const MotionFrame *motionFrame = dynamic_cast<const MotionFrame *>(frame.get());

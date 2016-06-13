@@ -4,6 +4,13 @@
 
 int Timer::TimerThread::mNextTimerId = 0;
 
+/**
+* @brief 
+*
+* @param timer
+* @param duration
+* @param repeat
+*/
 Timer::TimerThread::TimerThread( Timer &timer, int duration, bool repeat ) :
     mTimerId( 0 ),
     mTimer( timer ),
@@ -18,11 +25,17 @@ Timer::TimerThread::TimerThread( Timer &timer, int duration, bool repeat ) :
     mAccessMutex.unlock();
 }
 
+/**
+* @brief 
+*/
 Timer::TimerThread::~TimerThread()
 {
     cancel();
 }
 
+/**
+* @brief 
+*/
 void Timer::TimerThread::cancel()
 {
     mAccessMutex.lock();
@@ -36,6 +49,9 @@ void Timer::TimerThread::cancel()
     mAccessMutex.unlock();
 }
 
+/**
+* @brief 
+*/
 void Timer::TimerThread::reset()
 {
     mAccessMutex.lock();
@@ -52,6 +68,11 @@ void Timer::TimerThread::reset()
     mAccessMutex.unlock();
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int Timer::TimerThread::run()
 {
     Debug( 4, "Starting timer %d for %d seconds", mTimerId, mDuration );
@@ -78,21 +99,36 @@ int Timer::TimerThread::run()
     return( timerExpired );
 }
 
+/**
+* @brief 
+*
+* @param timeout
+* @param repeat
+*/
 Timer::Timer( int timeout, bool repeat ) : mTimerThread( *this, timeout, repeat )
 {
     mTimerThread.start();
 }
 
+/**
+* @brief 
+*/
 Timer::~Timer()
 {
     //cancel();
 }
 
+/**
+* @brief 
+*/
 void Timer::Timer::cancel()
 {
     mTimerThread.cancel();
 }
 
+/**
+* @brief 
+*/
 void Timer::Timer::reset()
 {
     mTimerThread.reset();

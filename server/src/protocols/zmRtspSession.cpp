@@ -8,6 +8,13 @@
 
 #include "../libgen/libgenUtils.h"
 
+/**
+* @brief 
+*
+* @param session
+* @param connection
+* @param encoder
+*/
 RtspSession::RtspSession( int session, RtspConnection *connection, Encoder *encoder ) :
     mState( INIT ),
     mSession( session ),
@@ -17,12 +24,25 @@ RtspSession::RtspSession( int session, RtspConnection *connection, Encoder *enco
     Debug( 2, "New RTSP session %d", session );
 }
 
+/**
+* @brief 
+*/
 RtspSession::~RtspSession()
 {
 }
 
 // Handle RTSP commands once session established.
 // Otherwise RTSP commands are handled in RTSP connection class
+/**
+* @brief 
+*
+* @param requestType
+* @param requestUrl
+* @param requestHeaders
+* @param responseHeaders
+*
+* @return 
+*/
 bool RtspSession::recvRequest( const std::string &requestType, const std::string &requestUrl, const Connection::Headers &requestHeaders, Connection::Headers &responseHeaders )
 {
     Debug( 2, "Session %d - Processing RTSP request: %s", mSession, requestType.c_str() );
@@ -144,6 +164,15 @@ bool RtspSession::recvRequest( const std::string &requestType, const std::string
 }
 
 // Create a new RTSP stream object from config received over RTSP
+/**
+* @brief 
+*
+* @param trackId
+* @param encoder
+* @param transportSpec
+*
+* @return 
+*/
 RtspStream *RtspSession::newStream( int trackId, Encoder *encoder, const std::string &transportSpec )
 {
     StringTokenList transportParts( transportSpec, ";" );
@@ -178,27 +207,54 @@ RtspStream *RtspSession::newStream( int trackId, Encoder *encoder, const std::st
     return( rtspStream );
 }
 
+/**
+* @brief 
+*
+* @param newState
+*
+* @return 
+*/
 RtspSession::State RtspSession::state( State newState )
 {
     Debug( 4, "RTSP Session %d changing to state %d", mSession, newState );
     return( mState = newState );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int RtspSession::requestPorts()
 {
     return( mConnection->controller()->requestPorts() );
 }
 
+/**
+* @brief 
+*
+* @param port
+*/
 void RtspSession::releasePorts( int port )
 {
     mConnection->controller()->releasePorts( port );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 uint32_t RtspSession::requestSsrc()
 {
     return( mConnection->controller()->requestSsrc() );
 }
 
+/**
+* @brief 
+*
+* @param ssrc
+*/
 void RtspSession::releaseSsrc( uint32_t ssrc )
 {
     mConnection->controller()->releaseSsrc( ssrc );

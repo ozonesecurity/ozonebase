@@ -2,6 +2,9 @@
 
 #include <math.h>
 
+/**
+* @brief 
+*/
 void Polygon::calcArea()
 {
     double floatArea = 0.0L;
@@ -14,6 +17,9 @@ void Polygon::calcArea()
     mArea = (int)round(fabs(floatArea));
 }
 
+/**
+* @brief 
+*/
 void Polygon::calcCentre()
 {
     if ( !mArea && mNumCoords )
@@ -30,6 +36,12 @@ void Polygon::calcCentre()
     mCentre = Coord( (int)round(floatX), (int)round(floatY) );
 }
 
+/**
+* @brief 
+*
+* @param numCoords
+* @param coords
+*/
 Polygon::Polygon( int numCoords, const Coord *coords ) : mNumCoords( numCoords )
 {
     mCoords = new Coord[mNumCoords];
@@ -55,6 +67,11 @@ Polygon::Polygon( int numCoords, const Coord *coords ) : mNumCoords( numCoords )
     calcCentre();
 }
 
+/**
+* @brief 
+*
+* @param polygon
+*/
 Polygon::Polygon( const Polygon &polygon ) : mNumCoords( polygon.mNumCoords ), mExtent( polygon.mExtent ), mArea( polygon.mArea ), mCentre( polygon.mCentre )
 {
     mCoords = new Coord[mNumCoords];
@@ -64,6 +81,13 @@ Polygon::Polygon( const Polygon &polygon ) : mNumCoords( polygon.mNumCoords ), m
     }
 }
 
+/**
+* @brief 
+*
+* @param polygon
+*
+* @return 
+*/
 Polygon &Polygon::operator=( const Polygon &polygon )
 {
     if ( mNumCoords < polygon.mNumCoords )
@@ -82,6 +106,13 @@ Polygon &Polygon::operator=( const Polygon &polygon )
     return( *this );
 }
 
+/**
+* @brief 
+*
+* @param coord
+*
+* @return 
+*/
 bool Polygon::isInside( const Coord &coord ) const
 {
     bool inside = false;

@@ -18,6 +18,13 @@
 #include <sys/shm.h>
 #endif // ZM_MEM_MAPPED
 
+/**
+* @brief 
+*
+* @param name
+* @param location
+* @param memoryKey
+*/
 MemoryOutput::MemoryOutput( const std::string &name, const std::string &location, int memoryKey ) :
     VideoConsumer( cClass(), name ),
     MemoryIO( location, memoryKey, true ),
@@ -26,10 +33,18 @@ MemoryOutput::MemoryOutput( const std::string &name, const std::string &location
 {
 }
 
+/**
+* @brief 
+*/
 MemoryOutput::~MemoryOutput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MemoryOutput::run()
 {
     if ( waitForProviders() )
@@ -60,6 +75,13 @@ int MemoryOutput::run()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param frame
+*
+* @return 
+*/
 bool MemoryOutput::storeFrame( FramePtr frame )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());

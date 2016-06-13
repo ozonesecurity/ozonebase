@@ -7,6 +7,13 @@
 #include <errno.h>
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param secs
+*
+* @return 
+*/
 struct timespec getTimeout( int secs )
 {
     struct timespec timeout;
@@ -17,6 +24,13 @@ struct timespec getTimeout( int secs )
     return( timeout );
 }
 
+/**
+* @brief 
+*
+* @param secs
+*
+* @return 
+*/
 struct timespec getTimeout( double secs )
 {
     struct timespec timeout;
@@ -32,12 +46,18 @@ struct timespec getTimeout( double secs )
     return( timeout );
 }
 
+/**
+* @brief 
+*/
 Mutex::Mutex()
 {
     if ( pthread_mutex_init( &mMutex, NULL ) < 0 )
         throw ThreadException( stringtf( "Unable to create pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 Mutex::~Mutex()
 {
     if ( locked() )
@@ -46,12 +66,20 @@ Mutex::~Mutex()
         throw ThreadException( stringtf( "Unable to destroy pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 void Mutex::lock()
 {
     if ( pthread_mutex_lock( &mMutex ) < 0 )
         throw ThreadException( stringtf( "Unable to lock pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*
+* @param secs
+*/
 void Mutex::lock( int secs )
 {
     struct timespec timeout = getTimeout( secs );
@@ -59,6 +87,11 @@ void Mutex::lock( int secs )
         throw ThreadException( stringtf( "Unable to timedlock pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*
+* @param secs
+*/
 void Mutex::lock( double secs )
 {
     struct timespec timeout = getTimeout( secs );
@@ -66,12 +99,20 @@ void Mutex::lock( double secs )
         throw ThreadException( stringtf( "Unable to timedlock pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 void Mutex::unlock()
 {
     if ( pthread_mutex_unlock( &mMutex ) < 0 )
         throw ThreadException( stringtf( "Unable to unlock pthread mutex: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Mutex::locked()
 {
     int state = pthread_mutex_trylock( &mMutex );
@@ -82,28 +123,47 @@ bool Mutex::locked()
     return( state == EBUSY );
 }
 
+/**
+* @brief 
+*
+* @param mutex
+*/
 ScopedMutex::ScopedMutex( Mutex &mutex ) : mMutex( mutex )
 {
     mMutex.lock();
 }
 
+/**
+* @brief 
+*/
 ScopedMutex::~ScopedMutex()
 {
     mMutex.unlock();
 }
 
+/**
+* @brief 
+*
+* @param mutex
+*/
 Condition::Condition( Mutex &mutex ) : mMutex( mutex )
 {
     if ( pthread_cond_init( &mCondition, NULL ) < 0 )
         throw ThreadException( stringtf( "Unable to create pthread condition: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 Condition::~Condition()
 {
     if ( pthread_cond_destroy( &mCondition ) < 0 )
         throw ThreadException( stringtf( "Unable to destroy pthread condition: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 void Condition::wait()
 {
     // Locking done outside of this function
@@ -111,6 +171,13 @@ void Condition::wait()
         throw ThreadException( stringtf( "Unable to wait pthread condition: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*
+* @param secs
+*
+* @return 
+*/
 bool Condition::wait( int secs )
 {
     // Locking done outside of this function
@@ -121,6 +188,13 @@ bool Condition::wait( int secs )
     return( errno != ETIMEDOUT );
 }
 
+/**
+* @brief 
+*
+* @param secs
+*
+* @return 
+*/
 bool Condition::wait( double secs )
 {
     // Locking done outside of this function
@@ -130,18 +204,29 @@ bool Condition::wait( double secs )
     return( errno != ETIMEDOUT );
 }
 
+/**
+* @brief 
+*/
 void Condition::signal()
 {
     if ( pthread_cond_signal( &mCondition ) < 0 )
         throw ThreadException( stringtf( "Unable to signal pthread condition: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*/
 void Condition::broadcast()
 {
     if ( pthread_cond_broadcast( &mCondition ) < 0 )
         throw ThreadException( stringtf( "Unable to broadcast pthread condition: %s", strerror(errno) ) );
 }
 
+/**
+* @brief 
+*
+* @param threadLabel
+*/
 Thread::Thread( const std::string &threadLabel ) :
     mThreadLabel( threadLabel ),
     mThreadCondition( mThreadMutex ),
@@ -152,6 +237,11 @@ Thread::Thread( const std::string &threadLabel ) :
     Debug( 1, "Creating thread %s", mThreadLabel.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param threadLabel
+*/
 Thread::Thread( const char *threadLabel ) :
     mThreadLabel( threadLabel ),
     mThreadCondition( mThreadMutex ),
@@ -162,6 +252,9 @@ Thread::Thread( const char *threadLabel ) :
     Debug( 1, "Creating thread %s", mThreadLabel.c_str() );
 }
 
+/**
+* @brief 
+*/
 Thread::~Thread()
 {
     Debug( 1, "Destroying thread %d (%s)", mTid, mThreadLabel.c_str() );
@@ -172,6 +265,13 @@ Thread::~Thread()
     }
 }
 
+/**
+* @brief 
+*
+* @param arg
+*
+* @return 
+*/
 void *Thread::mThreadFunc( void *arg )
 {
     Debug( 2, "Invoking thread" );
@@ -197,6 +297,9 @@ void *Thread::mThreadFunc( void *arg )
     return( status );
 }
 
+/**
+* @brief 
+*/
 void Thread::start()
 {
     Debug( 1, "Starting thread (%s)", mThreadLabel.c_str() );
@@ -224,12 +327,18 @@ void Thread::start()
 }
 
 
+/**
+* @brief 
+*/
 void Thread::stop()
 {
     Debug( 1, "Stopping thread %d (%s)", mTid, mThreadLabel.c_str() );
     mStop = true;
 }
 
+/**
+* @brief 
+*/
 void Thread::join()
 {
     Debug( 1, "Joining thread %d (%s)", mTid, mThreadLabel.c_str() );

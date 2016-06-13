@@ -1,6 +1,15 @@
 #include "../base/zm.h"
 #include "zmSlaveVideo.h"
 
+/**
+* @brief 
+*
+* @param id
+* @param width
+* @param height
+* @param pixelFormat
+* @param frameRate
+*/
 SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate ) :
     VideoProvider( cClass(), id ),
     mInitialised( true ),
@@ -11,6 +20,11 @@ SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, 
 {
 }
 
+/**
+* @brief 
+*
+* @param id
+*/
 SlaveVideo::SlaveVideo( const std::string &id ) :
     VideoProvider( cClass(), id ),
     mInitialised( false ),
@@ -24,6 +38,14 @@ SlaveVideo::~SlaveVideo()
 {
 }
 
+/**
+* @brief 
+*
+* @param width
+* @param height
+* @param pixelFormat
+* @param frameRate
+*/
 void SlaveVideo::prepare( uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate )
 {
     mImageWidth = width;
@@ -33,12 +55,22 @@ void SlaveVideo::prepare( uint16_t width, uint16_t height, PixelFormat pixelForm
     mInitialised = true;
 }
 
+/**
+* @brief 
+*
+* @param frameRate
+*/
 void SlaveVideo::prepare( const FrameRate &frameRate )
 {
     mFrameRate = frameRate;
     mInitialised = true;
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 void SlaveVideo::relayImage( const Image &image )
 {
     if ( !mInitialised )

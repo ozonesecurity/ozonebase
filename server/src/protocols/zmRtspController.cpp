@@ -7,6 +7,13 @@
 
 #include <stdlib.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param tcpPort
+* @param udpPortRange
+*/
 RtspController::RtspController( const std::string &name, uint32_t tcpPort, const PortRange &udpPortRange ) :
     Controller( cClass(), name, "RTSP", tcpPort ),
     mDataPortRange( udpPortRange )
@@ -14,15 +21,32 @@ RtspController::RtspController( const std::string &name, uint32_t tcpPort, const
     Debug( 2, "Assigned RTP port range is %d-%d", mDataPortRange.first, mDataPortRange.second );
 }
 
+/**
+* @brief 
+*/
 RtspController::~RtspController()
 {
 }
 
+/**
+* @brief 
+*
+* @param socket
+*
+* @return 
+*/
 Connection *RtspController::newConnection( TcpInetSocket *socket )
 {
     return( new RtspConnection( this, socket ) );
 }
 
+/**
+* @brief 
+*
+* @param session
+*
+* @return 
+*/
 RtspSession *RtspController::getSession( uint32_t session )
 {
     RtspSessions::iterator iter = mRtspSessions.find( session );
@@ -35,6 +59,14 @@ RtspSession *RtspController::getSession( uint32_t session )
 }
 
 // Create a new RTSP session
+/**
+* @brief 
+*
+* @param connection
+* @param encoder
+*
+* @return 
+*/
 RtspSession *RtspController::newSession( RtspConnection *connection, Encoder *encoder )
 {
     uint32_t session = 0;
@@ -56,6 +88,11 @@ RtspSession *RtspController::newSession( RtspConnection *connection, Encoder *en
 
 // Assign RTP ports from pool making sure not to use ones
 // already in use. Ports always assigned as pairs
+/**
+* @brief 
+*
+* @return 
+*/
 int RtspController::requestPorts()
 {
     for ( int i = mDataPortRange.first; i <= mDataPortRange.second; i += 2 )
@@ -72,6 +109,11 @@ int RtspController::requestPorts()
 }
 
 // Return port(s) to pool
+/**
+* @brief 
+*
+* @param port
+*/
 void RtspController::releasePorts( int port )
 {
     if ( port > 0 )
@@ -79,6 +121,11 @@ void RtspController::releasePorts( int port )
 }
 
 // Get unique random RTP Synchronisation Source identifier
+/**
+* @brief 
+*
+* @return 
+*/
 uint32_t RtspController::requestSsrc()
 {
     // Prevent duplicate sessions
@@ -94,6 +141,11 @@ uint32_t RtspController::requestSsrc()
     return( ssrc );
 }
 
+/**
+* @brief 
+*
+* @param ssrc
+*/
 void RtspController::releaseSsrc( uint32_t ssrc )
 {
     mSsrcs.erase( ssrc );

@@ -6,6 +6,15 @@
 
 //#include <arpa/inet.h>
 
+/**
+* @brief 
+*
+* @param ssrc
+* @param localHost
+* @param localPortBase
+* @param remoteHost
+* @param remotePortBase
+*/
 RtpSession::RtpSession( uint32_t ssrc, const std::string &localHost, int localPortBase, const std::string &remoteHost, int remotePortBase ) :
     mSsrc( ssrc ),
     mLocalHost( localHost ),
@@ -41,6 +50,11 @@ RtpSession::RtpSession( uint32_t ssrc, const std::string &localHost, int localPo
     mLastSrTimeRtp = 0;
 }
 
+/**
+* @brief 
+*
+* @param seq
+*/
 void RtpSession::init( uint16_t seq )
 {
     Debug( 3, "Initialising sequence" );
@@ -58,6 +72,13 @@ void RtpSession::init( uint16_t seq )
     mTransit = 0;
 }
 
+/**
+* @brief 
+*
+* @param seq
+*
+* @return 
+*/
 bool RtpSession::updateSeq( uint16_t seq )
 {
     uint16_t uDelta = seq - mMaxSeq;
@@ -137,6 +158,11 @@ bool RtpSession::updateSeq( uint16_t seq )
     return( uDelta==1?true:false );
 }
 
+/**
+* @brief 
+*
+* @param header
+*/
 void RtpSession::updateJitter( const RtpDataHeader *header )
 {
     if ( mRtpFactor > 0 )
@@ -167,6 +193,13 @@ void RtpSession::updateJitter( const RtpDataHeader *header )
     Debug( 5, "RTP Jitter: %d", mJitter );
 }
 
+/**
+* @brief 
+*
+* @param ntpTimeSecs
+* @param ntpTimeFrac
+* @param rtpTime
+*/
 void RtpSession::updateRtcpData( uint32_t ntpTimeSecs, uint32_t ntpTimeFrac, uint32_t rtpTime )
 {
     struct timeval ntpTime = tvMake( ntpTimeSecs, suseconds_t((USEC_PER_SEC*(ntpTimeFrac>>16))/(1<<16)) );
@@ -201,6 +234,9 @@ void RtpSession::updateRtcpData( uint32_t ntpTimeSecs, uint32_t ntpTimeFrac, uin
     mLastSrTimeRtp = rtpTime;
 }
 
+/**
+* @brief 
+*/
 void RtpSession::updateRtcpStats()
 {
     uint32_t extendedMax = mCycles + mMaxSeq;

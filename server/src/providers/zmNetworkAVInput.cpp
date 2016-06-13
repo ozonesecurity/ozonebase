@@ -4,6 +4,13 @@
 #include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param source
+* @param format
+*/
 NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format ) :
     AudioVideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -17,10 +24,18 @@ NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &sour
 {
 }
 
+/**
+* @brief 
+*/
 NetworkAVInput::~NetworkAVInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int NetworkAVInput::run()
 {
     AVInputFormat *inputFormat = 0;

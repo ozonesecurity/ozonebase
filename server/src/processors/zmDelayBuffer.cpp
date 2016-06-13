@@ -3,6 +3,12 @@
 
 #include "../base/zmFeedFrame.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param delay
+*/
 DelayBufferFilter::DelayBufferFilter( const std::string &name, double delay ) :
     GeneralProvider( cClass(), name ),
     Thread( identity() ),
@@ -10,10 +16,18 @@ DelayBufferFilter::DelayBufferFilter( const std::string &name, double delay ) :
 {
 }
 
+/**
+* @brief 
+*/
 DelayBufferFilter::~DelayBufferFilter()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int DelayBufferFilter::run()
 {
 	FrameQueue delayQueue;

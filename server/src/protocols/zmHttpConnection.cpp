@@ -6,18 +6,37 @@
 #include "zmHttpStream.h"
 #include "../libgen/libgenUtils.h"
 
+/**
+* @brief 
+*
+* @param controller
+* @param socket
+*/
 HttpConnection::HttpConnection( Controller *controller, TcpInetSocket *socket ) :
     TextConnection( controller, socket ),
     mHttpController( dynamic_cast<HttpController *>(controller) )
 {
 }
 
+/**
+* @brief 
+*/
 HttpConnection::~HttpConnection()
 {
     mHttpController->deleteSession( (uintptr_t)this );
 }
 
 // Transmit an HTTP response message over an established connection
+/**
+* @brief 
+*
+* @param headers
+* @param payload
+* @param statusCode
+* @param statusText
+*
+* @return 
+*/
 bool HttpConnection::sendResponse( Headers &headers, std::string payload, int statusCode, std::string statusText )
 {
     std::string response;
@@ -48,6 +67,13 @@ bool HttpConnection::sendResponse( Headers &headers, std::string payload, int st
 }
 
 // Receive, assemble and handle HTTP commands that are not related to established streams
+/**
+* @brief 
+*
+* @param request
+*
+* @return 
+*/
 bool HttpConnection::recvRequest( std::string &request )
 {
     Debug( 2, "Received HTTP request: %s (%zd bytes)", request.c_str(), request.size() );
