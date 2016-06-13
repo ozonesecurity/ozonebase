@@ -1,0 +1,10 @@
+<map id="Image::writeJpeg" name="Image::writeJpeg">
+<area shape="rect" id="node2" href="$class_event_recorder.html#a84a608c8ab801d830856408647e1785e" title="EventRecorder::processFrame" alt="" coords="176,5,376,32"/>
+<area shape="rect" id="node4" href="$class_local_file_output.html#ae400b2bcc1b66792250925ef0b7f0a2b" title="LocalFileOutput::writeFrame" alt="" coords="183,56,369,83"/>
+<area shape="rect" id="node6" href="$class_mp4_file_output.html#ac6e4a6cfab05633098e83d5c8404306c" title="Mp4FileOutput::run" alt="" coords="209,107,343,133"/>
+<area shape="rect" id="node7" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="636,183,773,209"/>
+<area shape="rect" id="node8" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="179,208,373,235"/>
+<area shape="rect" id="node3" href="$class_event_recorder.html#a84137d6f676655852a6c306f9931ae5f" title="EventRecorder::run" alt="" coords="439,5,573,32"/>
+<area shape="rect" id="node5" href="$class_local_file_output.html#acd87a7f0a0aaed0663590c0192483adf" title="LocalFileOutput::run" alt="" coords="437,56,575,83"/>
+<area shape="rect" id="node9" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="424,208,588,235"/>
+</map>

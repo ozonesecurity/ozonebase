@@ -1,0 +1,7 @@
+<map id="QuadVideo::deregisterProvider" name="QuadVideo::deregisterProvider">
+<area shape="rect" id="node2" href="$class_feed_consumer.html#ab88de12bdfc4be4476fd138e59a8cda1" title="FeedConsumer::deregister\lProvider" alt="" coords="252,51,428,92"/>
+<area shape="rect" id="node3" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="737,8,875,34"/>
+<area shape="rect" id="node4" href="$class_feed_provider.html#a55fc4d795ba5c0055eaa9f77465139c1" title="FeedProvider::hasConsumer" alt="" coords="476,29,664,56"/>
+<area shape="rect" id="node5" href="$class_feed_provider.html#a351ebd59ac16f8f7522aad379e5f3cf1" title="FeedProvider::deregister\lConsumer" alt="" coords="488,80,652,122"/>
+<area shape="rect" id="node6" href="$class_feed_consumer.html#a02aefeb0dd9715a0c62a79f0ab18c8c5" title="FeedConsumer::hasProvider" alt="" coords="712,88,900,114"/>
+</map>

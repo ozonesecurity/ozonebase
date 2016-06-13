@@ -1,0 +1,4 @@
+<map id="Controller::findStream" name="Controller::findStream">
+<area shape="rect" id="node2" href="$class_feed_base.html#a27d113ac55879058cd684e0c16bf4b1a" title="Build identity from the class and name strings. " alt="" coords="203,5,367,32"/>
+<area shape="rect" id="node3" href="$class_feed_provider.html#a2e4659092e97cbf0ec02badf93b34354" title="Locate a provider with the given identity. " alt="" coords="221,56,349,83"/>
+</map>

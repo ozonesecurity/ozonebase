@@ -1,0 +1,8 @@
+<map id="Mask::image" name="Mask::image">
+<area shape="rect" id="node2" href="$class_zone.html#a6e88d4cdbfec2ae9853e539df56e0548" title="Zone::checkMotion" alt="" coords="349,24,483,50"/>
+<area shape="rect" id="node6" href="$class_image.html#ada453ff34b5a240a14cc1656e2c3dc95" title="Image::highlightEdges" alt="" coords="151,24,301,50"/>
+<area shape="rect" id="node7" href="$class_image.html#abb6d736b70f7fe25cdc1520d6930f258" title="Image::locateBlobs" alt="" coords="159,74,293,101"/>
+<area shape="rect" id="node3" href="$class_motion_detector.html#a3bdca29229e49296f36d21b686ee06f9" title="MotionDetector::detectMotion" alt="" coords="531,24,725,50"/>
+<area shape="rect" id="node4" href="$class_motion_detector.html#ab3c14562972b1881b184b2f3814123a6" title="MotionDetector::analyse" alt="" coords="773,24,937,50"/>
+<area shape="rect" id="node5" href="$class_motion_detector.html#af0b59147c5ec1c704e2389a415657588" title="MotionDetector::run" alt="" coords="985,24,1123,50"/>
+</map>

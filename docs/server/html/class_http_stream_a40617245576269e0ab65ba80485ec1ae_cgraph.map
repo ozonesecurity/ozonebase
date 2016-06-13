@@ -1,0 +1,7 @@
+<map id="HttpStream::run" name="HttpStream::run">
+<area shape="rect" id="node2" href="$class_select.html#af179f984eef6bb3f28df56154cc1f156" title="Select::addWriter" alt="" coords="215,5,338,32"/>
+<area shape="rect" id="node3" href="$class_feed_consumer.html#a80b6eb167765c37712347db232c8e41d" title="FeedConsumer::waitForProviders" alt="" coords="168,56,385,83"/>
+<area shape="rect" id="node5" href="$class_select.html#acd61a6269eda7d8359543f162fdb797d" title="Select::wait" alt="" coords="231,107,322,133"/>
+<area shape="rect" id="node6" href="$class_select.html#a471d1495cf2e5d59a5ec5a6be04318eb" title="Select::getWriteable" alt="" coords="207,157,347,184"/>
+<area shape="rect" id="node4" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="433,56,572,83"/>
+</map>

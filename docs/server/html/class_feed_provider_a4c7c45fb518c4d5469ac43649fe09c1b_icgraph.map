@@ -1,0 +1,10 @@
+<map id="FeedProvider::registerConsumer" name="FeedProvider::registerConsumer">
+<area shape="rect" id="node2" href="$class_feed_consumer.html#a5eac06a868f4dc353d34589207ab99f6" title="FeedConsumer::registerProvider" alt="" coords="265,129,475,156"/>
+<area shape="rect" id="node8" href="$class_h264_encoder.html#ac2bc3e88cce36d8658ec154f33dba13e" title="H264Encoder::registerConsumer" alt="" coords="264,180,476,207"/>
+<area shape="rect" id="node9" href="$class_h264_relay.html#afdb48d4b82fd4368ec963b3ce95691b8" title="H264Relay::registerConsumer" alt="" coords="271,231,469,257"/>
+<area shape="rect" id="node3" href="$class_quad_video.html#ae14e9c547206482020988cc1dfe421b9" title="QuadVideo::registerProvider" alt="" coords="537,5,722,32"/>
+<area shape="rect" id="node4" href="$class_http_image_stream.html#a30d396eaae0715bf5db81777e1e0449b" title="HttpImageStream::HttpImage\lStream" alt="" coords="532,57,727,98"/>
+<area shape="rect" id="node5" href="$class_http_data_stream.html#a78e003682475c44cdf03af97a1d26436" title="HttpDataStream::HttpData\lStream" alt="" coords="540,122,719,163"/>
+<area shape="rect" id="node6" href="$class_rtsp_connection.html#a8864466b9ec035a67c9973fa4d0aa126" title="RtspConnection::handleRequest" alt="" coords="524,188,735,215"/>
+<area shape="rect" id="node7" href="$class_rtsp_stream.html#a32b2907b4bac8d99070c12f639a640b2" title="RtspStream::RtspStream" alt="" coords="544,239,715,265"/>
+</map>

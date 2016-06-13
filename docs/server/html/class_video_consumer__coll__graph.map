@@ -1,0 +1,5 @@
+<map id="VideoConsumer" name="VideoConsumer">
+<area shape="rect" id="node2" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="37,109,148,136"/>
+<area shape="rect" id="node3" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,5,87,32"/>
+<area shape="rect" id="node4" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="111,5,170,32"/>
+</map>

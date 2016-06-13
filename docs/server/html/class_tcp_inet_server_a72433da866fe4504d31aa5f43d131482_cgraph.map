@@ -1,0 +1,4 @@
+<map id="TcpInetServer::listen" name="TcpInetServer::listen">
+<area shape="rect" id="node2" href="$class_socket.html#ac841ace3ba3f3b0daa9b59a498d3769c" title="Socket::listen" alt="" coords="196,5,299,32"/>
+<area shape="rect" id="node3" href="$class_socket.html#a0c9750548d7cfc58390c35a513bc3a12" title="Socket::close" alt="" coords="347,5,449,32"/>
+</map>

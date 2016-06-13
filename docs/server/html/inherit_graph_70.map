@@ -1,0 +1,22 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_comms_base.html" title="Base class for all the Socket and Pipe classes. " alt="" coords="5,193,104,220"/>
+<area shape="rect" id="node2" href="$class_pipe.html" title="Class representing a unix pipe. " alt="" coords="183,168,231,195"/>
+<area shape="rect" id="node3" href="$class_socket.html" title="Class representing a general Unix socket. " alt="" coords="176,219,239,245"/>
+<area shape="rect" id="node4" href="$class_inet_socket.html" title="Class representing a general socket using internet addressing. " alt="" coords="335,148,421,175"/>
+<area shape="rect" id="node11" href="$class_unix_socket.html" title="Class representing a general socket using Unix style addressing. " alt="" coords="333,249,423,276"/>
+<area shape="rect" id="node5" href="$class_tcp_inet_socket.html" title="Class representing a TCP internet socket. " alt="" coords="497,60,604,87"/>
+<area shape="rect" id="node8" href="$class_udp_inet_socket.html" title="Class representing a UDP internet socket. " alt="" coords="496,155,605,181"/>
+<area shape="rect" id="node6" href="$class_tcp_inet_client.html" title="Class representing a TCP internet client socket. " alt="" coords="661,5,761,32"/>
+<area shape="rect" id="node7" href="$class_tcp_inet_server.html" title="Class representing a TCP internet server socket. " alt="" coords="659,56,763,83"/>
+<area shape="rect" id="node9" href="$class_udp_inet_client.html" title="Class representing a UDP internet client socket. " alt="" coords="660,107,763,133"/>
+<area shape="rect" id="node10" href="$class_udp_inet_server.html" title="Class representing a UDP internet server socket. " alt="" coords="658,157,765,184"/>
+<area shape="rect" id="node12" href="$class_tcp_unix_socket.html" title="Class representing a TCP Unix socket. " alt="" coords="495,233,607,260"/>
+<area shape="rect" id="node15" href="$class_udp_unix_socket.html" title="Class representing a UDP Unix socket. " alt="" coords="493,297,608,324"/>
+<area shape="rect" id="node13" href="$class_tcp_unix_client.html" title="Class representing a TCP Unix client socket. " alt="" coords="659,208,764,235"/>
+<area shape="rect" id="node14" href="$class_tcp_unix_server.html" title="Class representing a TCP Unix server socket. " alt="" coords="657,259,766,285"/>
+<area shape="rect" id="node16" href="$class_udp_unix_client.html" title="Class representing a UDP Unix client socket. " alt="" coords="658,309,765,336"/>
+<area shape="rect" id="node17" href="$class_udp_unix_server.html" title="Class representing a UDP Unix server socket. " alt="" coords="656,360,767,387"/>
+<area shape="rect" id="node18" href="$class_socket_protocol.html" title="Abstract base class representing a socket protocol. " alt="" coords="152,101,263,128"/>
+<area shape="rect" id="node19" href="$class_tcp_socket_protocol.html" title="Class representing the TCP socket protocol. " alt="" coords="311,85,445,112"/>
+<area shape="rect" id="node20" href="$class_udp_socket_protocol.html" title="Class representing the UDP socket protocol. " alt="" coords="311,199,445,225"/>
+</map>

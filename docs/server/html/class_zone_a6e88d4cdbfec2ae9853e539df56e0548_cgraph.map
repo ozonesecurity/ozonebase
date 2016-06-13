@@ -1,0 +1,10 @@
+<map id="Zone::checkMotion" name="Zone::checkMotion">
+<area shape="rect" id="node2" href="$class_mask.html#ab5a14f5e25c4f3a2a725680783ad425e" title="Mask::image" alt="" coords="389,31,486,57"/>
+<area shape="rect" id="node3" href="$class_image.html#abb6d736b70f7fe25cdc1520d6930f258" title="Image::locateBlobs" alt="" coords="195,31,329,57"/>
+<area shape="rect" id="node5" href="$class_image.html#ada453ff34b5a240a14cc1656e2c3dc95" title="Image::highlightEdges" alt="" coords="187,81,337,108"/>
+<area shape="rect" id="node6" href="$class_image.html#a6df4e9f8c809f45f7f48733cf1c510fc" title="Image::fill" alt="" coords="223,132,301,159"/>
+<area shape="rect" id="node7" href="$class_image.html#a9dcb733714436797228a0743a3773071" title="Image::swell" alt="" coords="214,183,310,209"/>
+<area shape="rect" id="node9" href="$class_image.html#ac809762a44da79842fbc0f0f3862c714" title="Image::outline" alt="" coords="210,233,314,260"/>
+<area shape="rect" id="node4" href="$class_image.html#a03efeabe026bd5ff0f98fb7c91484c29" title="Image::y" alt="" coords="401,81,474,108"/>
+<area shape="rect" id="node8" href="$class_image.html#aa67c19ac9c6c4f7e9ba143fca64bbdf4" title="Image::assign" alt="" coords="385,183,489,209"/>
+</map>

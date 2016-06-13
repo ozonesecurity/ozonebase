@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_mask.html" title="Mask" alt="" coords="5,56,60,83"/>
+<area shape="rect" id="node2" href="$class_box_mask.html" title="BoxMask" alt="" coords="115,5,192,32"/>
+<area shape="rect" id="node3" href="$class_image_mask.html" title="ImageMask" alt="" coords="108,56,199,83"/>
+<area shape="rect" id="node4" href="$class_poly_mask.html" title="PolyMask" alt="" coords="113,107,193,133"/>
+</map>

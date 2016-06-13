@@ -1,0 +1,4 @@
+<map id="FeedConsumer::checkProviders" name="FeedConsumer::checkProviders">
+<area shape="rect" id="node2" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="263,5,401,32"/>
+<area shape="rect" id="node3" href="$class_thread.html#abd50159ecd409936f454c2321f673616" title="Stop the thread, by setting the mStop flag. Thread is responsible for actually existing. " alt="" coords="285,56,379,83"/>
+</map>

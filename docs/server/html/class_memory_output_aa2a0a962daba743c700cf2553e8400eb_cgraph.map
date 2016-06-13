@@ -1,0 +1,5 @@
+<map id="MemoryOutput::storeFrame" name="MemoryOutput::storeFrame">
+<area shape="rect" id="node2" href="$class_image.html#ad51ca575663b7e8f15900ee4f044ac13" title="Image::copy" alt="" coords="290,5,385,32"/>
+<area shape="rect" id="node3" href="$class_video_consumer.html#a843010ada945a86ff979dae0d667435c" title="Return the first provider cast appropriately, shortcut for when providers == 1. " alt="" coords="236,56,439,83"/>
+<area shape="rect" id="node4" href="$class_video_provider.html#a5b5ad2235e3bb94f6f21bf82ea0fd9ec" title="Return the frame rate at this this provider supplies frames. May not be available or accurate..." alt="" coords="251,107,423,133"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="Zone" name="Zone">
+<area shape="rect" id="node2" href="$class_region.html" title="Region" alt="" coords="95,213,157,240"/>
+<area shape="rect" id="node3" href="$class_polygon.html" title="Polygon" alt="" coords="10,109,79,136"/>
+<area shape="rect" id="node4" href="$class_coord.html" title="Coord" alt="" coords="5,5,63,32"/>
+<area shape="rect" id="node5" href="$class_box.html" title="Box" alt="" coords="97,5,142,32"/>
+<area shape="rect" id="node6" href="$class_mask.html" title="Mask" alt="" coords="205,109,260,136"/>
+<area shape="rect" id="node7" href="$class_image.html" title="Image" alt="" coords="474,213,533,240"/>
+<area shape="rect" id="node8" href="$struct_image_1_1_y_u_v2_r_g_b.html" title="Image::YUV2RGB" alt="" coords="378,109,509,136"/>
+<area shape="rect" id="node9" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="534,109,593,136"/>
+<area shape="rect" id="node10" href="$struct_image_1_1_r_g_b2_y_u_v.html" title="Image::RGB2YUV" alt="" coords="617,109,747,136"/>
+<area shape="rect" id="node11" href="$class_buffer.html" title="Buffer\&lt; uint8_t \&gt;" alt="" coords="771,109,891,136"/>
+<area shape="rect" id="node12" href="$struct_image_1_1_lookups.html" title="Image::Lookups" alt="" coords="915,109,1030,136"/>
+<area shape="rect" id="node13" href="$structlocal__error__mgr.html" title="local_error_mgr" alt="" coords="1055,109,1165,136"/>
+<area shape="rect" id="node14" href="$struct_mask_1_1_range.html" title="Mask::Range" alt="" coords="183,5,283,32"/>
+<area shape="rect" id="node15" href="$class_motion_data.html" title="MotionData" alt="" coords="557,213,647,240"/>
+</map>

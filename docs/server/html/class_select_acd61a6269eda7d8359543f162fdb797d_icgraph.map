@@ -1,0 +1,5 @@
+<map id="Select::wait" name="Select::wait">
+<area shape="rect" id="node2" href="$class_http_stream.html#a40617245576269e0ab65ba80485ec1ae" title="HttpStream::run" alt="" coords="148,5,263,32"/>
+<area shape="rect" id="node3" href="$class_rtmp_stream.html#a7cffd1820173a7603f5ca0bf49551e4c" title="Thread code, must be overriden to do actual thread work. " alt="" coords="144,56,267,83"/>
+<area shape="rect" id="node4" href="$class_rtsp_stream.html#a2062f21b96866c4c92f552c660728711" title="RtspStream::run" alt="" coords="146,107,265,133"/>
+</map>
