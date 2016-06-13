@@ -4,6 +4,12 @@
 Mutex               Encoder::smPoolMutex;
 Encoder::EncoderMap Encoder::smEncoderPool;
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 Encoder::Encoder( const std::string &cl4ss, const std::string &name ) :
     VideoConsumer( cl4ss, name ),
     VideoProvider( cl4ss, name ),
@@ -14,10 +20,16 @@ Encoder::Encoder( const std::string &cl4ss, const std::string &name ) :
 {
 }
 
+/**
+* @brief 
+*/
 Encoder::~Encoder()
 {
 }
 
+/**
+* @brief 
+*/
 void Encoder::cleanup()
 {
     unpoolEncoder( this );
@@ -30,6 +42,14 @@ void Encoder::cleanup()
     FeedConsumer::cleanup();
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param provider
+*
+* @return 
+*/
 bool Encoder::queueFrame( FramePtr frame, FeedProvider *provider )
 {
     if ( mPooled && ((time( NULL ) - mLastUse) > POOL_TIMEOUT) )
@@ -41,6 +61,13 @@ bool Encoder::queueFrame( FramePtr frame, FeedProvider *provider )
     return( FeedConsumer::queueFrame( frame, provider ) );
 }
 
+/**
+* @brief 
+*
+* @param poolKey
+*
+* @return 
+*/
 Encoder *Encoder::getPooledEncoder( const std::string &poolKey )
 {
     smPoolMutex.lock();
@@ -50,6 +77,13 @@ Encoder *Encoder::getPooledEncoder( const std::string &poolKey )
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param encoder
+*
+* @return 
+*/
 bool Encoder::poolEncoder( Encoder *encoder )
 {
     Debug( 2, "Adding encoder %s to pool", encoder->mPoolKey.c_str() );
@@ -60,6 +94,13 @@ bool Encoder::poolEncoder( Encoder *encoder )
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @param encoder
+*
+* @return 
+*/
 bool Encoder::unpoolEncoder( Encoder *encoder )
 {
     Debug( 2, "Removing encoder %s from pool", encoder->mPoolKey.c_str() );

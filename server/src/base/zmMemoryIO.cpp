@@ -14,6 +14,13 @@
 #include <sys/shm.h>
 #endif // ZM_MEM_MAPPED
 
+/**
+* @brief 
+*
+* @param location
+* @param memoryKey
+* @param owner
+*/
 MemoryIO::MemoryIO( const std::string &location, int memoryKey, bool owner ) :
     mLocation( location ),
     mMemoryKey( memoryKey ),
@@ -32,12 +39,22 @@ MemoryIO::MemoryIO( const std::string &location, int memoryKey, bool owner ) :
     mMemFile[0] = '\0';
 }
 
+/**
+* @brief 
+*/
 MemoryIO::~MemoryIO()
 {
     if ( mMemPtr )
         detachMemory();
 }
 
+/**
+* @brief 
+*
+* @param sharedData
+*
+* @return 
+*/
 bool MemoryIO::queryMemory( SharedData *sharedData )
 {
     size_t memSize = sizeof(SharedData);
@@ -111,6 +128,14 @@ bool MemoryIO::queryMemory( SharedData *sharedData )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param imageCount
+* @param imageFormat
+* @param imageWidth
+* @param imageHeight
+*/
 void MemoryIO::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
 {
     Image tempImage( imageFormat, imageWidth, imageHeight, 0 );
@@ -202,6 +227,9 @@ void MemoryIO::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t i
     }
 }
 
+/**
+* @brief 
+*/
 void MemoryIO::detachMemory()
 {
     for ( int i = 0; i < mSharedData->imageCount; i++ )

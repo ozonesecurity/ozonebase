@@ -3,6 +3,12 @@
 
 #include "zmFeedProvider.h"
 
+/**
+* @brief 
+*
+* @param streamName
+* @param streamClass
+*/
 void Controller::addStream( const std::string &streamName, const std::string &streamClass )
 {
     Info( "Adding stream %s with class %s", streamName.c_str(), streamClass.c_str() );
@@ -11,6 +17,12 @@ void Controller::addStream( const std::string &streamName, const std::string &st
         Fatal( "Unable to add stream %s with class %s", streamName.c_str(), streamClass.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param streamName
+* @param streamProvider
+*/
 void Controller::addStream( const std::string &streamName, FeedProvider &streamProvider )
 {
     const std::string streamPath = makePath( streamName, streamProvider.name() );
@@ -20,6 +32,11 @@ void Controller::addStream( const std::string &streamName, FeedProvider &streamP
         Fatal( "Unable to add stream %s with provider %s", streamPath.c_str(), streamProvider.cidentity() );
 }
 
+/**
+* @brief 
+*
+* @param streamTag
+*/
 void Controller::removeStream( const std::string &streamTag )
 {
     Info( "Removing stream %s", streamTag.c_str() );
@@ -33,6 +50,13 @@ void Controller::removeStream( const std::string &streamTag )
 }
 
 // Check if stream name exists, does not check instances so if any exists err on the positive side
+/**
+* @brief 
+*
+* @param streamName
+*
+* @return 
+*/
 bool Controller::verifyStreamName( const std::string &streamName )
 {
     Info( "Verifying stream %s", streamName.c_str() );
@@ -42,6 +66,14 @@ bool Controller::verifyStreamName( const std::string &streamName )
     return( mApplicationInstances.empty() ? false : true );
 }
 
+/**
+* @brief 
+*
+* @param streamName
+* @param streamSource
+*
+* @return 
+*/
 FeedProvider *Controller::findStream( const std::string &streamName, const std::string &streamSource )
 {
     Info( "Find stream %s with source %s", streamName.c_str(), streamSource.c_str() );

@@ -4,6 +4,9 @@
 
 #include "zm.h"
 
+/**
+* @brief 
+*/
 void zmLoadConfig()
 {
     FILE *cfg;
@@ -87,6 +90,13 @@ void zmLoadConfig()
 
 StaticConfig staticConfig;
 
+/**
+* @brief 
+*
+* @param p_name
+* @param p_value
+* @param p_type
+*/
 ConfigItem::ConfigItem( const char *p_name, const char *p_value, const char *const p_type )
 {
     name = new char[strlen(p_name)+1];
@@ -101,6 +111,9 @@ ConfigItem::ConfigItem( const char *p_name, const char *p_value, const char *con
     accessed = false;
 }
 
+/**
+* @brief 
+*/
 ConfigItem::~ConfigItem()
 {
     delete[] name;
@@ -108,6 +121,9 @@ ConfigItem::~ConfigItem()
     delete[] type;
 }
 
+/**
+* @brief 
+*/
 void ConfigItem::ConvertValue() const
 {
     if ( !strcmp( type, "boolean" ) )
@@ -138,6 +154,11 @@ void ConfigItem::ConvertValue() const
     accessed = true;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool ConfigItem::BooleanValue() const
 {
     if ( !accessed )
@@ -152,6 +173,11 @@ bool ConfigItem::BooleanValue() const
     return( cfg_value.boolean_value );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int ConfigItem::IntegerValue() const
 {
     if ( !accessed )
@@ -166,6 +192,11 @@ int ConfigItem::IntegerValue() const
     return( cfg_value.integer_value );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 double ConfigItem::DecimalValue() const
 {
     if ( !accessed )
@@ -180,6 +211,11 @@ double ConfigItem::DecimalValue() const
     return( cfg_value.decimal_value );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 const char *ConfigItem::StringValue() const
 {
     if ( !accessed )
@@ -194,12 +230,18 @@ const char *ConfigItem::StringValue() const
     return( cfg_value.string_value );
 }
 
+/**
+* @brief 
+*/
 Config::Config()
 {
     n_items = 0;
     items = 0;
 }
 
+/**
+* @brief 
+*/
 Config::~Config()
 {
     if ( items )
@@ -212,11 +254,21 @@ Config::~Config()
     }
 }
 
+/**
+* @brief 
+*/
 void Config::Assign()
 {
 ZM_CFG_ASSIGN_LIST
 }
 
+/**
+* @brief 
+*
+* @param id
+*
+* @return 
+*/
 const ConfigItem &Config::Item( int id )
 {
     if ( !n_items )

@@ -3,6 +3,14 @@
 
 #include "zmFeedProvider.h"
 
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
+* @param buffer
+*/
 VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, FRAME_TYPE_VIDEO, id, timestamp, buffer ),
     mVideoProvider( provider ),
@@ -12,6 +20,15 @@ VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
+* @param buffer
+* @param size
+*/
 VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, FRAME_TYPE_VIDEO, id, timestamp, buffer, size ),
     mVideoProvider( provider ),
@@ -21,6 +38,15 @@ VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+* @param buffer
+*/
 VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer ),
     mVideoProvider( provider ),
@@ -30,6 +56,16 @@ VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, u
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+* @param buffer
+* @param size
+*/
 VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer, size ),
     mVideoProvider( provider ),
@@ -39,6 +75,12 @@ VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, u
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+*/
 VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent ) :
     FeedFrame( provider, parent ),
     mVideoProvider( provider ),
@@ -59,6 +101,15 @@ VideoFrame::VideoFrame( const VideoFrame &frame ) :
 }
 */
 
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
+* @param buffer
+* @param samples
+*/
 AudioFrame::AudioFrame( AudioProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples ) :
     FeedFrame( provider, FRAME_TYPE_AUDIO, id, timestamp, buffer ),
     mAudioProvider( provider ),
@@ -69,6 +120,16 @@ AudioFrame::AudioFrame( AudioProvider *provider, uint64_t id, uint64_t timestamp
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+* @param buffer
+* @param samples
+*/
 AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples ) :
     FeedFrame( provider, parent, FRAME_TYPE_AUDIO, id, timestamp, buffer ),
     mAudioProvider( provider ),
@@ -79,6 +140,12 @@ AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, u
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+*/
 AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent ) :
     FeedFrame( provider, parent ),
     mAudioProvider( provider ),
@@ -101,26 +168,68 @@ AudioFrame::AudioFrame( const AudioFrame &frame ) :
 }
 */
 
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
+* @param buffer
+*/
 DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp, buffer )
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
+* @param buffer
+* @param size
+*/
 DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp, buffer, size )
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+* @param buffer
+*/
 DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer )
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+* @param buffer
+* @param size
+*/
 DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer, size )
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+*/
 DataFrame::DataFrame( FeedProvider *provider, FramePtr parent ) :
     FeedFrame( provider, parent )
 {

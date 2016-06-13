@@ -2,6 +2,9 @@
 #include "zmFeedConsumer.h"
 #include "zmFeedProvider.h"
 
+/**
+* @brief 
+*/
 void FeedConsumer::cleanup()
 {
     mProviderMutex.lock();
@@ -15,6 +18,14 @@ void FeedConsumer::cleanup()
     mQueueMutex.unlock();
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param link
+*
+* @return 
+*/
 bool FeedConsumer::registerProvider( FeedProvider &provider, const FeedLink &link )
 {
     Debug( 2, "%s - Registering provider %s", cidentity(), provider.cidentity() );
@@ -31,6 +42,14 @@ bool FeedConsumer::registerProvider( FeedProvider &provider, const FeedLink &lin
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param reciprocate
+*
+* @return 
+*/
 bool FeedConsumer::deregisterProvider( FeedProvider &provider, bool reciprocate )
 {
     Debug( 2, "%s - Deregistering provider %s", cidentity(), provider.cidentity() );
@@ -42,6 +61,11 @@ bool FeedConsumer::deregisterProvider( FeedProvider &provider, bool reciprocate 
     return( result );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool FeedConsumer::hasProvider() const
 {
     mProviderMutex.lock();
@@ -50,6 +74,13 @@ bool FeedConsumer::hasProvider() const
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param provider
+*
+* @return 
+*/
 bool FeedConsumer::hasProvider( FeedProvider &provider ) const
 {
     mProviderMutex.lock();
@@ -59,6 +90,11 @@ bool FeedConsumer::hasProvider( FeedProvider &provider ) const
     return( result );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool FeedConsumer::waitForProviders()
 {
     mProviderMutex.lock();
@@ -115,6 +151,11 @@ bool FeedConsumer::waitForProviders()
     return( readyCount > 0 && badCount == 0 );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool FeedConsumer::checkProviders()
 {
     mProviderMutex.lock();
@@ -155,6 +196,14 @@ bool FeedConsumer::checkProviders()
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param provider
+*
+* @return 
+*/
 bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
 {
     bool result = true;
@@ -172,81 +221,164 @@ bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+* @param providerLimit
+*/
 DataConsumer::DataConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
      setIdentity( cl4ss, name );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param provider
+* @param link
+*/
 DataConsumer::DataConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
      setIdentity( cl4ss, provider.name() );
 }
 
+/**
+* @brief 
+*/
 DataConsumer::DataConsumer()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 DataProvider *DataConsumer::dataProvider() const
 {
     return( mProviders.empty() ? NULL : dynamic_cast<DataProvider *>(mProviders.begin()->first) );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+* @param providerLimit
+*/
 VideoConsumer::VideoConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
      setIdentity( cl4ss, name );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param provider
+* @param link
+*/
 VideoConsumer::VideoConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
      setIdentity( cl4ss, provider.name() );
 }
 
+/**
+* @brief 
+*/
 VideoConsumer::VideoConsumer()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 VideoProvider *VideoConsumer::videoProvider() const
 {
     return( mProviders.empty() ? NULL : dynamic_cast<VideoProvider *>(mProviders.begin()->first) );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+* @param providerLimit
+*/
 AudioConsumer::AudioConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
      setIdentity( cl4ss, name );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param provider
+* @param link
+*/
 AudioConsumer::AudioConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
      setIdentity( cl4ss, provider.name() );
 }
 
+/**
+* @brief 
+*/
 AudioConsumer::AudioConsumer()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 AudioProvider *AudioConsumer::audioProvider() const
 {
     return( mProviders.empty() ? NULL : dynamic_cast<AudioProvider *>(mProviders.begin()->first) );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+* @param providerLimit
+*/
 GeneralConsumer::GeneralConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
      setIdentity( cl4ss, name );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param provider
+* @param link
+*/
 GeneralConsumer::GeneralConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
      setIdentity( cl4ss, provider.name() );
 }
 
+/**
+* @brief 
+*/
 GeneralConsumer::GeneralConsumer()
 {
 }

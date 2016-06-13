@@ -14,6 +14,13 @@
 #include <sys/shm.h>
 #endif // ZM_MEM_MAPPED
 
+/**
+* @brief 
+*
+* @param location
+* @param memoryKey
+* @param owner
+*/
 MemoryIOV1::MemoryIOV1( const std::string &location, int memoryKey, bool owner ) :
     mLocation( location ),
     mMemoryKey( memoryKey ),
@@ -33,12 +40,22 @@ MemoryIOV1::MemoryIOV1( const std::string &location, int memoryKey, bool owner )
     mMemFile[0] = '\0';
 }
 
+/**
+* @brief 
+*/
 MemoryIOV1::~MemoryIOV1()
 {
     if ( mMemPtr )
         detachMemory();
 }
 
+/**
+* @brief 
+*
+* @param sharedData
+*
+* @return 
+*/
 bool MemoryIOV1::queryMemory( SharedData *sharedData )
 {
     size_t memSize = sizeof(SharedData);
@@ -112,6 +129,14 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param imageCount
+* @param imageFormat
+* @param imageWidth
+* @param imageHeight
+*/
 void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
 {
     if ( mMemPtr )
@@ -223,6 +248,9 @@ void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t
     }
 }
 
+/**
+* @brief 
+*/
 void MemoryIOV1::detachMemory()
 {
     if ( !mMemPtr )

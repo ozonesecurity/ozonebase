@@ -4,6 +4,14 @@
 #include "zmConnection.h"
 #include "zmEncoder.h"
 
+/**
+* @brief 
+*
+* @param tag
+* @param id
+* @param connection
+* @param provider
+*/
 Stream::Stream( const std::string &tag, const std::string &id, Connection *connection, FeedProvider *provider ) :
     VideoConsumer( tag, id ),
     mConnection( connection ),
@@ -12,6 +20,14 @@ Stream::Stream( const std::string &tag, const std::string &id, Connection *conne
 {
 }
 
+/**
+* @brief 
+*
+* @param tag
+* @param id
+* @param connection
+* @param encoder
+*/
 Stream::Stream( const std::string &tag, const std::string &id, Connection *connection, Encoder *encoder ) :
     VideoConsumer( tag, id ),
     mConnection( connection ),
@@ -20,6 +36,9 @@ Stream::Stream( const std::string &tag, const std::string &id, Connection *conne
 {
 }
 
+/**
+* @brief 
+*/
 Stream::~Stream()
 {
 }

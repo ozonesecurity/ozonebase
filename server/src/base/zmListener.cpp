@@ -5,16 +5,29 @@
 #include "../protocols/zmRtspController.h"
 #include "../protocols/zmRtmpController.h"
 
+/**
+* @brief 
+*
+* @param interface
+*/
 Listener::Listener( const std::string &interface ) :
     Thread( "Listener" ),
     mInterface( interface )
 {
 }
 
+/**
+* @brief 
+*/
 Listener::~Listener()
 {
 }
 
+/**
+* @brief 
+*
+* @param controller
+*/
 void Listener::addController( Controller *controller )
 {
     std::pair<ControllerMap::iterator,bool> result = mControllers.insert( ControllerMap::value_type( controller->port(), controller ) );
@@ -22,12 +35,22 @@ void Listener::addController( Controller *controller )
         Fatal( "Unable to add controller %s on port %d", controller->cproto(), controller->port() );
 }
 
+/**
+* @brief 
+*
+* @param controller
+*/
 void Listener::removeController( Controller *controller )
 {
     bool result = ( mControllers.erase( controller->port() ) == 1 );
     if ( !result )
         Fatal( "Unable to remove controller %s on port %d", controller->cproto(), controller->port() );
 }
+/**
+* @brief 
+*
+* @return 
+*/
 int Listener::run()
 {
     typedef std::map<TcpInetServer *,Controller *>   SocketControllers;
