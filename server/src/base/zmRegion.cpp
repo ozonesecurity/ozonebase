@@ -6,6 +6,13 @@
 
 //#include <math.h>
 
+/**
+* @brief 
+*
+* @param id
+* @param label
+* @param polygon
+*/
 Region::Region( int id, const char *label, const Polygon &polygon ) :
     mId( id ),
     mIdentity( label ),
@@ -14,11 +21,22 @@ Region::Region( int id, const char *label, const Polygon &polygon ) :
 	Debug( 1, "Initialised region %d/%s %dx%d", mId, mIdentity.c_str(), mPolygon.width(), mPolygon.height() );
 }
 
+/**
+* @brief 
+*/
 Region::~Region()
 {
 	delete mMask;
 }
 
+/**
+* @brief 
+*
+* @param polyString
+* @param polygon
+*
+* @return 
+*/
 bool Region::parsePolygonString( const char *polyString, Polygon &polygon )
 {
 	Debug( 3, "Parsing polygon string '%s'", polyString );

@@ -7,6 +7,13 @@
 Mutex                       FeedProvider::smProviderMutex;
 FeedProvider::ProviderMap   FeedProvider::smProviders;
 
+/**
+* @brief 
+*
+* @param identity
+*
+* @return 
+*/
 FeedProvider *FeedProvider::find( const std::string &identity )
 {
     smProviderMutex.lock();
@@ -35,6 +42,9 @@ bool FeedProvider::verify( const std::string &identity )
 }
 */
 
+/**
+* @brief 
+*/
 FeedProvider::FeedProvider() :
     mState( PROV_WAIT ),
     mFrameCount( 0 ),
@@ -45,6 +55,9 @@ FeedProvider::FeedProvider() :
 {
 }
 
+/**
+* @brief 
+*/
 void FeedProvider::addToMap()
 {
     smProviderMutex.lock();
@@ -54,6 +67,9 @@ void FeedProvider::addToMap()
     smProviderMutex.unlock();
 }
 
+/**
+* @brief 
+*/
 void FeedProvider::removeFromMap()
 {
     smProviderMutex.lock();
@@ -62,6 +78,9 @@ void FeedProvider::removeFromMap()
     smProviderMutex.unlock();
 }
 
+/**
+* @brief 
+*/
 void FeedProvider::cleanup()
 {
     setEnded();
@@ -74,6 +93,14 @@ void FeedProvider::cleanup()
     mConsumerMutex.unlock();
 }
 
+/**
+* @brief 
+*
+* @param consumer
+* @param link
+*
+* @return 
+*/
 bool FeedProvider::registerConsumer( FeedConsumer &consumer, const FeedLink &link )
 {
     Debug( 2, "%s - Registering consumer %s", cidentity(), consumer.cidentity() );
@@ -87,6 +114,14 @@ bool FeedProvider::registerConsumer( FeedConsumer &consumer, const FeedLink &lin
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @param consumer
+* @param reciprocate
+*
+* @return 
+*/
 bool FeedProvider::deregisterConsumer( FeedConsumer &consumer, bool reciprocate )
 {
     Debug( 2, "%s - Deregistering consumer %s", cidentity(), consumer.cidentity() );
@@ -98,6 +133,11 @@ bool FeedProvider::deregisterConsumer( FeedConsumer &consumer, bool reciprocate 
     return( result );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool FeedProvider::hasConsumer() const
 {
     mConsumerMutex.lock();
@@ -106,6 +146,13 @@ bool FeedProvider::hasConsumer() const
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param consumer
+*
+* @return 
+*/
 bool FeedProvider::hasConsumer( FeedConsumer &consumer ) const
 {
     mConsumerMutex.lock();
@@ -115,6 +162,11 @@ bool FeedProvider::hasConsumer( FeedConsumer &consumer ) const
     return( result );
 }
 
+/**
+* @brief 
+*
+* @param frame
+*/
 void FeedProvider::distributeFrame( FramePtr frame )
 {
     setReady();
@@ -138,6 +190,11 @@ void FeedProvider::distributeFrame( FramePtr frame )
     }
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 FramePtr FeedProvider::pollFrame() const
 {
     if ( !ready() || !mCanPoll )
@@ -148,6 +205,12 @@ FramePtr FeedProvider::pollFrame() const
     return( frame );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 DataProvider::DataProvider( const std::string &cl4ss, const std::string &name )
 {
     setIdentity( cl4ss, name );
@@ -155,6 +218,12 @@ DataProvider::DataProvider( const std::string &cl4ss, const std::string &name )
     //Info( "DataProvider : %s + %s", mTag.c_str(), mId.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 VideoProvider::VideoProvider( const std::string &cl4ss, const std::string &name )
 {
     mHasVideo = true;
@@ -163,6 +232,12 @@ VideoProvider::VideoProvider( const std::string &cl4ss, const std::string &name 
     //Info( "VideoProvider : %s + %s", mTag.c_str(), mId.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 AudioProvider::AudioProvider( const std::string &cl4ss, const std::string &name )
 {
     mHasAudio = true;
@@ -171,6 +246,12 @@ AudioProvider::AudioProvider( const std::string &cl4ss, const std::string &name 
     //Info( "AudioProvider : %s + %s", mTag.c_str(), mId.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 AudioVideoProvider::AudioVideoProvider( const std::string &cl4ss, const std::string &name )
 {
     setIdentity( cl4ss, name );
@@ -178,18 +259,40 @@ AudioVideoProvider::AudioVideoProvider( const std::string &cl4ss, const std::str
     //Info( "AudioVideoProvider : %s + %s", mTag.c_str(), mId.c_str() );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
 bool AudioVideoProvider::videoFramesOnly( FramePtr frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     return( videoFrame != NULL );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
 bool AudioVideoProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
 {
     const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame.get());
     return( audioFrame != NULL );
 }
 
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+*/
 GeneralProvider::GeneralProvider( const std::string &cl4ss, const std::string &name )
 {
     setIdentity( cl4ss, name );

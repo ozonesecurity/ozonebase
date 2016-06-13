@@ -13,6 +13,14 @@
 ** http://www.ics.uci.edu/~eppstein/numth/frap.c
 **/
 
+/**
+* @brief 
+*
+* @param input
+* @param maxden
+*
+* @return 
+*/
 AVRational double2Rational( double input, long maxden )
 {
     //printf( "%.3lf\n", input );
@@ -83,6 +91,14 @@ AVRational double2Rational( double input, long maxden )
 }
 
 // This section extracted from ffmpeg code. Should be moved or rewritten.
+/**
+* @brief 
+*
+* @param p
+* @param end
+*
+* @return 
+*/
 static const uint8_t *_h264StartCode( const uint8_t *p, const uint8_t *end )
 {
     const uint8_t *a = p + 4 - ((intptr_t)p & 3);
@@ -120,6 +136,14 @@ static const uint8_t *_h264StartCode( const uint8_t *p, const uint8_t *end )
     return( end + 3 );
 }
 
+/**
+* @brief 
+*
+* @param p
+* @param end
+*
+* @return 
+*/
 const uint8_t *h264StartCode( const uint8_t *p, const uint8_t *end )
 {
     const uint8_t *out = _h264StartCode( p, end );
@@ -128,6 +152,14 @@ const uint8_t *h264StartCode( const uint8_t *p, const uint8_t *end )
     return( out );
 }
 
+/**
+* @brief 
+*
+* @param mutex
+* @param op
+*
+* @return 
+*/
 static int ffmpegLockManager( void **mutex, enum AVLockOp op ) 
 { 
     //pthread_mutex_t** pmutex = (pthread_mutex_t**) mutex;
@@ -156,6 +188,9 @@ static int ffmpegLockManager( void **mutex, enum AVLockOp op )
     return 0;
 }
 
+/**
+* @brief 
+*/
 void ffmpegInit()
 {
     av_log_set_level( ( dbgLevel > DBG_INF ) ? AV_LOG_DEBUG : AV_LOG_QUIET );
@@ -168,6 +203,13 @@ void ffmpegInit()
     avformat_network_init();
 }
 
+/**
+* @brief 
+*
+* @param error
+*
+* @return 
+*/
 const char *avStrError( int error )
 {
     static char avErrorBuffer[256] = ""; // Should be mutex protected really
@@ -176,6 +218,11 @@ const char *avStrError( int error )
     return( avErrorBuffer );
 }
 
+/**
+* @brief 
+*
+* @param dict
+*/
 void avDumpDict( AVDictionary *dict )
 {
     Info( "Dictionary" );
@@ -186,6 +233,13 @@ void avDumpDict( AVDictionary *dict )
     }
 }
 
+/**
+* @brief 
+*
+* @param dict
+* @param name
+* @param value
+*/
 void avDictSet( AVDictionary **dict, const char *name, const char *value )
 {
     int avError = av_dict_set( dict, name, value, 0 );
@@ -196,6 +250,13 @@ void avDictSet( AVDictionary **dict, const char *name, const char *value )
     }
 }
 
+/**
+* @brief 
+*
+* @param dict
+* @param name
+* @param value
+*/
 void avDictSet( AVDictionary **dict, const char *name, int value )
 {
     char valueString[64] = "";
@@ -203,6 +264,13 @@ void avDictSet( AVDictionary **dict, const char *name, int value )
     avDictSet( dict, name, valueString );
 }
 
+/**
+* @brief 
+*
+* @param dict
+* @param name
+* @param value
+*/
 void avDictSet( AVDictionary **dict, const char *name, double value )
 {
     char valueString[64] = "";
@@ -213,11 +281,23 @@ void avDictSet( AVDictionary **dict, const char *name, double value )
 ///< These could possibly read the presets from the ffmpeg files themselves
 
 /// This must be called _after_ preset function below to have any effect
+/**
+* @brief 
+*
+* @param dict
+* @param profile
+*/
 void avSetH264Profile( AVDictionary **dict, const std::string &profile )
 {
     av_dict_set( dict, "profile", profile.c_str(), 0 );
 }
 
+/**
+* @brief 
+*
+* @param dict
+* @param preset
+*/
 void avSetH264Preset( AVDictionary **dict, const std::string &preset )
 {
     av_dict_set( dict, "preset", preset.c_str(), 0 );

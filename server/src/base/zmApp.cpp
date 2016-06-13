@@ -6,18 +6,8 @@
 #include <stdlib.h>
 
 /**
-   Write description of function here.
-   The function should follow these comments.
-   Use of "brief" tag is optional. (no point to it)
-  
-   The function arguments listed with "param" will be compared 
-   to the declaration and verified.
-
-   @param[in]     _inArg1 Description of first function argument.
-   @param[out]    _outArg2 Description of second function argument.
-   @param[in,out] _inoutArg3 Description of third function argument.
-   @return Description of returned value.
- */
+* @brief 
+*/
 Application::Application()
 {
     srand( time( NULL ) );
@@ -28,36 +18,18 @@ Application::Application()
 }
 
 /**
-   Write description of function here.
-   The function should follow these comments.
-   Use of "brief" tag is optional. (no point to it)
-  
-   The function arguments listed with "param" will be compared 
-   to the declaration and verified.
-
-   @param[in]     _inArg1 Description of first function argument.
-   @param[out]    _outArg2 Description of second function argument.
-   @param[in,out] _inoutArg3 Description of third function argument.
-   @return Description of returned value.
- */
+* @brief 
+*
+* @param thread
+*/
 void Application::addThread( Thread *thread )
 {
     mThreads.push_back( thread );
 }
 
 /**
-   Write description of function here.
-   The function should follow these comments.
-   Use of "brief" tag is optional. (no point to it)
-  
-   The function arguments listed with "param" will be compared 
-   to the declaration and verified.
-
-   @param[in]     _inArg1 Description of first function argument.
-   @param[out]    _outArg2 Description of second function argument.
-   @param[in,out] _inoutArg3 Description of third function argument.
-   @return Description of returned value.
- */
+* @brief 
+*/
 void Application::run()
 {
     for ( ThreadList::iterator iter = mThreads.begin(); iter != mThreads.end(); iter++ )

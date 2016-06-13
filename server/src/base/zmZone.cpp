@@ -6,6 +6,20 @@
 
 #include <math.h>
 
+/**
+* @brief 
+*
+* @param type
+* @param alarmRgb
+* @param checkBlobs
+* @param diffThres
+* @param scoreThres
+* @param scoreBlend
+* @param minAlarmPixels
+* @param maxAlarmPixels
+* @param minScore
+* @param maxScore
+*/
 void Zone::setup( ZoneType type, const Rgb alarmRgb, bool checkBlobs, double diffThres, double scoreThres, unsigned long scoreBlend, int minAlarmPixels, int maxAlarmPixels, unsigned long minScore, unsigned long maxScore )
 {
 	mType = type;
@@ -41,6 +55,9 @@ void Zone::setup( ZoneType type, const Rgb alarmRgb, bool checkBlobs, double dif
     mThresImage = NULL;
 }
 
+/**
+* @brief 
+*/
 Zone::~Zone()
 {
     delete mThresImage;
@@ -48,6 +65,14 @@ Zone::~Zone()
 	delete mMask;
 }
 
+/**
+* @brief 
+*
+* @param deltaImage
+* @param varBuffer
+*
+* @return 
+*/
 bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
 {
 	bool alarm = false;
@@ -218,6 +243,16 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
 	return( alarm );
 }
 
+/**
+* @brief 
+*
+* @param zone_string
+* @param zone_id
+* @param colour
+* @param polygon
+*
+* @return 
+*/
 bool Zone::parseZoneString( const char *zone_string, int &zone_id, int &colour, Polygon &polygon )
 {
 	Debug( 3, "Parsing zone string '%s'", zone_string );

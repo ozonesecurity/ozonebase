@@ -6,6 +6,13 @@
 
 bool gZmReload = false;
 
+/**
+* @brief 
+*
+* @param signal
+*
+* @return 
+*/
 RETSIGTYPE zm_hup_handler( int signal )
 {
 #if HAVE_STRSIGNAL
@@ -18,6 +25,13 @@ RETSIGTYPE zm_hup_handler( int signal )
 
 bool gZmTerminate = false;
 
+/**
+* @brief 
+*
+* @param signal
+*
+* @return 
+*/
 RETSIGTYPE zm_term_handler( int signal )
 {
 #if HAVE_STRSIGNAL
@@ -31,11 +45,37 @@ RETSIGTYPE zm_term_handler( int signal )
 #define TRACE_SIZE 16
 
 #if HAVE_STRUCT_SIGCONTEXT
+/**
+* @brief 
+*
+* @param signal
+* @param HAVE_SIGINFO_T && HAVE_UCONTEXT_T 
+* @param info
+* @param 
+*
+* @return 
+*/
 RETSIGTYPE zm_die_handler( int signal, struct sigcontext context )
 #elif ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T )
 #include <ucontext.h>
+/**
+* @brief 
+*
+* @param signal
+* @param info
+* @param 
+*
+* @return 
+*/
 RETSIGTYPE zm_die_handler( int signal, siginfo_t *info, void *context )
 #else
+/**
+* @brief 
+*
+* @param signal
+*
+* @return 
+*/
 RETSIGTYPE zm_die_handler( int signal )
 #endif
 {
@@ -112,6 +152,11 @@ RETSIGTYPE zm_die_handler( int signal )
     exit( signal );
 }
 
+/**
+* @brief 
+*
+* @param handler
+*/
 void zmSetHupHandler( SigHandler *handler )
 {
     sigset_t block_set;
@@ -124,6 +169,11 @@ void zmSetHupHandler( SigHandler *handler )
     sigaction( SIGHUP, &action, &old_action );
 }
 
+/**
+* @brief 
+*
+* @param handler
+*/
 void zmSetTermHandler( SigHandler *handler )
 {
     sigset_t block_set;
@@ -136,6 +186,11 @@ void zmSetTermHandler( SigHandler *handler )
     sigaction( SIGTERM, &action, &old_action );
 }
 
+/**
+* @brief 
+*
+* @param handler
+*/
 void zmSetDieHandler( SigHandler *handler )
 {
     sigset_t block_set;
@@ -153,16 +208,25 @@ void zmSetDieHandler( SigHandler *handler )
     sigaction( SIGFPE, &action, &old_action );
 }
 
+/**
+* @brief 
+*/
 void zmSetDefaultHupHandler()
 {
     zmSetHupHandler( (SigHandler *)zm_hup_handler );
 }
 
+/**
+* @brief 
+*/
 void zmSetDefaultTermHandler()
 {
     zmSetTermHandler( (SigHandler *)zm_term_handler );
 }
 
+/**
+* @brief 
+*/
 void zmSetDefaultDieHandler()
 {
     if ( config.dump_cores )
