@@ -136,7 +136,7 @@ bool MemoryIO::queryMemory( SharedData *sharedData )
 * @param imageWidth
 * @param imageHeight
 */
-void MemoryIO::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
+void MemoryIO::attachMemory( int imageCount, AVPixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
 {
     Image tempImage( imageFormat, imageWidth, imageHeight, 0 );
     Info( "Pixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );

@@ -14,23 +14,23 @@ class SlaveVideo : public VideoProvider
 CLASSID(SlaveVideo);
 
 protected:
-    bool        mInitialised;
-    uint16_t    mImageWidth;
-    uint16_t    mImageHeight;
-    PixelFormat mPixelFormat;
-    FrameRate   mFrameRate;
+    bool            mInitialised;
+    uint16_t        mImageWidth;
+    uint16_t        mImageHeight;
+    AVPixelFormat   mPixelFormat;
+    FrameRate       mFrameRate;
 
 public:
     SlaveVideo( const std::string &name );
-    SlaveVideo( const std::string &name, uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate );
+    SlaveVideo( const std::string &name, uint16_t width, uint16_t height, AVPixelFormat pixelFormat, const FrameRate &frameRate );
     ~SlaveVideo();
 
 public:
-    void prepare( uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate );
+    void prepare( uint16_t width, uint16_t height, AVPixelFormat pixelFormat, const FrameRate &frameRate );
     void prepare( const FrameRate &frameRate );
     void relayImage( const Image &image );
 
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint16_t width() const { return( mImageWidth ); }
     uint16_t height() const { return( mImageHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }

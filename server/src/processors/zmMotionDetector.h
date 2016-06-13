@@ -34,7 +34,7 @@ private:
 private:
     //unsigned int    mWidth;                 // Normally the same as the camera, but not if partly rotated
     //unsigned int    mHeight;                // Normally the same as the camera, but not if partly rotated
-    //PixelFormat     mPixelFormat;
+    //AVPixelFormat     mPixelFormat;
     int             mFastStart;             // Whether to progressively blend images until the full blend ratios reached
     int             mPreEventCount;         // How many images to hold and prepend to an alarm event
     int             mPostEventCount;        // How many unalarmed images must occur before the alarm state is reset
@@ -87,7 +87,7 @@ public:
     bool addZone( Zone *zone );
     uint16_t width() const { return( videoProvider()->width() ); }
     uint16_t height() const { return( videoProvider()->height() ); }
-    PixelFormat pixelFormat() const { return( Image::getNativePixelFormat( videoProvider()->pixelFormat() ) ); }
+    AVPixelFormat pixelFormat() const { return( Image::getNativePixelFormat( videoProvider()->pixelFormat() ) ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
 
     VideoProvider *compImageSlave() const { return( mCompImageSlave ); }

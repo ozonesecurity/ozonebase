@@ -912,8 +912,8 @@ Image::Format Image::getFormatFromPalette( int palette )
         case V4L2_PIX_FMT_JPEG :
             format = FMT_YUVJP;
             break;
-        case PIX_FMT_YUYV422 :
-        case PIX_FMT_UYVY422 :
+        case V4L2_PIX_FMT_YUYV :
+        case V4L2_PIX_FMT_UYVY :
             format = FMT_YUV;
             break;
         default :
@@ -923,7 +923,7 @@ Image::Format Image::getFormatFromPalette( int palette )
     return( format );
 }
 
-#if HAVE_LIBSWSCALE
+#if HAVE_LIBAVUTIL_AVUTIL_H
 /**
 * @brief 
 *
@@ -931,28 +931,28 @@ Image::Format Image::getFormatFromPalette( int palette )
 *
 * @return 
 */
-PixelFormat Image::getFfPixFormat( Format format )
+AVPixelFormat Image::getFfPixFormat( Format format )
 {
-    PixelFormat pixFormat = PIX_FMT_NONE;
+    AVPixelFormat pixFormat = AV_PIX_FMT_NONE;
     switch( format )
     {
         case FMT_GREY :
-            pixFormat = PIX_FMT_GRAY8;
+            pixFormat = AV_PIX_FMT_GRAY8;
             break;
         case FMT_GREY16 :
-            pixFormat = PIX_FMT_GRAY16;
+            pixFormat = AV_PIX_FMT_GRAY16;
             break;
         case FMT_RGB :
-            pixFormat = PIX_FMT_BGR24;
+            pixFormat = AV_PIX_FMT_BGR24;
             break;
         case FMT_RGB48 :
-            pixFormat = PIX_FMT_RGB48BE;
+            pixFormat = AV_PIX_FMT_RGB48BE;
             break;
         case FMT_YUVP :
-            pixFormat = PIX_FMT_YUV444P;
+            pixFormat = AV_PIX_FMT_YUV444P;
             break;
         case FMT_YUVJP :
-            pixFormat = PIX_FMT_YUVJ444P;
+            pixFormat = AV_PIX_FMT_YUVJ444P;
             break;
         case FMT_UNDEF :
         default :
@@ -971,51 +971,51 @@ PixelFormat Image::getFfPixFormat( Format format )
 *
 * @return 
 */
-Image::Format Image::getFormatFromPixelFormat( PixelFormat pixelFormat )
+Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
 {
     Format format = FMT_UNDEF;
 
     switch( pixelFormat )
     {
-        case PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
+        case AV_PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
         {
             format = FMT_GREY;
             break;
         }
-        case PIX_FMT_GRAY16 :
+        case AV_PIX_FMT_GRAY16 :
         {
             format = FMT_GREY16;
             break;
         }
-        case PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
-        case PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
-        case PIX_FMT_RGB565:
-        case PIX_FMT_RGB555:
+        case AV_PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
+        case AV_PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
+        case AV_PIX_FMT_RGB565:
+        case AV_PIX_FMT_RGB555:
         {
             format = FMT_RGB;
             break;
         }
-        case PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
-        case PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
-        case PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
-        case PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
-        case PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
-        case PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
-        case PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
-        case PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
+        case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
+        case AV_PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
+        case AV_PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
+        case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
+        case AV_PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
+        case AV_PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
+        case AV_PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
+        case AV_PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
         {
             format = FMT_YUVP;
             break;
         }
-        case PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV420P and setting color_range
-        case PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of PIX_FMT_YUV440P and setting color_range
-        case PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV422P and setting color_range
-        case PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range
+        case AV_PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range
+        case AV_PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range
+        case AV_PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range
+        case AV_PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range
         {
             format = FMT_YUVJP;
             break;
         }
-        case PIX_FMT_RGB48:
+        case AV_PIX_FMT_RGB48:
         {
             format = FMT_RGB48;
             break;
@@ -1029,7 +1029,7 @@ Image::Format Image::getFormatFromPixelFormat( PixelFormat pixelFormat )
     return( format );
 }
 
-#endif // HAVE_LIBSWSCALE
+#endif // HAVE_LIBAVUTIL_AVUTIL_H
 
 /**
 * @brief 
@@ -2322,7 +2322,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 * @param height
 * @param data
 */
-Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data )
+Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *data )
 {
     if ( !smInitialised )
         initialise();
@@ -2336,7 +2336,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
     unsigned char *imageData = data;
     switch( pixFormat )
     {
-        case PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
+        case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2344,7 +2344,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
+        case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2352,7 +2352,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
+        case AV_PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2360,13 +2360,13 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
+        case AV_PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
         {
             // Nothing to do
             format = FMT_RGB;
             break;
         }
-        case PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
+        case AV_PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2374,7 +2374,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
+        case AV_PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2382,7 +2382,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
+        case AV_PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
         {
             // XXX - Not convinced about this one
             format = FMT_YUVP;
@@ -2391,7 +2391,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
+        case AV_PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2399,7 +2399,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
+        case AV_PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2407,13 +2407,13 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
+        case AV_PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
         {
             // Ok 'as is'
             format = FMT_GREY;
             break;
         }
-        case PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV420P and setting color_range
+        case AV_PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range
         {
             format = FMT_YUVJP;
             if ( !data ) break;
@@ -2421,7 +2421,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV422P and setting color_range
+        case AV_PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range
         {
             format = FMT_YUVJP;
             if ( !data ) break;
@@ -2429,7 +2429,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range
+        case AV_PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range
         {
             format = FMT_YUVJP;
             if ( !data ) break;
@@ -2437,15 +2437,15 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        //case PIX_FMT_GRAY16BE :  ///<        Y        , 16bpp, big-endian
-        //case PIX_FMT_GRAY16LE :  ///<        Y        , 16bpp, little-endian
-        case PIX_FMT_GRAY16 :
+        //case AV_PIX_FMT_GRAY16BE :  ///<        Y        , 16bpp, big-endian
+        //case AV_PIX_FMT_GRAY16LE :  ///<        Y        , 16bpp, little-endian
+        case AV_PIX_FMT_GRAY16 :
         {
             // Ok 'as is'
             format = FMT_GREY16;
             break;
         }
-        case PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
+        case AV_PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
         {
             // XXX - Not convinced about this one
             format = FMT_YUVP;
@@ -2454,7 +2454,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        case PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of PIX_FMT_YUV440P and setting color_range
+        case AV_PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range
         {
             // XXX - Not convinced about this one
             format = FMT_YUVJP;
@@ -2463,17 +2463,17 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        //case PIX_FMT_RGB48BE :   ///< packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian
-        //case PIX_FMT_RGB48LE :   ///< packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian
-        case PIX_FMT_RGB48:
+        //case AV_PIX_FMT_RGB48BE :   ///< packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as big-endian
+        //case AV_PIX_FMT_RGB48LE :   ///< packed RGB 16:16:16, 48bpp, 16R, 16G, 16B, the 2-byte value for each R/G/B component is stored as little-endian
+        case AV_PIX_FMT_RGB48:
         {
             // Ok 'as is'
             format = FMT_RGB48;
             break;
         }
-        //case PIX_FMT_RGB565BE :  ///< packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian
-        //case PIX_FMT_RGB565LE :  ///< packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian
-        case PIX_FMT_RGB565:
+        //case AV_PIX_FMT_RGB565BE :  ///< packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), big-endian
+        //case AV_PIX_FMT_RGB565LE :  ///< packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian
+        case AV_PIX_FMT_RGB565:
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2481,9 +2481,9 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
             imageData = tempData;
             break;
         }
-        //case PIX_FMT_RGB555BE :  ///< packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), big-endian, most significant bit to 0
-        //case PIX_FMT_RGB555LE :  ///< packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), little-endian, most significant bit to 0
-        case PIX_FMT_RGB555:
+        //case AV_PIX_FMT_RGB555BE :  ///< packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), big-endian, most significant bit to 0
+        //case AV_PIX_FMT_RGB555LE :  ///< packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), little-endian, most significant bit to 0
+        case AV_PIX_FMT_RGB555:
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2493,7 +2493,7 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
         }
         default :
         {
-            Panic( "Can't convert PixelFormat %d to image format", pixFormat );
+            Panic( "Can't convert AVPixelFormat %d to image format", pixFormat );
             break;
         }
     }

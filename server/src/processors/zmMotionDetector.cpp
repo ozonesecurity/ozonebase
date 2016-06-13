@@ -99,7 +99,7 @@ int MotionDetector::run()
     // Wait for encoder to be ready
     if ( waitForProviders() )
     {
-        PixelFormat pixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
         Info( "pf:%d, %dx%d", pixelFormat, width, height );

@@ -10,7 +10,7 @@
 * @param pixelFormat
 * @param frameRate
 */
-SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate ) :
+SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, AVPixelFormat pixelFormat, const FrameRate &frameRate ) :
     VideoProvider( cClass(), id ),
     mInitialised( true ),
     mImageWidth( width ),
@@ -46,7 +46,7 @@ SlaveVideo::~SlaveVideo()
 * @param pixelFormat
 * @param frameRate
 */
-void SlaveVideo::prepare( uint16_t width, uint16_t height, PixelFormat pixelFormat, const FrameRate &frameRate )
+void SlaveVideo::prepare( uint16_t width, uint16_t height, AVPixelFormat pixelFormat, const FrameRate &frameRate )
 {
     mImageWidth = width;
     mImageHeight = height;

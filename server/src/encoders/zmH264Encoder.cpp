@@ -40,7 +40,7 @@ H264Encoder::H264Encoder( const std::string &name, uint16_t width, uint16_t heig
     mHeight( height ),
     mFrameRate( frameRate ),
     mBitRate( bitRate ),
-    mPixelFormat( PIX_FMT_YUV420P ),
+    mPixelFormat( AV_PIX_FMT_YUV420P ),
     mQuality( quality ),
     mAvcLevel( 0 ),
     mAvcProfile( 0 )
@@ -154,7 +154,7 @@ int H264Encoder::run()
     avDumpDict( opts );
 
     // Make sure ffmpeg is compiled with libx264 support
-    AVCodec *codec = avcodec_find_encoder( CODEC_ID_H264 );
+    AVCodec *codec = avcodec_find_encoder( AV_CODEC_ID_H264 );
     if ( !codec )
         Fatal( "Can't find encoder codec" );
 
@@ -188,7 +188,7 @@ int H264Encoder::run()
         // Find the source codec context
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputPixelFormat = videoProvider()->pixelFormat();
         //FrameRate inputFrameRate = videoProvider()->frameRate();
         //Info( "CONVERT: %d-%dx%d -> %d-%dx%d",
             //inputPixelFormat, inputWidth, inputHeight,
