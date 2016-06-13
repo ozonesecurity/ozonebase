@@ -13,7 +13,6 @@ libbase_a_SOURCES = \
     zmConfig.cpp \
     zmConnection.cpp \
     zmController.cpp \
-    zmDb.cpp \
     zmEncoder.cpp \
     zmFeedBase.cpp \
     zmFeedConsumer.cpp \
@@ -39,7 +38,6 @@ pkginclude_HEADERS = \
     zmConfig.h \
     zmConnection.h \
     zmController.h \
-    zmDb.h \
     zmEncoder.h \
     zmFeedBase.h \
     zmFeedConsumer.h \

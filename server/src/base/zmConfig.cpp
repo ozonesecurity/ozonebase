@@ -3,7 +3,6 @@
 #include <errno.h>
 
 #include "zm.h"
-#include "zmDb.h"
 
 void zmLoadConfig()
 {
@@ -83,8 +82,6 @@ void zmLoadConfig()
         }
     }
     fclose( cfg);
-    zmDbConnect();
-    config.Load();
     config.Assign();
 }
 
@@ -215,70 +212,15 @@ Config::~Config()
     }
 }
 
-void Config::Load()
-{
-    static char sql[ZM_SQL_SML_BUFSIZ];
-
-    strncpy( sql, "select Name, Value, Type from Config order by Id", sizeof(sql) );
-    if ( mysql_query( &gDbConn, sql ) )
-    {
-        Error( "Can't run query: %s", mysql_error( &gDbConn ) );
-        exit( mysql_errno( &gDbConn ) );
-    }
-
-    MYSQL_RES *result = mysql_store_result( &gDbConn );
-    if ( !result )
-    {
-        Error( "Can't use query result: %s", mysql_error( &gDbConn ) );
-        exit( mysql_errno( &gDbConn ) );
-    }
-    n_items = mysql_num_rows( result );
-
-    if ( n_items <= ZM_MAX_CFG_ID )
-    {
-        Error( "Config mismatch, expected %d items, read %d. Try running 'zmupdate.pl -f' to reload config.", ZM_MAX_CFG_ID+1, n_items );
-        exit( -1 );
-    }
-
-    items = new ConfigItem *[n_items];
-    for( int i = 0; MYSQL_ROW dbrow = mysql_fetch_row( result ); i++ )
-    {
-        items[i] = new ConfigItem( dbrow[0], dbrow[1], dbrow[2] );
-    }
-    mysql_free_result( result );
-}
-
 void Config::Assign()
 {
 ZM_CFG_ASSIGN_LIST
-#if 0
-    if ( extra_debug )
-    {
-        static char extra_level_env[PATH_MAX] = "";
-        static char extra_log_env[PATH_MAX] = "";
-
-        snprintf( extra_level_env, sizeof(extra_level_env), "ZM_DBG_LEVEL%s=%d", extra_debug_target, extra_debug_level );
-        if ( putenv( extra_level_env ) < 0 )
-        {
-            Error("Can't putenv %s: %s", extra_level_env, strerror(errno) );
-        }
-
-        snprintf( extra_log_env, sizeof(extra_log_env), "ZM_DBG_LOG%s=%s", extra_debug_target, extra_debug_log );
-        if ( putenv( extra_log_env ) < 0 )
-        {
-            Error("Can't putenv %s: %s", extra_log_env, strerror(errno) );
-        }
-
-        dbgReinit( extra_debug_target );
-    }
-#endif
 }
 
 const ConfigItem &Config::Item( int id )
 {
     if ( !n_items )
     {
-        Load();
         Assign();
     }
 
