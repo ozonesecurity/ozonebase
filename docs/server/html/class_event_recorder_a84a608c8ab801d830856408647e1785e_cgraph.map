@@ -1,5 +1,0 @@
-<map id="EventRecorder::processFrame" name="EventRecorder::processFrame">
-<area shape="rect" id="node2" href="$class_image.html#a5af802879f05abe0ad9b5988e21a5b97" title="Image::writeJpeg" alt="" coords="253,29,376,56"/>
-<area shape="rect" id="node4" href="$class_feed_frame.html#ab7b2319f304dbc261142dd53c5ca010a" title="How old this frame is (in seconds) relative to &#39;now&#39; or the supplied timestamp. " alt="" coords="256,80,373,107"/>
-<area shape="rect" id="node3" href="$class_image.html#a8875c3989c38ea02ecacbe757c4565c1" title="Image::jpegCcInfo" alt="" coords="424,29,553,56"/>
-</map>

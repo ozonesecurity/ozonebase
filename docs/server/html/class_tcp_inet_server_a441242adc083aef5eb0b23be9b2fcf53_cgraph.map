@@ -1,5 +1,0 @@
-<map id="TcpInetServer::accept" name="TcpInetServer::accept">
-<area shape="rect" id="node2" href="$class_socket.html#a23e88c71d35514f2f6ccdf3a0389a283" title="Socket::accept" alt="" coords="204,31,315,57"/>
-<area shape="rect" id="node3" href="$class_socket.html#a0c9750548d7cfc58390c35a513bc3a12" title="Socket::close" alt="" coords="395,5,498,32"/>
-<area shape="rect" id="node4" href="$class_sock_addr.html#a64044fb2db81add97a8126e51fe6bd9b" title="SockAddr::newSockAddr" alt="" coords="363,56,531,83"/>
-</map>

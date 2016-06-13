@@ -1,4 +1,0 @@
-<map id="H264Encoder::getPoolKey" name="H264Encoder::getPoolKey">
-<area shape="rect" id="node2" href="$class_h264_encoder.html#a248ceec2d6ab50aa5ef1443ef3d58947" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="231,5,371,32"/>
-<area shape="rect" id="node3" href="$class_h264_encoder.html#aa7dfbbea36cfbf2f9cad50be26285741" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="229,56,373,83"/>
-</map>

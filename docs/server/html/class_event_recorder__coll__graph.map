@@ -1,8 +1,0 @@
-<map id="EventRecorder" name="EventRecorder">
-<area shape="rect" id="node2" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="59,185,174,212"/>
-<area shape="rect" id="node3" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="35,109,145,136"/>
-<area shape="rect" id="node4" href="$class_feed_base.html" title="FeedBase" alt="" coords="5,5,87,32"/>
-<area shape="rect" id="node5" href="$class_mutex.html" title="Class representing phread mutex. " alt="" coords="151,5,210,32"/>
-<area shape="rect" id="node6" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="189,109,252,136"/>
-<area shape="rect" id="node7" href="$class_condition.html" title="Condition" alt="" coords="305,5,382,32"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="SockAddr::newSockAddr" name="SockAddr::newSockAddr">
-<area shape="rect" id="node2" href="$class_socket.html#a23e88c71d35514f2f6ccdf3a0389a283" title="Socket::accept" alt="" coords="221,56,332,83"/>
-<area shape="rect" id="node3" href="$class_socket.html#abcf0d0a6fb9ac150d3e58d2c69d59688" title="Socket::accept" alt="" coords="403,5,513,32"/>
-<area shape="rect" id="node4" href="$class_tcp_inet_server.html#ae9414762e93b688bc314475fde754d4c" title="TcpInetServer::accept" alt="" coords="383,56,533,83"/>
-<area shape="rect" id="node5" href="$class_tcp_unix_server.html#ad1e96383adc7a4dc3a1710c5b69e6a7a" title="TcpUnixServer::accept" alt="" coords="380,107,536,133"/>
-</map>

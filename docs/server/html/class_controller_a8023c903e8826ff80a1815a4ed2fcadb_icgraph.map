@@ -1,6 +1,0 @@
-<map id="Controller::verifyStreamName" name="Controller::verifyStreamName">
-<area shape="rect" id="node2" href="$class_http_connection.html#aabe9a61240e8456705cc62c0d524812e" title="HttpConnection::recvRequest" alt="" coords="248,5,443,32"/>
-<area shape="rect" id="node3" href="$class_rtsp_connection.html#ab2cde45424b4b147a6276bb054a6cf6f" title="RtspConnection::validate\lRequestUrl" alt="" coords="261,57,430,98"/>
-<area shape="rect" id="node4" href="$class_rtsp_connection.html#a8864466b9ec035a67c9973fa4d0aa126" title="RtspConnection::handleRequest" alt="" coords="717,64,928,91"/>
-<area shape="rect" id="node5" href="$class_rtsp_session.html#a9a7277bf63281d6e4bd5c1893f776978" title="RtspSession::recvRequest" alt="" coords="491,89,669,116"/>
-</map>

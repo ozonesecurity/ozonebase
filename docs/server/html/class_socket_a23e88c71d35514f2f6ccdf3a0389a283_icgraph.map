@@ -1,5 +1,0 @@
-<map id="Socket::accept" name="Socket::accept">
-<area shape="rect" id="node2" href="$class_socket.html#abcf0d0a6fb9ac150d3e58d2c69d59688" title="Socket::accept" alt="" coords="187,5,297,32"/>
-<area shape="rect" id="node3" href="$class_tcp_inet_server.html#ae9414762e93b688bc314475fde754d4c" title="TcpInetServer::accept" alt="" coords="167,56,317,83"/>
-<area shape="rect" id="node4" href="$class_tcp_unix_server.html#ad1e96383adc7a4dc3a1710c5b69e6a7a" title="TcpUnixServer::accept" alt="" coords="164,107,320,133"/>
-</map>

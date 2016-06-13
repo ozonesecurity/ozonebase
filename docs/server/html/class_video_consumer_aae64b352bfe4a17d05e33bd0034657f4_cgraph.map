@@ -1,7 +1,0 @@
-<map id="VideoConsumer::VideoConsumer" name="VideoConsumer::VideoConsumer">
-<area shape="rect" id="node2" href="$class_video_consumer.html#a8ac7118272436baf141db33d96ad2b70" title="VideoConsumer::VideoConsumer" alt="" coords="269,29,485,56"/>
-<area shape="rect" id="node3" href="$class_feed_base.html#a55dbba6ea38cb685dbb73369c02af024" title="Identify this instance. " alt="" coords="533,80,684,107"/>
-<area shape="rect" id="node5" href="$class_feed_base.html#a22f313327e4e4effc09beed76b12fa55" title="Return the name string. " alt="" coords="753,131,875,157"/>
-<area shape="rect" id="node4" href="$class_feed_base.html#aa59409b5f2ed4f9e5357590c101d860d" title="Return the class string. " alt="" coords="754,29,874,56"/>
-<area shape="rect" id="node6" href="$class_feed_base.html#a27d113ac55879058cd684e0c16bf4b1a" title="Build identity from the class and name strings. " alt="" coords="732,80,896,107"/>
-</map>

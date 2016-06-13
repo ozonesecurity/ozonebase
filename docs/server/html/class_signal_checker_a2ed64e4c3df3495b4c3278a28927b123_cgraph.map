@@ -1,8 +1,0 @@
-<map id="SignalChecker::checkSignal" name="SignalChecker::checkSignal">
-<area shape="rect" id="node2" href="$class_signal_checker.html#ac79e965a6ad3bf30aeacd410f659f615" title="Return the width (in pixels) of video frames supplied by this provider. " alt="" coords="242,29,389,56"/>
-<area shape="rect" id="node4" href="$class_feed_base.html#aada1551e2fc238c1435be539ae27588a" title="Return the identity string. " alt="" coords="250,80,381,107"/>
-<area shape="rect" id="node5" href="$class_signal_checker.html#a6f1701de98c4b733c5cf060482118b9f" title="Return the height (in pixels) of video frames supplied by this provider. " alt="" coords="240,155,391,181"/>
-<area shape="rect" id="node6" href="$class_image.html#a56759e2557792a6359888acb1615f7a5" title="Image::green" alt="" coords="266,205,365,232"/>
-<area shape="rect" id="node7" href="$class_image.html#a462942cff8819bcf895b26600a9e1fd8" title="Image::blue" alt="" coords="270,256,361,283"/>
-<area shape="rect" id="node3" href="$class_video_consumer.html#a843010ada945a86ff979dae0d667435c" title="Return the first provider cast appropriately, shortcut for when providers == 1. " alt="" coords="439,92,641,119"/>
-</map>

@@ -1,8 +1,0 @@
-<map id="HttpDataStream" name="HttpDataStream">
-<area shape="rect" id="node2" href="$class_http_stream.html" title="HttpStream" alt="" coords="62,304,151,331"/>
-<area shape="rect" id="node3" href="$class_stream.html" title="Stream" alt="" coords="31,229,95,256"/>
-<area shape="rect" id="node4" href="$class_video_consumer.html" title="VideoConsumer" alt="" coords="5,155,120,181"/>
-<area shape="rect" id="node5" href="$class_feed_consumer.html" title="FeedConsumer" alt="" coords="7,80,118,107"/>
-<area shape="rect" id="node6" href="$class_feed_base.html" title="FeedBase" alt="" coords="22,5,103,32"/>
-<area shape="rect" id="node7" href="$class_thread.html" title="Abstract class representing pthread thread. " alt="" coords="119,229,182,256"/>
-</map>

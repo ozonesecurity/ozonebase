@@ -1,7 +1,0 @@
-<map id="GeneralConsumer::GeneralConsumer" name="GeneralConsumer::GeneralConsumer">
-<area shape="rect" id="node2" href="$class_general_consumer.html#a48c5d67823a0767973432eb0928b32db" title="GeneralConsumer::General\lConsumer" alt="" coords="233,29,413,71"/>
-<area shape="rect" id="node3" href="$class_feed_base.html#a55dbba6ea38cb685dbb73369c02af024" title="Identify this instance. " alt="" coords="461,95,612,122"/>
-<area shape="rect" id="node5" href="$class_feed_base.html#a22f313327e4e4effc09beed76b12fa55" title="Return the name string. " alt="" coords="681,146,803,173"/>
-<area shape="rect" id="node4" href="$class_feed_base.html#aa59409b5f2ed4f9e5357590c101d860d" title="Return the class string. " alt="" coords="682,45,802,71"/>
-<area shape="rect" id="node6" href="$class_feed_base.html#a27d113ac55879058cd684e0c16bf4b1a" title="Build identity from the class and name strings. " alt="" coords="660,95,824,122"/>
-</map>

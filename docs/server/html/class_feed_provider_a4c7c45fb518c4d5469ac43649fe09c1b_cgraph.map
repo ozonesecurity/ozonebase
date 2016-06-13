@@ -1,6 +1,0 @@
-<map id="FeedProvider::registerConsumer" name="FeedProvider::registerConsumer">
-<area shape="rect" id="node2" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="547,5,686,32"/>
-<area shape="rect" id="node3" href="$class_feed_consumer.html#a02aefeb0dd9715a0c62a79f0ab18c8c5" title="FeedConsumer::hasProvider" alt="" coords="275,31,463,57"/>
-<area shape="rect" id="node4" href="$class_feed_consumer.html#a5eac06a868f4dc353d34589207ab99f6" title="FeedConsumer::registerProvider" alt="" coords="264,81,475,108"/>
-<area shape="rect" id="node5" href="$class_feed_provider.html#a55fc4d795ba5c0055eaa9f77465139c1" title="FeedProvider::hasConsumer" alt="" coords="523,81,711,108"/>
-</map>

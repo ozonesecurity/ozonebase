@@ -1,4 +1,0 @@
-<map id="SockAddr" name="SockAddr">
-<area shape="rect" id="node2" href="$class_sock_addr_inet.html" title="Class representing an internet socket address. " alt="" coords="5,80,107,107"/>
-<area shape="rect" id="node3" href="$class_sock_addr_unix.html" title="Class representing a Unix socket address. " alt="" coords="131,80,237,107"/>
-</map>

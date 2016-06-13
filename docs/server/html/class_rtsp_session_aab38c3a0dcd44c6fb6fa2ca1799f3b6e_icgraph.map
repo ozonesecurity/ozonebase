@@ -1,4 +1,0 @@
-<map id="RtspSession::newStream" name="RtspSession::newStream">
-<area shape="rect" id="node2" href="$class_rtsp_session.html#a9a7277bf63281d6e4bd5c1893f776978" title="RtspSession::recvRequest" alt="" coords="224,5,403,32"/>
-<area shape="rect" id="node3" href="$class_rtsp_connection.html#a8864466b9ec035a67c9973fa4d0aa126" title="RtspConnection::handleRequest" alt="" coords="451,5,661,32"/>
-</map>

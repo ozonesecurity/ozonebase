@@ -1,7 +1,0 @@
-<map id="FeedProvider::distributeFrame" name="FeedProvider::distributeFrame">
-<area shape="rect" id="node2" href="$class_feed_provider.html#a351ebd59ac16f8f7522aad379e5f3cf1" title="FeedProvider::deregister\lConsumer" alt="" coords="213,52,377,93"/>
-<area shape="rect" id="node3" href="$class_feed_base.html#a21fb04c56b16da04d346748ca0c5b2d4" title="Return the identity string as a c&#45;style string. " alt="" coords="686,8,825,35"/>
-<area shape="rect" id="node4" href="$class_feed_consumer.html#a02aefeb0dd9715a0c62a79f0ab18c8c5" title="FeedConsumer::hasProvider" alt="" coords="425,30,613,56"/>
-<area shape="rect" id="node5" href="$class_feed_consumer.html#ab88de12bdfc4be4476fd138e59a8cda1" title="FeedConsumer::deregister\lProvider" alt="" coords="431,81,607,122"/>
-<area shape="rect" id="node6" href="$class_feed_provider.html#a55fc4d795ba5c0055eaa9f77465139c1" title="FeedProvider::hasConsumer" alt="" coords="661,88,849,115"/>
-</map>
