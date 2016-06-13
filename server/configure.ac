@@ -10,48 +10,11 @@ AC_SUBST(PATH_BUILD)
 TIME_BUILD=`date +'%s'`
 AC_SUBST(TIME_BUILD)
 
-AC_PREFIX_DEFAULT([/opt/])
-CPPFLAGS="-D__STDC_CONSTANT_MACROS"
+CPPFLAGS="$CPPFLAGS -D__STDC_CONSTANT_MACROS"
 
 AC_ARG_VAR(ZM_USER,[Name of ZoneMinder user, zoneminder])
 if test "$ZM_USER" == ""; then
     AC_SUBST(ZM_USER,[zoneminder])
-fi
-AC_ARG_VAR(ZM_WEB_DIR,[Location to install web GUI html files, default /opt/zm2/web/html])
-if test "$ZM_WEB_DIR" == ""; then
-    AC_SUBST(ZM_WEB_DIR,$prefix/web/html)
-fi
-AC_ARG_VAR(ZM_CGI_DIR,[Location to install web GUI cgi files, default /opt/zm2/web/cgi-bin])
-if test "$ZM_CGI_DIR" == ""; then
-    AC_SUBST(ZM_CGI_DIR,$prefix/web/cgi-bin)
-fi
-AC_ARG_VAR(ZM_WEB_HOST,[Hostname for virtual hosting, default current host name])
-if test "$ZM_WEB_HOST" == ""; then
-    AC_SUBST(ZM_WEB_HOST,`hostname`)
-fi
-AC_ARG_VAR(ZM_DB_HOST,[Hostname where ZoneMinder database located, default localhost])
-if test "$ZM_DB_HOST" == ""; then
-    AC_SUBST(ZM_DB_HOST,[localhost])
-fi
-AC_ARG_VAR(ZM_DB_NAME,[Name of ZoneMinder database, default zm])
-if test "$ZM_DB_NAME" == ""; then
-    AC_SUBST(ZM_DB_NAME,[zm])
-fi
-AC_ARG_VAR(ZM_DB_USER,[Name of ZoneMinder database user, default zmuser])
-if test "$ZM_DB_USER" == ""; then
-    AC_SUBST(ZM_DB_USER,[zmuser])
-fi
-AC_ARG_VAR(ZM_DB_PASS,[Password of ZoneMinder database user, default zmpass])
-if test "$ZM_DB_PASS" == ""; then
-    AC_SUBST(ZM_DB_PASS,[zmpass])
-fi
-AC_ARG_VAR(ZM_SSL_LIB,[Library to use for ssl functions, default gnutls])
-if test "$ZM_SSL_LIB" == ""; then
-    AC_SUBST(ZM_SSL_LIB,gnutls)
-fi
-AC_ARG_VAR(ZM_MYSQL_ENGINE,[MySQL engine to use with database, default MyISAM])
-if test "$ZM_MYSQL_ENGINE" == ""; then
-    AC_SUBST(ZM_MYSQL_ENGINE,MyISAM)
 fi
 AC_ARG_VAR(ZM_RUNDIR,[Location of transient process files, default /var/run/zm])
 if test "$ZM_RUNDIR" == ""; then
@@ -64,10 +27,6 @@ fi
 AC_ARG_VAR(ZM_LOGDIR,[Location of generated log files, default /var/log/zm])
 if test "$ZM_LOGDIR" == ""; then
     AC_SUBST(ZM_LOGDIR,[/var/log/zm])
-fi
-AC_ARG_VAR(ZM_LIBARCH,[Architecture specific library path, default lib, try lib64 on 64 bit systems])
-if test "$ZM_LIBARCH" == ""; then
-    AC_SUBST(ZM_LIBARCH,[/lib])
 fi
 
 ENABLE_V4L=yes
@@ -172,26 +131,19 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday memmove memset mkdir munmap putenv select socket sqrt strcasecmp strchr strcspn strerror strncasecmp strrchr strsignal strspn strstr strtol strtoull])
 
 # Checks for libraries.
+AC_CHECK_LIB(z,compress,,)
 AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(zm requires libjpeg.a))
 AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(zm requires libpthread.a))
 AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(zm requires libdl.a))
-if test "$ZM_SSL_LIB" == "openssl"; then
-AC_CHECK_LIB(crypto,MD5,,AC_MSG_WARN([libcrypto.a is required for authenticated streaming - use ZM_SSL_LIB option to select gnutls instead]))
-else
-AC_CHECK_HEADERS(gcrypt.h,,AC_MSG_WARN(zm requires libgcrypt headers to be installed for gnutls),)
-AC_CHECK_LIB(gcrypt,gcry_check_version,,AC_MSG_WARN([libgcrypt.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
-AC_CHECK_LIB(gnutls-openssl,MD5,,AC_MSG_WARN([gnutls-openssl.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
-fi
-AC_CHECK_LIB(z,zlibVersion)
 AC_CHECK_LIB(x264,x264_predict_16x16_init)
 AC_CHECK_LIB(avcore,av_image_copy,,)
-AC_CHECK_LIB(avcodec,av_init_packet,,AC_MSG_WARN(libavcodec.a is required for MPEG streaming))
-AC_CHECK_LIB(avformat,av_register_all,,AC_MSG_WARN(libavformat.a is required for MPEG streaming))
-AC_CHECK_LIB(avdevice,avdevice_register_all,,AC_MSG_WARN(libavdevice.a may be required for MPEG streaming))
-AC_CHECK_LIB(avutil,av_malloc,,AC_MSG_ERROR(libavutil.a is required, please install ffmpeg development libraries))
-AC_CHECK_LIB(swscale,sws_scale,,AC_MSG_ERROR(libswscale.a is required, please install ffmpeg development libraries))
-AC_CHECK_LIB(bz2,BZ2_bzCompress,,AC_MSG_ERROR([libbz2.a is required with recent versions of ffmpeg]))
-AC_CHECK_LIB(z,compress,,)
+AC_CHECK_LIB(avutil,av_malloc,,AC_MSG_ERROR(libavutil.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avfilter,avfilter_register_all,,AC_MSG_ERROR(libavfilter.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avdevice,avdevice_register_all,,AC_MSG_ERROR(libavdevice.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avcodec,av_init_packet,,AC_MSG_ERROR(libavcodec.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avformat,av_register_all,,AC_MSG_ERROR(libavformat.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(swscale,sws_scale,,AC_MSG_ERROR(libswscale.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(swresample,swr_init,,)
 
 # Checks for header files.
 AC_FUNC_ALLOCA
@@ -213,15 +165,9 @@ fi
 AC_CHECK_HEADERS(zlib.h,,,)
 
 AC_CHECK_DECLS(round,,,[#include <math.h>])
-if test "$ZM_SSL_LIB" == "openssl"; then
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([zm requires openssl/md5.h - use ZM_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
-#include <openssl/md5.h>])
-else
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([zm requires gnutls/openssl.h - use ZM_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
-#include <gnutls/openssl.h>])
-fi
 AC_CHECK_DECLS(backtrace,,,[#include <execinfo.h>])
 
+AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
 AC_DEFINE_DIR([BINDIR],[bindir],[Expanded binary directory])
