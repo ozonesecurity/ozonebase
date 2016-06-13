@@ -70,43 +70,6 @@ if test "$ZM_LIBARCH" == ""; then
     AC_SUBST(ZM_LIBARCH,[/lib])
 fi
 
-MYSQL_PREFIX=/usr
-AC_ARG_WITH(mysql,
-    [  --with-mysql=<path>        prefix of MySQL installation, default /usr],
-    [MYSQL_PREFIX=$with_mysql],
-    AC_MSG_WARN([You can call configure with the --with-mysql option.
-    This tells configure where to find the MySql C library and headers if configure cannot
-    locate them automatically.
-    e.g. --with-mysql=/usr/local or --with-mysql=/usr])
-)
-AC_SUBST(MYSQL_PREFIX)
-MYSQL_LIBS="-L${MYSQL_PREFIX}/${ZM_LIBARCH}/mysql"
-MYSQL_CFLAGS="-I${MYSQL_PREFIX}/include"
-AC_SUBST(MYSQL_LIBS)
-AC_SUBST(MYSQL_CFLAGS)
-
-LDFLAGS="${MYSQL_LIBS} $LDFLAGS"
-
-FFMPEG_PREFIX=/usr/local
-AC_ARG_WITH(ffmpeg,
-    [  --with-ffmpeg=<path>       prefix of ffmpeg root directory for libavcodec etc, default /usr/local],
-    [FFMPEG_PREFIX=$with_ffmpeg],
-    AC_MSG_WARN([You can call configure with the --with-ffmpeg option.
-    This tells configure where to find the ffmpeg root directory within which are the libavcodec 
-    and libavformat files that are used for various functions in ZoneMinder. Ensure that your copy of
-    ffmpeg has installed libraries and headers as well as binaries.
-    e.g. --with-ffmpeg=/opt/ffmpeg])
-)
-AC_SUBST(FFMPEG_PREFIX)
-FFMPEG_LIBS="-L${FFMPEG_PREFIX}/${ZM_LIBARCH}"
-FFMPEG_CFLAGS="-I${FFMPEG_PREFIX}/include"
-AC_SUBST(FFMPEG_LIBS)
-AC_SUBST(FFMPEG_CFLAGS)
-
-LDFLAGS="${FFMPEG_LIBS} $LDFLAGS"
-CFLAGS="${FFMPEG_CFLAGS} $CFLAGS"
-CPPFLAGS="${FFMPEG_CFLAGS} $CPPFLAGS"
-
 ENABLE_V4L=yes
 AC_ARG_ENABLE(video4linux,
     [  --enable-video4linux=<yes|no> enable or disabled video4linux support, default enabled],
@@ -208,12 +171,7 @@ AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday memmove memset mkdir munmap putenv select socket sqrt strcasecmp strchr strcspn strerror strncasecmp strrchr strsignal strspn strstr strtol strtoull])
 
-# Other programs
-AC_CHECK_PROG(OPT_FFMPEG,ffmpeg,yes,no)
-AC_PATH_PROG(PATH_FFMPEG,ffmpeg)
-
 # Checks for libraries.
-AC_CHECK_LIB(mysqlclient,mysql_init,,AC_MSG_ERROR(zm requires libmysqlclient.a))
 AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(zm requires libjpeg.a))
 AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(zm requires libpthread.a))
 AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(zm requires libdl.a))
@@ -241,7 +199,6 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h limits.h memory.h netdb.h netinet/in.h stddef.h stdlib.h string.h strings.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h syslog.h unistd.h values.h])
 AC_CHECK_HEADERS(linux/videodev2.h,,AC_MSG_WARN(zm requires Video4Linux2 to be installed for V4L2 support))
 AC_CHECK_HEADERS(jpeglib.h,,AC_MSG_ERROR(zm requires libjpeg headers to be installed),)
-AC_CHECK_HEADERS(mysql/mysql.h,,AC_MSG_ERROR(zm requires MySQL headers - check that MySQL development packages are installed),)
 AC_CHECK_HEADERS(libavutil/avutil.h,,,)
 AC_CHECK_HEADERS(libavcodec/avcodec.h,,,)
 AC_CHECK_HEADERS(libavformat/avformat.h,,,)
@@ -287,8 +244,5 @@ AC_CONFIG_FILES([
     src/providers/Makefile
     src/examples/Makefile
 ])
-
-# Create the definitions for compilation and defaults for the database
-AC_CONFIG_COMMANDS([src/zmConfigDefines.h],[perl ./zmconfgen.pl])
 
 AC_OUTPUT
