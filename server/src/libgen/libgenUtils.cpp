@@ -11,6 +11,14 @@
 #include <endian.h>
 #include <byteswap.h>
 
+/**
+* @brief 
+*
+* @param divisor
+* @param limit
+*
+* @return 
+*/
 unsigned long getShift( unsigned long divisor, int limit )
 {
     if ( limit && divisor > limit )
@@ -88,6 +96,14 @@ uint16_t be16toh( uint16_t input )
 }
 #endif
 
+/**
+* @brief 
+*
+* @param format
+* @param ...
+*
+* @return 
+*/
 const std::string stringtf( const char *format, ... )
 {
     char buffer[BUFSIZ];
@@ -106,6 +122,14 @@ const std::string stringtf( const char *format, ... )
     va_end( args );
 }
 
+/**
+* @brief 
+*
+* @param format
+* @param ...
+*
+* @return 
+*/
 const std::string stringtf( const std::string &format, ... )
 {
     char buffer[BUFSIZ];
@@ -125,6 +149,13 @@ const std::string stringtf( const std::string &format, ... )
     va_end( args );
 }
 
+/**
+* @brief 
+*
+* @param upperStr
+*
+* @return 
+*/
 std::string toLower( const std::string &upperStr )
 {
     std::string lowerStr;
@@ -136,6 +167,13 @@ std::string toLower( const std::string &upperStr )
     return( lowerStr );
 }
 
+/**
+* @brief 
+*
+* @param lowerStr
+*
+* @return 
+*/
 std::string toUpper( const std::string &lowerStr )
 {
     std::string upperStr;
@@ -147,11 +185,28 @@ std::string toUpper( const std::string &lowerStr )
     return( upperStr );
 }
 
+/**
+* @brief 
+*
+* @param haystack
+* @param needle
+*
+* @return 
+*/
 bool startsWith( const std::string &haystack, const std::string &needle )
 {
     return( haystack.substr( 0, needle.length() ) == needle );
 }
 
+/**
+* @brief 
+*
+* @param string
+* @param chars
+* @param limit
+*
+* @return 
+*/
 StringVector split( const std::string &string, const std::string chars, int limit )
 {
     StringVector stringVector;
@@ -192,20 +247,49 @@ static const std::string base64Chars =
              "0123456789+/";
 
 
+/**
+* @brief 
+*
+* @param c
+*
+* @return 
+*/
 static inline bool isBase64(unsigned char c) {
   return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
+/**
+* @brief 
+*
+* @param 
+*
+* @return 
+*/
 const std::string base64Encode( const std::string &inString  )
 {
     return( base64Encode( (const unsigned char *)inString.data(), inString.size() ) );
 }
 
+/**
+* @brief 
+*
+* @param 
+*
+* @return 
+*/
 const std::string base64Encode( const ByteBuffer &buffer  )
 {
     return( base64Encode( buffer.data(), buffer.size() ) );
 }
 
+/**
+* @brief 
+*
+* @param data
+* @param size
+*
+* @return 
+*/
 const std::string base64Encode( const unsigned char *data, size_t size )
 {
   std::string ret;
@@ -250,6 +334,13 @@ const std::string base64Encode( const unsigned char *data, size_t size )
 
 }
 
+/**
+* @brief 
+*
+* @param inString
+*
+* @return 
+*/
 const std::string base64Decode( const std::string &inString )
 {
     int in_len = inString.size();
@@ -295,6 +386,16 @@ const std::string base64Decode( const std::string &inString )
     return( ret );
 }
 
+/**
+* @brief 
+*
+* @param digitsIn
+* @param digitsInLen
+* @param digitsOut
+* @param digitsOutLen
+*
+* @return 
+*/
 bool encodeBCD( const char *digitsIn, ssize_t digitsInLen, unsigned char *digitsOut, ssize_t &digitsOutLen )
 {
     bool good = true;
@@ -315,6 +416,15 @@ bool encodeBCD( const char *digitsIn, ssize_t digitsInLen, unsigned char *digits
     return( good );
 }
 
+/**
+* @brief 
+*
+* @param digitsIn
+* @param digitsOut
+* @param digitsOutLen
+*
+* @return 
+*/
 bool encodeBCD( const std::string &digitsIn, unsigned char *digitsOut, ssize_t &digitsOutLen )
 {
     bool good = true;
@@ -335,6 +445,16 @@ bool encodeBCD( const std::string &digitsIn, unsigned char *digitsOut, ssize_t &
     return( good );
 }
 
+/**
+* @brief 
+*
+* @param digitsIn
+* @param digitsInLen
+* @param digitsOut
+* @param digitsOutLen
+*
+* @return 
+*/
 bool decodeBCD( const unsigned char *digitsIn, ssize_t digitsInLen, char *digitsOut, ssize_t &digitsOutLen )
 {
     bool good = true;
@@ -358,6 +478,15 @@ bool decodeBCD( const unsigned char *digitsIn, ssize_t digitsInLen, char *digits
     return( good );
 }
 
+/**
+* @brief 
+*
+* @param digitsIn
+* @param digitsInLen
+* @param digitsOut
+*
+* @return 
+*/
 bool decodeBCD( const unsigned char *digitsIn, ssize_t digitsInLen, std::string &digitsOut )
 {
     bool good = true;
@@ -380,6 +509,14 @@ bool decodeBCD( const unsigned char *digitsIn, ssize_t digitsInLen, std::string 
     return( good );
 }
 
+/**
+* @brief 
+*
+* @param varName
+* @param defaultValue
+*
+* @return 
+*/
 const char *getStringEnv( const char *varName, const char *defaultValue )
 {
     const char *envValue = getenv( varName );
@@ -388,11 +525,27 @@ const char *getStringEnv( const char *varName, const char *defaultValue )
     return( envValue?envValue:defaultValue );
 }
 
+/**
+* @brief 
+*
+* @param varName
+* @param defaultValue
+*
+* @return 
+*/
 int getIntEnv( const char *varName, const char *defaultValue )
 {
     return( strtol( getStringEnv( varName, defaultValue ), NULL, 0 ) );
 }
 
+/**
+* @brief 
+*
+* @param varName
+* @param defaultValue
+*
+* @return 
+*/
 bool getBoolEnv( const char *varName, const char *defaultValue )
 {
     const char *envValue = getStringEnv( varName, defaultValue );
@@ -407,6 +560,13 @@ bool getBoolEnv( const char *varName, const char *defaultValue )
     return( (bool)strtol( envValue, NULL, 0 ) );
 }
 
+/**
+* @brief 
+*
+* @param str
+* @param sep
+* @param flags
+*/
 void StringTokenList::splitIntoTokens( const char* str, const char *sep, int flags )
 {
     char *pos;
@@ -449,6 +609,12 @@ void StringTokenList::splitIntoTokens( const char* str, const char *sep, int fla
     }
 }
 
+/**
+* @brief 
+*
+* @param error
+* @param severity
+*/
 SvrException::SvrException( const std::string &error, Severity severity ) : mError( error ), mSeverity( severity )
 {
     Debug( 6, "New exception '%s' (%d) created", mError.c_str(), mSeverity );

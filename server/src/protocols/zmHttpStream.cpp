@@ -7,6 +7,14 @@
 #include "../base/zmFeedFrame.h"
 #include "../encoders/zmJpegEncoder.h"
 
+/**
+* @brief 
+*
+* @param tag
+* @param httpSession
+* @param connection
+* @param provider
+*/
 HttpStream::HttpStream( const std::string &tag, HttpSession *httpSession, Connection *connection, FeedProvider *provider ) :
     Stream( tag, stringtf( "%X", httpSession->session() ), connection, provider ),
     Thread( identity() ),
@@ -15,10 +23,18 @@ HttpStream::HttpStream( const std::string &tag, HttpSession *httpSession, Connec
     Debug( 2, "New HTTP stream" );
 }
 
+/**
+* @brief 
+*/
 HttpStream::~HttpStream()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int HttpStream::run()
 {
     Select select( 60 );
@@ -55,6 +71,17 @@ int HttpStream::run()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param httpSession
+* @param connection
+* @param provider
+* @param width
+* @param height
+* @param frameRate
+* @param quality
+*/
 HttpImageStream::HttpImageStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality ) :
     HttpStream( cClass(), httpSession, connection, provider )
 {
@@ -71,11 +98,22 @@ HttpImageStream::HttpImageStream( HttpSession *httpSession, Connection *connecti
     registerProvider( *mEncoder );
 }
 
+/**
+* @brief 
+*/
 HttpImageStream::~HttpImageStream()
 {
     deregisterProvider( *mEncoder );
 }
 
+/**
+* @brief 
+*
+* @param writeable
+* @param frame
+*
+* @return 
+*/
 bool HttpImageStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
 {
     const ByteBuffer &packet = frame->buffer();
@@ -111,6 +149,13 @@ bool HttpImageStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param httpSession
+* @param connection
+* @param provider
+*/
 HttpDataStream::HttpDataStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider ) :
     HttpStream( cClass(), httpSession, connection, provider )
 {
@@ -118,11 +163,22 @@ HttpDataStream::HttpDataStream( HttpSession *httpSession, Connection *connection
     registerProvider( *provider );
 }
 
+/**
+* @brief 
+*/
 HttpDataStream::~HttpDataStream()
 {
     deregisterProvider( *mProvider );
 }
 
+/**
+* @brief 
+*
+* @param writeable
+* @param frame
+*
+* @return 
+*/
 bool HttpDataStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
 {
     const ByteBuffer &packet = frame->buffer();

@@ -11,6 +11,14 @@
 #include <sys/param.h>
 #include <netinet/tcp.h>
 
+/**
+* @brief 
+*
+* @param iovcnt
+* @param ...
+*
+* @return 
+*/
 int CommsBase::readV( int iovcnt, /* const void *, int, */ ... )
 {
     va_list arg_ptr;
@@ -31,6 +39,14 @@ int CommsBase::readV( int iovcnt, /* const void *, int, */ ... )
     return( nBytes );
 }
 
+/**
+* @brief 
+*
+* @param iovcnt
+* @param ...
+*
+* @return 
+*/
 int CommsBase::writeV( int iovcnt, /* const void *, int, */ ... )
 {
     va_list arg_ptr;
@@ -51,6 +67,11 @@ int CommsBase::writeV( int iovcnt, /* const void *, int, */ ... )
     return( nBytes );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Pipe::open()
 {
     if ( ::pipe( mFd ) < 0 )
@@ -62,6 +83,11 @@ bool Pipe::open()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Pipe::close()
 {
     if ( mFd[0] > -1 ) ::close( mFd[0] );
@@ -71,6 +97,13 @@ bool Pipe::close()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param blocking
+*
+* @return 
+*/
 bool Pipe::setBlocking( bool blocking )
 {
     int flags;
@@ -98,10 +131,23 @@ bool Pipe::setBlocking( bool blocking )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param addr
+*/
 SockAddr::SockAddr( const struct sockaddr *addr ) : mAddr( addr )
 {
 }
 
+/**
+* @brief 
+*
+* @param addr
+* @param len
+*
+* @return 
+*/
 SockAddr *SockAddr::newSockAddr( const struct sockaddr &addr, socklen_t len )
 {
     if ( addr.sa_family == AF_INET && len == SockAddrInet::addrSize() )
@@ -116,6 +162,13 @@ SockAddr *SockAddr::newSockAddr( const struct sockaddr &addr, socklen_t len )
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param addr
+*
+* @return 
+*/
 SockAddr *SockAddr::newSockAddr( const SockAddr *addr )
 {
     if ( !addr )
@@ -133,10 +186,22 @@ SockAddr *SockAddr::newSockAddr( const SockAddr *addr )
     return( 0 );
 }
 
+/**
+* @brief 
+*/
 SockAddrInet::SockAddrInet() : SockAddr( (struct sockaddr *)&mAddrIn )
 {
 }
 
+/**
+* @brief 
+*
+* @param host
+* @param serv
+* @param proto
+*
+* @return 
+*/
 bool SockAddrInet::resolve( const char *host, const char *serv, const char *proto )
 {
     memset( &mAddrIn, 0, sizeof(mAddrIn) );
@@ -162,6 +227,15 @@ bool SockAddrInet::resolve( const char *host, const char *serv, const char *prot
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param host
+* @param port
+* @param proto
+*
+* @return 
+*/
 bool SockAddrInet::resolve( const char *host, int port, const char *proto )
 {
     memset( &mAddrIn, 0, sizeof(mAddrIn) );
@@ -179,6 +253,14 @@ bool SockAddrInet::resolve( const char *host, int port, const char *proto )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param serv
+* @param proto
+*
+* @return 
+*/
 bool SockAddrInet::resolve( const char *serv, const char *proto )
 {
     memset( &mAddrIn, 0, sizeof(mAddrIn) );
@@ -197,6 +279,14 @@ bool SockAddrInet::resolve( const char *serv, const char *proto )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param port
+* @param proto
+*
+* @return 
+*/
 bool SockAddrInet::resolve( int port, const char *proto )
 {
     memset( &mAddrIn, 0, sizeof(mAddrIn) );
@@ -208,10 +298,21 @@ bool SockAddrInet::resolve( int port, const char *proto )
     return( true );
 }
 
+/**
+* @brief 
+*/
 SockAddrUnix::SockAddrUnix() : SockAddr( (struct sockaddr *)&mAddrUn )
 {
 }
 
+/**
+* @brief 
+*
+* @param path
+* @param proto
+*
+* @return 
+*/
 bool SockAddrUnix::resolve( const char *path, const char *proto )
 {
     memset( &mAddrUn, 0, sizeof(mAddrUn) );
@@ -222,6 +323,11 @@ bool SockAddrUnix::resolve( const char *path, const char *proto )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::socket()
 {
     if ( mSd >= 0 )
@@ -243,6 +349,11 @@ bool Socket::socket()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::connect()
 {
     if ( !socket() ) 
@@ -260,6 +371,11 @@ bool Socket::connect()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::bind()
 {
     if ( !socket() )
@@ -274,6 +390,11 @@ bool Socket::bind()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::listen()
 {
     if ( ::listen( mSd, SOMAXCONN ) == -1 )
@@ -288,6 +409,11 @@ bool Socket::listen()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::accept()
 {
     struct sockaddr *remoteAddr = mLocalAddr->getTempAddr();
@@ -310,6 +436,13 @@ bool Socket::accept()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param newSd
+*
+* @return 
+*/
 bool Socket::accept( int &newSd )
 {
     struct sockaddr *remoteAddr = mLocalAddr->getTempAddr();
@@ -327,6 +460,11 @@ bool Socket::accept( int &newSd )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool Socket::close()
 {
     if ( mSd > -1 ) ::close( mSd );
@@ -335,6 +473,11 @@ bool Socket::close()
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int Socket::bytesToRead() const
 {
     int bytes_to_read = 0;
@@ -347,6 +490,13 @@ int Socket::bytesToRead() const
     return( bytes_to_read );
 }
 
+/**
+* @brief 
+*
+* @param blocking
+*
+* @return 
+*/
 bool Socket::getBlocking( bool &blocking )
 {
     int flags;
@@ -360,6 +510,13 @@ bool Socket::getBlocking( bool &blocking )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param blocking
+*
+* @return 
+*/
 bool Socket::setBlocking( bool blocking )
 {
 #if 0
@@ -398,6 +555,13 @@ bool Socket::setBlocking( bool blocking )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param buffersize
+*
+* @return 
+*/
 bool Socket::getSendBufferSize( int &buffersize ) const
 {
     socklen_t optlen = sizeof(buffersize);
@@ -409,6 +573,13 @@ bool Socket::getSendBufferSize( int &buffersize ) const
     return( buffersize );
 }
 
+/**
+* @brief 
+*
+* @param buffersize
+*
+* @return 
+*/
 bool Socket::getRecvBufferSize( int &buffersize ) const
 {
     socklen_t optlen = sizeof(buffersize);
@@ -420,6 +591,13 @@ bool Socket::getRecvBufferSize( int &buffersize ) const
     return( buffersize );
 }
 
+/**
+* @brief 
+*
+* @param buffersize
+*
+* @return 
+*/
 bool Socket::setSendBufferSize( int buffersize )
 {
     if ( setsockopt( mSd, SOL_SOCKET, SO_SNDBUF, (char *)&buffersize, sizeof(buffersize)) < 0 )
@@ -430,6 +608,13 @@ bool Socket::setSendBufferSize( int buffersize )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param buffersize
+*
+* @return 
+*/
 bool Socket::setRecvBufferSize( int buffersize )
 {
     if ( setsockopt( mSd, SOL_SOCKET, SO_RCVBUF, (char *)&buffersize, sizeof(buffersize)) < 0 )
@@ -440,6 +625,13 @@ bool Socket::setRecvBufferSize( int buffersize )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param route
+*
+* @return 
+*/
 bool Socket::getRouting( bool &route ) const
 {
     int dontRoute;
@@ -453,6 +645,13 @@ bool Socket::getRouting( bool &route ) const
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param route
+*
+* @return 
+*/
 bool Socket::setRouting( bool route )
 {
     int dontRoute = !route;
@@ -464,6 +663,13 @@ bool Socket::setRouting( bool route )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param nodelay
+*
+* @return 
+*/
 bool Socket::getNoDelay( bool &nodelay ) const
 {
     int int_nodelay;
@@ -477,6 +683,13 @@ bool Socket::getNoDelay( bool &nodelay ) const
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param nodelay
+*
+* @return 
+*/
 bool Socket::setNoDelay( bool nodelay )
 {
     int int_nodelay = nodelay;
@@ -489,16 +702,33 @@ bool Socket::setNoDelay( bool nodelay )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool TcpInetServer::listen()
 {
     return( Socket::listen() );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 bool TcpInetServer::accept()
 {
     return( Socket::accept() );
 }
 
+/**
+* @brief 
+*
+* @param newSocket
+*
+* @return 
+*/
 bool TcpInetServer::accept( TcpInetSocket *&newSocket )
 {
     int newSd = -1;
@@ -512,6 +742,13 @@ bool TcpInetServer::accept( TcpInetSocket *&newSocket )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param newSocket
+*
+* @return 
+*/
 bool TcpUnixServer::accept( TcpUnixSocket *&newSocket )
 {
     int newSd = -1;
@@ -525,25 +762,48 @@ bool TcpUnixServer::accept( TcpUnixSocket *&newSocket )
     return( true );
 }
 
+/**
+* @brief 
+*/
 Select::Select() : mHasTimeout( false ), mMaxFd( -1 )
 {
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 Select::Select( struct timeval timeout ) : mMaxFd( -1 )
 {
     setTimeout( timeout );
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 Select::Select( int timeout ) : mMaxFd( -1 )
 {
     setTimeout( timeout );
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 Select::Select( double timeout ) : mMaxFd( -1 )
 {
     setTimeout( timeout );
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 void Select::setTimeout( int timeout )
 {
     mTimeout.tv_sec = timeout;
@@ -551,6 +811,11 @@ void Select::setTimeout( int timeout )
     mHasTimeout = true;
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 void Select::setTimeout( double timeout )
 {
     mTimeout.tv_sec = int(timeout);
@@ -558,17 +823,28 @@ void Select::setTimeout( double timeout )
     mHasTimeout = true;
 }
 
+/**
+* @brief 
+*
+* @param timeout
+*/
 void Select::setTimeout( struct timeval timeout )
 {
     mTimeout = timeout;
     mHasTimeout = true;
 }
 
+/**
+* @brief 
+*/
 void Select::clearTimeout()
 {
     mHasTimeout = false;
 }
 
+/**
+* @brief 
+*/
 void Select::calcMaxFd()
 {
     mMaxFd = -1;
@@ -580,6 +856,13 @@ void Select::calcMaxFd()
             mMaxFd = (*iter)->getMaxDesc();
 }
 
+/**
+* @brief 
+*
+* @param comms
+*
+* @return 
+*/
 bool Select::addReader( CommsBase *comms )
 {
     if ( !comms->isOpen() )
@@ -594,6 +877,13 @@ bool Select::addReader( CommsBase *comms )
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @param comms
+*
+* @return 
+*/
 bool Select::deleteReader( CommsBase *comms )
 {
     if ( !comms->isOpen() )
@@ -609,12 +899,22 @@ bool Select::deleteReader( CommsBase *comms )
     return( false );
 }
 
+/**
+* @brief 
+*/
 void Select::clearReaders()
 {
     mReaders.clear();
     mMaxFd = -1;
 }
 
+/**
+* @brief 
+*
+* @param comms
+*
+* @return 
+*/
 bool Select::addWriter( CommsBase *comms )
 {
     std::pair<CommsSet::iterator,bool> result = mWriters.insert( comms );
@@ -624,6 +924,13 @@ bool Select::addWriter( CommsBase *comms )
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @param comms
+*
+* @return 
+*/
 bool Select::deleteWriter( CommsBase *comms )
 {
     if ( mWriters.erase( comms ) )
@@ -634,12 +941,20 @@ bool Select::deleteWriter( CommsBase *comms )
     return( false );
 }
 
+/**
+* @brief 
+*/
 void Select::clearWriters()
 {
     mWriters.clear();
     mMaxFd = -1;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int Select::wait()
 {
     struct timeval tempTimeout = mTimeout;
@@ -679,11 +994,21 @@ int Select::wait()
     return( nFound );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 const Select::CommsList &Select::getReadable() const
 {
     return( mReadable );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 const Select::CommsList &Select::getWriteable() const
 {
     return( mWriteable );

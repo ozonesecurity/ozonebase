@@ -4,23 +4,44 @@
 #include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param provider
+*/
 DirectVideoFilter::DirectVideoFilter( AudioVideoProvider &provider ) :
     VideoConsumer( cClass(), provider, FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) ),
     VideoProvider( cClass(), provider.name() )
 {
 }
 
+/**
+* @brief 
+*/
 DirectVideoFilter::~DirectVideoFilter()
 {
 }
 
 // Don't locally queue just send the frames on
+/**
+* @brief 
+*
+* @param framePtr
+* @param provider
+*
+* @return 
+*/
 bool DirectVideoFilter::queueFrame( FramePtr framePtr, FeedProvider *provider )
 {
     distributeFrame( framePtr );
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param provider
+*/
 QueuedVideoFilter::QueuedVideoFilter( AudioVideoProvider &provider ) :
     VideoConsumer( cClass(), provider, FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) ),
     VideoProvider( cClass(), provider.name() ),
@@ -28,10 +49,18 @@ QueuedVideoFilter::QueuedVideoFilter( AudioVideoProvider &provider ) :
 {
 }
 
+/**
+* @brief 
+*/
 QueuedVideoFilter::~QueuedVideoFilter()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int QueuedVideoFilter::run()
 {
     if ( waitForProviders() )

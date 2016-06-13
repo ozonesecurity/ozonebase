@@ -6,11 +6,33 @@
 #include "../libgen/libgenTime.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param bitRate
+* @param quality
+*
+* @return 
+*/
 std::string H264Relay::getPoolKey( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality )
 {
     return( stringtf( "%s-h264-%dx%d@%d/%d-%d(%d)", name.c_str(), width, height, frameRate.num, frameRate.den, bitRate, quality ) );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param width
+* @param height
+* @param frameRate
+* @param bitRate
+* @param quality
+*/
 H264Relay::H264Relay( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality ) :
     Encoder( cClass(), getPoolKey( name, width, height, frameRate, bitRate, quality ) ),
     Thread( identity() ),
@@ -25,10 +47,20 @@ H264Relay::H264Relay( const std::string &name, uint16_t width, uint16_t height, 
 {
 }
 
+/**
+* @brief 
+*/
 H264Relay::~H264Relay()
 {
 }
 
+/**
+* @brief 
+*
+* @param trackId
+*
+* @return 
+*/
 const std::string &H264Relay::sdpString( int trackId ) const
 {
     if ( true || mSdpString.empty() )
@@ -49,11 +81,24 @@ const std::string &H264Relay::sdpString( int trackId ) const
     return( mSdpString );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int H264Relay::gopSize() const
 {
     return( mCodecContext->gop_size );
 }
 
+/**
+* @brief 
+*
+* @param consumer
+* @param link
+*
+* @return 
+*/
 bool H264Relay::registerConsumer( FeedConsumer &consumer, const FeedLink &link )
 {
     if ( Encoder::registerConsumer( consumer, link ) )
@@ -69,11 +114,24 @@ bool H264Relay::registerConsumer( FeedConsumer &consumer, const FeedLink &link )
     return( false );
 }
 
+/**
+* @brief 
+*
+* @param consumer
+* @param reciprocate
+*
+* @return 
+*/
 bool H264Relay::deregisterConsumer( FeedConsumer &consumer, bool reciprocate )
 {
     return( Encoder::deregisterConsumer( consumer, reciprocate ) );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int H264Relay::run()
 {
     // Make sure ffmpeg is compiled with libx264 support

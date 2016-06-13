@@ -5,11 +5,25 @@
 #include "zmHttpSession.h"
 #include "zmHttpConnection.h"
 
+/**
+* @brief 
+*
+* @param socket
+*
+* @return 
+*/
 Connection *HttpController::newConnection( TcpInetSocket *socket )
 {
     return( new HttpConnection( this, socket ) );
 }
      
+/**
+* @brief 
+*
+* @param session
+*
+* @return 
+*/
 HttpSession *HttpController::getSession( uint32_t session )
 {
     HttpSessions::iterator iter = mHttpSessions.find( session );
@@ -22,6 +36,13 @@ HttpSession *HttpController::getSession( uint32_t session )
 }
 
 // Create a new HTTP session
+/**
+* @brief 
+*
+* @param session
+*
+* @return 
+*/
 HttpSession *HttpController::newSession( uint32_t session )
 {
     HttpSession *httpSession = new HttpSession( session );
@@ -30,6 +51,11 @@ HttpSession *HttpController::newSession( uint32_t session )
     return( httpSession );
 }
 
+/**
+* @brief 
+*
+* @param session
+*/
 void HttpController::deleteSession( uint32_t session )
 {
     HttpSessions::iterator iter = mHttpSessions.find( session );

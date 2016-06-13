@@ -6,6 +6,13 @@
 #include "../base/zmMotionFrame.h"
 #include "../libgen/libgenTime.h"
 
+/**
+* @brief 
+*
+* @param outputFormat
+*
+* @return 
+*/
 AVFormatContext *Mp4FileOutput::openFile( AVOutputFormat *outputFormat )
 {
     /* allocate the output media context */
@@ -71,6 +78,11 @@ AVFormatContext *Mp4FileOutput::openFile( AVOutputFormat *outputFormat )
     return( outputContext );
 }
 
+/**
+* @brief 
+*
+* @param outputContext
+*/
 void Mp4FileOutput::closeFile( AVFormatContext *outputContext )
 {
     /* write the trailer, if any.  the trailer must be written
@@ -95,6 +107,11 @@ void Mp4FileOutput::closeFile( AVFormatContext *outputContext )
     av_free( outputContext );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int Mp4FileOutput::run()
 {
     //const int MAX_EVENT_HEAD_AGE = 2;    ///< Number of seconds of video before event to save

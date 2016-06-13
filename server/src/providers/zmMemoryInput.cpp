@@ -3,6 +3,13 @@
 
 #include "../base/zmFeedFrame.h"
 
+/**
+* @brief 
+*
+* @param id
+* @param location
+* @param memoryKey
+*/
 MemoryInput::MemoryInput( const std::string &id, const std::string &location, int memoryKey ) :
     VideoProvider( cClass(), id ),
     MemoryIO( location, memoryKey, false ),
@@ -10,10 +17,18 @@ MemoryInput::MemoryInput( const std::string &id, const std::string &location, in
 {
 }
 
+/**
+* @brief 
+*/
 MemoryInput::~MemoryInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MemoryInput::run()
 {
     SharedData sharedData;
@@ -55,6 +70,11 @@ int MemoryInput::run()
     return( !ended() );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 const FeedFrame *MemoryInput::loadFrame()
 {
     int index = mSharedData->lastWriteIndex;

@@ -3,6 +3,14 @@
 
 #include "../base/zmFeedFrame.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param pixelFormat
+* @param width
+* @param height
+*/
 ImageConvert::ImageConvert( const std::string &name, PixelFormat pixelFormat, int width, int height ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -13,6 +21,15 @@ ImageConvert::ImageConvert( const std::string &name, PixelFormat pixelFormat, in
 {
 }
 
+/**
+* @brief 
+*
+* @param pixelFormat
+* @param width
+* @param height
+* @param provider
+* @param link
+*/
 ImageConvert::ImageConvert( PixelFormat pixelFormat, int width, int height, VideoProvider &provider, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
@@ -24,10 +41,18 @@ ImageConvert::ImageConvert( PixelFormat pixelFormat, int width, int height, Vide
 {
 }
 
+/**
+* @brief 
+*/
 ImageConvert::~ImageConvert()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int ImageConvert::run()
 {
     uint16_t inputWidth = videoProvider()->width();

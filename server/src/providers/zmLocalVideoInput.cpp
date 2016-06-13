@@ -4,6 +4,12 @@
 #include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
+/**
+* @brief 
+*
+* @param id
+* @param source
+*/
 LocalVideoInput::LocalVideoInput( const std::string &id, const std::string &source ) :
     VideoProvider( cClass(), id ),
     Thread( identity() ),
@@ -13,10 +19,18 @@ LocalVideoInput::LocalVideoInput( const std::string &id, const std::string &sour
 {
 }
 
+/**
+* @brief 
+*/
 LocalVideoInput::~LocalVideoInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int LocalVideoInput::run()
 {
     AVInputFormat *inputFormat = av_find_input_format( "video4linux2" );

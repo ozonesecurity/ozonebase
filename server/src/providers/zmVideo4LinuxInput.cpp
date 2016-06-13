@@ -11,6 +11,13 @@
 #include <sys/mman.h>
 #include <errno.h>
 
+/**
+* @brief 
+*
+* @param palette
+*
+* @return 
+*/
 PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
 {
     PixelFormat pixFormat = PIX_FMT_NONE;
@@ -147,6 +154,17 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
     return( pixFormat );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param device
+* @param standard
+* @param palette
+* @param width
+* @param height
+* @param channelMask
+*/
 Video4LinuxInput::Video4LinuxInput( const std::string &name, const std::string &device, int standard, int palette, int width, int height, uint32_t channelMask ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -167,10 +185,18 @@ Video4LinuxInput::Video4LinuxInput( const std::string &name, const std::string &
     mCurrentChannel = mChannels[0];
 }
 
+/**
+* @brief 
+*/
 Video4LinuxInput::~Video4LinuxInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int Video4LinuxInput::run()
 {
     struct stat st; 

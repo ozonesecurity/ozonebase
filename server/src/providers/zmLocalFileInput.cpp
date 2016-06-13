@@ -22,6 +22,13 @@
 #include <arpa/inet.h>
 #include <glob.h>
 
+/**
+* @brief 
+*
+* @param name
+* @param pattern
+* @param frameRate
+*/
 LocalFileInput::LocalFileInput( const std::string &name, const std::string &pattern, const FrameRate &frameRate ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -33,10 +40,18 @@ LocalFileInput::LocalFileInput( const std::string &name, const std::string &patt
 {
 }
 
+/**
+* @brief 
+*/
 LocalFileInput::~LocalFileInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int LocalFileInput::run()
 {
     glob_t pglob;

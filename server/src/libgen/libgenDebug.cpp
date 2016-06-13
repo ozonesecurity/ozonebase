@@ -32,6 +32,11 @@ const char *dbgName()
     return( _dbgName );
 }
 
+/**
+* @brief 
+*
+* @param sig
+*/
 void usrHandler( int sig )
 {
     if( sig == SIGUSR1)
@@ -51,6 +56,11 @@ void usrHandler( int sig )
     Info( "Debug Level Changed to %d", dbgLevel );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int getDebugEnv()
 {
     char envName[128];
@@ -141,6 +151,11 @@ int getDebugEnv()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int debugPrepareLog()
 {
     FILE *tempLogFP = NULL;
@@ -178,6 +193,15 @@ int debugPrepareLog()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param id
+* @param level
+*
+* @return 
+*/
 int debugInitialise( const char *name, const char *id, int level )
 {
     int status;
@@ -229,11 +253,27 @@ int debugInitialise( const char *name, const char *id, int level )
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param name
+* @param id
+* @param level
+*
+* @return 
+*/
 int dbgInit( const char *name, const char *id, int level )
 {
     return( debugInitialise( name, id, level ) );
 }
 
+/**
+* @brief 
+*
+* @param target
+*
+* @return 
+*/
 int debugReinitialise( const char *target )
 {
     int status;
@@ -280,11 +320,23 @@ int debugReinitialise( const char *target )
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param target
+*
+* @return 
+*/
 int dbgReinit( const char *target )
 {
     return( debugReinitialise( target ) );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int debugTerminate()
 {
     Debug( 1, "Terminating Debug" );
@@ -301,11 +353,22 @@ int debugTerminate()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int dbgTerm()
 {
     return( debugTerminate() );
 }
 
+/**
+* @brief 
+*
+* @param tp1
+* @param tp2
+*/
 void dbgSubtractTime( struct timeval * const tp1, struct timeval * const tp2 )
 {
     tp1->tv_sec -= tp2->tv_sec;
@@ -320,6 +383,16 @@ void dbgSubtractTime( struct timeval * const tp1, struct timeval * const tp2 )
     }
 }
 
+/**
+* @brief 
+*
+* @param hex
+* @param file
+* @param line
+* @param level
+* @param fstring
+* @param ...
+*/
 void dbgOutput( int hex, const char * const file, const int line, const int level, const char *fstring, ... )
 {
     char            classString[4];

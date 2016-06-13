@@ -4,6 +4,11 @@
 #include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+*/
 ImageTimestamper::ImageTimestamper( const std::string &name ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -12,6 +17,12 @@ ImageTimestamper::ImageTimestamper( const std::string &name ) :
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param link
+*/
 ImageTimestamper::ImageTimestamper( VideoProvider &provider, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
@@ -21,10 +32,18 @@ ImageTimestamper::ImageTimestamper( VideoProvider &provider, const FeedLink &lin
 {
 }
 
+/**
+* @brief 
+*/
 ImageTimestamper::~ImageTimestamper()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int ImageTimestamper::run()
 {
     if ( waitForProviders() )
@@ -75,6 +94,14 @@ int ImageTimestamper::run()
     return( !ended() );
 }
 
+/**
+* @brief 
+*
+* @param image
+* @param timestamp
+*
+* @return 
+*/
 bool ImageTimestamper::timestampImage( Image *image, uint64_t timestamp )
 {
     if ( mTimestampFormat[0] )

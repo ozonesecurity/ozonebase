@@ -4,6 +4,13 @@
 #include "../base/zmFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param source
+* @param format
+*/
 RemoteVideoInput::RemoteVideoInput( const std::string &name, const std::string &source, const std::string &format ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -14,10 +21,18 @@ RemoteVideoInput::RemoteVideoInput( const std::string &name, const std::string &
 {
 }
 
+/**
+* @brief 
+*/
 RemoteVideoInput::~RemoteVideoInput()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int RemoteVideoInput::run()
 {
     if ( dbgLevel > DBG_INF )

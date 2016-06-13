@@ -3,6 +3,17 @@
 
 #include "../base/zmFeedFrame.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param pixelFormat
+* @param width
+* @param height
+* @param frameRate
+* @param xTiles
+* @param yTiles
+*/
 QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
     VideoConsumer( cClass(), name, xTiles*yTiles ),
     VideoProvider( cClass(), name ),
@@ -24,12 +35,23 @@ QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int widt
     memset( mConvertContexts, 0, sizeof(*mConvertContexts)*mTiles );
 }
 
+/**
+* @brief 
+*/
 QuadVideo::~QuadVideo()
 {
     delete[] mConvertContexts;
     delete[] mInterFrames;
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param link
+*
+* @return 
+*/
 bool QuadVideo::registerProvider( FeedProvider &provider, const FeedLink &link )
 {
     for ( int i = 0; i < mProviderList.size(); i++ )
@@ -46,6 +68,14 @@ bool QuadVideo::registerProvider( FeedProvider &provider, const FeedLink &link )
     return( false );
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param reciprocate
+*
+* @return 
+*/
 bool QuadVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
 {
     for ( int i = 0; i < mProviderList.size(); i++ )
@@ -65,6 +95,11 @@ bool QuadVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
     return( VideoConsumer::deregisterProvider( provider, reciprocate ) );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int QuadVideo::run()
 {
     // Make sure ffmpeg is compiled with mpjpeg support

@@ -4,6 +4,11 @@
 #include "../base/zmFeedFrame.h"
 #include "../base/zmFeedProvider.h"
 
+/**
+* @brief 
+*
+* @return 
+*/
 int LocalFileOutput::run()
 {
     if ( waitForProviders() )
@@ -29,6 +34,13 @@ int LocalFileOutput::run()
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param frame
+*
+* @return 
+*/
 bool LocalFileOutput::writeFrame( const FeedFrame *frame )
 {
     std::string path = stringtf( "%s/img-%s-%ju.jpg", mLocation.c_str(), mName.c_str(), frame->id() );

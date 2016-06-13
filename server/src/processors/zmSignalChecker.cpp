@@ -4,6 +4,11 @@
 #include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+*/
 SignalChecker::SignalChecker( const std::string &name ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -11,11 +16,19 @@ SignalChecker::SignalChecker( const std::string &name ) :
 {
 }
 
+/**
+* @brief 
+*/
 SignalChecker::~SignalChecker()
 {
     mSignal = false;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int SignalChecker::run()
 {
     if ( waitForProviders() )
@@ -73,6 +86,13 @@ int SignalChecker::run()
     return( !ended() );
 }
 
+/**
+* @brief 
+*
+* @param image
+*
+* @return 
+*/
 bool SignalChecker::checkSignal( const Image &image )
 {
     uint32_t signalCheckColour = 0x010203;
@@ -119,6 +139,14 @@ bool SignalChecker::checkSignal( const Image &image )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
 bool SignalChecker::signalValid( FramePtr frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
@@ -129,6 +157,14 @@ bool SignalChecker::signalValid( FramePtr frame, const FeedConsumer * )
     return( signalChecker->hasSignal() );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
 bool SignalChecker::signalInvalid( FramePtr frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());

@@ -4,6 +4,15 @@
 #include "zmRtpSession.h"
 #include "../libgen/libgenComms.h"
 
+/**
+* @brief 
+*
+* @param rtspStream
+* @param rtpSession
+* @param payloadType
+* @param frameRate
+* @param clockRate
+*/
 RtpDataManager::RtpDataManager( RtspStream &rtspStream, RtpSession &rtpSession, uint8_t payloadType, const AVRational &frameRate, const AVRational &clockRate ) :
     mRtspStream( rtspStream ),
     mRtpSession( rtpSession ),
@@ -15,6 +24,9 @@ RtpDataManager::RtpDataManager( RtspStream &rtspStream, RtpSession &rtpSession, 
 {
 }
 
+/**
+* @brief 
+*/
 RtpDataManager::~RtpDataManager()
 {
     mQueueMutex.lock();
@@ -25,6 +37,14 @@ RtpDataManager::~RtpDataManager()
 }
 
 // Assemble an RTP packet
+/**
+* @brief 
+*
+* @param data
+* @param size
+* @param timecode
+* @param last
+*/
 void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t timecode, bool last )
 {
     if ( !mTimestampBase )

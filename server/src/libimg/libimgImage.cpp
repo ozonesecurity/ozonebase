@@ -17,6 +17,9 @@
 
 #define ABSDIFF(a,b)    (((a)<(b))?((b)-(a)):((a)-(b)))
 
+/**
+* @brief 
+*/
 Mask::~Mask()
 {
     delete mMaskImage;
@@ -25,6 +28,11 @@ Mask::~Mask()
     mRanges = 0;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 const Image *Mask::image() const
 {
     if ( !mMaskImage )
@@ -32,6 +40,11 @@ const Image *Mask::image() const
     return( mMaskImage );
 }
 
+/**
+* @brief 
+*
+* @param box
+*/
 BoxMask::BoxMask( const Box &box ) : mBox( box )
 {
     mRanges = new Range[mBox.height()];
@@ -43,6 +56,11 @@ BoxMask::BoxMask( const Box &box ) : mBox( box )
     }
 }
 
+/**
+* @brief 
+*
+* @param mask
+*/
 BoxMask::BoxMask( const BoxMask &mask ) : Mask( mask ), mBox( mask.mBox )
 {
     mRanges = new Range[mBox.height()];
@@ -51,6 +69,9 @@ BoxMask::BoxMask( const BoxMask &mask ) : Mask( mask ), mBox( mask.mBox )
         mMaskImage = new Image( *mask.mMaskImage );
 }
 
+/**
+* @brief 
+*/
 void BoxMask::createMaskImage()
 {
     mMaskImage = new Image( Image::FMT_GREY, mBox.hiX()+1, mBox.hiY()+1 );
@@ -60,23 +81,45 @@ void BoxMask::createMaskImage()
         mMaskImage->crop( mBox.loX(), mBox.loY(), mBox.hiX(), mBox.hiY() );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 unsigned long BoxMask::pixels() const
 {
     return( mBox.area() );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void BoxMask::shrink( unsigned char factor )
 {
     Box newBox( mBox.loX()/factor, mBox.loY()/factor, mBox.hiX()/factor, mBox.hiY()/factor );
     *this = BoxMask( newBox );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void BoxMask::swell( unsigned char factor )
 {
     Box newBox( mBox.loX()*factor, mBox.loY()*factor, mBox.hiX()*factor, mBox.hiY()*factor );
     *this = BoxMask( newBox );
 }
 
+/**
+* @brief 
+*
+* @param mask
+*
+* @return 
+*/
 BoxMask &BoxMask::operator=( const BoxMask &mask )
 {
     mBox = mask.mBox;
@@ -86,6 +129,11 @@ BoxMask &BoxMask::operator=( const BoxMask &mask )
     return( *this );
 }
 
+/**
+* @brief 
+*
+* @param poly
+*/
 PolyMask::PolyMask( const Polygon &poly ) : mPoly( poly )
 {
     mRanges = new Range[mPoly.height()];
@@ -117,6 +165,11 @@ PolyMask::PolyMask( const Polygon &poly ) : mPoly( poly )
     }
 }
 
+/**
+* @brief 
+*
+* @param mask
+*/
 PolyMask::PolyMask( const PolyMask &mask ) : Mask( mask ), mPoly( mask.mPoly )
 {
     mRanges = new Range[mPoly.height()];
@@ -125,6 +178,9 @@ PolyMask::PolyMask( const PolyMask &mask ) : Mask( mask ), mPoly( mask.mPoly )
         mMaskImage = new Image( *mask.mMaskImage );
 }
 
+/**
+* @brief 
+*/
 void PolyMask::createMaskImage()
 {
     mMaskImage = new Image( Image::FMT_GREY, mPoly.hiX()+1, mPoly.hiY()+1 );
@@ -134,11 +190,21 @@ void PolyMask::createMaskImage()
         mMaskImage->crop( mPoly.loX(), mPoly.loY(), mPoly.hiX(), mPoly.hiY() );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 unsigned long PolyMask::pixels() const
 {
     return( mPoly.area() );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void PolyMask::shrink( unsigned char factor )
 {
     Coord *newCoords = new Coord[mPoly.numCoords()];
@@ -148,6 +214,11 @@ void PolyMask::shrink( unsigned char factor )
     *this = PolyMask( newPoly );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void PolyMask::swell( unsigned char factor )
 {
     Coord *newCoords = new Coord[mPoly.numCoords()];
@@ -157,6 +228,13 @@ void PolyMask::swell( unsigned char factor )
     *this = PolyMask( newPoly );
 }
 
+/**
+* @brief 
+*
+* @param mask
+*
+* @return 
+*/
 PolyMask &PolyMask::operator=( const PolyMask &mask )
 {
     mPoly = mask.mPoly;
@@ -166,6 +244,11 @@ PolyMask &PolyMask::operator=( const PolyMask &mask )
     return( *this );
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 ImageMask::ImageMask( const Image &image ) : mArea( 0 )
 {
     mMaskImage = new Image( Image::FMT_GREY, image );
@@ -208,6 +291,11 @@ ImageMask::ImageMask( const Image &image ) : mArea( 0 )
         mMaskImage->crop( mBox.loX(), mBox.loY(), mBox.hiX(), mBox.hiY() );
 }
 
+/**
+* @brief 
+*
+* @param mask
+*/
 ImageMask::ImageMask( const ImageMask &mask ) : Mask( mask ), mBox( mask.mBox ), mArea( mask.mArea )
 {
     mMaskImage = new Image( *mask.mMaskImage );
@@ -217,11 +305,21 @@ ImageMask::ImageMask( const ImageMask &mask ) : Mask( mask ), mBox( mask.mBox ),
     mArea = mask.mArea;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 unsigned long ImageMask::pixels() const
 {
     return( mArea );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void ImageMask::shrink( unsigned char factor )
 {
     Image *newImage = new Image( Image::FMT_GREY, mMaskImage->width()/factor, mMaskImage->height()/factor );
@@ -272,6 +370,11 @@ void ImageMask::shrink( unsigned char factor )
     mBox = Box( mBox.loX()/factor, mBox.loY()/factor, mBox.hiX()/factor, mBox.hiY()/factor );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void ImageMask::swell( unsigned char factor )
 {
     Image *newImage = new Image( Image::FMT_GREY, mMaskImage->width()*factor, mMaskImage->height()*factor );
@@ -306,6 +409,13 @@ void ImageMask::swell( unsigned char factor )
     mArea *= factor;
 }
 
+/**
+* @brief 
+*
+* @param mask
+*
+* @return 
+*/
 ImageMask &ImageMask::operator=( const ImageMask &mask )
 {
     mMaskImage = new Image( *mask.mMaskImage );
@@ -351,6 +461,9 @@ local_error_mgr Image::smJpegDeError;
 Mutex Image::smJpegCoMutex;
 Mutex Image::smJpegDeMutex;
 
+/**
+* @brief 
+*/
 void Image::initialise()
 {
     static Mutex initMutex;
@@ -518,6 +631,17 @@ void Image::initialise()
 }
 
 // Copies and expands/compresses YUV planar data
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+* @param densityX
+* @param densityY
+* @param expand
+*/
 void Image::copyYUVP2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height, int densityX, int densityY, bool expand )
 {
     if ( expand )
@@ -577,6 +701,14 @@ void Image::copyYUVP2YUVP( unsigned char *pDst, const unsigned char *pSrc, int w
     }
 }
 
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+*/
 void Image::copyYUYV2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height )
 {
     size_t size = width*height*2;
@@ -597,6 +729,14 @@ void Image::copyYUYV2RGB( unsigned char *pDst, const unsigned char *pSrc, int wi
     }
 }
 
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+*/
 void Image::copyUYVY2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height )
 {
     size_t size = width*height*2;
@@ -617,6 +757,14 @@ void Image::copyUYVY2RGB( unsigned char *pDst, const unsigned char *pSrc, int wi
     }
 }
 
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+*/
 void Image::copyUYVY2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height )
 {
     //Hexdump( 0, pSrc, 16 );
@@ -635,6 +783,14 @@ void Image::copyUYVY2YUVP( unsigned char *pDst, const unsigned char *pSrc, int w
     }
 }
 
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+*/
 void Image::copyYUYV2YUVP( unsigned char *pDst, const unsigned char *pSrc, int width, int height )
 {
     size_t size = width*height*2;
@@ -654,6 +810,17 @@ void Image::copyYUYV2YUVP( unsigned char *pDst, const unsigned char *pSrc, int w
 
 // Broken, do not use
 // In this case the P means packed and not planar
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+* @param rBits
+* @param gBits
+* @param bBits
+*/
 void Image::copyRGBP2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height, int rBits, int gBits, int bBits )
 {
     int packSize = (((rBits+gBits+bBits)-1)/8)+1;
@@ -698,6 +865,14 @@ void Image::copyRGBP2RGB( unsigned char *pDst, const unsigned char *pSrc, int wi
     }
 }
 
+/**
+* @brief 
+*
+* @param pDst
+* @param pSrc
+* @param width
+* @param height
+*/
 void Image::copyBGR2RGB( unsigned char *pDst, const unsigned char *pSrc, int width, int height )
 {
     int size = width*height*3;
@@ -710,6 +885,13 @@ void Image::copyBGR2RGB( unsigned char *pDst, const unsigned char *pSrc, int wid
     }
 }
 
+/**
+* @brief 
+*
+* @param palette
+*
+* @return 
+*/
 Image::Format Image::getFormatFromPalette( int palette )
 {
     Format format = FMT_UNDEF;
@@ -742,6 +924,13 @@ Image::Format Image::getFormatFromPalette( int palette )
 }
 
 #if HAVE_LIBSWSCALE
+/**
+* @brief 
+*
+* @param format
+*
+* @return 
+*/
 PixelFormat Image::getFfPixFormat( Format format )
 {
     PixelFormat pixFormat = PIX_FMT_NONE;
@@ -775,6 +964,13 @@ PixelFormat Image::getFfPixFormat( Format format )
     return( pixFormat );
 }
 
+/**
+* @brief 
+*
+* @param pixelFormat
+*
+* @return 
+*/
 Image::Format Image::getFormatFromPixelFormat( PixelFormat pixelFormat )
 {
     Format format = FMT_UNDEF;
@@ -835,6 +1031,13 @@ Image::Format Image::getFormatFromPixelFormat( PixelFormat pixelFormat )
 
 #endif // HAVE_LIBSWSCALE
 
+/**
+* @brief 
+*
+* @param transparency
+*
+* @return 
+*/
 Image::BlendTablePtr Image::getBlendTable( int transparency )
 {
     static Mutex blendMutex;
@@ -884,6 +1087,13 @@ unsigned char Image::red( int p ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param p
+*
+* @return 
+*/
 unsigned char Image::green( int p ) const
 {
     switch( mFormat )
@@ -909,6 +1119,13 @@ unsigned char Image::green( int p ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param p
+*
+* @return 
+*/
 unsigned char Image::blue( int p ) const
 {
     switch( mFormat )
@@ -934,24 +1151,55 @@ unsigned char Image::blue( int p ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::red( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::red( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::green( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::green( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::blue( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::blue( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param p
+*
+* @return 
+*/
 unsigned char Image::y( int p ) const
 {
     switch( mFormat )
@@ -977,6 +1225,13 @@ unsigned char Image::y( int p ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param p
+*
+* @return 
+*/
 unsigned char Image::u( int p ) const
 {
     switch( mFormat )
@@ -1002,6 +1257,13 @@ unsigned char Image::u( int p ) const
     return( 128 );
 }
 
+/**
+* @brief 
+*
+* @param p
+*
+* @return 
+*/
 unsigned char Image::v( int p ) const
 {
     switch( mFormat )
@@ -1027,24 +1289,54 @@ unsigned char Image::v( int p ) const
     return( 128 );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::y( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::y( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::u( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::u( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param x
+* @param y
+*
+* @return 
+*/
 unsigned char Image::v( int x, int y ) const
 {
     int offset = (x+(y*mWidth))*mPixelStep;
     return( Image::v( offset ) );
 }
 
+/**
+* @brief 
+*
+* @param lines
+* @param cols
+*/
 void Image::dump( int lines, int cols ) const
 {
     Info( "DUMP-F%d, %dx%d", mFormat, mWidth, mHeight );
@@ -1089,6 +1381,9 @@ void Image::dump( int lines, int cols ) const
     }
 }
 
+/**
+* @brief 
+*/
 void Image::clear()
 {
     mColourSpace = CS_UNDEF;
@@ -1109,6 +1404,11 @@ void Image::clear()
     mMask = 0;
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 void Image::copy( const Image &image )
 {
     mColourSpace = image.mColourSpace;
@@ -1129,6 +1429,11 @@ void Image::copy( const Image &image )
     mMask = image.mMask;
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 void Image::convert( const Image &image )
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -1848,6 +2153,9 @@ void Image::convert( const Image &image )
     Panic( "Unsupported conversion to format %d from format %d", mFormat, image.mFormat );
 }
 
+/**
+* @brief 
+*/
 Image::Image()
 {
     if ( !smInitialised )
@@ -1855,6 +2163,11 @@ Image::Image()
     clear();
 }
 
+/**
+* @brief 
+*
+* @param filename
+*/
 Image::Image( const char *filename )
 {
     if ( !smInitialised )
@@ -1863,6 +2176,15 @@ Image::Image( const char *filename )
     readJpeg( filename );
 }
 
+/**
+* @brief 
+*
+* @param format
+* @param width
+* @param height
+* @param data
+* @param adoptData
+*/
 Image::Image( Format format, int width, int height, unsigned char *data, bool adoptData )
 {
     if ( !smInitialised )
@@ -1871,6 +2193,14 @@ Image::Image( Format format, int width, int height, unsigned char *data, bool ad
     assign( format, width, height, data, adoptData );
 }
 
+/**
+* @brief 
+*
+* @param v4lPalette
+* @param width
+* @param height
+* @param data
+*/
 Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 {
     if ( !smInitialised )
@@ -1984,6 +2314,14 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
     assign( format, width, height, imageData );
 }
 
+/**
+* @brief 
+*
+* @param pixFormat
+* @param width
+* @param height
+* @param data
+*/
 Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data )
 {
     if ( !smInitialised )
@@ -2162,6 +2500,11 @@ Image::Image( PixelFormat pixFormat, int width, int height, unsigned char *data 
     assign( format, width, height, imageData );
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 Image::Image( const Image &image )
 {
     if ( !smInitialised )
@@ -2169,6 +2512,12 @@ Image::Image( const Image &image )
     copy( image );
 }
 
+/**
+* @brief 
+*
+* @param format
+* @param image
+*/
 Image::Image( Format format, const Image &image )
 {
     if ( !smInitialised )
@@ -2182,6 +2531,15 @@ Image::~Image()
 {
 }
 
+/**
+* @brief 
+*
+* @param format
+* @param width
+* @param height
+* @param data
+* @param adoptData
+*/
 void Image::assign( Format format, int width, int height, unsigned char *data, bool adoptData )
 {
     if ( mBuffer.empty() || format != mFormat || width != mWidth || height != mHeight )
@@ -2289,11 +2647,24 @@ void Image::assign( Format format, int width, int height, unsigned char *data, b
         mBuffer.size( mSize );
 }
 
+/**
+* @brief 
+*
+* @param image
+*/
 void Image::assign( const Image &image )
 {
     assign( image.mFormat, image.mWidth, image.mHeight, image.mBuffer.size()?image.mBuffer.data():0 );
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param mask
+*
+* @return 
+*/
 Image *Image::highlightEdges( Rgb colour, const Mask *mask ) const
 {
     if ( mChannels != 1 )
@@ -2340,6 +2711,13 @@ Image *Image::highlightEdges( Rgb colour, const Mask *mask ) const
 }
 
 // Assumes raw files is basically byte dump of buffer so no format checking
+/**
+* @brief 
+*
+* @param filename
+*
+* @return 
+*/
 bool Image::readRaw( const char *filename )
 {
     FILE *infile;
@@ -2375,6 +2753,13 @@ bool Image::readRaw( const char *filename )
 }
 
 // Assumes raw files is basically byte dump of buffer so no format checking
+/**
+* @brief 
+*
+* @param filename
+*
+* @return 
+*/
 bool Image::writeRaw( const char *filename ) const
 {
     FILE *outfile;
@@ -2395,6 +2780,11 @@ bool Image::writeRaw( const char *filename ) const
     return( true );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 jpeg_decompress_struct *Image::jpegDcInfo()
 {
     struct jpeg_decompress_struct *cinfo = smJpegDeCinfo;
@@ -2410,6 +2800,13 @@ jpeg_decompress_struct *Image::jpegDcInfo()
     return( cinfo );
 }
 
+/**
+* @brief 
+*
+* @param quality
+*
+* @return 
+*/
 jpeg_compress_struct *Image::jpegCcInfo( int quality )
 {
     struct jpeg_compress_struct *cinfo = smJpegCoCinfo[quality];
@@ -2425,6 +2822,13 @@ jpeg_compress_struct *Image::jpegCcInfo( int quality )
     return( cinfo );
 }
 
+/**
+* @brief 
+*
+* @param filename
+*
+* @return 
+*/
 bool Image::readJpeg( const std::string &filename )
 {
     ScopedMutex mutex( smJpegDeMutex );
@@ -2533,6 +2937,14 @@ bool Image::readJpeg( const std::string &filename )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param filename
+* @param qualityOverride
+*
+* @return 
+*/
 bool Image::writeJpeg( const std::string &filename, int qualityOverride ) const
 {
     if ( qualityOverride < 0 || qualityOverride > 100 )
@@ -2642,6 +3054,14 @@ bool Image::writeJpeg( const std::string &filename, int qualityOverride ) const
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param inbuffer
+* @param inbufferSize
+*
+* @return 
+*/
 bool Image::decodeJpeg( const JOCTET *inbuffer, int inbufferSize )
 {
     ScopedMutex mutex( smJpegDeMutex );
@@ -2740,6 +3160,15 @@ bool Image::decodeJpeg( const JOCTET *inbuffer, int inbufferSize )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param outbuffer
+* @param outbufferSize
+* @param qualityOverride
+*
+* @return 
+*/
 bool Image::encodeJpeg( JOCTET *outbuffer, int *outbufferSize, int qualityOverride ) const
 {
     if ( qualityOverride < 0 || qualityOverride > 100 )
@@ -2834,6 +3263,14 @@ bool Image::encodeJpeg( JOCTET *outbuffer, int *outbufferSize, int qualityOverri
 }
 
 #if HAVE_ZLIB_H
+/**
+* @brief 
+*
+* @param inbuffer
+* @param inbufferSize
+*
+* @return 
+*/
 bool Image::unzip( const Bytef *inbuffer, unsigned long inbufferSize )
 {
     unsigned long zipSize = mBuffer.size();
@@ -2851,6 +3288,15 @@ bool Image::unzip( const Bytef *inbuffer, unsigned long inbufferSize )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param outbuffer
+* @param outbufferSize
+* @param compression_level
+*
+* @return 
+*/
 bool Image::zip( Bytef *outbuffer, unsigned long *outbufferSize, int compression_level ) const
 {
     int result = compress2( outbuffer, outbufferSize, mBuffer.data(), mBuffer.size(), compression_level );
@@ -2863,6 +3309,16 @@ bool Image::zip( Bytef *outbuffer, unsigned long *outbufferSize, int compression
 }
 #endif // HAVE_ZLIB_H
 
+/**
+* @brief 
+*
+* @param loX
+* @param loY
+* @param hiX
+* @param hiY
+*
+* @return 
+*/
 bool Image::crop( int loX, int loY, int hiX, int hiY )
 {
     int newWidth = (hiX-loX)+1;
@@ -2905,12 +3361,24 @@ bool Image::crop( int loX, int loY, int hiX, int hiY )
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param limits
+*
+* @return 
+*/
 bool Image::crop( const Box &limits )
 {
     return( crop( limits.loX(), limits.loY(), limits.hiX(), limits.hiY() ) );
 }
 
 // Set all image to all non-zero pixels of passed image
+/**
+* @brief 
+*
+* @param image
+*/
 void Image::overlay( const Image &image )
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -3991,6 +4459,12 @@ void Image::blend( const Image &image, int transparency ) const
 }
 #endif
 
+/**
+* @brief 
+*
+* @param image
+* @param fraction
+*/
 void Image::blend( const Image &image, unsigned short fraction ) const
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -5146,6 +5620,11 @@ void Image::blend( const Image &image, unsigned short fraction ) const
     return;
 }
 
+/**
+* @brief 
+*
+* @param fraction
+*/
 void Image::decay( unsigned short fraction ) const
 {
     if ( mFormat == FMT_UNDEF )
@@ -5213,6 +5692,11 @@ void Image::decay( unsigned short fraction ) const
     return;
 }
 
+/**
+* @brief 
+*
+* @param fraction
+*/
 void Image::boost( unsigned short fraction ) const
 {
     if ( mFormat == FMT_UNDEF )
@@ -5297,6 +5781,9 @@ void Image::boost( unsigned short fraction ) const
     return;
 }
 
+/**
+* @brief 
+*/
 void Image::square() const
 {
     if ( mFormat == FMT_UNDEF )
@@ -5327,6 +5814,9 @@ void Image::square() const
     return;
 }
 
+/**
+* @brief 
+*/
 void Image::squareRoot() const
 {
     if ( mFormat == FMT_UNDEF )
@@ -5358,6 +5848,11 @@ void Image::squareRoot() const
     return;
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 unsigned long long Image::total() const
 {
     unsigned char *pData = mBuffer.data();
@@ -5436,6 +5931,13 @@ unsigned long long Image::total() const
     return( total );
 }
 
+/**
+* @brief 
+*
+* @param channel
+*
+* @return 
+*/
 unsigned long long Image::total( int channel ) const
 {
     if ( channel <= 0 || channel > mChannels )
@@ -5507,6 +6009,11 @@ unsigned long long Image::total( int channel ) const
     return( total );
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void Image::shrink( unsigned char factor )
 {
     if ( mFormat == FMT_UNDEF )
@@ -5655,6 +6162,11 @@ void Image::shrink( unsigned char factor )
     return;
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void Image::swell( unsigned char factor )
 {
     if ( mFormat == FMT_UNDEF )
@@ -5770,6 +6282,11 @@ void Image::swell( unsigned char factor )
     return;
 }
 
+/**
+* @brief 
+*
+* @param filterSize
+*/
 void Image::despeckleFilter( int filterSize )
 {
     if ( mFormat == FMT_UNDEF )
@@ -5886,6 +6403,16 @@ void Image::despeckleFilter( int filterSize )
     return;
 }
 
+/**
+* @brief 
+*
+* @param blobGroup
+* @param mask
+* @param weightBlobCentres
+* @param tidyBlobs
+*
+* @return 
+*/
 int Image::locateBlobs( BlobGroup &blobGroup, const Mask *mask, bool weightBlobCentres, bool tidyBlobs )
 {
     if ( mFormat == FMT_UNDEF )
@@ -6437,6 +6964,14 @@ void Image::medianFilter( const Coord &filterSize )
 }
 #endif
 
+/**
+* @brief 
+*
+* @param image
+* @param correct
+*
+* @return 
+*/
 Image *Image::delta( const Image &image, bool correct ) const
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -6693,6 +7228,14 @@ Image *Image::delta( const Image &image, bool correct ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param image
+* @param correct
+*
+* @return 
+*/
 Image *Image::delta2( const Image &image, bool correct ) const
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -7004,6 +7547,14 @@ Image *Image::delta2( const Image &image, bool correct ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param image
+* @param correct
+*
+* @return 
+*/
 Image *Image::yDelta( const Image &image, bool correct ) const
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -7736,6 +8287,14 @@ Image *Image::yDelta( const Image &image, bool correct ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param image
+* @param correct
+*
+* @return 
+*/
 Image *Image::yDelta2( const Image &image, bool correct ) const
 {
     if ( !(mWidth == image.mWidth && mHeight == image.mHeight) )
@@ -8480,6 +9039,13 @@ Image *Image::yDelta2( const Image &image, bool correct ) const
     return( 0 );
 }
 
+/**
+* @brief 
+*
+* @param text
+*
+* @return 
+*/
 const Coord Image::textCentreCoord( const char *text )
 {
     int index = 0;
@@ -8507,6 +9073,14 @@ const Coord Image::textCentreCoord( const char *text )
     return( Coord( x, y ) );
 }
 
+/**
+* @brief 
+*
+* @param text
+* @param coord
+* @param fgColour
+* @param bgColour
+*/
 void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, const Rgb bgColour )
 {
     mText = text;
@@ -8747,6 +9321,13 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
     }
 }
 
+/**
+* @brief 
+*
+* @param label
+* @param when
+* @param coord
+*/
 void Image::timestamp( const char *label, const time_t when, const Coord &coord )
 {
     char timeText[256];
@@ -8763,6 +9344,9 @@ void Image::timestamp( const char *label, const time_t when, const Coord &coord 
     }
 }
 
+/**
+* @brief 
+*/
 void Image::erase()
 {
     switch( mFormat )
@@ -8792,11 +9376,23 @@ void Image::erase()
     Panic( "Unsupported erase of format %d", mFormat );
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param density
+*/
 void Image::fill( Rgb colour, unsigned char density )
 {
     fill( colour, Box( 0, 0, mWidth-1, mHeight-1 ), density );
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param point
+*/
 void Image::fill( Rgb colour, const Coord &point )
 {
     int x = point.x();
@@ -8900,6 +9496,13 @@ void Image::fill( Rgb colour, const Coord &point )
     }
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param limits
+* @param density
+*/
 void Image::fill( Rgb colour, const Box &limits, unsigned char density )
 {
     int loX = limits.lo().x();
@@ -9070,6 +9673,13 @@ void Image::fill( Rgb colour, const Box &limits, unsigned char density )
     }
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param polygon
+* @param density
+*/
 void Image::fill( Rgb colour, const Polygon &polygon, unsigned char density )
 {
     unsigned char colR = RGB_RED_VAL(colour);
@@ -9231,6 +9841,12 @@ void Image::fill( Rgb colour, const Polygon &polygon, unsigned char density )
     } while ( numGlobalEdges || numActiveEdges );
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param box
+*/
 void Image::outline( Rgb colour, const Box &box )
 {
     unsigned char colR = RGB_RED_VAL(colour);
@@ -9309,6 +9925,12 @@ void Image::outline( Rgb colour, const Box &box )
     }
 }
 
+/**
+* @brief 
+*
+* @param colour
+* @param polygon
+*/
 void Image::outline( Rgb colour, const Polygon &polygon )
 {
     unsigned char colR = RGB_RED_VAL(colour);
@@ -9449,6 +10071,11 @@ void Image::outline( Rgb colour, const Polygon &polygon )
     }
 }
 
+/**
+* @brief 
+*
+* @param angle
+*/
 void Image::rotate( int angle )
 {
     angle %= 360;
@@ -9534,6 +10161,11 @@ void Image::rotate( int angle )
     }
 }
 
+/**
+* @brief 
+*
+* @param leftRight
+*/
 void Image::flip( bool leftRight )
 {
     ByteBuffer flipBuffer( mBuffer.size() );
@@ -9641,6 +10273,11 @@ void Image::flip( bool leftRight )
     mBuffer = flipBuffer;
 }
 
+/**
+* @brief 
+*
+* @param factor
+*/
 void Image::scale( unsigned int factor )
 {
     if ( !factor )

@@ -13,6 +13,18 @@
 #include "../base/zmFeedFrame.h"
 #include "../base/zmFfmpeg.h"
 
+/**
+* @brief 
+*
+* @param rtspSession
+* @param trackId
+* @param connection
+* @param encoder
+* @param transport
+* @param profile
+* @param lowerTransport
+* @param transportParms
+*/
 RtspStream::RtspStream( RtspSession *rtspSession, int trackId, RtspConnection *connection, Encoder *encoder, const std::string &transport, const std::string &profile, const std::string &lowerTransport, const StringTokenList::TokenList &transportParms ) :
     Stream( "RtspStream", stringtf( "%X-%d ", rtspSession->session(), trackId ), connection, encoder ),
     Thread( identity() ),
@@ -143,6 +155,9 @@ RtspStream::RtspStream( RtspSession *rtspSession, int trackId, RtspConnection *c
     registerProvider( *mEncoder );
 }
 
+/**
+* @brief 
+*/
 RtspStream::~RtspStream()
 {
     deregisterProvider( *mEncoder );
@@ -160,6 +175,11 @@ bool ready = false;
 
 // Write the encoded H.264 frameout to RTP. Not quite as simple as that as need to mess with the RTP
 // NAL (Network Access Layer) as well.
+/**
+* @brief 
+*
+* @param frame
+*/
 void RtspStream::packetiseFrame( FramePtr frame )
 {
     Debug( 1, "Got %zd byte frame to packetise", frame->buffer().size() );
@@ -244,6 +264,11 @@ void RtspStream::packetiseFrame( FramePtr frame )
     }
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int RtspStream::run()
 {
     Debug( 3, "Dest address = %s", mDestAddr.c_str() );

@@ -11,6 +11,11 @@
 //AVFrame *picture, *tmp_picture;
 //int frame_count, video_outbuf_size;
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MovieFileOutput::run()
 {
     if ( waitForProviders() )
@@ -268,7 +273,6 @@ int MovieFileOutput::run()
                                         avInterFrame->pts = avInputFrame->pts;
                                     }
                                 }
-
                                 int result = 0;
                                 if ( outputContext->oformat->flags & AVFMT_RAWPICTURE )
                                 {

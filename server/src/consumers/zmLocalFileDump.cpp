@@ -4,6 +4,12 @@
 #include "../base/zmFeedFrame.h"
 #include "../base/zmFeedProvider.h"
 
+/**
+* @brief 
+*
+* @param name
+* @param location
+*/
 LocalFileDump::LocalFileDump( const std::string &name, const std::string &location ) :
     FeedConsumer(),
     Thread( identity() ),
@@ -12,6 +18,11 @@ LocalFileDump::LocalFileDump( const std::string &name, const std::string &locati
     setIdentity( cClass(), name );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int LocalFileDump::run()
 {
     std::string filePath;

@@ -4,12 +4,23 @@
 #include "../base/zmFeedFrame.h"
 #include <sys/time.h>
 
+/**
+* @brief 
+*
+* @param name
+*/
 FilterSwapUV::FilterSwapUV( const std::string &name ) :
     VideoProvider( cClass(), name ),
     Thread( identity() )
 {
 }
 
+/**
+* @brief 
+*
+* @param provider
+* @param link
+*/
 FilterSwapUV::FilterSwapUV( VideoProvider &provider, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
@@ -17,10 +28,18 @@ FilterSwapUV::FilterSwapUV( VideoProvider &provider, const FeedLink &link ) :
 {
 }
 
+/**
+* @brief 
+*/
 FilterSwapUV::~FilterSwapUV()
 {
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int FilterSwapUV::run()
 {
     if ( waitForProviders() )

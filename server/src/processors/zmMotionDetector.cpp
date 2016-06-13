@@ -9,6 +9,9 @@
 bool writeImages = false;
 std::string writeLocation = "/tmp/debug";
 
+/**
+* @brief 
+*/
 void MotionDetector::construct()
 {
     mRefBlend = 128;
@@ -35,6 +38,11 @@ void MotionDetector::construct()
     mStartTime = time( 0 );
 }
 
+/**
+* @brief 
+*
+* @param name
+*/
 MotionDetector::MotionDetector( const std::string &name ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -52,6 +60,9 @@ MotionDetector::MotionDetector( const std::string &name ) :
     mVarImageSlave = new SlaveVideo( name+"-varImage" );
 }
 
+/**
+* @brief 
+*/
 MotionDetector::~MotionDetector()
 {
     for ( ZoneSet::iterator zoneIter = mZones.begin(); zoneIter!= mZones.end(); zoneIter++ )
@@ -62,12 +73,24 @@ MotionDetector::~MotionDetector()
     mAlarmed = false;
 }
 
+/**
+* @brief 
+*
+* @param zone
+*
+* @return 
+*/
 bool MotionDetector::addZone( Zone *zone )
 {
     std::pair<ZoneSet::iterator,bool> result = mZones.insert( zone );
     return( result.second );
 }
 
+/**
+* @brief 
+*
+* @return 
+*/
 int MotionDetector::run()
 {
     config.dir_events = "/transfer";
@@ -165,6 +188,15 @@ int MotionDetector::run()
     return( !ended() );
 }
 
+/**
+* @brief 
+*
+* @param compImage
+* @param motionData
+* @param motionImage
+*
+* @return 
+*/
 bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Image *motionImage )
 {
     double score = 0;
@@ -262,6 +294,14 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
     return( mAlarmed );
 }
 
+/**
+* @brief 
+*
+* @param compImage
+* @param motionZones
+*
+* @return 
+*/
 uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZones )
 {
     bool alarm = false;
@@ -458,6 +498,14 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
     return( score?score:alarm );
 } 
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
 bool MotionDetector::inAlarm( FramePtr frame, const FeedConsumer * )
 {
     const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());

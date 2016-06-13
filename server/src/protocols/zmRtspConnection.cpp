@@ -15,6 +15,12 @@
 
 #include <sys/uio.h>
 
+/**
+* @brief 
+*
+* @param controller
+* @param socket
+*/
 RtspConnection::RtspConnection( Controller *controller, TcpInetSocket *socket ) :
     BinaryConnection( controller, socket ),
     mRtspController( dynamic_cast<RtspController *>( controller ) ),
@@ -22,6 +28,17 @@ RtspConnection::RtspConnection( Controller *controller, TcpInetSocket *socket ) 
 {
 }
 
+/**
+* @brief 
+*
+* @param url
+* @param host
+* @param streamName
+* @param streamSource
+* @param track
+*
+* @return 
+*/
 FeedProvider *RtspConnection::validateRequestUrl( const std::string &url, std::string *host, std::string *streamName, std::string *streamSource, int *track )
 {
     char tempHost[64]="", tempStreamName[64]="", tempStreamSource[64]="";
@@ -60,6 +77,13 @@ FeedProvider *RtspConnection::validateRequestUrl( const std::string &url, std::s
 }
 
 // Handle interleaved RTP commands that are not related to established streams
+/**
+* @brief 
+*
+* @param buffer
+*
+* @return 
+*/
 bool RtspConnection::handleRequest( const ByteBuffer &buffer )
 {
     int channel= buffer[1];
@@ -70,6 +94,13 @@ bool RtspConnection::handleRequest( const ByteBuffer &buffer )
 }
 
 // Handle RTSP commands that are not related to established streams
+/**
+* @brief 
+*
+* @param request
+*
+* @return 
+*/
 bool RtspConnection::handleRequest( const std::string &request )
 {
     Debug( 2, "Handling RTSP request: %s (%zd bytes)", request.c_str(), request.size() );
@@ -251,6 +282,13 @@ bool RtspConnection::handleRequest( const std::string &request )
 }
 
 // Receive, assemble and handle RTSP commands that are not related to established streams
+/**
+* @brief 
+*
+* @param buffer
+*
+* @return 
+*/
 bool RtspConnection::recvRequest( ByteBuffer &buffer )
 {
     Debug( 2, "Received RTSP message, %zd bytes", buffer.size() );
@@ -323,6 +361,16 @@ bool RtspConnection::recvRequest( ByteBuffer &buffer )
 }
 
 // Transmit an RTSP response message over an established connection
+/**
+* @brief 
+*
+* @param headers
+* @param payload
+* @param statusCode
+* @param statusText
+*
+* @return 
+*/
 bool RtspConnection::sendResponse( Headers &headers, std::string payload, int statusCode, std::string statusText )
 {
     std::string response;
@@ -374,6 +422,14 @@ bool RtspConnection::sendResponse( Headers &headers, std::string payload, int st
     return( true );
 }
 
+/**
+* @brief 
+*
+* @param channel
+* @param packet
+*
+* @return 
+*/
 bool RtspConnection::sendInterleavedPacket( uint8_t channel, const ByteBuffer &packet )
 {
     unsigned char header[4] = "$";
