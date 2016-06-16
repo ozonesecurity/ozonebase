@@ -1,35 +1,79 @@
-<!-- REPLACE THE IP ADDRESS WITH YOUR SERVER IP -->
 <html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+
 <body>
-  <table>
-    <h1>Example of the amazing simplicity of ozone server framework<h1>
-    <h5>Source code:<a href="https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.cpp">here</a></h5>
-    <th>Live Feeds, 2 traffic cameras</th>
-     <tr>
-        <!-- live frames -->
-        <td>
-            <img src="http://192.168.1.224:9292/watchcam1/cam1" />
-        </td>
-        <td>
-            <img src="http://192.168.1.224:9292/watchcam2/cam2" />
-        </td>
-     </tr>
-     <!-- debug frames -->
-     <tr>
-        <td>
-          Modect on cam1:<br/>
-          <img src="http://192.168.1.224:9292/debug/modectcam1" />
-        </td>
-        <td>
-          Modect on cam2:<br/>
-          <img src="http://192.168.1.224:9292/debug/modectcam2" />
-        </td>
-    </tr>
-  </table>
- 
-<h2> Muxed 4x4 stream of camera 1 and 2 and its debug frames</h2>
- <img src="http://192.168.1.224:9292/debug/quadcammux" />
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="http://ozone.network">oZone.Network</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Demo</a></li>
+                <li><a href="https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/starter_example.html">Source Code</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>oZone Server Framework live example</h1>
+        </div>
 
 
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> Live RTSP feeds, auto-converted to MJPEG for browser display, along with live motion tracking
+        </div>
+        <div class="row">
+            <!-- live frames -->
+            <div class="col-sm-4">
+                <figure class="figure">
+                    <figcaption class="bg-success figure-caption text-xs-right">Camera 1: Live Feed</figcaption>
+                    <img class="figure-img img-fluid img-thumbnail" src="http://192.168.1.224:9292/watchcam1/cam1" />
+                </figure>
+            </div>
+            <div class="col-sm-4">
+                <figure class="figure">
+                    <figcaption class="bg-info figure-caption text-xs-right">Camera 2: Live Feed</figcaption>
+                    <img class="figure-img img-fluid img-thumbnail" src="http://192.168.1.224:9292/watchcam2/cam2" />
+                </figure>
+            </div>
+        </div>
+        <div class="row">
+
+            <!-- debug frames -->
+            <div class="col-sm-4">
+                <figure class="figure">
+                    <figcaption class="bg-success figure-caption text-xs-right">Motion detection on Cam1</figcaption>
+                    <img class="img-thumbnail" src="http://192.168.1.224:9292/debug/modectcam1" />
+                </figure>
+            </div>
+            <div class="col-sm-4">
+                <figure class="figure">
+                    <figcaption class="bg-info figure-caption text-xs-right">Motion detection on Cam2</figcaption>
+                    <img class="img-thumbnail" src="http://192.168.1.224:9292/debug/modectcam2" />
+                </figure>
+            </div>
+        </div>
+
+        <br/>
+        <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-film" aria-hidden="true"></span> And Now: for some really cool stiching on the fly!
+        </div>
+        <figure class="figure">
+            <figcaption class="figure-caption text-xs-right">4 feed mux of live and debug feeds</figcaption>
+            <img class="figure-img img-fluid img-thumbnail" src="http://192.168.1.224:9292/debug/quadcammux" />
+        </figure>
+
+
+    </div>
 </body>
+
 </html>
