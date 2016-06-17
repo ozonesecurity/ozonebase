@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_VIDEO_4_LINUX_INPUT_H
-#define ZM_VIDEO_4_LINUX_INPUT_H
+#ifndef OZ_VIDEO_4_LINUX_INPUT_H
+#define OZ_VIDEO_4_LINUX_INPUT_H
 
 #include "../base/ozFeedProvider.h"
 #include "../base/ozFeedFrame.h"
@@ -143,7 +143,7 @@ protected:
     int run();
 };
 
-#endif // ZM_VIDEO_4_LINUX_INPUT_H
+#endif // OZ_VIDEO_4_LINUX_INPUT_H
 
 
 /*@}*/

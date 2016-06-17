@@ -1,7 +1,7 @@
 /** @addtogroup Consumers */
 /*@{*/
-#ifndef ZM_MEMORY_OUTPUT_H
-#define ZM_MEMORY_OUTPUT_H
+#ifndef OZ_MEMORY_OUTPUT_H
+#define OZ_MEMORY_OUTPUT_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../base/ozMemoryIO.h"
@@ -31,5 +31,5 @@ public:
     ~MemoryOutput();
 };
 
-#endif // ZM_MEMORY_OUTPUT_H
+#endif // OZ_MEMORY_OUTPUT_H
 /*@}*/

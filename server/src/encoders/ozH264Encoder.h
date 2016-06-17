@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_H264_ENCODER_H
-#define ZM_H264_ENCODER_H
+#ifndef OZ_H264_ENCODER_H
+#define OZ_H264_ENCODER_H
 
 //
 // Class for H.264 encoder threads.
@@ -119,7 +119,7 @@ protected:
     int run();
 };
 
-#endif // ZM_H264_ENCODER_H
+#endif // OZ_H264_ENCODER_H
 
 
 /*@}*/

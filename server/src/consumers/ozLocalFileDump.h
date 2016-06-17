@@ -1,7 +1,7 @@
 /** @addtogroup Consumers */
 /*@{*/
-#ifndef ZM_LOCAL_FILE_DUMP_H
-#define ZM_LOCAL_FILE_DUMP_H
+#ifndef OZ_LOCAL_FILE_DUMP_H
+#define OZ_LOCAL_FILE_DUMP_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../libgen/libgenThread.h"
@@ -24,5 +24,5 @@ public:
     LocalFileDump( const std::string &name, const std::string &location );
 };
 
-#endif // ZM_LOCAL_FILE_DUMP_H
+#endif // OZ_LOCAL_FILE_DUMP_H
 /*@}*/

@@ -1,5 +1,5 @@
-#ifndef ZM_FFMPEG_H
-#define ZM_FFMPEG_H
+#ifndef OZ_FFMPEG_H
+#define OZ_FFMPEG_H
 
 #include "../libgen/libgenThread.h"
 
@@ -19,9 +19,9 @@ extern "C" {
 #endif
 
 #if LIBAVCODEC_VERSION_INT == ((52<<16)+(72<<8)+2)
-#define ZM_FFMPEG_061   1
+#define OZ_FFMPEG_061   1
 #elif LIBAVCODEC_VERSION_INT >= ((52<<16)+(72<<8)+2)
-#define ZM_FFMPEG_SVN   1
+#define OZ_FFMPEG_SVN   1
 #else
 #error ZoneMinder requires libavcodec version 52.72.2 or higher
 #endif
@@ -166,4 +166,4 @@ void avDictSet( AVDictionary **dict, const char *name, double value );
 void avSetH264Profile( AVDictionary **dict, const std::string &profile );
 void avSetH264Preset( AVDictionary **dict, const std::string &preset );
 
-#endif // ZM_FFMPEG_H
+#endif // OZ_FFMPEG_H

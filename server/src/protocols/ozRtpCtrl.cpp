@@ -180,7 +180,7 @@ int RtpCtrlManager::generateRr( const unsigned char *packet, ssize_t packetLen )
     int byteLen = sizeof(rtcpPacket->header)+sizeof(rtcpPacket->body.rr)+sizeof(rtcpPacket->body.rr.rr[0]);
     int wordLen = ((byteLen-1)/sizeof(uint32_t))+1;
 
-    rtcpPacket->header.version = ZM_RTP_VERSION;
+    rtcpPacket->header.version = OZ_RTP_VERSION;
     rtcpPacket->header.p = 0;
     rtcpPacket->header.pt = RTCP_RR;
     rtcpPacket->header.count = 1;
@@ -223,7 +223,7 @@ int RtpCtrlManager::generateSdes( const unsigned char *packet, ssize_t packetLen
     int byteLen = sizeof(rtcpPacket->header)+sizeof(rtcpPacket->body.sdes)+sizeof(rtcpPacket->body.sdes.item[0])+cname.size();
     int wordLen = ((byteLen-1)/sizeof(uint32_t))+1;
 
-    rtcpPacket->header.version = ZM_RTP_VERSION;
+    rtcpPacket->header.version = OZ_RTP_VERSION;
     rtcpPacket->header.p = 0;
     rtcpPacket->header.pt = RTCP_SDES;
     rtcpPacket->header.count = 1;
@@ -252,7 +252,7 @@ int RtpCtrlManager::generateBye( const unsigned char *packet, ssize_t packetLen 
     int byteLen = sizeof(rtcpPacket->header)+sizeof(rtcpPacket->body.bye)+sizeof(rtcpPacket->body.bye.srcN[0]);
     int wordLen = ((byteLen-1)/sizeof(uint32_t))+1;
 
-    rtcpPacket->header.version = ZM_RTP_VERSION;
+    rtcpPacket->header.version = OZ_RTP_VERSION;
     rtcpPacket->header.p = 0;
     rtcpPacket->header.pt = RTCP_BYE;
     rtcpPacket->header.count = 1;

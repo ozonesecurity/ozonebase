@@ -1,5 +1,5 @@
-#ifndef ZM_MEMORY_IO_V1_H
-#define ZM_MEMORY_IO_V1_H
+#ifndef OZ_MEMORY_IO_V1_H
+#define OZ_MEMORY_IO_V1_H
 
 #include "ozFfmpeg.h"
 
@@ -61,12 +61,12 @@ protected:
         Image           *image;
     };
 
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
     int             mMapFd;
     char            mMemFile[PATH_MAX];
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
     int             mShmId;
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
     int             mMemSize;
     unsigned char   *mMemPtr;
 
@@ -85,4 +85,4 @@ public:
     ~MemoryIOV1();
 };
 
-#endif // ZM_MEMORY_IO_V1_H
+#endif // OZ_MEMORY_IO_V1_H

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_REMOTE_VIDEO_INPUT_H
-#define ZM_REMOTE_VIDEO_INPUT_H
+#ifndef OZ_REMOTE_VIDEO_INPUT_H
+#define OZ_REMOTE_VIDEO_INPUT_H
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
@@ -51,7 +51,7 @@ protected:
     int run();
 };
 
-#endif // ZM_REMOTE_VIDEO_INPUT_H
+#endif // OZ_REMOTE_VIDEO_INPUT_H
 
 
 /*@}*/

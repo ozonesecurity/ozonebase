@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTSP_CONTROLLER_H
-#define ZM_RTSP_CONTROLLER_H
+#ifndef OZ_RTSP_CONTROLLER_H
+#define OZ_RTSP_CONTROLLER_H
 
 #include "../base/ozController.h"
 
@@ -53,7 +53,7 @@ public:
     void releaseSsrc( uint32_t ssrc );
 };
 
-#endif // ZM_RTSP_CONTROLLER_H
+#endif // OZ_RTSP_CONTROLLER_H
 
 
 /*@}*/

@@ -627,9 +627,9 @@ ac_header_list=
 ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
-ZM_CONFIG
+OZ_CONFIG
 SYSCONFDIR
-ZM_PID
+OZ_PID
 LIBDIR
 BINDIR
 ALLOCA
@@ -663,20 +663,20 @@ CPPFLAGS
 LDFLAGS
 CXXFLAGS
 CXX
-ZM_LIBARCH
-ZM_LOGDIR
-ZM_TMPDIR
-ZM_RUNDIR
-ZM_MYSQL_ENGINE
-ZM_SSL_LIB
-ZM_DB_PASS
-ZM_DB_USER
-ZM_DB_NAME
-ZM_DB_HOST
-ZM_WEB_HOST
-ZM_CGI_DIR
-ZM_WEB_DIR
-ZM_USER
+OZ_LIBARCH
+OZ_LOGDIR
+OZ_TMPDIR
+OZ_RUNDIR
+OZ_MYSQL_ENGINE
+OZ_SSL_LIB
+OZ_DB_PASS
+OZ_DB_USER
+OZ_DB_NAME
+OZ_DB_HOST
+OZ_WEB_HOST
+OZ_CGI_DIR
+OZ_WEB_DIR
+OZ_USER
 TIME_BUILD
 PATH_BUILD
 AM_BACKSLASH
@@ -757,20 +757,20 @@ enable_dependency_tracking
       ac_precious_vars='build_alias
 host_alias
 target_alias
-ZM_USER
-ZM_WEB_DIR
-ZM_CGI_DIR
-ZM_WEB_HOST
-ZM_DB_HOST
-ZM_DB_NAME
-ZM_DB_USER
-ZM_DB_PASS
-ZM_SSL_LIB
-ZM_MYSQL_ENGINE
-ZM_RUNDIR
-ZM_TMPDIR
-ZM_LOGDIR
-ZM_LIBARCH
+OZ_USER
+OZ_WEB_DIR
+OZ_CGI_DIR
+OZ_WEB_HOST
+OZ_DB_HOST
+OZ_DB_NAME
+OZ_DB_USER
+OZ_DB_PASS
+OZ_SSL_LIB
+OZ_MYSQL_ENGINE
+OZ_RUNDIR
+OZ_TMPDIR
+OZ_LOGDIR
+OZ_LIBARCH
 CXX
 CXXFLAGS
 LDFLAGS
@@ -1406,23 +1406,23 @@ Optional Features:
                           speeds up one-time build
 
 Some influential environment variables:
-  ZM_USER     Name of ZoneMinder user, zoneminder
-  ZM_WEB_DIR  Location to install web GUI html files, default
+  OZ_USER     Name of ZoneMinder user, zoneminder
+  OZ_WEB_DIR  Location to install web GUI html files, default
               /opt/oz2/web/html
-  ZM_CGI_DIR  Location to install web GUI cgi files, default
+  OZ_CGI_DIR  Location to install web GUI cgi files, default
               /opt/oz2/web/cgi-bin
-  ZM_WEB_HOST Hostname for virtual hosting, default current host name
-  ZM_DB_HOST  Hostname where ZoneMinder database located, default localhost
-  ZM_DB_NAME  Name of ZoneMinder database, default oz
-  ZM_DB_USER  Name of ZoneMinder database user, default ozuser
-  ZM_DB_PASS  Password of ZoneMinder database user, default ozpass
-  ZM_SSL_LIB  Library to use for ssl functions, default gnutls
-  ZM_MYSQL_ENGINE
+  OZ_WEB_HOST Hostname for virtual hosting, default current host name
+  OZ_DB_HOST  Hostname where ZoneMinder database located, default localhost
+  OZ_DB_NAME  Name of ZoneMinder database, default oz
+  OZ_DB_USER  Name of ZoneMinder database user, default ozuser
+  OZ_DB_PASS  Password of ZoneMinder database user, default ozpass
+  OZ_SSL_LIB  Library to use for ssl functions, default gnutls
+  OZ_MYSQL_ENGINE
               MySQL engine to use with database, default MyISAM
-  ZM_RUNDIR   Location of transient process files, default /var/run/oz
-  ZM_TMPDIR   Location of temporary files, default /tmp/oz
-  ZM_LOGDIR   Location of generated log files, default /var/log/oz
-  ZM_LIBARCH  Architecture specific library path, default lib, try lib64 on 64
+  OZ_RUNDIR   Location of transient process files, default /var/run/oz
+  OZ_TMPDIR   Location of temporary files, default /tmp/oz
+  OZ_LOGDIR   Location of generated log files, default /var/log/oz
+  OZ_LIBARCH  Architecture specific library path, default lib, try lib64 on 64
               bit systems
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
@@ -3039,73 +3039,73 @@ TIME_BUILD=`date +'%s'`
 CPPFLAGS="-D__STDC_CONSTANT_MACROS"
 
 
-if test "$ZM_USER" == ""; then
-    ZM_USER=zoneminder
+if test "$OZ_USER" == ""; then
+    OZ_USER=zoneminder
 
 fi
 
-if test "$ZM_WEB_DIR" == ""; then
-    ZM_WEB_DIR=$prefix/web/html
+if test "$OZ_WEB_DIR" == ""; then
+    OZ_WEB_DIR=$prefix/web/html
 
 fi
 
-if test "$ZM_CGI_DIR" == ""; then
-    ZM_CGI_DIR=$prefix/web/cgi-bin
+if test "$OZ_CGI_DIR" == ""; then
+    OZ_CGI_DIR=$prefix/web/cgi-bin
 
 fi
 
-if test "$ZM_WEB_HOST" == ""; then
-    ZM_WEB_HOST=`hostname`
+if test "$OZ_WEB_HOST" == ""; then
+    OZ_WEB_HOST=`hostname`
 
 fi
 
-if test "$ZM_DB_HOST" == ""; then
-    ZM_DB_HOST=localhost
+if test "$OZ_DB_HOST" == ""; then
+    OZ_DB_HOST=localhost
 
 fi
 
-if test "$ZM_DB_NAME" == ""; then
-    ZM_DB_NAME=oz
+if test "$OZ_DB_NAME" == ""; then
+    OZ_DB_NAME=oz
 
 fi
 
-if test "$ZM_DB_USER" == ""; then
-    ZM_DB_USER=ozuser
+if test "$OZ_DB_USER" == ""; then
+    OZ_DB_USER=ozuser
 
 fi
 
-if test "$ZM_DB_PASS" == ""; then
-    ZM_DB_PASS=ozpass
+if test "$OZ_DB_PASS" == ""; then
+    OZ_DB_PASS=ozpass
 
 fi
 
-if test "$ZM_SSL_LIB" == ""; then
-    ZM_SSL_LIB=gnutls
+if test "$OZ_SSL_LIB" == ""; then
+    OZ_SSL_LIB=gnutls
 
 fi
 
-if test "$ZM_MYSQL_ENGINE" == ""; then
-    ZM_MYSQL_ENGINE=MyISAM
+if test "$OZ_MYSQL_ENGINE" == ""; then
+    OZ_MYSQL_ENGINE=MyISAM
 
 fi
 
-if test "$ZM_RUNDIR" == ""; then
-    ZM_RUNDIR=/var/run/oz
+if test "$OZ_RUNDIR" == ""; then
+    OZ_RUNDIR=/var/run/oz
 
 fi
 
-if test "$ZM_TMPDIR" == ""; then
-    ZM_TMPDIR=/tmp/oz
+if test "$OZ_TMPDIR" == ""; then
+    OZ_TMPDIR=/tmp/oz
 
 fi
 
-if test "$ZM_LOGDIR" == ""; then
-    ZM_LOGDIR=/var/log/oz
+if test "$OZ_LOGDIR" == ""; then
+    OZ_LOGDIR=/var/log/oz
 
 fi
 
-if test "$ZM_LIBARCH" == ""; then
-    ZM_LIBARCH=/lib
+if test "$OZ_LIBARCH" == ""; then
+    OZ_LIBARCH=/lib
 
 fi
 
@@ -3133,7 +3133,7 @@ fi
 
 if test "$ENABLE_V4L" = "yes"; then
 
-$as_echo "#define ZM_V4L 1" >>confdefs.h
+$as_echo "#define OZ_V4L 1" >>confdefs.h
 
 fi
 
@@ -3161,7 +3161,7 @@ fi
 
 if test "$ENABLE_MMAP" = "yes"; then
 
-$as_echo "#define ZM_MEM_MAPPED 1" >>confdefs.h
+$as_echo "#define OZ_MEM_MAPPED 1" >>confdefs.h
 
 fi
 
@@ -3187,7 +3187,7 @@ fi
 
 if test "$ENABLE_DEBUG" != "yes"; then
 
-$as_echo "#define ZM_DBG_OFF 1" >>confdefs.h
+$as_echo "#define OZ_DBG_OFF 1" >>confdefs.h
 
 fi
 
@@ -3215,7 +3215,7 @@ fi
 
 if test "$ENABLE_CRASHTRACE" != "yes"; then
 
-$as_echo "#define ZM_NO_CRASHTRACE 1" >>confdefs.h
+$as_echo "#define OZ_NO_CRASHTRACE 1" >>confdefs.h
 
 fi
 
@@ -6436,7 +6436,7 @@ else
   as_fn_error $? "oz requires libdl.a" "$LINENO" 5
 fi
 
-if test "$ZM_SSL_LIB" == "openssl"; then
+if test "$OZ_SSL_LIB" == "openssl"; then
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5 in -lcrypto" >&5
 $as_echo_n "checking for MD5 in -lcrypto... " >&6; }
 if ${ac_cv_lib_crypto_MD5+:} false; then :
@@ -6481,8 +6481,8 @@ _ACEOF
   LIBS="-lcrypto $LIBS"
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libcrypto.a is required for authenticated streaming - use ZM_SSL_LIB option to select gnutls instead" >&5
-$as_echo "$as_me: WARNING: libcrypto.a is required for authenticated streaming - use ZM_SSL_LIB option to select gnutls instead" >&2;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libcrypto.a is required for authenticated streaming - use OZ_SSL_LIB option to select gnutls instead" >&5
+$as_echo "$as_me: WARNING: libcrypto.a is required for authenticated streaming - use OZ_SSL_LIB option to select gnutls instead" >&2;}
 fi
 
 else
@@ -6545,8 +6545,8 @@ _ACEOF
   LIBS="-lgcrypt $LIBS"
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgcrypt.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead" >&5
-$as_echo "$as_me: WARNING: libgcrypt.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead" >&2;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgcrypt.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead" >&5
+$as_echo "$as_me: WARNING: libgcrypt.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead" >&2;}
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5 in -lgnutls-openssl" >&5
@@ -6593,8 +6593,8 @@ _ACEOF
   LIBS="-lgnutls-openssl $LIBS"
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gnutls-openssl.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead" >&5
-$as_echo "$as_me: WARNING: gnutls-openssl.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead" >&2;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: gnutls-openssl.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead" >&5
+$as_echo "$as_me: WARNING: gnutls-openssl.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead" >&2;}
 fi
 
 fi
@@ -7529,7 +7529,7 @@ cat >>confdefs.h <<_ACEOF
 #define HAVE_DECL_ROUND $ac_have_decl
 _ACEOF
 
-if test "$ZM_SSL_LIB" == "openssl"; then
+if test "$OZ_SSL_LIB" == "openssl"; then
 ac_fn_cxx_check_decl "$LINENO" "MD5" "ac_cv_have_decl_MD5" "#include <stdlib.h>
 #include <openssl/md5.h>
 "
@@ -7545,7 +7545,7 @@ _ACEOF
 if test $ac_have_decl = 1; then :
 
 else
-  as_fn_error $? "oz requires openssl/md5.h - use ZM_SSL_LIB option to select gnutls instead" "$LINENO" 5
+  as_fn_error $? "oz requires openssl/md5.h - use OZ_SSL_LIB option to select gnutls instead" "$LINENO" 5
 fi
 
 else
@@ -7564,7 +7564,7 @@ _ACEOF
 if test $ac_have_decl = 1; then :
 
 else
-  as_fn_error $? "oz requires gnutls/openssl.h - use ZM_SSL_LIB option to select openssl instead" "$LINENO" 5
+  as_fn_error $? "oz requires gnutls/openssl.h - use OZ_SSL_LIB option to select openssl instead" "$LINENO" 5
 fi
 
 fi
@@ -7617,7 +7617,7 @@ _ACEOF
   test "$prefix_NONE" && prefix=NONE
   test "$exec_prefix_NONE" && exec_prefix=NONE
 
-ZM_PID="$ZM_RUNDIR/oz.pid"
+OZ_PID="$OZ_RUNDIR/oz.pid"
 
 
   prefix_NONE=
@@ -7636,7 +7636,7 @@ _ACEOF
   test "$prefix_NONE" && prefix=NONE
   test "$exec_prefix_NONE" && exec_prefix=NONE
 
-ZM_CONFIG="$SYSCONFDIR/oz.conf"
+OZ_CONFIG="$SYSCONFDIR/oz.conf"
 
 
 ac_config_files="$ac_config_files Makefile src/Makefile src/libgen/Makefile src/libimg/Makefile src/base/Makefile src/base/ozConfig.h src/consumers/Makefile src/encoders/Makefile src/processors/Makefile src/protocols/Makefile src/providers/Makefile src/examples/Makefile"

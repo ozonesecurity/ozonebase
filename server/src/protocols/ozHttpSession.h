@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_HTTP_SESSION_H
-#define ZM_HTTP_SESSION_H
+#ifndef OZ_HTTP_SESSION_H
+#define OZ_HTTP_SESSION_H
 
 #include "../base/ozConnection.h"
 
@@ -29,7 +29,7 @@ public:
     uint32_t session() const { return( mSession ); }
 };
 
-#endif // ZM_HTTP_SESSION_H
+#endif // OZ_HTTP_SESSION_H
 
 
 /*@}*/

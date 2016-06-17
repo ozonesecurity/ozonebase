@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_DELAY_BUFFER_H
-#define ZM_DELAY_BUFFER_H
+#ifndef OZ_DELAY_BUFFER_H
+#define OZ_DELAY_BUFFER_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -27,7 +27,7 @@ protected:
     int run();
 };
 
-#endif // ZM_DELAY_BUFFER_H
+#endif // OZ_DELAY_BUFFER_H
 
 
 /*@}*/

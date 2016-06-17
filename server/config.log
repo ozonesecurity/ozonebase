@@ -221,8 +221,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:4864: result: g++ -E
@@ -244,8 +244,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:4927: checking for grep that handles long lines and -e
@@ -317,8 +317,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -401,8 +401,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -476,8 +476,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -557,8 +557,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -602,8 +602,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -653,8 +653,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -698,8 +698,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -743,8 +743,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -792,8 +792,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -908,7 +908,7 @@ configure:6267: $? = 0
 configure:6267: result: yes
 configure:6273: checking for _doprnt
 configure:6273: g++ -o conftest -g -O2 -D__STDC_CONSTANT_MACROS  conftest.cpp  >&5
-/tmp/cclelZuv.o: In function `main':
+/tmp/ccxEZZ1y.o: In function `main':
 /home/pp/ozonebase/server/conftest.cpp:78: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:6273: $? = 1
@@ -922,8 +922,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -1132,8 +1132,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -1226,8 +1226,8 @@ configure: failed program was:
 | #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 | #define PACKAGE "ZoneMinder"
 | #define VERSION "2.0.0a"
-| #define ZM_V4L 1
-| #define ZM_MEM_MAPPED 1
+| #define OZ_V4L 1
+| #define OZ_MEM_MAPPED 1
 | #define STDC_HEADERS 1
 | #define HAVE_SYS_TYPES_H 1
 | #define HAVE_SYS_STAT_H 1
@@ -1601,34 +1601,34 @@ ac_cv_env_LDFLAGS_set=
 ac_cv_env_LDFLAGS_value=
 ac_cv_env_LIBS_set=
 ac_cv_env_LIBS_value=
-ac_cv_env_ZM_CGI_DIR_set=
-ac_cv_env_ZM_CGI_DIR_value=
-ac_cv_env_ZM_DB_HOST_set=
-ac_cv_env_ZM_DB_HOST_value=
-ac_cv_env_ZM_DB_NAME_set=
-ac_cv_env_ZM_DB_NAME_value=
-ac_cv_env_ZM_DB_PASS_set=
-ac_cv_env_ZM_DB_PASS_value=
-ac_cv_env_ZM_DB_USER_set=
-ac_cv_env_ZM_DB_USER_value=
-ac_cv_env_ZM_LIBARCH_set=
-ac_cv_env_ZM_LIBARCH_value=
-ac_cv_env_ZM_LOGDIR_set=
-ac_cv_env_ZM_LOGDIR_value=
-ac_cv_env_ZM_MYSQL_ENGINE_set=
-ac_cv_env_ZM_MYSQL_ENGINE_value=
-ac_cv_env_ZM_RUNDIR_set=
-ac_cv_env_ZM_RUNDIR_value=
-ac_cv_env_ZM_SSL_LIB_set=
-ac_cv_env_ZM_SSL_LIB_value=
-ac_cv_env_ZM_TMPDIR_set=
-ac_cv_env_ZM_TMPDIR_value=
-ac_cv_env_ZM_USER_set=
-ac_cv_env_ZM_USER_value=
-ac_cv_env_ZM_WEB_DIR_set=
-ac_cv_env_ZM_WEB_DIR_value=
-ac_cv_env_ZM_WEB_HOST_set=
-ac_cv_env_ZM_WEB_HOST_value=
+ac_cv_env_OZ_CGI_DIR_set=
+ac_cv_env_OZ_CGI_DIR_value=
+ac_cv_env_OZ_DB_HOST_set=
+ac_cv_env_OZ_DB_HOST_value=
+ac_cv_env_OZ_DB_NAME_set=
+ac_cv_env_OZ_DB_NAME_value=
+ac_cv_env_OZ_DB_PASS_set=
+ac_cv_env_OZ_DB_PASS_value=
+ac_cv_env_OZ_DB_USER_set=
+ac_cv_env_OZ_DB_USER_value=
+ac_cv_env_OZ_LIBARCH_set=
+ac_cv_env_OZ_LIBARCH_value=
+ac_cv_env_OZ_LOGDIR_set=
+ac_cv_env_OZ_LOGDIR_value=
+ac_cv_env_OZ_MYSQL_ENGINE_set=
+ac_cv_env_OZ_MYSQL_ENGINE_value=
+ac_cv_env_OZ_RUNDIR_set=
+ac_cv_env_OZ_RUNDIR_value=
+ac_cv_env_OZ_SSL_LIB_set=
+ac_cv_env_OZ_SSL_LIB_value=
+ac_cv_env_OZ_TMPDIR_set=
+ac_cv_env_OZ_TMPDIR_value=
+ac_cv_env_OZ_USER_set=
+ac_cv_env_OZ_USER_value=
+ac_cv_env_OZ_WEB_DIR_set=
+ac_cv_env_OZ_WEB_DIR_value=
+ac_cv_env_OZ_WEB_HOST_set=
+ac_cv_env_OZ_WEB_HOST_value=
 ac_cv_env_build_alias_set=
 ac_cv_env_build_alias_value=
 ac_cv_env_host_alias_set=
@@ -1799,6 +1799,22 @@ LTLIBOBJS=''
 MAKEINFO='${SHELL} /home/pp/ozonebase/server/missing makeinfo'
 MKDIR_P='/bin/mkdir -p'
 OBJEXT='o'
+OZ_CGI_DIR='NONE/web/cgi-bin'
+OZ_CONFIG='/opt//etc/oz.conf'
+OZ_DB_HOST='localhost'
+OZ_DB_NAME='oz'
+OZ_DB_PASS='ozpass'
+OZ_DB_USER='ozuser'
+OZ_LIBARCH='/lib'
+OZ_LOGDIR='/var/log/oz'
+OZ_MYSQL_ENGINE='MyISAM'
+OZ_PID='/var/run/oz/oz.pid'
+OZ_RUNDIR='/var/run/oz'
+OZ_SSL_LIB='gnutls'
+OZ_TMPDIR='/tmp/oz'
+OZ_USER='zoneminder'
+OZ_WEB_DIR='NONE/web/html'
+OZ_WEB_HOST='ubuntu'
 PACKAGE='ZoneMinder'
 PACKAGE_BUGREPORT='support@zoneminder.com'
 PACKAGE_NAME='oz'
@@ -1814,24 +1830,8 @@ SET_MAKE=''
 SHELL='/bin/bash'
 STRIP=''
 SYSCONFDIR='/opt//etc'
-TIME_BUILD='1466196392'
+TIME_BUILD='1466203290'
 VERSION='2.0.0a'
-ZM_CGI_DIR='NONE/web/cgi-bin'
-ZM_CONFIG='/opt//etc/oz.conf'
-ZM_DB_HOST='localhost'
-ZM_DB_NAME='oz'
-ZM_DB_PASS='ozpass'
-ZM_DB_USER='ozuser'
-ZM_LIBARCH='/lib'
-ZM_LOGDIR='/var/log/oz'
-ZM_MYSQL_ENGINE='MyISAM'
-ZM_PID='/var/run/oz/oz.pid'
-ZM_RUNDIR='/var/run/oz'
-ZM_SSL_LIB='gnutls'
-ZM_TMPDIR='/tmp/oz'
-ZM_USER='zoneminder'
-ZM_WEB_DIR='NONE/web/html'
-ZM_WEB_HOST='ubuntu'
 ac_ct_CC='gcc'
 ac_ct_CXX='g++'
 am__EXEEXT_FALSE=''
@@ -1888,8 +1888,8 @@ target_alias=''
 #define PACKAGE_URL "http://www.zoneminder.com/downloads.html"
 #define PACKAGE "ZoneMinder"
 #define VERSION "2.0.0a"
-#define ZM_V4L 1
-#define ZM_MEM_MAPPED 1
+#define OZ_V4L 1
+#define OZ_MEM_MAPPED 1
 #define STDC_HEADERS 1
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_SYS_STAT_H 1

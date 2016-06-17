@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_HTTP_CONNECTION_H
-#define ZM_HTTP_CONNECTION_H
+#ifndef OZ_HTTP_CONNECTION_H
+#define OZ_HTTP_CONNECTION_H
 
 #include "../base/ozConnection.h"
 
@@ -28,7 +28,7 @@ public:
     bool sendResponse( Headers &headers, std::string payload="", int statusCode=200, std::string statusText="OK" );
 };
 
-#endif // ZM_HTTP_CONNECTION_H
+#endif // OZ_HTTP_CONNECTION_H
 
 
 /*@}*/

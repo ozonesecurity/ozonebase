@@ -1,5 +1,5 @@
-#ifndef ZM_ALARM_FRAME_H
-#define ZM_ALARM_FRAME_H
+#ifndef OZ_ALARM_FRAME_H
+#define OZ_ALARM_FRAME_H
 
 #include "ozFeedFrame.h"
 
@@ -33,4 +33,4 @@ public:
     bool alarmed() const { return( mAlarmed ); }
 };
 
-#endif // ZM_ALARM_FRAME_H
+#endif // OZ_ALARM_FRAME_H

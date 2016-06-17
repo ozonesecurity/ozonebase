@@ -198,7 +198,7 @@ void RtspStream::packetiseFrame( FramePtr frame )
 
         int frameSize = nextStartPos-startPos;
 
-        if ( frameSize <= ZM_RTP_MAX_PACKET_SIZE )
+        if ( frameSize <= OZ_RTP_MAX_PACKET_SIZE )
         {
             unsigned char type = startPos[0] & 0x1F;
             unsigned char nri = startPos[0] & 0x60;
@@ -210,7 +210,7 @@ void RtspStream::packetiseFrame( FramePtr frame )
         }
         else
         {
-            unsigned char tempBuffer[ZM_RTP_MAX_PACKET_SIZE];
+            unsigned char tempBuffer[OZ_RTP_MAX_PACKET_SIZE];
 
             unsigned char type = startPos[0] & 0x1F;
             unsigned char nri = startPos[0] & 0x60;
@@ -224,12 +224,12 @@ void RtspStream::packetiseFrame( FramePtr frame )
 
             startPos += 1;
             frameSize -= 1;
-            while ( (frameSize + 2) > ZM_RTP_MAX_PACKET_SIZE )
+            while ( (frameSize + 2) > OZ_RTP_MAX_PACKET_SIZE )
             {
-                memcpy( &tempBuffer[2], startPos, ZM_RTP_MAX_PACKET_SIZE - 2);
-                mRtpData->buildPacket( tempBuffer, ZM_RTP_MAX_PACKET_SIZE, frame->timestamp(), false );
-                startPos += ZM_RTP_MAX_PACKET_SIZE - 2;
-                frameSize -= ZM_RTP_MAX_PACKET_SIZE - 2;
+                memcpy( &tempBuffer[2], startPos, OZ_RTP_MAX_PACKET_SIZE - 2);
+                mRtpData->buildPacket( tempBuffer, OZ_RTP_MAX_PACKET_SIZE, frame->timestamp(), false );
+                startPos += OZ_RTP_MAX_PACKET_SIZE - 2;
+                frameSize -= OZ_RTP_MAX_PACKET_SIZE - 2;
                 tempBuffer[1] &= ~(1 << 7);
             }
             tempBuffer[1] |= 1 << 6;
@@ -241,22 +241,22 @@ void RtspStream::packetiseFrame( FramePtr frame )
     }
     else
     {
-        if ( frame->buffer().size() <= ZM_RTP_MAX_PACKET_SIZE )
+        if ( frame->buffer().size() <= OZ_RTP_MAX_PACKET_SIZE )
         {
             //ff_rtp_send_data(s1, buf, size, last);
             mRtpData->buildPacket( frame->buffer().data(), frame->buffer().size(), frame->timestamp(), true );
         }
         else
         {
-            unsigned char tempBuffer[ZM_RTP_MAX_PACKET_SIZE];
+            unsigned char tempBuffer[OZ_RTP_MAX_PACKET_SIZE];
             uint8_t *frameDataPtr = frame->buffer().data();
             uint32_t frameSize = frame->buffer().size();
-            while ( frameSize > ZM_RTP_MAX_PACKET_SIZE )
+            while ( frameSize > OZ_RTP_MAX_PACKET_SIZE )
             {
-                memcpy( tempBuffer, frameDataPtr, ZM_RTP_MAX_PACKET_SIZE );
-                mRtpData->buildPacket( tempBuffer, ZM_RTP_MAX_PACKET_SIZE, frame->timestamp(), false );
-                frameDataPtr += ZM_RTP_MAX_PACKET_SIZE;
-                frameSize -= ZM_RTP_MAX_PACKET_SIZE;
+                memcpy( tempBuffer, frameDataPtr, OZ_RTP_MAX_PACKET_SIZE );
+                mRtpData->buildPacket( tempBuffer, OZ_RTP_MAX_PACKET_SIZE, frame->timestamp(), false );
+                frameDataPtr += OZ_RTP_MAX_PACKET_SIZE;
+                frameSize -= OZ_RTP_MAX_PACKET_SIZE;
             }
             memcpy( tempBuffer, frameDataPtr, frameSize );
             mRtpData->buildPacket( tempBuffer, frameSize, frame->timestamp(), true );

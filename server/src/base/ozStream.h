@@ -1,5 +1,5 @@
-#ifndef ZM_STREAM_H
-#define ZM_STREAM_H
+#ifndef OZ_STREAM_H
+#define OZ_STREAM_H
 
 #include "ozFeedConsumer.h"
 #include "../libgen/libgenComms.h"
@@ -31,4 +31,4 @@ public:
     ~Stream();
 };
 
-#endif // ZM_STREAM_H
+#endif // OZ_STREAM_H

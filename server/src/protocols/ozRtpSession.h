@@ -2,14 +2,14 @@
 /*@{*/
 
 
-#ifndef ZM_RTP_SESSION_H
-#define ZM_RTP_SESSION_H
+#ifndef OZ_RTP_SESSION_H
+#define OZ_RTP_SESSION_H
 
 #include "../libgen/libgenBuffer.h"
 #include "../libgen/libgenThread.h"
 
-#define ZM_RTP_VERSION          2
-#define ZM_RTP_MAX_PACKET_SIZE  1450
+#define OZ_RTP_VERSION          2
+#define OZ_RTP_MAX_PACKET_SIZE  1450
 
 struct RtpDataHeader;
 
@@ -23,7 +23,7 @@ public:
     typedef enum { EMPTY, FILLING, READY } FrameState;
 
 private:
-    static const int ZM_RTP_SEQ_MOD = 1<<16;
+    static const int OZ_RTP_SEQ_MOD = 1<<16;
     static const int MAX_DROPOUT = 3000;
     static const int MAX_MISORDER = 100;
     static const int MIN_SEQUENTIAL = 2;
@@ -157,7 +157,7 @@ public:
     }
 };
 
-#endif // ZM_RTP_SESSION_H
+#endif // OZ_RTP_SESSION_H
 
 
 /*@}*/

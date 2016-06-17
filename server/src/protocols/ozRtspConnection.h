@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTSP_CONNECTION_H
-#define ZM_RTSP_CONNECTION_H
+#ifndef OZ_RTSP_CONNECTION_H
+#define OZ_RTSP_CONNECTION_H
 
 //
 // Class representing the RTSP connection
@@ -38,7 +38,7 @@ public:
     bool sendInterleavedPacket( uint8_t channel, const ByteBuffer &packet );
 };
 
-#endif // ZM_RTSP_CONNECTION_H
+#endif // OZ_RTSP_CONNECTION_H
 
 
 /*@}*/

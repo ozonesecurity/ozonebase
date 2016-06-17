@@ -13,61 +13,61 @@ AC_SUBST(TIME_BUILD)
 AC_PREFIX_DEFAULT([/opt/])
 CPPFLAGS="-D__STDC_CONSTANT_MACROS"
 
-AC_ARG_VAR(ZM_USER,[Name of ZoneMinder user, zoneminder])
-if test "$ZM_USER" == ""; then
-    AC_SUBST(ZM_USER,[zoneminder])
+AC_ARG_VAR(OZ_USER,[Name of ZoneMinder user, zoneminder])
+if test "$OZ_USER" == ""; then
+    AC_SUBST(OZ_USER,[zoneminder])
 fi
-AC_ARG_VAR(ZM_WEB_DIR,[Location to install web GUI html files, default /opt/oz2/web/html])
-if test "$ZM_WEB_DIR" == ""; then
-    AC_SUBST(ZM_WEB_DIR,$prefix/web/html)
+AC_ARG_VAR(OZ_WEB_DIR,[Location to install web GUI html files, default /opt/oz2/web/html])
+if test "$OZ_WEB_DIR" == ""; then
+    AC_SUBST(OZ_WEB_DIR,$prefix/web/html)
 fi
-AC_ARG_VAR(ZM_CGI_DIR,[Location to install web GUI cgi files, default /opt/oz2/web/cgi-bin])
-if test "$ZM_CGI_DIR" == ""; then
-    AC_SUBST(ZM_CGI_DIR,$prefix/web/cgi-bin)
+AC_ARG_VAR(OZ_CGI_DIR,[Location to install web GUI cgi files, default /opt/oz2/web/cgi-bin])
+if test "$OZ_CGI_DIR" == ""; then
+    AC_SUBST(OZ_CGI_DIR,$prefix/web/cgi-bin)
 fi
-AC_ARG_VAR(ZM_WEB_HOST,[Hostname for virtual hosting, default current host name])
-if test "$ZM_WEB_HOST" == ""; then
-    AC_SUBST(ZM_WEB_HOST,`hostname`)
+AC_ARG_VAR(OZ_WEB_HOST,[Hostname for virtual hosting, default current host name])
+if test "$OZ_WEB_HOST" == ""; then
+    AC_SUBST(OZ_WEB_HOST,`hostname`)
 fi
-AC_ARG_VAR(ZM_DB_HOST,[Hostname where ZoneMinder database located, default localhost])
-if test "$ZM_DB_HOST" == ""; then
-    AC_SUBST(ZM_DB_HOST,[localhost])
+AC_ARG_VAR(OZ_DB_HOST,[Hostname where ZoneMinder database located, default localhost])
+if test "$OZ_DB_HOST" == ""; then
+    AC_SUBST(OZ_DB_HOST,[localhost])
 fi
-AC_ARG_VAR(ZM_DB_NAME,[Name of ZoneMinder database, default oz])
-if test "$ZM_DB_NAME" == ""; then
-    AC_SUBST(ZM_DB_NAME,[oz])
+AC_ARG_VAR(OZ_DB_NAME,[Name of ZoneMinder database, default oz])
+if test "$OZ_DB_NAME" == ""; then
+    AC_SUBST(OZ_DB_NAME,[oz])
 fi
-AC_ARG_VAR(ZM_DB_USER,[Name of ZoneMinder database user, default ozuser])
-if test "$ZM_DB_USER" == ""; then
-    AC_SUBST(ZM_DB_USER,[ozuser])
+AC_ARG_VAR(OZ_DB_USER,[Name of ZoneMinder database user, default ozuser])
+if test "$OZ_DB_USER" == ""; then
+    AC_SUBST(OZ_DB_USER,[ozuser])
 fi
-AC_ARG_VAR(ZM_DB_PASS,[Password of ZoneMinder database user, default ozpass])
-if test "$ZM_DB_PASS" == ""; then
-    AC_SUBST(ZM_DB_PASS,[ozpass])
+AC_ARG_VAR(OZ_DB_PASS,[Password of ZoneMinder database user, default ozpass])
+if test "$OZ_DB_PASS" == ""; then
+    AC_SUBST(OZ_DB_PASS,[ozpass])
 fi
-AC_ARG_VAR(ZM_SSL_LIB,[Library to use for ssl functions, default gnutls])
-if test "$ZM_SSL_LIB" == ""; then
-    AC_SUBST(ZM_SSL_LIB,gnutls)
+AC_ARG_VAR(OZ_SSL_LIB,[Library to use for ssl functions, default gnutls])
+if test "$OZ_SSL_LIB" == ""; then
+    AC_SUBST(OZ_SSL_LIB,gnutls)
 fi
-AC_ARG_VAR(ZM_MYSQL_ENGINE,[MySQL engine to use with database, default MyISAM])
-if test "$ZM_MYSQL_ENGINE" == ""; then
-    AC_SUBST(ZM_MYSQL_ENGINE,MyISAM)
+AC_ARG_VAR(OZ_MYSQL_ENGINE,[MySQL engine to use with database, default MyISAM])
+if test "$OZ_MYSQL_ENGINE" == ""; then
+    AC_SUBST(OZ_MYSQL_ENGINE,MyISAM)
 fi
-AC_ARG_VAR(ZM_RUNDIR,[Location of transient process files, default /var/run/oz])
-if test "$ZM_RUNDIR" == ""; then
-    AC_SUBST(ZM_RUNDIR,[/var/run/oz])
+AC_ARG_VAR(OZ_RUNDIR,[Location of transient process files, default /var/run/oz])
+if test "$OZ_RUNDIR" == ""; then
+    AC_SUBST(OZ_RUNDIR,[/var/run/oz])
 fi
-AC_ARG_VAR(ZM_TMPDIR,[Location of temporary files, default /tmp/oz])
-if test "$ZM_TMPDIR" == ""; then
-    AC_SUBST(ZM_TMPDIR,[/tmp/oz])
+AC_ARG_VAR(OZ_TMPDIR,[Location of temporary files, default /tmp/oz])
+if test "$OZ_TMPDIR" == ""; then
+    AC_SUBST(OZ_TMPDIR,[/tmp/oz])
 fi
-AC_ARG_VAR(ZM_LOGDIR,[Location of generated log files, default /var/log/oz])
-if test "$ZM_LOGDIR" == ""; then
-    AC_SUBST(ZM_LOGDIR,[/var/log/oz])
+AC_ARG_VAR(OZ_LOGDIR,[Location of generated log files, default /var/log/oz])
+if test "$OZ_LOGDIR" == ""; then
+    AC_SUBST(OZ_LOGDIR,[/var/log/oz])
 fi
-AC_ARG_VAR(ZM_LIBARCH,[Architecture specific library path, default lib, try lib64 on 64 bit systems])
-if test "$ZM_LIBARCH" == ""; then
-    AC_SUBST(ZM_LIBARCH,[/lib])
+AC_ARG_VAR(OZ_LIBARCH,[Architecture specific library path, default lib, try lib64 on 64 bit systems])
+if test "$OZ_LIBARCH" == ""; then
+    AC_SUBST(OZ_LIBARCH,[/lib])
 fi
 
 ENABLE_V4L=yes
@@ -83,7 +83,7 @@ AC_ARG_ENABLE(video4linux,
     e.g. --enable-video4linux=yes or --disable-video4linux]])
 )
 if test "$ENABLE_V4L" = "yes"; then
-    AC_DEFINE(ZM_V4L,1,"Whether to support the Video4Linux interface")
+    AC_DEFINE(OZ_V4L,1,"Whether to support the Video4Linux interface")
 fi
 
 ENABLE_MMAP=yes
@@ -99,7 +99,7 @@ AC_ARG_ENABLE(mmap,
     e.g. --enable-mmap=yes or --disable-mmap]])
 )
 if test "$ENABLE_MMAP" = "yes"; then
-    AC_DEFINE(ZM_MEM_MAPPED,1,"Whether to use mapped rather than shared memory")
+    AC_DEFINE(OZ_MEM_MAPPED,1,"Whether to use mapped rather than shared memory")
 fi
 
 ENABLE_DEBUG=yes
@@ -114,7 +114,7 @@ AC_ARG_ENABLE(debug,
     e.g. --enable-debug=yes or --disable-debug]])
 )
 if test "$ENABLE_DEBUG" != "yes"; then
-    AC_DEFINE(ZM_DBG_OFF,1,"Whether debug is switched off and compiled out")
+    AC_DEFINE(OZ_DBG_OFF,1,"Whether debug is switched off and compiled out")
 fi
 
 ENABLE_CRASHTRACE=yes
@@ -130,7 +130,7 @@ AC_ARG_ENABLE(crashtrace,
     e.g. --enable-crashtrace=yes or --disable-crashtrace])
 )
 if test "$ENABLE_CRASHTRACE" != "yes"; then
-  AC_DEFINE(ZM_NO_CRASHTRACE,1,"Whether crash tracing is switched off and compiled out")
+  AC_DEFINE(OZ_NO_CRASHTRACE,1,"Whether crash tracing is switched off and compiled out")
 fi
 
 # Compiler
@@ -175,12 +175,12 @@ AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday memmove memset mkdir munm
 AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(oz requires libjpeg.a))
 AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(oz requires libpthread.a))
 AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(oz requires libdl.a))
-if test "$ZM_SSL_LIB" == "openssl"; then
-AC_CHECK_LIB(crypto,MD5,,AC_MSG_WARN([libcrypto.a is required for authenticated streaming - use ZM_SSL_LIB option to select gnutls instead]))
+if test "$OZ_SSL_LIB" == "openssl"; then
+AC_CHECK_LIB(crypto,MD5,,AC_MSG_WARN([libcrypto.a is required for authenticated streaming - use OZ_SSL_LIB option to select gnutls instead]))
 else
 AC_CHECK_HEADERS(gcrypt.h,,AC_MSG_WARN(oz requires libgcrypt headers to be installed for gnutls),)
-AC_CHECK_LIB(gcrypt,gcry_check_version,,AC_MSG_WARN([libgcrypt.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
-AC_CHECK_LIB(gnutls-openssl,MD5,,AC_MSG_WARN([gnutls-openssl.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
+AC_CHECK_LIB(gcrypt,gcry_check_version,,AC_MSG_WARN([libgcrypt.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead]))
+AC_CHECK_LIB(gnutls-openssl,MD5,,AC_MSG_WARN([gnutls-openssl.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead]))
 fi
 AC_CHECK_LIB(z,zlibVersion)
 AC_CHECK_LIB(x264,x264_predict_16x16_init)
@@ -213,11 +213,11 @@ fi
 AC_CHECK_HEADERS(zlib.h,,,)
 
 AC_CHECK_DECLS(round,,,[#include <math.h>])
-if test "$ZM_SSL_LIB" == "openssl"; then
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires openssl/md5.h - use ZM_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
+if test "$OZ_SSL_LIB" == "openssl"; then
+AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires openssl/md5.h - use OZ_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
 #include <openssl/md5.h>])
 else
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires gnutls/openssl.h - use ZM_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
+AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires gnutls/openssl.h - use OZ_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
 #include <gnutls/openssl.h>])
 fi
 AC_CHECK_DECLS(backtrace,,,[#include <execinfo.h>])
@@ -226,9 +226,9 @@ AC_SUBST(LDFLAGS)
 
 AC_DEFINE_DIR([BINDIR],[bindir],[Expanded binary directory])
 AC_DEFINE_DIR([LIBDIR],[libdir],[Expanded library directory])
-AC_SUBST(ZM_PID,"$ZM_RUNDIR/oz.pid")
+AC_SUBST(OZ_PID,"$OZ_RUNDIR/oz.pid")
 AC_DEFINE_DIR([SYSCONFDIR],[sysconfdir],[Expanded configuration directory])
-AC_SUBST(ZM_CONFIG,"$SYSCONFDIR/oz.conf")
+AC_SUBST(OZ_CONFIG,"$SYSCONFDIR/oz.conf")
 
 AC_CONFIG_FILES([
     Makefile

@@ -1,5 +1,5 @@
-#ifndef ZM_CONTROLLER_H
-#define ZM_CONTROLLER_H
+#ifndef OZ_CONTROLLER_H
+#define OZ_CONTROLLER_H
 
 #include "ozFeedConsumer.h"
 #include <map>
@@ -54,4 +54,4 @@ public:
     FeedProvider *findStream( const std::string &streamName, const std::string &streamSource );
 };
 
-#endif // ZM_CONTROLLER_H
+#endif // OZ_CONTROLLER_H

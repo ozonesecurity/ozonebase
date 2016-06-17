@@ -1,5 +1,5 @@
-#ifndef ZM_FEED_FRAME_H
-#define ZM_FEED_FRAME_H
+#ifndef OZ_FEED_FRAME_H
+#define OZ_FEED_FRAME_H
 
 #include "ozFeedBase.h"
 
@@ -237,4 +237,4 @@ public:
 };
 #endif
 
-#endif // ZM_FEED_FRAME_H
+#endif // OZ_FEED_FRAME_H

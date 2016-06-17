@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_SIGNAL_CHECKER_H
-#define ZM_SIGNAL_CHECKER_H
+#ifndef OZ_SIGNAL_CHECKER_H
+#define OZ_SIGNAL_CHECKER_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -46,7 +46,7 @@ public:
     static bool signalInvalid( FramePtr, const FeedConsumer * );
 };
 
-#endif // ZM_SIGNAL_CHECKER_H
+#endif // OZ_SIGNAL_CHECKER_H
 
 
 /*@}*/

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_HTTP_H
-#define ZM_HTTP_H
+#ifndef OZ_HTTP_H
+#define OZ_HTTP_H
 
 #include "ozHttpController.h"
 #include "../libgen/libgenException.h"
@@ -16,7 +16,7 @@ public:
     }
 };
 
-#endif // ZM_HTTP_H
+#endif // OZ_HTTP_H
 
 
 /*@}*/

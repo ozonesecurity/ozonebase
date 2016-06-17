@@ -62,7 +62,7 @@ void RtpSession::init( uint16_t seq )
     // so left them for now
     mBaseSeq = seq;
     mMaxSeq = seq;
-    mBadSeq = ZM_RTP_SEQ_MOD + 1;  // so seq == mBadSeq is false
+    mBadSeq = OZ_RTP_SEQ_MOD + 1;  // so seq == mBadSeq is false
     mCycles = 0;
     //mSentPackets = 0;
     //mSentPrior = 0;
@@ -126,11 +126,11 @@ bool RtpSession::updateSeq( uint16_t seq )
         if ( seq < mMaxSeq )
         {
             // Sequence number wrapped - count another 64K cycle.
-            mCycles += ZM_RTP_SEQ_MOD;
+            mCycles += OZ_RTP_SEQ_MOD;
         }
         mMaxSeq = seq;
     }
-    else if ( uDelta <= ZM_RTP_SEQ_MOD - MAX_MISORDER )
+    else if ( uDelta <= OZ_RTP_SEQ_MOD - MAX_MISORDER )
     {
         Warning( "Packet out of sequence, gap %d", uDelta );
         // the sequence number made a very large jump
@@ -144,7 +144,7 @@ bool RtpSession::updateSeq( uint16_t seq )
         }
         else
         {
-            mBadSeq = (seq + 1) & (ZM_RTP_SEQ_MOD-1);
+            mBadSeq = (seq + 1) & (OZ_RTP_SEQ_MOD-1);
             return( false );
         }
     }

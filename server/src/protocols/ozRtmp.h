@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_H
-#define ZM_RTMP_H
+#ifndef OZ_RTMP_H
+#define OZ_RTMP_H
 
 #include "ozRtmpController.h"
 #include "../libgen/libgenException.h"
@@ -16,7 +16,7 @@ public:
     }
 };
 
-#endif // ZM_RTMP_H
+#endif // OZ_RTMP_H
 
 
 /*@}*/

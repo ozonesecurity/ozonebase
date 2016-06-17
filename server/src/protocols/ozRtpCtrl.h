@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTP_CTRL_H
-#define ZM_RTP_CTRL_H
+#ifndef OZ_RTP_CTRL_H
+#define OZ_RTP_CTRL_H
 
 #include "../base/ozStream.h"
 #include "../libgen/libgenThread.h"
@@ -16,11 +16,11 @@ class RtspStream;
 class RtpSession;
 
 // Defined in ffmpeg rtp.h
-//#define ZM_RTP_MAX_SDES 255      // maximum text length for SDES
+//#define OZ_RTP_MAX_SDES 255      // maximum text length for SDES
 
 // Big-endian mask for version, padding bit and packet type pair
 #define RTCP_VALID_MASK (0xc000 | 0x2000 | 0xfe)
-#define RTCP_VALID_VALUE ((ZM_RTP_VERSION << 14) | RTCP_SR)
+#define RTCP_VALID_VALUE ((OZ_RTP_VERSION << 14) | RTCP_SR)
 
 class RtpCtrlManager
 {
@@ -140,7 +140,7 @@ public:
     int recvPackets( unsigned char *buffer, ssize_t nBytes );
 };
 
-#endif // ZM_RTP_CTRL_H
+#endif // OZ_RTP_CTRL_H
 
 
 /*@}*/

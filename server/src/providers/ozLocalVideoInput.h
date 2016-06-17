@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_LOCAL_VIDEO_INPUT_H
-#define ZM_LOCAL_VIDEO_INPUT_H
+#ifndef OZ_LOCAL_VIDEO_INPUT_H
+#define OZ_LOCAL_VIDEO_INPUT_H
 
 #include "../base/ozFeedProvider.h"
 #include "../base/ozFeedFrame.h"
@@ -50,7 +50,7 @@ protected:
     int run();
 };
 
-#endif // ZM_LOCAL_VIDEO_INPUT_H
+#endif // OZ_LOCAL_VIDEO_INPUT_H
 
 
 /*@}*/

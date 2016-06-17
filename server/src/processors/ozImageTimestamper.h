@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_IMAGE_TIMESTAMPER_H
-#define ZM_IMAGE_TIMESTAMPER_H
+#ifndef OZ_IMAGE_TIMESTAMPER_H
+#define OZ_IMAGE_TIMESTAMPER_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -42,7 +42,7 @@ protected:
     int run();
 };
 
-#endif // ZM_IMAGE_TIMESTAMPER_H
+#endif // OZ_IMAGE_TIMESTAMPER_H
 
 
 /*@}*/

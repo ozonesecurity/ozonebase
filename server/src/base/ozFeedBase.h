@@ -1,5 +1,5 @@
-#ifndef ZM_FEED_BASE_H
-#define ZM_FEED_BASE_H
+#ifndef OZ_FEED_BASE_H
+#define OZ_FEED_BASE_H
 
 #include "countedPtr.h"
 #include "linkedPtr.h"
@@ -136,4 +136,4 @@ public:
 extern FeedLink     gQueuedFeedLink;
 extern FeedLink     gPolledFeedLink;
 
-#endif // ZM_FEED_BASE_H
+#endif // OZ_FEED_BASE_H

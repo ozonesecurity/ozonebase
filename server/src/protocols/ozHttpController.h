@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_HTTP_CONTROLLER_H
-#define ZM_HTTP_CONTROLLER_H
+#ifndef OZ_HTTP_CONTROLLER_H
+#define OZ_HTTP_CONTROLLER_H
 
 #include "../base/ozController.h"
 
@@ -38,7 +38,7 @@ public:
     void deleteSession( uint32_t session );
 };
 
-#endif // ZM_HTTP_CONTROLLER_H
+#endif // OZ_HTTP_CONTROLLER_H
 
 
 /*@}*/

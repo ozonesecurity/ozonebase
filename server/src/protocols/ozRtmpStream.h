@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_STREAM_H
-#define ZM_RTMP_STREAM_H
+#ifndef OZ_RTMP_STREAM_H
+#define OZ_RTMP_STREAM_H
 
 #include "../base/ozStream.h"
 #include "../libgen/libgenThread.h"
@@ -50,7 +50,7 @@ protected:
     int run();
 };
 
-#endif // ZM_RTMP_STREAM_H
+#endif // OZ_RTMP_STREAM_H
 
 
 /*@}*/

@@ -96,7 +96,7 @@ RETSIGTYPE oz_die_handler( int signal )
 #endif // HAVE_STRSIGNAL
     }
 
-#ifndef ZM_NO_CRASHTRACE
+#ifndef OZ_NO_CRASHTRACE
 #if ( ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T ) || HAVE_STRUCT_SIGCONTEXT )
     void *trace[TRACE_SIZE];
     int trace_size = 0;
@@ -147,7 +147,7 @@ RETSIGTYPE oz_die_handler( int signal )
     Info( cmd );
 #endif // HAVE_DECL_BACKTRACE
 #endif // ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T ) || HAVE_STRUCT_SIGCONTEXT
-#endif // ZM_NO_CRASHTRACE
+#endif // OZ_NO_CRASHTRACE
 
     exit( signal );
 }

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_MEMORY_INPUT_H
-#define ZM_MEMORY_INPUT_H
+#ifndef OZ_MEMORY_INPUT_H
+#define OZ_MEMORY_INPUT_H
 
 #include "../base/ozFeedProvider.h"
 #include "../base/ozMemoryIO.h"
@@ -41,7 +41,7 @@ public:
     FrameRate frameRate() const { return( mFrameRate ); }
 };
 
-#endif // ZM_MEMORY_INPUT_H
+#endif // OZ_MEMORY_INPUT_H
 
 
 /*@}*/

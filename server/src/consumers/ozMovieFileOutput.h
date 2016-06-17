@@ -1,8 +1,8 @@
 /** @addtogroup Consumers */
 /*@{*/
 
-#ifndef ZM_MOVIE_FILE_OUTPUT_H
-#define ZM_MOVIE_FILE_OUTPUT_H
+#ifndef OZ_MOVIE_FILE_OUTPUT_H
+#define OZ_MOVIE_FILE_OUTPUT_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../libgen/libgenThread.h"
@@ -99,5 +99,5 @@ public:
     }
 };
 
-#endif // ZM_MOVIE_FILE_OUTPUT_H
+#endif // OZ_MOVIE_FILE_OUTPUT_H
 /*@}*/

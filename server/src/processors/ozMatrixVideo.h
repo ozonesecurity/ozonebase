@@ -2,7 +2,7 @@
 /*@{*/
 
 
-#ifndef ZM_MATRIX_VIDEO_H
+#ifndef OZ_MATRIX_VIDEO_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -51,7 +51,7 @@ protected:
     int run();
 };
 
-#endif // ZM_MATRIX_VIDEO_H
+#endif // OZ_MATRIX_VIDEO_H
 
 
 /*@}*/

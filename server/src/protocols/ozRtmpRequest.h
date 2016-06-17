@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_REQUEST_H
-#define ZM_RTMP_REQUEST_H
+#ifndef OZ_RTMP_REQUEST_H
+#define OZ_RTMP_REQUEST_H
 
 #include "../libgen/libgenBuffer.h"
 
@@ -109,7 +109,7 @@ public:
     bool build( int format, ByteBuffer &request );
 };
 
-#endif // ZM_RTMP_REQUEST_H
+#endif // OZ_RTMP_REQUEST_H
 
 
 /*@}*/

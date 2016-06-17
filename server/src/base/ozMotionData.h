@@ -1,5 +1,5 @@
-#ifndef ZM_MOTION_DATA_H
-#define ZM_MOTION_DATA_H
+#ifndef OZ_MOTION_DATA_H
+#define OZ_MOTION_DATA_H
 
 #include "../libimg/libimgBox.h"
 #include "../libimg/libimgCoord.h"
@@ -92,4 +92,4 @@ public:
     }
 };
 
-#endif // ZM_MOTION_DATA_H
+#endif // OZ_MOTION_DATA_H

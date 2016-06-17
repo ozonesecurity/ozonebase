@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTSP_SESSION_H
-#define ZM_RTSP_SESSION_H
+#ifndef OZ_RTSP_SESSION_H
+#define OZ_RTSP_SESSION_H
 
 #include "ozRtspConnection.h"
 
@@ -55,7 +55,7 @@ public:
     void releaseSsrc( uint32_t ssrc );
 };
 
-#endif // ZM_RTSP_SESSION_H
+#endif // OZ_RTSP_SESSION_H
 
 
 /*@}*/

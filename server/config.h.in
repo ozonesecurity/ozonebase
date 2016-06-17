@@ -284,6 +284,18 @@
    slash. */
 #undef LSTAT_FOLLOWS_SLASHED_SYMLINK
 
+/* "Whether debug is switched off and compiled out" */
+#undef OZ_DBG_OFF
+
+/* "Whether to use mapped rather than shared memory" */
+#undef OZ_MEM_MAPPED
+
+/* "Whether crash tracing is switched off and compiled out" */
+#undef OZ_NO_CRASHTRACE
+
+/* "Whether to support the Video4Linux interface" */
+#undef OZ_V4L
+
 /* Name of package */
 #undef PACKAGE
 
@@ -339,18 +351,6 @@
 
 /* Version number of package */
 #undef VERSION
-
-/* "Whether debug is switched off and compiled out" */
-#undef ZM_DBG_OFF
-
-/* "Whether to use mapped rather than shared memory" */
-#undef ZM_MEM_MAPPED
-
-/* "Whether crash tracing is switched off and compiled out" */
-#undef ZM_NO_CRASHTRACE
-
-/* "Whether to support the Video4Linux interface" */
-#undef ZM_V4L
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_AMF_H
-#define ZM_RTMP_AMF_H
+#ifndef OZ_RTMP_AMF_H
+#define OZ_RTMP_AMF_H
 
 #include "../libgen/libgenBuffer.h"
 
@@ -462,7 +462,7 @@ public:
     size_t encode( ByteBuffer &buffer ) const;
 };
 
-#endif // ZM_RTMP_AMF_H
+#endif // OZ_RTMP_AMF_H
 
 
 /*@}*/

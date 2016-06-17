@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTSP_H
-#define ZM_RTSP_H
+#ifndef OZ_RTSP_H
+#define OZ_RTSP_H
 
 #include "ozRtspController.h"
 #include "../libgen/libgenException.h"
@@ -16,7 +16,7 @@ public:
     }
 };
 
-#endif // ZM_RTSP_H
+#endif // OZ_RTSP_H
 
 
 /*@}*/

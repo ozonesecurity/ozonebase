@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTP_DATA_H
-#define ZM_RTP_DATA_H
+#ifndef OZ_RTP_DATA_H
+#define OZ_RTP_DATA_H
 
 //
 // These are classes that define and control the RTP data streams that contain the H.264 frames
@@ -65,7 +65,7 @@ public:
     void unlockPacketQueue() { mQueueMutex.unlock(); }
 };
 
-#endif // ZM_RTP_DATA_H
+#endif // OZ_RTP_DATA_H
 
 
 /*@}*/

@@ -29,7 +29,7 @@
 
 #include <assert.h>
 
-#define ZM_RTMP_SIG_SIZE 1536
+#define OZ_RTMP_SIG_SIZE 1536
 
 static const uint8_t GenuineFMSKey[] = {
   0x47, 0x65, 0x6e, 0x75, 0x69, 0x6e, 0x65, 0x20, 0x41, 0x64, 0x6f, 0x62,
@@ -122,8 +122,8 @@ static void HMACsha256( const uint8_t *message, size_t messageLen, const uint8_t
 
 static void calculateDigest( unsigned int digestPos, uint8_t *handshakeMessage, const uint8_t *key, size_t keyLen, uint8_t *digest )
 {
-    const int messageLen = ZM_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH;
-    uint8_t message[ZM_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH];
+    const int messageLen = OZ_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH;
+    uint8_t message[OZ_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH];
 
     memcpy( message, handshakeMessage, digestPos );
     memcpy( message + digestPos, &handshakeMessage[digestPos + SHA256_DIGEST_LENGTH], messageLen - digestPos );
@@ -388,7 +388,7 @@ bool RtmpConnection::recvRequest( ByteBuffer &request )
             {
                 uint8_t *serverSig = (uint8_t *)&mS1;
 
-                mServerDigestPosition = calculateDigestOffset( serverSig, ZM_RTMP_SIG_SIZE, 1 );
+                mServerDigestPosition = calculateDigestOffset( serverSig, OZ_RTMP_SIG_SIZE, 1 );
                 Debug( 3, "Server digest offset: %d", mServerDigestPosition );
 
                 calculateDigest( mServerDigestPosition, serverSig, GenuineFMSKey, 36, serverSig+mServerDigestPosition );
@@ -407,13 +407,13 @@ bool RtmpConnection::recvRequest( ByteBuffer &request )
                 uint8_t *signatureResp = NULL;
 
                 /* we have to use this signature now to find the correct algorithms for getting the digest and DH positions */
-                int clientDigestPosition = calculateDigestOffset( clientSig, ZM_RTMP_SIG_SIZE, 1 );
+                int clientDigestPosition = calculateDigestOffset( clientSig, OZ_RTMP_SIG_SIZE, 1 );
 
                 if ( !verifyDigest( clientDigestPosition, clientSig, GenuineFPKey, 30 ) )
                 {
                     Debug( 2, "Trying alternate position for client digest" );
 
-                    clientDigestPosition = calculateDigestOffset( clientSig, ZM_RTMP_SIG_SIZE, 2 );
+                    clientDigestPosition = calculateDigestOffset( clientSig, OZ_RTMP_SIG_SIZE, 2 );
 
                     if ( !verifyDigest( clientDigestPosition, clientSig, GenuineFPKey, 30 ) )
                     {
@@ -423,10 +423,10 @@ bool RtmpConnection::recvRequest( ByteBuffer &request )
                 }
 
                 /* calculate response now */
-                signatureResp = clientSig+ZM_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH;
+                signatureResp = clientSig+OZ_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH;
 
                 HMACsha256( clientSig+clientDigestPosition, SHA256_DIGEST_LENGTH, GenuineFMSKey, sizeof(GenuineFMSKey), digestResp );
-                HMACsha256( clientSig, ZM_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH, digestResp, SHA256_DIGEST_LENGTH, signatureResp );
+                HMACsha256( clientSig, OZ_RTMP_SIG_SIZE - SHA256_DIGEST_LENGTH, digestResp, SHA256_DIGEST_LENGTH, signatureResp );
 
                 /* some info output */
                 Debug( 3, "Calculated digest key from secure key and server digest: " );
@@ -463,18 +463,18 @@ bool RtmpConnection::recvRequest( ByteBuffer &request )
                 uint8_t digest[SHA256_DIGEST_LENGTH];
 
                 Debug( 3, "Client sent signature:" );
-                Hexdump( 3, clientSig+(ZM_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH), SHA256_DIGEST_LENGTH);
+                Hexdump( 3, clientSig+(OZ_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH), SHA256_DIGEST_LENGTH);
 
                 // Verify client response
                 HMACsha256( serverSig+mServerDigestPosition, SHA256_DIGEST_LENGTH, GenuineFPKey, sizeof(GenuineFPKey), digest );
-                HMACsha256( clientSig, ZM_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH, digest, SHA256_DIGEST_LENGTH, signature );
+                HMACsha256( clientSig, OZ_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH, digest, SHA256_DIGEST_LENGTH, signature );
 
                 Debug( 3, "Digest key: " );
                 Hexdump( 3, digest, SHA256_DIGEST_LENGTH );
 
                 Debug( 3, "Signature calculated:" );
                 Hexdump( 3, signature, SHA256_DIGEST_LENGTH );
-                if ( memcmp( signature, clientSig+(ZM_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH), SHA256_DIGEST_LENGTH ) != 0)
+                if ( memcmp( signature, clientSig+(OZ_RTMP_SIG_SIZE-SHA256_DIGEST_LENGTH), SHA256_DIGEST_LENGTH ) != 0)
                 {
                     Warning( "Client not genuine Adobe!" );
                 }
@@ -485,7 +485,7 @@ bool RtmpConnection::recvRequest( ByteBuffer &request )
             }
             else
             {
-                if ( memcmp( &mS1, &mC2, ZM_RTMP_SIG_SIZE ) != 0)
+                if ( memcmp( &mS1, &mC2, OZ_RTMP_SIG_SIZE ) != 0)
                 {
                     Warning( "Client C2 packet does not match S1 packet" );
                 }

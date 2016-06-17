@@ -1,5 +1,5 @@
-#ifndef ZM_MOTION_FRAME_H
-#define ZM_MOTION_FRAME_H
+#ifndef OZ_MOTION_FRAME_H
+#define OZ_MOTION_FRAME_H
 
 #include "ozAlarmFrame.h"
 #include "ozMotionData.h"
@@ -42,4 +42,4 @@ public:
     const MotionData *motionData() const { return( mMotionData ); }
 };
 
-#endif // ZM_MOTION_FRAME_H
+#endif // OZ_MOTION_FRAME_H

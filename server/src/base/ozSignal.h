@@ -1,5 +1,5 @@
-#ifndef ZM_SIGNAL_H
-#define ZM_SIGNAL_H
+#ifndef OZ_SIGNAL_H
+#define OZ_SIGNAL_H
 
 #include "oz.h"
 
@@ -30,4 +30,4 @@ void ozSetDefaultHupHandler();
 void ozSetDefaultTermHandler();
 void ozSetDefaultDieHandler();
 
-#endif // ZM_SIGNAL_H
+#endif // OZ_SIGNAL_H

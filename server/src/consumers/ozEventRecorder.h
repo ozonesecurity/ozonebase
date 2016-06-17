@@ -1,8 +1,8 @@
 /** @addtogroup Consumers */
 /*@{*/
 
-#ifndef ZM_EVENT_RECORDER_H
-#define ZM_EVENT_RECORDER_H
+#ifndef OZ_EVENT_RECORDER_H
+#define OZ_EVENT_RECORDER_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../libgen/libgenThread.h"
@@ -56,6 +56,6 @@ public:
     }
 };
 
-#endif // ZM_EVENT_RECORDER_H
+#endif // OZ_EVENT_RECORDER_H
 
 /*@}*/

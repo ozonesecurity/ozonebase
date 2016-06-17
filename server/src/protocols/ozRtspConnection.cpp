@@ -400,7 +400,7 @@ bool RtspConnection::sendResponse( Headers &headers, std::string payload, int st
 
 #if 0
     // Not currently used. If RTSP over HTTP ever required then will need to do something like this
-    if ( mMethod == RTP_ZM_RTSP_HTTP )
+    if ( mMethod == RTP_OZ_RTSP_HTTP )
     {
         response = base64Encode( response );
         Debug( 2, "Sending encoded RTSP response: %s", response.c_str() );

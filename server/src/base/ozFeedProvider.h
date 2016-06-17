@@ -1,5 +1,5 @@
-#ifndef ZM_FEED_PROVIDER_H
-#define ZM_FEED_PROVIDER_H
+#ifndef OZ_FEED_PROVIDER_H
+#define OZ_FEED_PROVIDER_H
 
 #include "oz.h"
 #include "ozFeedBase.h"
@@ -204,4 +204,4 @@ protected:
 public:
 };
 
-#endif // ZM_FEED_PROVIDER_H
+#endif // OZ_FEED_PROVIDER_H

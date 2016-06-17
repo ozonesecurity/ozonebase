@@ -1,5 +1,5 @@
-#ifndef ZM_H
-#define ZM_H
+#ifndef OZ_H
+#define OZ_H
 
 extern "C"
 {
@@ -19,4 +19,4 @@ double round(double);
 #endif
 }
 
-#endif // ZM_H
+#endif // OZ_H

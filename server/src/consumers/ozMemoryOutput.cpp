@@ -10,13 +10,13 @@
 //#include <arpa/inet.h>
 //#include <glob.h>
 
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
 #include <sys/mman.h>
 #include <fcntl.h>
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
 
 /**
 * @brief 

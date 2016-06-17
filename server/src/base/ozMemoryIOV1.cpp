@@ -6,13 +6,13 @@
 
 #include <sys/stat.h>
 
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
 #include <sys/mman.h>
 #include <fcntl.h>
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
 
 /**
 * @brief 
@@ -25,12 +25,12 @@ MemoryIOV1::MemoryIOV1( const std::string &location, int memoryKey, bool owner )
     mLocation( location ),
     mMemoryKey( memoryKey ),
     mOwner( owner ),
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
     mMapFd( -1 ),
     //mMemFile( "" ),
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
     mShmId( -1 ),
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
     mMemSize( 0 ),
     mMemPtr( NULL ),
     mSharedData( NULL ),
@@ -61,7 +61,7 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
     size_t memSize = sizeof(SharedData);
     unsigned char *memPtr = NULL;
 
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
     char memFile[PATH_MAX] = "";
 
     //snprintf( memFile, sizeof(memFile), "%s/oz.mmap.%d", config.path_map, mMemoryKey );
@@ -102,7 +102,7 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
         //unlink( memFile );
         return( false );
     }
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
     int shmId = shmget( (config.shm_key&0xffff0000)|mMemoryKey, memSize, IPC_CREAT|0700 );
     if ( shmId < 0 )
     {
@@ -115,7 +115,7 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
         Debug( 3, "Can't shmat: %s", strerror(errno));
         return( false );
     }
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
 
     memcpy( sharedData, (SharedData *)memPtr, sizeof(*sharedData) );
 
@@ -152,7 +152,7 @@ void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t
              + (mImageCount*imageSize);
 
     Debug( 1, "mem.size=%d", mMemSize );
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
     //snprintf( mMemFile, sizeof(mMemFile), "%s/oz.mmap.%d", config.path_map, mMemoryKey );
     snprintf( mMemFile, sizeof(mMemFile), "%s/oz.mmap.%d", mLocation.c_str(), mMemoryKey );
     mMapFd = open( mMemFile, O_RDWR|O_CREAT, (mode_t)0600 );
@@ -184,7 +184,7 @@ void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t
         }
     if ( mMemPtr == MAP_FAILED )
         Fatal( "Can't map file %s (%d bytes) to memory: %s(%d)", mMemFile, mMemSize, strerror(errno), errno );
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
     mShmId = shmget( (config.shm_key&0xffff0000)|mMemoryKey, mMemSize, IPC_CREAT|0700 );
     if ( mShmId < 0 )
     {
@@ -197,7 +197,7 @@ void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t
         Error( "Can't shmat: %s", strerror(errno));
         exit( -1 );
     }
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
 
     mSharedData = (SharedData *)mMemPtr;
     mTriggerData = (TriggerData *)((char *)mSharedData + sizeof(SharedData));
@@ -266,7 +266,7 @@ void MemoryIOV1::detachMemory()
         memset( mMemPtr, 0, mMemSize );
     }
 
-#if ZM_MEM_MAPPED
+#if OZ_MEM_MAPPED
     if ( msync( mMemPtr, mMemSize, MS_SYNC ) < 0 )
         Error( "Can't msync: %s", strerror(errno) );
     if ( munmap( mMemPtr, mMemSize ) < 0 )
@@ -274,7 +274,7 @@ void MemoryIOV1::detachMemory()
     close( mMapFd );
     if ( mOwner )
         unlink( mMemFile );
-#else // ZM_MEM_MAPPED
+#else // OZ_MEM_MAPPED
     struct shmid_ds shmData;
     if ( shmctl( mShmId, IPC_STAT, &shmData ) < 0 )
     {
@@ -289,6 +289,6 @@ void MemoryIOV1::detachMemory()
             exit( -1 );
         }
     }
-#endif // ZM_MEM_MAPPED
+#endif // OZ_MEM_MAPPED
     mMemPtr = NULL;
 }

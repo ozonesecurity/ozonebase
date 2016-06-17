@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_IMAGE_CONVERT_H
-#define ZM_IMAGE_CONVERT_H
+#ifndef OZ_IMAGE_CONVERT_H
+#define OZ_IMAGE_CONVERT_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -38,7 +38,7 @@ protected:
     int run();
 };
 
-#endif // ZM_IMAGE_CONVERT_H
+#endif // OZ_IMAGE_CONVERT_H
 
 
 /*@}*/

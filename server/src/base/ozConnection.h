@@ -1,5 +1,5 @@
-#ifndef ZM_CONNECTION_H
-#define ZM_CONNECTION_H
+#ifndef OZ_CONNECTION_H
+#define OZ_CONNECTION_H
 
 #include "../libgen/libgenComms.h"
 #include "../libgen/libgenBuffer.h"
@@ -102,4 +102,4 @@ public:
     virtual bool recvRequest( ByteBuffer &request )=0;
 };
 
-#endif // ZM_CONNECTION_H
+#endif // OZ_CONNECTION_H

@@ -110,28 +110,28 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
         {
             switch( request.messageType() )
             {
-                case ZM_RTMP_TYPE_WINDOW_ACK_SIZE :
+                case OZ_RTMP_TYPE_WINDOW_ACK_SIZE :
                 {
                     RtmpWindowAckSizePayload *payload = reinterpret_cast<RtmpWindowAckSizePayload *>( request.payload().data() );
                     Debug( 2, "Got AckWindowSize %d", be32toh(payload->ackWindowSize) );
                     // Send stream begin
                     {
                         RtmpUserControlPayload ucPayload;
-                        ucPayload.eventType = htobe16(ZM_RTMP_UCM_EVENT_STREAM_BEGIN);
+                        ucPayload.eventType = htobe16(OZ_RTMP_UCM_EVENT_STREAM_BEGIN);
                         uint32_t eventData = 0;
 
                         ByteBuffer payload;
                         payload.append( &ucPayload, sizeof(ucPayload) );
                         payload.append( &eventData, sizeof(eventData) );
 
-                        buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
+                        buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
                         Debug( 2, "Built User Control Message - Stream Begin" );
                     }
                     request.clearPayload();
                     return( true );
                     break;
                 }
-                case ZM_RTMP_TYPE_USER_CTRL_MESSAGE :
+                case OZ_RTMP_TYPE_USER_CTRL_MESSAGE :
                 {
                     RtmpUserControlPayload *payload = reinterpret_cast<RtmpUserControlPayload *>( request.payload().data() );
                     Debug( 2, "Got UserControl event %d", be16toh(payload->eventType) );
@@ -139,13 +139,13 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                     return( true );
                     break;
                 }
-                case ZM_RTMP_TYPE_CMD_AMF3 :
+                case OZ_RTMP_TYPE_CMD_AMF3 :
                 {
                     Debug( 2, "Removing first byte %02x", request.payload()[0] );
                     request.payload()--;
                     // Fallthru
                 }
-                case ZM_RTMP_TYPE_CMD_AMF0 :
+                case OZ_RTMP_TYPE_CMD_AMF0 :
                 {
                     uint8_t amfVersion = 0;
                     if ( amfVersion == 0 )
@@ -163,7 +163,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                             std::string command = records[0]->getString();
                             int transactionId = records[1]->getInt();
                             const Amf0Object &parameters = records[2]->getObject();
-                            int objectEncoding = ZM_RTMP_TYPE_CMD_AMF3;
+                            int objectEncoding = OZ_RTMP_TYPE_CMD_AMF3;
                             const Amf0Record *appRecord = parameters.getRecord( "app" );
                             if ( appRecord )
                             {
@@ -190,7 +190,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     messagePayload.ackWindowSize = htobe32(2500000); //????
                                     payload.adopt( reinterpret_cast<unsigned char *>(&messagePayload), sizeof(messagePayload) );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_WINDOW_ACK_SIZE, 0, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_WINDOW_ACK_SIZE, 0, payload );
                                     Debug( 2, "Built Window Ack Size Message" );
                                 }
                                 // Send Set Peer Bandwidth message
@@ -199,23 +199,23 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     RtmpSetPeerBandwidthPayload messagePayload;
                                     //messagePayload.ackWindowSize = htobe32(65536); //????
                                     messagePayload.ackWindowSize = htobe32(2500000); //????
-                                    messagePayload.limitType = ZM_RTMP_LIMIT_TYPE_DYNAMIC;
+                                    messagePayload.limitType = OZ_RTMP_LIMIT_TYPE_DYNAMIC;
                                     payload.adopt( reinterpret_cast<unsigned char *>(&messagePayload), sizeof(messagePayload) );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_SET_PEER_BANDWIDTH, 0, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_SET_PEER_BANDWIDTH, 0, payload );
                                     Debug( 2, "Built Set Peer Bandwidth Message" );
                                 }
 
                                 {
                                     RtmpUserControlPayload ucPayload;
-                                    ucPayload.eventType = htobe16(ZM_RTMP_UCM_EVENT_STREAM_BEGIN);
+                                    ucPayload.eventType = htobe16(OZ_RTMP_UCM_EVENT_STREAM_BEGIN);
                                     uint32_t eventData = 0;
 
                                     ByteBuffer payload;
                                     payload.append( &ucPayload, sizeof(ucPayload) );
                                     payload.append( &eventData, sizeof(eventData) );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
                                     Debug( 2, "Built User Control Message - Stream Begin" );
                                 }
 
@@ -240,7 +240,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                         information.addRecord( "code", "NetConnection.Connect.Failed" );
                                         information.addRecord( "description", "Connection Failed." );
                                     }
-                                    //information.addRecord( "objectEncoding", ZM_RTMP_CMD_OBJ_ENCODING_AMF3 );
+                                    //information.addRecord( "objectEncoding", OZ_RTMP_CMD_OBJ_ENCODING_AMF3 );
                                     information.addRecord( "objectEncoding", objectEncoding );
                                     Amf0Array version;
                                     version.addRecord( "version", "3,5,1,516" );
@@ -252,7 +252,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     properties.encode( payload );
                                     information.encode( payload );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_HIGH_LEVEL, ZM_RTMP_TYPE_CMD_AMF0, 0, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_HIGH_LEVEL, OZ_RTMP_TYPE_CMD_AMF0, 0, payload );
                                     Debug( 2, "Built Command Message - _result" );
                                 }
                                 mState = CONNECTED;
@@ -282,21 +282,21 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
         {
             switch( request.messageType() )
             {
-                case ZM_RTMP_TYPE_WINDOW_ACK_SIZE :
+                case OZ_RTMP_TYPE_WINDOW_ACK_SIZE :
                 {
                     RtmpWindowAckSizePayload *payload = reinterpret_cast<RtmpWindowAckSizePayload *>( request.payload().data() );
                     Debug( 2, "Got AckWindowSize %d", le32toh(payload->ackWindowSize) );
                     // Send stream begin
                     {
                         RtmpUserControlPayload ucPayload;
-                        ucPayload.eventType = htobe16(ZM_RTMP_UCM_EVENT_STREAM_BEGIN);
+                        ucPayload.eventType = htobe16(OZ_RTMP_UCM_EVENT_STREAM_BEGIN);
                         uint32_t eventData = 0;
 
                         ByteBuffer payload;
                         payload.append( &ucPayload, sizeof(ucPayload) );
                         payload.append( &eventData, sizeof(eventData) );
 
-                        buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
+                        buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_USER_CTRL_MESSAGE, 0, payload );
                         Debug( 2, "Built User Control Message - Stream Begin" );
                     }
                     // Send _result
@@ -311,7 +311,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                         information.addRecord( "level", "status" );
                         information.addRecord( "code", "NetConnection.Connect.Success" );
                         information.addRecord( "description", "Connection Succeeded." );
-                        information.addRecord( "objectEncoding", ZM_RTMP_CMD_OBJ_ENCODING_AMF3 );
+                        information.addRecord( "objectEncoding", OZ_RTMP_CMD_OBJ_ENCODING_AMF3 );
                         Amf0Object version;
                         version.addRecord( "version", "3,5,1,516" );
                         information.addRecord( "data", version );
@@ -322,7 +322,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                         properties.encode( payload );
                         information.encode( payload );
 
-                        buildResponse0( response, ZM_RTMP_CSID_HIGH_LEVEL, ZM_RTMP_TYPE_CMD_AMF0, 0, payload );
+                        buildResponse0( response, OZ_RTMP_CSID_HIGH_LEVEL, OZ_RTMP_TYPE_CMD_AMF0, 0, payload );
                         Debug( 2, "Built Command Message - _result" );
                     }
                     mState = CONNECTED;
@@ -341,7 +341,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
         {
             switch( request.messageType() )
             {
-                case ZM_RTMP_TYPE_WINDOW_ACK_SIZE :
+                case OZ_RTMP_TYPE_WINDOW_ACK_SIZE :
                 {
                     RtmpWindowAckSizePayload *payload = reinterpret_cast<RtmpWindowAckSizePayload *>( request.payload().data() );
                     Debug( 2, "Got AckWindowSize %d", be32toh(payload->ackWindowSize) );
@@ -349,7 +349,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                     return( true );
                     break;
                 }
-                case ZM_RTMP_TYPE_USER_CTRL_MESSAGE :
+                case OZ_RTMP_TYPE_USER_CTRL_MESSAGE :
                 {
                     RtmpUserControlPayload *payload = reinterpret_cast<RtmpUserControlPayload *>( request.payload().data() );
                     Debug( 2, "Got UserControl event %d", be16toh(payload->eventType) );
@@ -357,13 +357,13 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                     return( true );
                     break;
                 }
-                case ZM_RTMP_TYPE_CMD_AMF3 :
+                case OZ_RTMP_TYPE_CMD_AMF3 :
                 {
                     Debug( 2, "Removing first byte %02x", request.payload()[0] );
                     request.payload()--;
                     // Fallthru
                 }
-                case ZM_RTMP_TYPE_CMD_AMF0 :
+                case OZ_RTMP_TYPE_CMD_AMF0 :
                 {
                     uint8_t amfVersion = 0;
                     if ( amfVersion == 0 )
@@ -394,7 +394,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                 null.encode( payload );
                                 streamId.encode( payload );
 
-                                buildResponse0( response, chunkStreamId, ZM_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
+                                buildResponse0( response, chunkStreamId, OZ_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
                                 Debug( 2, "Built Command Message - _result" );
 
                                 mState = STREAM_CREATED;
@@ -425,26 +425,26 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
         {
             switch( request.messageType() )
             {
-                case ZM_RTMP_TYPE_USER_CTRL_MESSAGE :
+                case OZ_RTMP_TYPE_USER_CTRL_MESSAGE :
                 {
                     RtmpUserControlPayload *payload = reinterpret_cast<RtmpUserControlPayload *>( request.payload().data() );
                     uint16_t eventType = be16toh(payload->eventType);
                     Debug( 2, "Got UserControl event %d", eventType );
                     switch( eventType )
                     {
-                        case ZM_RTMP_UCM_EVENT_SET_BUFFER_LENGTH :
+                        case OZ_RTMP_UCM_EVENT_SET_BUFFER_LENGTH :
                         {
                             uint32_t streamId = be32toh( *(reinterpret_cast<uint32_t *>(&(payload->eventData[0]))) );
                             uint32_t bufferLength = be32toh( *(reinterpret_cast<uint32_t *>(&(payload->eventData[4]))) );
                             Debug( 2, "Setting buffer length for stream %d to %d", streamId, bufferLength );
                             break;
                         }
-                        case ZM_RTMP_UCM_EVENT_STREAM_BEGIN :
-                        case ZM_RTMP_UCM_EVENT_STREAM_EOF :
-                        case ZM_RTMP_UCM_EVENT_STREAM_DRY :
-                        case ZM_RTMP_UCM_EVENT_STREAM_IS_RECORDED :
-                        case ZM_RTMP_UCM_EVENT_PING_REQUEST :
-                        case ZM_RTMP_UCM_EVENT_PING_RESPONSE :
+                        case OZ_RTMP_UCM_EVENT_STREAM_BEGIN :
+                        case OZ_RTMP_UCM_EVENT_STREAM_EOF :
+                        case OZ_RTMP_UCM_EVENT_STREAM_DRY :
+                        case OZ_RTMP_UCM_EVENT_STREAM_IS_RECORDED :
+                        case OZ_RTMP_UCM_EVENT_PING_REQUEST :
+                        case OZ_RTMP_UCM_EVENT_PING_RESPONSE :
                         default :
                         {
                             Warning( "Unexpected User Control Message event type %d received", eventType );
@@ -454,13 +454,13 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                     return( true );
                     break;
                 }
-                case ZM_RTMP_TYPE_CMD_AMF3 :
+                case OZ_RTMP_TYPE_CMD_AMF3 :
                 {
                     Debug( 2, "Removing first byte %02x", request.payload()[0] );
                     request.payload()--;
                     // Fallthru
                 }
-                case ZM_RTMP_TYPE_CMD_AMF0 :
+                case OZ_RTMP_TYPE_CMD_AMF0 :
                 {
                     uint8_t amfVersion = 0;
                     if ( amfVersion == 0 )
@@ -489,21 +489,21 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     messagePayload.chunkSize = htobe32( 32768 ); //????
                                     payload.adopt( reinterpret_cast<unsigned char *>(&messagePayload), sizeof(messagePayload) );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_SET_CHUNK_SIZE, 0, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_SET_CHUNK_SIZE, 0, payload );
                                     Debug( 2, "Built Set Chunk Size Message" );
                                     mConnection->txChunkSize( 32768 );
                                 }
                                 // Send stream begin
                                 {
                                     RtmpUserControlPayload ucPayload;
-                                    ucPayload.eventType = htobe16(ZM_RTMP_UCM_EVENT_STREAM_BEGIN);
+                                    ucPayload.eventType = htobe16(OZ_RTMP_UCM_EVENT_STREAM_BEGIN);
                                     uint32_t eventData = 0;
 
                                     ByteBuffer payload;
                                     payload.append( &ucPayload, sizeof(ucPayload) );
                                     payload.append( &eventData, sizeof(eventData) );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_LOW_LEVEL, ZM_RTMP_TYPE_USER_CTRL_MESSAGE, 1, payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_LOW_LEVEL, OZ_RTMP_TYPE_USER_CTRL_MESSAGE, 1, payload );
                                     Debug( 2, "Built User Control Message - Stream Begin" );
                                 }
                                 if ( true )
@@ -524,7 +524,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     properties.encode( payload );
                                     information.encode( payload );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
                                     Debug( 2, "Built Command Message - onStatus" );
                                 }
                                 FeedProvider *streamProvider = mConnection->controller()->findStream( mStreamName, mStreamSource );
@@ -546,7 +546,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     properties.encode( payload );
                                     information.encode( payload );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
                                     Debug( 2, "Built Command Message - onStatus (NetStream.Play.Start)" );
 
                                     RtmpStream *rtmpStream = new RtmpStream( this, mConnection, request.messageStreamId(), streamProvider, 320, 240, 10, 90000, 70 );
@@ -573,7 +573,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                         properties.encode( payload );
                                         information.encode( payload );
 
-                                        buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
+                                        buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
                                         Debug( 2, "Built Command Message - onStatus (NetStream.Play.Failed)" );
                                     }
                                     // Send _result
@@ -588,7 +588,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                         information.addRecord( "level", "status" );
                                         information.addRecord( "code", "NetConnection.Connect.Closed" );
                                         information.addRecord( "description", "Connection Closed." );
-                                        information.addRecord( "objectEncoding", ZM_RTMP_CMD_OBJ_ENCODING_AMF3 );
+                                        information.addRecord( "objectEncoding", OZ_RTMP_CMD_OBJ_ENCODING_AMF3 );
                                         Amf0Array version;
                                         version.addRecord( "version", "3,5,1,516" );
                                         information.addRecord( "data", version );
@@ -599,7 +599,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                         properties.encode( payload );
                                         information.encode( payload );
 
-                                        buildResponse0( response, ZM_RTMP_CSID_HIGH_LEVEL, ZM_RTMP_TYPE_CMD_AMF0, 0, payload );
+                                        buildResponse0( response, OZ_RTMP_CSID_HIGH_LEVEL, OZ_RTMP_TYPE_CMD_AMF0, 0, payload );
                                         Debug( 2, "Built Command Message - _result" );
                                     }
                                 }
@@ -627,7 +627,7 @@ bool RtmpSession::handleRequest( uint32_t chunkStreamId, RtmpRequest &request, B
                                     properties.encode( payload );
                                     information.encode( payload );
 
-                                    buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
+                                    buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_CMD_AMF0, request.messageStreamId(), payload );
                                     Debug( 2, "Built Command Message - onStatus (NetStream.Play.Stop)" );
 
                                     rtmpStream->stop();

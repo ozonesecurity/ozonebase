@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RAW_H264_INPUT_H
-#define ZM_RAW_H264_INPUT_H
+#ifndef OZ_RAW_H264_INPUT_H
+#define OZ_RAW_H264_INPUT_H
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
@@ -73,7 +73,7 @@ protected:
     int run();
 };
 
-#endif // ZM_RAW_H264_INPUT_H
+#endif // OZ_RAW_H264_INPUT_H
 
 
 /*@}*/

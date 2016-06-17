@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_MPEG_ENCODER_H
-#define ZM_MPEG_ENCODER_H
+#ifndef OZ_MPEG_ENCODER_H
+#define OZ_MPEG_ENCODER_H
 
 //
 // Class for MPEG encoder threads.
@@ -72,7 +72,7 @@ protected:
     int run();
 };
 
-#endif // ZM_MPEG_ENCODER_H
+#endif // OZ_MPEG_ENCODER_H
 
 
 /*@}*/

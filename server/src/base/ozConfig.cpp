@@ -12,9 +12,9 @@ void ozLoadConfig()
     FILE *cfg;
     char line[512];
     char *val;
-    if ( (cfg = fopen( ZM_CONFIG, "r")) == NULL )
+    if ( (cfg = fopen( OZ_CONFIG, "r")) == NULL )
     {
-        Fatal("Can't open %s: %s", ZM_CONFIG, strerror(errno) );
+        Fatal("Can't open %s: %s", OZ_CONFIG, strerror(errno) );
     }
     while ( fgets( line, sizeof(line), cfg ) != NULL )
     {
@@ -44,7 +44,7 @@ void ozLoadConfig()
         temp_ptr = strchr( line_ptr, '=' );
         if ( !temp_ptr )
         {
-            Warning( "Invalid data in %s: '%s'", ZM_CONFIG, line );
+            Warning( "Invalid data in %s: '%s'", OZ_CONFIG, line );
             continue;
         }
 
@@ -67,21 +67,21 @@ void ozLoadConfig()
         val = (char *)malloc( strlen(val_ptr)+1 );
         strncpy( val, val_ptr, strlen(val_ptr)+1 );
 
-        if ( strcasecmp( name_ptr, "ZM_DB_HOST" ) == 0 )
+        if ( strcasecmp( name_ptr, "OZ_DB_HOST" ) == 0 )
             staticConfig.DB_HOST = val;
-        else if ( strcasecmp( name_ptr, "ZM_DB_NAME" ) == 0 )
+        else if ( strcasecmp( name_ptr, "OZ_DB_NAME" ) == 0 )
             staticConfig.DB_NAME = val;
-        else if ( strcasecmp( name_ptr, "ZM_DB_USER" ) == 0 )
+        else if ( strcasecmp( name_ptr, "OZ_DB_USER" ) == 0 )
             staticConfig.DB_USER = val;
-        else if ( strcasecmp( name_ptr, "ZM_DB_PASS" ) == 0 )
+        else if ( strcasecmp( name_ptr, "OZ_DB_PASS" ) == 0 )
             staticConfig.DB_PASS = val;
-        else if ( strcasecmp( name_ptr, "ZM_PATH_WEB" ) == 0 )
+        else if ( strcasecmp( name_ptr, "OZ_PATH_WEB" ) == 0 )
             staticConfig.PATH_WEB = val;
         else
         {
             // We ignore this now as there may be more parameters than the
             // c/c++ binaries are bothered about
-            // Warning( "Invalid parameter '%s' in %s", name_ptr, ZM_CONFIG );
+            // Warning( "Invalid parameter '%s' in %s", name_ptr, OZ_CONFIG );
         }
     }
     fclose( cfg);
@@ -259,7 +259,7 @@ Config::~Config()
 */
 void Config::Assign()
 {
-ZM_CFG_ASSIGN_LIST
+OZ_CFG_ASSIGN_LIST
 }
 
 /**
@@ -276,7 +276,7 @@ const ConfigItem &Config::Item( int id )
         Assign();
     }
 
-    if ( id < 0 || id > ZM_MAX_CFG_ID )
+    if ( id < 0 || id > OZ_MAX_CFG_ID )
     {
         Error( "Attempt to access invalid config, id = %d. Try running 'ozupdate.pl -f' to reload config.", id );
         exit( -1 );

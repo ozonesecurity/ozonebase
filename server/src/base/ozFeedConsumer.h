@@ -1,5 +1,5 @@
-#ifndef ZM_FEED_CONSUMER_H
-#define ZM_FEED_CONSUMER_H
+#ifndef OZ_FEED_CONSUMER_H
+#define OZ_FEED_CONSUMER_H
 
 #include "ozFeedBase.h"
 #include "ozFeedFrame.h"
@@ -149,4 +149,4 @@ protected:
 	GeneralConsumer();
 };
 
-#endif // ZM_FEED_CONSUMER_H
+#endif // OZ_FEED_CONSUMER_H

@@ -1,8 +1,8 @@
 /** @addtogroup Consumers */
 /*@{*/
 
-#ifndef ZM_MP4_FILE_OUTPUT_H
-#define ZM_MP4_FILE_OUTPUT_H
+#ifndef OZ_MP4_FILE_OUTPUT_H
+#define OZ_MP4_FILE_OUTPUT_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../libgen/libgenThread.h"
@@ -92,5 +92,5 @@ public:
     }
 };
 
-#endif // ZM_MP4_FILE_OUTPUT_H
+#endif // OZ_MP4_FILE_OUTPUT_H
 /*@}*/

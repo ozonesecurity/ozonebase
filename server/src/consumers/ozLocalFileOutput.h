@@ -1,8 +1,8 @@
 /** @addtogroup Consumers */
 /*@{*/
 
-#ifndef ZM_LOCAL_FILE_OUTPUT_H
-#define ZM_LOCAL_FILE_OUTPUT_H
+#ifndef OZ_LOCAL_FILE_OUTPUT_H
+#define OZ_LOCAL_FILE_OUTPUT_H
 
 #include "../base/ozFeedConsumer.h"
 #include "../libgen/libgenThread.h"
@@ -33,6 +33,6 @@ public:
     }
 };
 
-#endif // ZM_LOCAL_FILE_OUTPUT_H
+#endif // OZ_LOCAL_FILE_OUTPUT_H
 
 /*@}*/

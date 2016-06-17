@@ -1,5 +1,5 @@
-#ifndef ZM_APP_H
-#define ZM_APP_H
+#ifndef OZ_APP_H
+#define OZ_APP_H
 
 #include <deque>
 #include "../libgen/libgenThread.h"
@@ -20,4 +20,4 @@ public:
     void run();
 };
 
-#endif // ZM_APP_H
+#endif // OZ_APP_H

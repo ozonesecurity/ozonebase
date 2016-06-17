@@ -60,7 +60,7 @@ void RtpDataManager::buildPacket( const unsigned char *data, int size, uint32_t 
 #endif
 
     RtpDataHeader rtpHeader;
-    rtpHeader.version = ZM_RTP_VERSION;
+    rtpHeader.version = OZ_RTP_VERSION;
     rtpHeader.p = 0; // Padding
     rtpHeader.x = 0; // Extension
     rtpHeader.cc = 0; // CCRC Count

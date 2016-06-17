@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_SLAVE_VIDEO_H
-#define ZM_SLAVE_VIDEO_H
+#ifndef OZ_SLAVE_VIDEO_H
+#define OZ_SLAVE_VIDEO_H
 
 #include "../base/ozFeedProvider.h"
 
@@ -40,7 +40,7 @@ public:
     FrameRate frameRate() const { return( mFrameRate ); }
 };
 
-#endif // ZM_SLAVE_VIDEO_H
+#endif // OZ_SLAVE_VIDEO_H
 
 
 /*@}*/

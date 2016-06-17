@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_JPEG_ENCODER_H
-#define ZM_JPEG_ENCODER_H
+#ifndef OZ_JPEG_ENCODER_H
+#define OZ_JPEG_ENCODER_H
 
 #include "../base/ozEncoder.h"
 #include "../libgen/libgenThread.h"
@@ -41,7 +41,7 @@ protected:
     int run();
 };
 
-#endif // ZM_JPEG_ENCODER_H
+#endif // OZ_JPEG_ENCODER_H
 
 
 /*@}*/

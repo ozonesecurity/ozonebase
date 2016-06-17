@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_CONNECTION_H
-#define ZM_RTMP_CONNECTION_H
+#ifndef OZ_RTMP_CONNECTION_H
+#define OZ_RTMP_CONNECTION_H
 
 #include "../base/ozConnection.h"
 #include "ozRtmpRequest.h"
@@ -124,7 +124,7 @@ public:
     bool sendResponse( const void *messageData, size_t messageSize );
 };
 
-#endif // ZM_RTMP_CONNECTION_H
+#endif // OZ_RTMP_CONNECTION_H
 
 
 /*@}*/

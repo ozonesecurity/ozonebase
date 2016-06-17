@@ -167,7 +167,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
             return( false );
         while( payload.size() )
         {
-            ByteBuffer *packet = buildPacket( ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_VIDEO, mStreamId, timestampDelta, payload, 0x00 );
+            ByteBuffer *packet = buildPacket( OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_VIDEO, mStreamId, timestampDelta, payload, 0x00 );
             Hexdump( 2, packet->data(), min(256,packet->size()) );
             mRtmpConnection->sendResponse( static_cast<void *>(packet->data()), packet->size() );
             Debug( 1, "Sent %zd byte packet", packet->size() );
@@ -235,7 +235,7 @@ bool RtmpStream::sendFrame( FramePtr frame )
 
                 while( payload.size() )
                 {
-                    ByteBuffer *packet = buildPacket( ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_VIDEO, mStreamId, timestampDelta, payload, packetType );
+                    ByteBuffer *packet = buildPacket( OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_VIDEO, mStreamId, timestampDelta, payload, packetType );
                     Hexdump( 2, packet->data(), min(256,packet->size()) );
                     mRtmpConnection->sendResponse( static_cast<void *>(packet->data()), packet->size() );
                     Debug( 1, "Sent %zd byte packet", packet->size() );
@@ -268,7 +268,7 @@ int RtmpStream::run()
         amfData1.encode( payload );
         amfData2.encode( payload );
 
-        mRtmpSession->buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_DATA_AMF0, mStreamId, payload );
+        mRtmpSession->buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_DATA_AMF0, mStreamId, payload );
         Debug( 2, "Built Command Message - %s", amfNotify.getString().c_str() );
     }
     if ( true )
@@ -300,7 +300,7 @@ int RtmpStream::run()
         amfNotify.encode( payload );
         amfData.encode( payload );
 
-        mRtmpSession->buildResponse0( response, ZM_RTMP_CSID_CONTROL, ZM_RTMP_TYPE_DATA_AMF0, mStreamId, payload );
+        mRtmpSession->buildResponse0( response, OZ_RTMP_CSID_CONTROL, OZ_RTMP_TYPE_DATA_AMF0, mStreamId, payload );
         Debug( 2, "Built Command Message - %s", amfNotify.getString().c_str() );
     }
 

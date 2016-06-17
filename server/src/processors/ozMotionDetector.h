@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_MOTION_DETECTOR_H
-#define ZM_MOTION_DETECTOR_H
+#ifndef OZ_MOTION_DETECTOR_H
+#define OZ_MOTION_DETECTOR_H
 
 #include "../base/ozFeedProvider.h"
 #include "../base/ozFeedConsumer.h"
@@ -112,7 +112,7 @@ public:
     static bool notInAlarm( FramePtr, const FeedConsumer * );
 };
 
-#endif // ZM_MOTION_DETECTOR_H
+#endif // OZ_MOTION_DETECTOR_H
 
 
 /*@}*/

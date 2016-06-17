@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_VIDEO_FILTER_H
-#define ZM_VIDEO_FILTER_H
+#ifndef OZ_VIDEO_FILTER_H
+#define OZ_VIDEO_FILTER_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -46,7 +46,7 @@ protected:
     int run();
 };
 
-#endif // ZM_VIDEO_FILTER_H
+#endif // OZ_VIDEO_FILTER_H
 
 
 /*@}*/

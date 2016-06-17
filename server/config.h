@@ -285,6 +285,18 @@
    slash. */
 #define LSTAT_FOLLOWS_SLASHED_SYMLINK 1
 
+/* "Whether debug is switched off and compiled out" */
+/* #undef OZ_DBG_OFF */
+
+/* "Whether to use mapped rather than shared memory" */
+#define OZ_MEM_MAPPED 1
+
+/* "Whether crash tracing is switched off and compiled out" */
+/* #undef OZ_NO_CRASHTRACE */
+
+/* "Whether to support the Video4Linux interface" */
+#define OZ_V4L 1
+
 /* Name of package */
 #define PACKAGE "ZoneMinder"
 
@@ -340,18 +352,6 @@
 
 /* Version number of package */
 #define VERSION "2.0.0a"
-
-/* "Whether debug is switched off and compiled out" */
-/* #undef ZM_DBG_OFF */
-
-/* "Whether to use mapped rather than shared memory" */
-#define ZM_MEM_MAPPED 1
-
-/* "Whether crash tracing is switched off and compiled out" */
-/* #undef ZM_NO_CRASHTRACE */
-
-/* "Whether to support the Video4Linux interface" */
-#define ZM_V4L 1
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

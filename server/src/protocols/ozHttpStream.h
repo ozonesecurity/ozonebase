@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_HTTP_STREAM_H
-#define ZM_HTTP_STREAM_H
+#ifndef OZ_HTTP_STREAM_H
+#define OZ_HTTP_STREAM_H
 
 #include "../base/ozStream.h"
 #include "../libgen/libgenThread.h"
@@ -55,7 +55,7 @@ public:
     ~HttpDataStream();
 };
 
-#endif // ZM_HTTP_STREAM_H
+#endif // OZ_HTTP_STREAM_H
 
 
 /*@}*/

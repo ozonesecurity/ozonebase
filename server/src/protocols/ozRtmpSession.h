@@ -2,36 +2,36 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_SESSION_H
-#define ZM_RTMP_SESSION_H
+#ifndef OZ_RTMP_SESSION_H
+#define OZ_RTMP_SESSION_H
 
 #include "../base/ozConnection.h"
 
 #include <map>
 
-#define ZM_RTMP_CSID_LOW_LEVEL             2
-#define ZM_RTMP_CSID_HIGH_LEVEL            3
-#define ZM_RTMP_CSID_CONTROL               4
-#define ZM_RTMP_CSID_VIDEO                 8
-#define ZM_RTMP_CSID_AUDIO                 9
+#define OZ_RTMP_CSID_LOW_LEVEL             2
+#define OZ_RTMP_CSID_HIGH_LEVEL            3
+#define OZ_RTMP_CSID_CONTROL               4
+#define OZ_RTMP_CSID_VIDEO                 8
+#define OZ_RTMP_CSID_AUDIO                 9
 
-#define ZM_RTMP_TYPE_SET_CHUNK_SIZE        1
-#define ZM_RTMP_TYPE_ABORT_MESSAGE         2
-#define ZM_RTMP_TYPE_ACK                   3
-#define ZM_RTMP_TYPE_USER_CTRL_MESSAGE     4
-#define ZM_RTMP_TYPE_WINDOW_ACK_SIZE       5
-#define ZM_RTMP_TYPE_SET_PEER_BANDWIDTH    6
+#define OZ_RTMP_TYPE_SET_CHUNK_SIZE        1
+#define OZ_RTMP_TYPE_ABORT_MESSAGE         2
+#define OZ_RTMP_TYPE_ACK                   3
+#define OZ_RTMP_TYPE_USER_CTRL_MESSAGE     4
+#define OZ_RTMP_TYPE_WINDOW_ACK_SIZE       5
+#define OZ_RTMP_TYPE_SET_PEER_BANDWIDTH    6
 
-#define ZM_RTMP_TYPE_AUDIO                 8
-#define ZM_RTMP_TYPE_VIDEO                 9
+#define OZ_RTMP_TYPE_AUDIO                 8
+#define OZ_RTMP_TYPE_VIDEO                 9
 
-#define ZM_RTMP_TYPE_DATA_AMF3             15
-#define ZM_RTMP_TYPE_SHOBJ_AMF3            16
-#define ZM_RTMP_TYPE_CMD_AMF3              17
-#define ZM_RTMP_TYPE_DATA_AMF0             18
-#define ZM_RTMP_TYPE_SHOBJ_AMF0            19
-#define ZM_RTMP_TYPE_CMD_AMF0              20
-#define ZM_RTMP_TYPE_AGGREGATE             22
+#define OZ_RTMP_TYPE_DATA_AMF3             15
+#define OZ_RTMP_TYPE_SHOBJ_AMF3            16
+#define OZ_RTMP_TYPE_CMD_AMF3              17
+#define OZ_RTMP_TYPE_DATA_AMF0             18
+#define OZ_RTMP_TYPE_SHOBJ_AMF0            19
+#define OZ_RTMP_TYPE_CMD_AMF0              20
+#define OZ_RTMP_TYPE_AGGREGATE             22
 
 #define RTCP_CMD_SUPPORT_SND_NONE       0x0001
 #define RTCP_CMD_SUPPORT_SND_ADPCM      0x0002
@@ -47,8 +47,8 @@
 
 #define RTCP_CMD_SUPPORT_VID_CLIENT_SEEK    1
 
-#define ZM_RTMP_CMD_OBJ_ENCODING_AMF0      0
-#define ZM_RTMP_CMD_OBJ_ENCODING_AMF3      3
+#define OZ_RTMP_CMD_OBJ_ENCODING_AMF0      0
+#define OZ_RTMP_CMD_OBJ_ENCODING_AMF3      3
 
 /// General RTMP message header
 struct RtmpMessageHeader
@@ -81,13 +81,13 @@ struct RtmpUserControlPayload
 {
     //RtmpMessageHeader   header;
     uint16_t            eventType __attribute__ ((packed));
-#define ZM_RTMP_UCM_EVENT_STREAM_BEGIN         0
-#define ZM_RTMP_UCM_EVENT_STREAM_EOF           1
-#define ZM_RTMP_UCM_EVENT_STREAM_DRY           2
-#define ZM_RTMP_UCM_EVENT_SET_BUFFER_LENGTH    3
-#define ZM_RTMP_UCM_EVENT_STREAM_IS_RECORDED   4
-#define ZM_RTMP_UCM_EVENT_PING_REQUEST         6
-#define ZM_RTMP_UCM_EVENT_PING_RESPONSE        7
+#define OZ_RTMP_UCM_EVENT_STREAM_BEGIN         0
+#define OZ_RTMP_UCM_EVENT_STREAM_EOF           1
+#define OZ_RTMP_UCM_EVENT_STREAM_DRY           2
+#define OZ_RTMP_UCM_EVENT_SET_BUFFER_LENGTH    3
+#define OZ_RTMP_UCM_EVENT_STREAM_IS_RECORDED   4
+#define OZ_RTMP_UCM_EVENT_PING_REQUEST         6
+#define OZ_RTMP_UCM_EVENT_PING_RESPONSE        7
     uint8_t             eventData[];
 };
 
@@ -101,9 +101,9 @@ struct RtmpSetPeerBandwidthPayload
 {
     //RtmpMessageHeader   header;
     uint32_t             ackWindowSize __attribute__ ((packed));
-#define ZM_RTMP_LIMIT_TYPE_HARD    0
-#define ZM_RTMP_LIMIT_TYPE_SOFT    1
-#define ZM_RTMP_LIMIT_TYPE_DYNAMIC 2
+#define OZ_RTMP_LIMIT_TYPE_HARD    0
+#define OZ_RTMP_LIMIT_TYPE_SOFT    1
+#define OZ_RTMP_LIMIT_TYPE_DYNAMIC 2
     uint8_t              limitType;
 };
 
@@ -152,7 +152,7 @@ protected:
     bool handleRequest( uint32_t chunkStreamId, RtmpRequest &request, ByteBuffer &response );
 };
 
-#endif // ZM_RTMP_SESSION_H
+#endif // OZ_RTMP_SESSION_H
 
 
 /*@}*/

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_MEMORY_INPUT_V1_H
-#define ZM_MEMORY_INPUT_V1_H
+#ifndef OZ_MEMORY_INPUT_V1_H
+#define OZ_MEMORY_INPUT_V1_H
 
 #include "../base/ozFeedProvider.h"
 #include "../base/ozMemoryIOV1.h"
@@ -50,7 +50,7 @@ public:
 
 };
 
-#endif // ZM_MEMORY_INPUT_V1_H
+#endif // OZ_MEMORY_INPUT_V1_H
 
 
 /*@}*/

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_NETWORK_AV_INPUT_H
-#define ZM_NETWORK_AV_INPUT_H
+#ifndef OZ_NETWORK_AV_INPUT_H
+#define OZ_NETWORK_AV_INPUT_H
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
@@ -73,7 +73,7 @@ protected:
     int run();
 };
 
-#endif // ZM_NETWORK_AV_INPUT_H
+#endif // OZ_NETWORK_AV_INPUT_H
 
 
 /*@}*/

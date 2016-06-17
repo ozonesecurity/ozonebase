@@ -1,5 +1,5 @@
-#ifndef ZM_LISTENER_H
-#define ZM_LISTENER_H
+#ifndef OZ_LISTENER_H
+#define OZ_LISTENER_H
 
 #include "../libgen/libgenComms.h"
 #include "../libgen/libgenThread.h"
@@ -38,4 +38,4 @@ private:
     int run();                                          ///< Execute listener thread
 };
 
-#endif // ZM_LISTENER_H
+#endif // OZ_LISTENER_H

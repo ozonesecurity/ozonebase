@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_FILTER_SWAPUV_H
-#define ZM_FILTER_SWAPUV_H
+#ifndef OZ_FILTER_SWAPUV_H
+#define OZ_FILTER_SWAPUV_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -35,7 +35,7 @@ protected:
     int run();
 };
 
-#endif // ZM_FILTER_SWAPUV_H
+#endif // OZ_FILTER_SWAPUV_H
 
 
 /*@}*/

@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTSP_STREAM_H
-#define ZM_RTSP_STREAM_H
+#ifndef OZ_RTSP_STREAM_H
+#define OZ_RTSP_STREAM_H
 
 //
 // Class representing the RTSP server thread. RTSP is defined in http://www.ietf.org/rfc/rfc2326.txt
@@ -147,7 +147,7 @@ protected:
     int run();
 };
 
-#endif // ZM_RTSP_STREAM_H
+#endif // OZ_RTSP_STREAM_H
 
 
 /*@}*/

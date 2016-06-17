@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RATE_LIMITER_H
-#define ZM_RATE_LIMITER_H
+#ifndef OZ_RATE_LIMITER_H
+#define OZ_RATE_LIMITER_H
 
 #include "../base/ozFeedBase.h"
 #include "../base/ozFeedProvider.h"
@@ -37,7 +37,7 @@ protected:
     int run();
 };
 
-#endif // ZM_RATE_LIMITER_H
+#endif // OZ_RATE_LIMITER_H
 
 
 /*@}*/

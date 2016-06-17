@@ -1,5 +1,5 @@
-#ifndef ZM_ENCODER_H
-#define ZM_ENCODER_H
+#ifndef OZ_ENCODER_H
+#define OZ_ENCODER_H
 
 #include "ozFeedProvider.h"
 #include "ozFeedConsumer.h"
@@ -64,4 +64,4 @@ protected:
     }
 };
 
-#endif // ZM_ENCODER_H
+#endif // OZ_ENCODER_H

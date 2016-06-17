@@ -2,8 +2,8 @@
 /*@{*/
 
 
-#ifndef ZM_RTMP_CONTROLLER_H
-#define ZM_RTMP_CONTROLLER_H
+#ifndef OZ_RTMP_CONTROLLER_H
+#define OZ_RTMP_CONTROLLER_H
 
 #include "../base/ozController.h"
 
@@ -39,7 +39,7 @@ public:
     void deleteSession( uint32_t session );
 };
 
-#endif // ZM_RTMP_CONTROLLER_H
+#endif // OZ_RTMP_CONTROLLER_H
 
 
 /*@}*/
