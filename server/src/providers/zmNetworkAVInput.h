@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_NETWORK_AV_INPUT_H
 #define ZM_NETWORK_AV_INPUT_H
 
@@ -70,3 +74,6 @@ protected:
 };
 
 #endif // ZM_NETWORK_AV_INPUT_H
+
+
+/*@}*/

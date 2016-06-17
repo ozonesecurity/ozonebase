@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_VIDEO_4_LINUX_INPUT_H
 #define ZM_VIDEO_4_LINUX_INPUT_H
 
@@ -140,3 +144,6 @@ protected:
 };
 
 #endif // ZM_VIDEO_4_LINUX_INPUT_H
+
+
+/*@}*/

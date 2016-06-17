@@ -1,3 +1,7 @@
+/** @addtogroup Encoders */
+/*@{*/
+
+
 #ifndef ZM_H264_RELAY_H
 #define ZM_H264_RELAY_H
 
@@ -96,3 +100,6 @@ protected:
 };
 
 #endif // ZM_H264_RELAY_H
+
+
+/*@}*/

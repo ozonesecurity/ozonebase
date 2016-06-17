@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTSP_STREAM_H
 #define ZM_RTSP_STREAM_H
 
@@ -144,3 +148,6 @@ protected:
 };
 
 #endif // ZM_RTSP_STREAM_H
+
+
+/*@}*/

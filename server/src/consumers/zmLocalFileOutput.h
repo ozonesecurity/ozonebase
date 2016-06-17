@@ -1,3 +1,6 @@
+/** @addtogroup Consumers */
+/*@{*/
+
 #ifndef ZM_LOCAL_FILE_OUTPUT_H
 #define ZM_LOCAL_FILE_OUTPUT_H
 
@@ -31,3 +34,5 @@ public:
 };
 
 #endif // ZM_LOCAL_FILE_OUTPUT_H
+
+/*@}*/

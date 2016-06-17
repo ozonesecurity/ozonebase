@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTMP_H
 #define ZM_RTMP_H
 
@@ -13,3 +17,6 @@ public:
 };
 
 #endif // ZM_RTMP_H
+
+
+/*@}*/

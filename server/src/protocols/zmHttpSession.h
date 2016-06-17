@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_HTTP_SESSION_H
 #define ZM_HTTP_SESSION_H
 
@@ -26,3 +30,6 @@ public:
 };
 
 #endif // ZM_HTTP_SESSION_H
+
+
+/*@}*/

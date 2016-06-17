@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTMP_SESSION_H
 #define ZM_RTMP_SESSION_H
 
@@ -149,3 +153,6 @@ protected:
 };
 
 #endif // ZM_RTMP_SESSION_H
+
+
+/*@}*/

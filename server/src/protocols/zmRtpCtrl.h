@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTP_CTRL_H
 #define ZM_RTP_CTRL_H
 
@@ -137,3 +141,6 @@ public:
 };
 
 #endif // ZM_RTP_CTRL_H
+
+
+/*@}*/

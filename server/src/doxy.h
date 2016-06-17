@@ -44,12 +44,11 @@ In addition to the core components above, there are other components that form a
 
 </p>
 
+<p>Please browse the <a href="modules.html">modules</a> category on the sidebar to read more about the various classes</p>
+
 <p>A visual layout of how these components interact is shown below:
 <br/>
 <img src="../public/images/ozone-mainpage-class-ref.png" width="500px" style="float:left">
 </p>
 
-<p>
-Please browse the <a href="modules.html">modules</a> category on the sidebar to read more about the various classes
-</p>
  */

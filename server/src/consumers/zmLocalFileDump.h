@@ -1,3 +1,5 @@
+/** @addtogroup Consumers */
+/*@{*/`
 #ifndef ZM_LOCAL_FILE_DUMP_H
 #define ZM_LOCAL_FILE_DUMP_H
 
@@ -23,3 +25,4 @@ public:
 };
 
 #endif // ZM_LOCAL_FILE_DUMP_H
+/*@}*/

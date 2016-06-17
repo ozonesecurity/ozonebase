@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_REMOTE_VIDEO_INPUT_H
 #define ZM_REMOTE_VIDEO_INPUT_H
 
@@ -48,3 +52,6 @@ protected:
 };
 
 #endif // ZM_REMOTE_VIDEO_INPUT_H
+
+
+/*@}*/

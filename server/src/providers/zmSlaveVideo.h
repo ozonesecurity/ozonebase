@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_SLAVE_VIDEO_H
 #define ZM_SLAVE_VIDEO_H
 
@@ -37,3 +41,6 @@ public:
 };
 
 #endif // ZM_SLAVE_VIDEO_H
+
+
+/*@}*/

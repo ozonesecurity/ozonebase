@@ -1,3 +1,7 @@
+/** @addtogroup Encoders */
+/*@{*/
+
+
 #ifndef ZM_JPEG_ENCODER_H
 #define ZM_JPEG_ENCODER_H
 
@@ -38,3 +42,6 @@ protected:
 };
 
 #endif // ZM_JPEG_ENCODER_H
+
+
+/*@}*/

@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_RATE_LIMITER_H
 #define ZM_RATE_LIMITER_H
 
@@ -34,3 +38,6 @@ protected:
 };
 
 #endif // ZM_RATE_LIMITER_H
+
+
+/*@}*/

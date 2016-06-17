@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_VIDEO_FILTER_H
 #define ZM_VIDEO_FILTER_H
 
@@ -43,3 +47,6 @@ protected:
 };
 
 #endif // ZM_VIDEO_FILTER_H
+
+
+/*@}*/

@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_IMAGE_TIMESTAMPER_H
 #define ZM_IMAGE_TIMESTAMPER_H
 
@@ -39,3 +43,6 @@ protected:
 };
 
 #endif // ZM_IMAGE_TIMESTAMPER_H
+
+
+/*@}*/

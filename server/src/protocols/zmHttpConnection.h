@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_HTTP_CONNECTION_H
 #define ZM_HTTP_CONNECTION_H
 
@@ -25,3 +29,6 @@ public:
 };
 
 #endif // ZM_HTTP_CONNECTION_H
+
+
+/*@}*/

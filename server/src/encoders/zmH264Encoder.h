@@ -1,3 +1,7 @@
+/** @addtogroup Encoders */
+/*@{*/
+
+
 #ifndef ZM_H264_ENCODER_H
 #define ZM_H264_ENCODER_H
 
@@ -116,3 +120,6 @@ protected:
 };
 
 #endif // ZM_H264_ENCODER_H
+
+
+/*@}*/

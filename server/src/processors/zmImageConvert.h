@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_IMAGE_CONVERT_H
 #define ZM_IMAGE_CONVERT_H
 
@@ -35,3 +39,6 @@ protected:
 };
 
 #endif // ZM_IMAGE_CONVERT_H
+
+
+/*@}*/
