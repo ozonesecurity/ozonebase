@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_FILTER_SWAPUV_H
 #define ZM_FILTER_SWAPUV_H
 
@@ -32,3 +36,6 @@ protected:
 };
 
 #endif // ZM_FILTER_SWAPUV_H
+
+
+/*@}*/

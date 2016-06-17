@@ -1,3 +1,7 @@
+/** @addtogroup Encoders */
+/*@{*/
+
+
 #ifndef ZM_MPEG_ENCODER_H
 #define ZM_MPEG_ENCODER_H
 
@@ -69,3 +73,6 @@ protected:
 };
 
 #endif // ZM_MPEG_ENCODER_H
+
+
+/*@}*/

@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_DELAY_BUFFER_H
 #define ZM_DELAY_BUFFER_H
 
@@ -24,3 +28,6 @@ protected:
 };
 
 #endif // ZM_DELAY_BUFFER_H
+
+
+/*@}*/

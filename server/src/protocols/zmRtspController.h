@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTSP_CONTROLLER_H
 #define ZM_RTSP_CONTROLLER_H
 
@@ -50,3 +54,6 @@ public:
 };
 
 #endif // ZM_RTSP_CONTROLLER_H
+
+
+/*@}*/

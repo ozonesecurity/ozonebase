@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTP_DATA_H
 #define ZM_RTP_DATA_H
 
@@ -62,3 +66,6 @@ public:
 };
 
 #endif // ZM_RTP_DATA_H
+
+
+/*@}*/

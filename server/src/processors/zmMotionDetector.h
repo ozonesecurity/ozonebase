@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_MOTION_DETECTOR_H
 #define ZM_MOTION_DETECTOR_H
 
@@ -109,3 +113,6 @@ public:
 };
 
 #endif // ZM_MOTION_DETECTOR_H
+
+
+/*@}*/

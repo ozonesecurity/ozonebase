@@ -1,3 +1,5 @@
+/** @addtogroup Consumers */
+/*@{*/
 #ifndef ZM_MEMORY_OUTPUT_H
 #define ZM_MEMORY_OUTPUT_H
 
@@ -30,3 +32,4 @@ public:
 };
 
 #endif // ZM_MEMORY_OUTPUT_H
+/*@}*/

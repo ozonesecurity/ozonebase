@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTSP_CONNECTION_H
 #define ZM_RTSP_CONNECTION_H
 
@@ -35,3 +39,6 @@ public:
 };
 
 #endif // ZM_RTSP_CONNECTION_H
+
+
+/*@}*/

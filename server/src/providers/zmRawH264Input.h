@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_RAW_H264_INPUT_H
 #define ZM_RAW_H264_INPUT_H
 
@@ -70,3 +74,6 @@ protected:
 };
 
 #endif // ZM_RAW_H264_INPUT_H
+
+
+/*@}*/

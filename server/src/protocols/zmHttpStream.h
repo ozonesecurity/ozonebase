@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_HTTP_STREAM_H
 #define ZM_HTTP_STREAM_H
 
@@ -52,3 +56,6 @@ public:
 };
 
 #endif // ZM_HTTP_STREAM_H
+
+
+/*@}*/

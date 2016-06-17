@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTMP_STREAM_H
 #define ZM_RTMP_STREAM_H
 
@@ -47,3 +51,6 @@ protected:
 };
 
 #endif // ZM_RTMP_STREAM_H
+
+
+/*@}*/

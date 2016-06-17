@@ -1,3 +1,7 @@
+/** @addtogroup Protocols */
+/*@{*/
+
+
 #ifndef ZM_RTP_SESSION_H
 #define ZM_RTP_SESSION_H
 
@@ -154,3 +158,6 @@ public:
 };
 
 #endif // ZM_RTP_SESSION_H
+
+
+/*@}*/

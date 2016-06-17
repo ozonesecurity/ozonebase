@@ -1,3 +1,6 @@
+/** @addtogroup Consumers */
+/*@{*/
+
 #ifndef ZM_EVENT_RECORDER_H
 #define ZM_EVENT_RECORDER_H
 
@@ -7,6 +10,7 @@
 #include "../base/zmMotionFrame.h"
 
 #include <deque>
+
 
 ///
 /// Consumer class used to record video stream for which motion or other significant
@@ -53,3 +57,5 @@ public:
 };
 
 #endif // ZM_EVENT_RECORDER_H
+
+/*@}*/

@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_SIGNAL_CHECKER_H
 #define ZM_SIGNAL_CHECKER_H
 
@@ -43,3 +47,6 @@ public:
 };
 
 #endif // ZM_SIGNAL_CHECKER_H
+
+
+/*@}*/

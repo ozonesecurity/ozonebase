@@ -1,3 +1,7 @@
+/** @addtogroup Processors */
+/*@{*/
+
+
 #ifndef ZM_QUAD_VIDEO_H
 #define ZM_QUAD_VIDEO_H
 
@@ -49,3 +53,6 @@ protected:
 };
 
 #endif // ZM_QUAD_VIDEO_H
+
+
+/*@}*/

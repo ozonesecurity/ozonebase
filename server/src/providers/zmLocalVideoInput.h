@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_LOCAL_VIDEO_INPUT_H
 #define ZM_LOCAL_VIDEO_INPUT_H
 
@@ -47,3 +51,6 @@ protected:
 };
 
 #endif // ZM_LOCAL_VIDEO_INPUT_H
+
+
+/*@}*/

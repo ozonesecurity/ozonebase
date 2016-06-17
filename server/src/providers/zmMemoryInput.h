@@ -1,3 +1,7 @@
+/** @addtogroup Providers */
+/*@{*/
+
+
 #ifndef ZM_MEMORY_INPUT_H
 #define ZM_MEMORY_INPUT_H
 
@@ -38,3 +42,6 @@ public:
 };
 
 #endif // ZM_MEMORY_INPUT_H
+
+
+/*@}*/

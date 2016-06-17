@@ -1,3 +1,6 @@
+/** @addtogroup Consumers */
+/*@{*/
+
 #ifndef ZM_MOVIE_FILE_OUTPUT_H
 #define ZM_MOVIE_FILE_OUTPUT_H
 
@@ -97,3 +100,4 @@ public:
 };
 
 #endif // ZM_MOVIE_FILE_OUTPUT_H
+/*@}*/
