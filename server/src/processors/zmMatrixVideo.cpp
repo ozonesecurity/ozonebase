@@ -1,5 +1,5 @@
 #include "../base/zm.h"
-#include "zmQuadVideo.h"
+#include "zmMatrixVideo.h"
 
 #include "../base/zmFeedFrame.h"
 
@@ -14,7 +14,7 @@
 * @param xTiles
 * @param yTiles
 */
-QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
+MatrixVideo::MatrixVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
     VideoConsumer( cClass(), name, xTiles*yTiles ),
     VideoProvider( cClass(), name ),
     Thread( identity() ),
@@ -38,7 +38,7 @@ QuadVideo::QuadVideo( const std::string &name, PixelFormat pixelFormat, int widt
 /**
 * @brief 
 */
-QuadVideo::~QuadVideo()
+MatrixVideo::~MatrixVideo()
 {
     delete[] mConvertContexts;
     delete[] mInterFrames;
@@ -52,7 +52,7 @@ QuadVideo::~QuadVideo()
 *
 * @return 
 */
-bool QuadVideo::registerProvider( FeedProvider &provider, const FeedLink &link )
+bool MatrixVideo::registerProvider( FeedProvider &provider, const FeedLink &link )
 {
     for ( int i = 0; i < mProviderList.size(); i++ )
     {
@@ -76,7 +76,7 @@ bool QuadVideo::registerProvider( FeedProvider &provider, const FeedLink &link )
 *
 * @return 
 */
-bool QuadVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
+bool MatrixVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
 {
     for ( int i = 0; i < mProviderList.size(); i++ )
     {
@@ -100,7 +100,7 @@ bool QuadVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
 *
 * @return 
 */
-int QuadVideo::run()
+int MatrixVideo::run()
 {
     // Make sure ffmpeg is compiled with mpjpeg support
     AVCodec *codec = avcodec_find_encoder( CODEC_ID_MJPEG );
@@ -254,7 +254,7 @@ int QuadVideo::run()
 #include <libavfilter/vsrc_buffer.h>
 #include <libavfilter/buffersink.h>
 
-int QuadVideo::run()
+int MatrixVideo::run()
 {
     avfilter_register_all();
 
