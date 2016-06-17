@@ -13,7 +13,7 @@ libprocessors_a_SOURCES = \
 	zmImageConvert.cpp \
 	zmImageTimestamper.cpp \
 	zmMotionDetector.cpp \
-	zmQuadVideo.cpp \
+	zmMatrixVideo.cpp \
 	zmRateLimiter.cpp \
 	zmSignalChecker.cpp \
 	zmVideoFilter.cpp
@@ -24,7 +24,7 @@ pkginclude_HEADERS = \
 	zmImageConvert.h \
 	zmImageTimestamper.h \
 	zmMotionDetector.h \
-	zmQuadVideo.h \
+	zmMatrixVideo.h \
 	zmRateLimiter.h \
 	zmSignalChecker.h \
 	zmVideoFilter.h

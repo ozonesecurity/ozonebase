@@ -2,22 +2,21 @@
 /*@{*/
 
 
-#ifndef ZM_QUAD_VIDEO_H
-#define ZM_QUAD_VIDEO_H
+#ifndef ZM_MATRIX_VIDEO_H
 
 #include "../base/zmFeedBase.h"
 #include "../base/zmFeedProvider.h"
 #include "../base/zmFeedConsumer.h"
 
 ///
-/// Processor that amalgamates up to four video streams into a 2x2 quad video matrix. Can easily
+/// Processor that amalgamates up to four video streams into a 2x2 matrix video matrix. Can easily
 /// be extended for other geometries but the overall image size must be exactly divisble by the number
 /// of tiles. Bit of a kludge implementation, a more flexible variant should be possible using ffmpeg
 /// filters.
 ///
-class QuadVideo : public VideoConsumer, public VideoProvider, public Thread
+class MatrixVideo : public VideoConsumer, public VideoProvider, public Thread
 {
-CLASSID(QuadVideo);
+CLASSID(MatrixVideo);
 
 private:
     typedef std::vector<FeedProvider *>   ProviderList;
@@ -37,8 +36,8 @@ private:
     struct SwsContext **mConvertContexts;
 
 public:
-    QuadVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles=2, int yTiles=2 );
-    ~QuadVideo();
+    MatrixVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles=2, int yTiles=2 );
+    ~MatrixVideo();
 
     PixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint16_t width() const { return( mWidth ); }
@@ -52,7 +51,7 @@ protected:
     int run();
 };
 
-#endif // ZM_QUAD_VIDEO_H
+#endif // ZM_MATRIX_VIDEO_H
 
 
 /*@}*/

@@ -2,13 +2,13 @@
 #include "../base/zmListener.h"
 #include "../providers/zmLocalVideoInput.h"
 #include "../providers/zmNetworkAVInput.h"
-#include "../processors/zmQuadVideo.h"
+#include "../processors/zmMatrixVideo.h"
 #include "../protocols/zmRtspController.h"
 
 #include "../libgen/libgenDebug.h"
 
 //
-// Load one file, one V4L and two network streams, combine to quad video available over RTSP
+// Load one file, one V4L and two network streams, combine to matrix video available over RTSP
 //
 int main( int argc, const char *argv[] )
 {
@@ -29,12 +29,12 @@ int main( int argc, const char *argv[] )
     NetworkAVInput input4( "input", "/tmp/movie.mp4" );
     app.addThread( &input4 );
 
-    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-    quadVideo.registerProvider( input1 );
-    quadVideo.registerProvider( input2 );
-    quadVideo.registerProvider( input3 );
-    quadVideo.registerProvider( input4 );
-    app.addThread( &quadVideo );
+    MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    matrixVideo.registerProvider( input1 );
+    matrixVideo.registerProvider( input2 );
+    matrixVideo.registerProvider( input3 );
+    matrixVideo.registerProvider( input4 );
+    app.addThread( &matrixVideo );
 
     Listener listener;
     app.addThread( &listener );
@@ -46,7 +46,7 @@ int main( int argc, const char *argv[] )
     rtspController.addStream( "input2", input2 );
     rtspController.addStream( "input3", input3 );
     rtspController.addStream( "input4", input4 );
-    rtspController.addStream( "quad", quadVideo );
+    rtspController.addStream( "matrix", matrixVideo );
 
     app.run();
 }

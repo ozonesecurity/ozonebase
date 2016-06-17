@@ -12,7 +12,7 @@
 
 [![ozone server video](http://img.youtube.com/vi/Ic2HXUjxRnU/0.jpg)](http://www.youtube.com/watch?v=Ic2HXUjxRnU "ozone server example")
 
-What's happening here is we wrote a simple server and client app. The server app connects to two traffic cameras, converts RTSP to MJPEG so it can show on the browser. It also creates motion detection streams and a stiched quad frame to show you it rocks. And in less that 22 lines of core code. 
+What's happening here is we wrote a simple server and client app. The server app connects to two traffic cameras, converts RTSP to MJPEG so it can show on the browser. It also creates motion detection streams and a stiched matrix frame to show you it rocks. And in less that 22 lines of core code. 
 
 
 
@@ -50,7 +50,7 @@ Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/s
   </table>
  
 <h2> Muxed 4x4 stream of camera 1 and 2 and its debug frames</h2>
- <img src="http://192.168.1.224:9292/debug/quadcammux" />
+ <img src="http://192.168.1.224:9292/debug/matrixcammux" />
 
 
 </body>
@@ -82,12 +82,12 @@ Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/s
    	app.addThread( &motionDetector2 );
 
 	// Let's make a mux/stitched handler for cam1 and cam2 and its debugs
-	QuadVideo quadVideo( "quadcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-   	quadVideo.registerProvider( cam1 );
-   	quadVideo.registerProvider( *motionDetector1.deltaImageSlave() );
-   	quadVideo.registerProvider( cam2 );
-   	quadVideo.registerProvider( *motionDetector2.deltaImageSlave() );
-   	app.addThread( &quadVideo );
+	MatrixVideo matrixVideo( "matrixcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+   	matrixVideo.registerProvider( cam1 );
+   	matrixVideo.registerProvider( *motionDetector1.deltaImageSlave() );
+   	matrixVideo.registerProvider( cam2 );
+   	matrixVideo.registerProvider( *motionDetector2.deltaImageSlave() );
+   	app.addThread( &matrixVideo );
 
 	Listener listener;
     app.addThread( &listener );
@@ -98,7 +98,7 @@ Full code [here](https://github.com/ozonesecurity/ozonebase/blob/master/server/s
 
 	httpController.addStream( "file", cam1 );
    	httpController.addStream( "debug", SlaveVideo::cClass() );
-   	httpController.addStream( "debug", quadVideo );
+   	httpController.addStream( "debug", matrixVideo );
    	httpController.addStream( "debug", motionDetector1 );
    	httpController.addStream( "debug", motionDetector2 );
 	
