@@ -8,23 +8,23 @@ lib_LIBRARIES = \
     libproviders.a
 
 libproviders_a_SOURCES = \
-	zmLocalFileInput.cpp \
-	zmLocalVideoInput.cpp \
-	zmMemoryInput.cpp \
-	zmMemoryInputV1.cpp \
-	zmNetworkAVInput.cpp \
-	zmRawH264Input.cpp \
-	zmRemoteVideoInput.cpp \
-	zmSlaveVideo.cpp \
-	zmVideo4LinuxInput.cpp
+	ozLocalFileInput.cpp \
+	ozLocalVideoInput.cpp \
+	ozMemoryInput.cpp \
+	ozMemoryInputV1.cpp \
+	ozNetworkAVInput.cpp \
+	ozRawH264Input.cpp \
+	ozRemoteVideoInput.cpp \
+	ozSlaveVideo.cpp \
+	ozVideo4LinuxInput.cpp
 
 pkginclude_HEADERS = \
-	zmLocalFileInput.h \
-	zmLocalVideoInput.h \
-	zmMemoryInput.h \
-	zmMemoryInputV1.h \
-	zmNetworkAVInput.h \
-	zmRawH264Input.h \
-	zmRemoteVideoInput.h \
-	zmSlaveVideo.h \
-	zmVideo4LinuxInput.h
+	ozLocalFileInput.h \
+	ozLocalVideoInput.h \
+	ozMemoryInput.h \
+	ozMemoryInputV1.h \
+	ozNetworkAVInput.h \
+	ozRawH264Input.h \
+	ozRemoteVideoInput.h \
+	ozSlaveVideo.h \
+	ozVideo4LinuxInput.h

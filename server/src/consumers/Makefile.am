@@ -8,17 +8,17 @@ lib_LIBRARIES = \
     libconsumers.a
 
 libconsumers_a_SOURCES = \
-	zmEventRecorder.cpp \
-	zmLocalFileDump.cpp \
-	zmLocalFileOutput.cpp \
-	zmMemoryOutput.cpp \
-	zmMovieFileOutput.cpp \
-	zmMp4FileOutput.cpp
+	ozEventRecorder.cpp \
+	ozLocalFileDump.cpp \
+	ozLocalFileOutput.cpp \
+	ozMemoryOutput.cpp \
+	ozMovieFileOutput.cpp \
+	ozMp4FileOutput.cpp
 
 pkginclude_HEADERS = \
-	zmEventRecorder.h \
-	zmLocalFileDump.h \
-	zmLocalFileOutput.h \
-	zmMemoryOutput.h \
-	zmMovieFileOutput.h \
-	zmMp4FileOutput.h
+	ozEventRecorder.h \
+	ozLocalFileDump.h \
+	ozLocalFileOutput.h \
+	ozMemoryOutput.h \
+	ozMovieFileOutput.h \
+	ozMp4FileOutput.h

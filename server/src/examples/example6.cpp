@@ -1,9 +1,9 @@
-#include "../base/zmApp.h"
-#include "../base/zmListener.h"
-#include "../providers/zmNetworkAVInput.h"
-#include "../processors/zmMotionDetector.h"
-#include "../processors/zmMatrixVideo.h"
-#include "../protocols/zmHttpController.h"
+#include "../base/ozApp.h"
+#include "../base/ozListener.h"
+#include "../providers/ozNetworkAVInput.h"
+#include "../processors/ozMotionDetector.h"
+#include "../processors/ozMatrixVideo.h"
+#include "../protocols/ozHttpController.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -25,7 +25,7 @@ int main( int argc, const char *argv[] )
 
     MotionDetector motionDetector( "modect" );
     motionDetector.registerProvider( input );
-    //EventRecorder eventRecorder( "/transfer/zmx" );
+    //EventRecorder eventRecorder( "/transfer/ozx" );
     app.addThread( &motionDetector );
 
     MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );

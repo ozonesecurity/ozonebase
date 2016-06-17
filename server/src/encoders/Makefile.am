@@ -8,13 +8,13 @@ lib_LIBRARIES = \
     libencoders.a
 
 libencoders_a_SOURCES = \
-	zmH264Encoder.cpp \
-	zmH264Relay.cpp \
-	zmMpegEncoder.cpp \
-	zmJpegEncoder.cpp
+	ozH264Encoder.cpp \
+	ozH264Relay.cpp \
+	ozMpegEncoder.cpp \
+	ozJpegEncoder.cpp
 
 pkginclude_HEADERS = \
-	zmH264Encoder.h \
-	zmH264Relay.h \
-	zmMpegEncoder.h \
-	zmJpegEncoder.h
+	ozH264Encoder.h \
+	ozH264Relay.h \
+	ozMpegEncoder.h \
+	ozJpegEncoder.h

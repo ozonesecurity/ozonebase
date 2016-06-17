@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(zm,2.0.0a,support@zoneminder.com,ZoneMinder,http://www.zoneminder.com/downloads.html)
+AC_INIT(oz,2.0.0a,support@zoneminder.com,ZoneMinder,http://www.zoneminder.com/downloads.html)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR(src/base)
 AM_CONFIG_HEADER(config.h)
@@ -17,11 +17,11 @@ AC_ARG_VAR(ZM_USER,[Name of ZoneMinder user, zoneminder])
 if test "$ZM_USER" == ""; then
     AC_SUBST(ZM_USER,[zoneminder])
 fi
-AC_ARG_VAR(ZM_WEB_DIR,[Location to install web GUI html files, default /opt/zm2/web/html])
+AC_ARG_VAR(ZM_WEB_DIR,[Location to install web GUI html files, default /opt/oz2/web/html])
 if test "$ZM_WEB_DIR" == ""; then
     AC_SUBST(ZM_WEB_DIR,$prefix/web/html)
 fi
-AC_ARG_VAR(ZM_CGI_DIR,[Location to install web GUI cgi files, default /opt/zm2/web/cgi-bin])
+AC_ARG_VAR(ZM_CGI_DIR,[Location to install web GUI cgi files, default /opt/oz2/web/cgi-bin])
 if test "$ZM_CGI_DIR" == ""; then
     AC_SUBST(ZM_CGI_DIR,$prefix/web/cgi-bin)
 fi
@@ -33,17 +33,17 @@ AC_ARG_VAR(ZM_DB_HOST,[Hostname where ZoneMinder database located, default local
 if test "$ZM_DB_HOST" == ""; then
     AC_SUBST(ZM_DB_HOST,[localhost])
 fi
-AC_ARG_VAR(ZM_DB_NAME,[Name of ZoneMinder database, default zm])
+AC_ARG_VAR(ZM_DB_NAME,[Name of ZoneMinder database, default oz])
 if test "$ZM_DB_NAME" == ""; then
-    AC_SUBST(ZM_DB_NAME,[zm])
+    AC_SUBST(ZM_DB_NAME,[oz])
 fi
-AC_ARG_VAR(ZM_DB_USER,[Name of ZoneMinder database user, default zmuser])
+AC_ARG_VAR(ZM_DB_USER,[Name of ZoneMinder database user, default ozuser])
 if test "$ZM_DB_USER" == ""; then
-    AC_SUBST(ZM_DB_USER,[zmuser])
+    AC_SUBST(ZM_DB_USER,[ozuser])
 fi
-AC_ARG_VAR(ZM_DB_PASS,[Password of ZoneMinder database user, default zmpass])
+AC_ARG_VAR(ZM_DB_PASS,[Password of ZoneMinder database user, default ozpass])
 if test "$ZM_DB_PASS" == ""; then
-    AC_SUBST(ZM_DB_PASS,[zmpass])
+    AC_SUBST(ZM_DB_PASS,[ozpass])
 fi
 AC_ARG_VAR(ZM_SSL_LIB,[Library to use for ssl functions, default gnutls])
 if test "$ZM_SSL_LIB" == ""; then
@@ -53,17 +53,17 @@ AC_ARG_VAR(ZM_MYSQL_ENGINE,[MySQL engine to use with database, default MyISAM])
 if test "$ZM_MYSQL_ENGINE" == ""; then
     AC_SUBST(ZM_MYSQL_ENGINE,MyISAM)
 fi
-AC_ARG_VAR(ZM_RUNDIR,[Location of transient process files, default /var/run/zm])
+AC_ARG_VAR(ZM_RUNDIR,[Location of transient process files, default /var/run/oz])
 if test "$ZM_RUNDIR" == ""; then
-    AC_SUBST(ZM_RUNDIR,[/var/run/zm])
+    AC_SUBST(ZM_RUNDIR,[/var/run/oz])
 fi
-AC_ARG_VAR(ZM_TMPDIR,[Location of temporary files, default /tmp/zm])
+AC_ARG_VAR(ZM_TMPDIR,[Location of temporary files, default /tmp/oz])
 if test "$ZM_TMPDIR" == ""; then
-    AC_SUBST(ZM_TMPDIR,[/tmp/zm])
+    AC_SUBST(ZM_TMPDIR,[/tmp/oz])
 fi
-AC_ARG_VAR(ZM_LOGDIR,[Location of generated log files, default /var/log/zm])
+AC_ARG_VAR(ZM_LOGDIR,[Location of generated log files, default /var/log/oz])
 if test "$ZM_LOGDIR" == ""; then
-    AC_SUBST(ZM_LOGDIR,[/var/log/zm])
+    AC_SUBST(ZM_LOGDIR,[/var/log/oz])
 fi
 AC_ARG_VAR(ZM_LIBARCH,[Architecture specific library path, default lib, try lib64 on 64 bit systems])
 if test "$ZM_LIBARCH" == ""; then
@@ -125,7 +125,7 @@ AC_ARG_ENABLE(crashtrace,
     This tells configure whether to compile ZoneMinder with crash tracing included. This allows a
     dump of the stack trace when a ZoneMinder binary crashes or is killed by an unexpected signal.
     Although this should work on most systems it does rely on un(or loosely) documented features and
-    so should be regarded as experimental. If you experience problems compiling zm_signal.cpp or 
+    so should be regarded as experimental. If you experience problems compiling oz_signal.cpp or 
     ZoneMinder binaries fail to shut down correctly then you should probably disable this feature.
     e.g. --enable-crashtrace=yes or --disable-crashtrace])
 )
@@ -172,13 +172,13 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday memmove memset mkdir munmap putenv select socket sqrt strcasecmp strchr strcspn strerror strncasecmp strrchr strsignal strspn strstr strtol strtoull])
 
 # Checks for libraries.
-AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(zm requires libjpeg.a))
-AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(zm requires libpthread.a))
-AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(zm requires libdl.a))
+AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(oz requires libjpeg.a))
+AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(oz requires libpthread.a))
+AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(oz requires libdl.a))
 if test "$ZM_SSL_LIB" == "openssl"; then
 AC_CHECK_LIB(crypto,MD5,,AC_MSG_WARN([libcrypto.a is required for authenticated streaming - use ZM_SSL_LIB option to select gnutls instead]))
 else
-AC_CHECK_HEADERS(gcrypt.h,,AC_MSG_WARN(zm requires libgcrypt headers to be installed for gnutls),)
+AC_CHECK_HEADERS(gcrypt.h,,AC_MSG_WARN(oz requires libgcrypt headers to be installed for gnutls),)
 AC_CHECK_LIB(gcrypt,gcry_check_version,,AC_MSG_WARN([libgcrypt.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
 AC_CHECK_LIB(gnutls-openssl,MD5,,AC_MSG_WARN([gnutls-openssl.a is required for authenticated streaming - use ZM_SSL_LIB option to select openssl instead]))
 fi
@@ -197,8 +197,8 @@ AC_CHECK_LIB(z,compress,,)
 AC_FUNC_ALLOCA
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h limits.h memory.h netdb.h netinet/in.h stddef.h stdlib.h string.h strings.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h syslog.h unistd.h values.h])
-AC_CHECK_HEADERS(linux/videodev2.h,,AC_MSG_WARN(zm requires Video4Linux2 to be installed for V4L2 support))
-AC_CHECK_HEADERS(jpeglib.h,,AC_MSG_ERROR(zm requires libjpeg headers to be installed),)
+AC_CHECK_HEADERS(linux/videodev2.h,,AC_MSG_WARN(oz requires Video4Linux2 to be installed for V4L2 support))
+AC_CHECK_HEADERS(jpeglib.h,,AC_MSG_ERROR(oz requires libjpeg headers to be installed),)
 AC_CHECK_HEADERS(libavutil/avutil.h,,,)
 AC_CHECK_HEADERS(libavcodec/avcodec.h,,,)
 AC_CHECK_HEADERS(libavformat/avformat.h,,,)
@@ -214,10 +214,10 @@ AC_CHECK_HEADERS(zlib.h,,,)
 
 AC_CHECK_DECLS(round,,,[#include <math.h>])
 if test "$ZM_SSL_LIB" == "openssl"; then
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([zm requires openssl/md5.h - use ZM_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
+AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires openssl/md5.h - use ZM_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
 #include <openssl/md5.h>])
 else
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([zm requires gnutls/openssl.h - use ZM_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
+AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires gnutls/openssl.h - use ZM_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
 #include <gnutls/openssl.h>])
 fi
 AC_CHECK_DECLS(backtrace,,,[#include <execinfo.h>])
@@ -226,9 +226,9 @@ AC_SUBST(LDFLAGS)
 
 AC_DEFINE_DIR([BINDIR],[bindir],[Expanded binary directory])
 AC_DEFINE_DIR([LIBDIR],[libdir],[Expanded library directory])
-AC_SUBST(ZM_PID,"$ZM_RUNDIR/zm.pid")
+AC_SUBST(ZM_PID,"$ZM_RUNDIR/oz.pid")
 AC_DEFINE_DIR([SYSCONFDIR],[sysconfdir],[Expanded configuration directory])
-AC_SUBST(ZM_CONFIG,"$SYSCONFDIR/zm.conf")
+AC_SUBST(ZM_CONFIG,"$SYSCONFDIR/oz.conf")
 
 AC_CONFIG_FILES([
     Makefile
@@ -236,7 +236,7 @@ AC_CONFIG_FILES([
     src/libgen/Makefile
     src/libimg/Makefile
     src/base/Makefile
-    src/base/zmConfig.h
+    src/base/ozConfig.h
     src/consumers/Makefile
     src/encoders/Makefile
     src/processors/Makefile
