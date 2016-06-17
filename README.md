@@ -12,7 +12,7 @@
 
 [![ozone server video](http://img.youtube.com/vi/Ic2HXUjxRnU/0.jpg)](http://www.youtube.com/watch?v=Ic2HXUjxRnU "ozone server example")
 
-What's happening here is we wrote a simple server and client app. The server app connects to two traffic cameras, converts RTSP to MJPEG so it can show on the browser. It also creates motion detection streams and a stiched matrix frame to show you it rocks. And in less that 22 lines of core code. 
+What's happening here is we wrote a simple server and client app. The server app connects to two traffic cameras, converts RTSP to MJPEG so it can show on the browser. It also creates motion detection streams and a stitched matrix frame to show you it rocks. And in less that 22 lines of core code. 
 
 
 
