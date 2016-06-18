@@ -191,7 +191,7 @@ static int ffmpegLockManager( void **mutex, enum AVLockOp op )
 /**
 * @brief 
 */
-void ffmpegInit()
+void avInit()
 {
     av_log_set_level( ( dbgLevel > DBG_INF ) ? AV_LOG_DEBUG : AV_LOG_QUIET );
 

@@ -16,7 +16,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 

@@ -157,7 +157,7 @@ typedef enum {
 
 const uint8_t *h264StartCode( const uint8_t *p, const uint8_t *end );
 
-void ffmpegInit();
+void avInit();
 const char *avStrError( int error );
 void avDumpDict( AVDictionary *dict );
 void avDictSet( AVDictionary **dict, const char *name, const char *value );
