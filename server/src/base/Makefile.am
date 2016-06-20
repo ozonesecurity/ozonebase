@@ -8,49 +8,49 @@ lib_LIBRARIES = \
     libbase.a
 
 libbase_a_SOURCES = \
-    zmAlarmFrame.cpp \
-    zmApp.cpp \
-    zmConfig.cpp \
-    zmConnection.cpp \
-    zmController.cpp \
-    zmEncoder.cpp \
-    zmFeedBase.cpp \
-    zmFeedConsumer.cpp \
-    zmFeedFrame.cpp \
-    zmFeedProvider.cpp \
-    zmFfmpeg.cpp \
-    zmListener.cpp \
-    zmMemoryIO.cpp \
-    zmMemoryIOV1.cpp \
-    zmMotionData.cpp \
-    zmMotionFrame.cpp \
-    zmRegion.cpp \
-    zmSignal.cpp \
-    zmStream.cpp \
-    zmZone.cpp
+    ozAlarmFrame.cpp \
+    ozApp.cpp \
+    ozConfig.cpp \
+    ozConnection.cpp \
+    ozController.cpp \
+    ozEncoder.cpp \
+    ozFeedBase.cpp \
+    ozFeedConsumer.cpp \
+    ozFeedFrame.cpp \
+    ozFeedProvider.cpp \
+    ozFfmpeg.cpp \
+    ozListener.cpp \
+    ozMemoryIO.cpp \
+    ozMemoryIOV1.cpp \
+    ozMotionData.cpp \
+    ozMotionFrame.cpp \
+    ozRegion.cpp \
+    ozSignal.cpp \
+    ozStream.cpp \
+    ozZone.cpp
 
 pkginclude_HEADERS = \
     countedPtr.h \
     linkedPtr.h \
-    zmAlarmFrame.h \
-    zmApp.h \
-    zmConfigDefines.h \
-    zmConfig.h \
-    zmConnection.h \
-    zmController.h \
-    zmEncoder.h \
-    zmFeedBase.h \
-    zmFeedConsumer.h \
-    zmFeedFrame.h \
-    zmFeedProvider.h \
-    zmFfmpeg.h \
-    zm.h \
-    zmListener.h \
-    zmMemoryIO.h \
-    zmMemoryIOV1.h \
-    zmMotionData.h \
-    zmMotionFrame.h \
-    zmRegion.h \
-    zmSignal.h \
-    zmStream.h \
-    zmZone.h
+    ozAlarmFrame.h \
+    ozApp.h \
+    ozConfigDefines.h \
+    ozConfig.h \
+    ozConnection.h \
+    ozController.h \
+    ozEncoder.h \
+    ozFeedBase.h \
+    ozFeedConsumer.h \
+    ozFeedFrame.h \
+    ozFeedProvider.h \
+    ozFfmpeg.h \
+    oz.h \
+    ozListener.h \
+    ozMemoryIO.h \
+    ozMemoryIOV1.h \
+    ozMotionData.h \
+    ozMotionFrame.h \
+    ozRegion.h \
+    ozSignal.h \
+    ozStream.h \
+    ozZone.h

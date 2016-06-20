@@ -8,23 +8,23 @@ lib_LIBRARIES = \
     libprocessors.a
 
 libprocessors_a_SOURCES = \
-	zmDelayBuffer.cpp \
-	zmFilterSwapUV.cpp \
-	zmImageConvert.cpp \
-	zmImageTimestamper.cpp \
-	zmMotionDetector.cpp \
-	zmQuadVideo.cpp \
-	zmRateLimiter.cpp \
-	zmSignalChecker.cpp \
-	zmVideoFilter.cpp
+	ozDelayBuffer.cpp \
+	ozFilterSwapUV.cpp \
+	ozImageConvert.cpp \
+	ozImageTimestamper.cpp \
+	ozMotionDetector.cpp \
+	ozMatrixVideo.cpp \
+	ozRateLimiter.cpp \
+	ozSignalChecker.cpp \
+	ozVideoFilter.cpp
 
 pkginclude_HEADERS = \
-	zmDelayBuffer.h \
-	zmFilterSwapUV.h \
-	zmImageConvert.h \
-	zmImageTimestamper.h \
-	zmMotionDetector.h \
-	zmQuadVideo.h \
-	zmRateLimiter.h \
-	zmSignalChecker.h \
-	zmVideoFilter.h
+	ozDelayBuffer.h \
+	ozFilterSwapUV.h \
+	ozImageConvert.h \
+	ozImageTimestamper.h \
+	ozMotionDetector.h \
+	ozMatrixVideo.h \
+	ozRateLimiter.h \
+	ozSignalChecker.h \
+	ozVideoFilter.h

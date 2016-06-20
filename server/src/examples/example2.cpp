@@ -1,8 +1,8 @@
-#include "../base/zmApp.h"
-#include "../providers/zmMemoryInput.h"
-#include "../processors/zmMotionDetector.h"
-#include "../consumers/zmEventRecorder.h"
-#include "../consumers/zmLocalFileOutput.h"
+#include "../base/ozApp.h"
+#include "../providers/ozMemoryInput.h"
+#include "../processors/ozMotionDetector.h"
+#include "../consumers/ozEventRecorder.h"
+#include "../consumers/ozLocalFileOutput.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -15,7 +15,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 

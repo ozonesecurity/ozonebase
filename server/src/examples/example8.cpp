@@ -1,8 +1,8 @@
-#include "../base/zmApp.h"
-#include "../base/zmListener.h"
-#include "../providers/zmMemoryInputV1.h"
-#include "../protocols/zmHttpController.h"
-#include "../protocols/zmRtspController.h"
+#include "../base/ozApp.h"
+#include "../base/ozListener.h"
+#include "../providers/ozMemoryInputV1.h"
+#include "../protocols/ozHttpController.h"
+#include "../protocols/ozRtspController.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -12,11 +12,11 @@
 //
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "zmx", "", 5 );
+    debugInitialise( "ozx", "", 5 );
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 

@@ -222,7 +222,7 @@ static void dieHandler( int signal )
     Error( "Got signal %d, crashing", signal );
 #endif // HAVE_STRSIGNAL
 
-#ifndef ZM_NO_CRASHTRACE
+#ifndef OZ_NO_CRASHTRACE
 #if ( ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T ) || HAVE_STRUCT_SIGCONTEXT )
     void *trace[16];
     int trace_size = 0;
@@ -259,7 +259,7 @@ static void dieHandler( int signal )
     Info( "Backtrace complete" );
 #endif // HAVE_DECL_BACKTRACE
 #endif // ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T ) || HAVE_STRUCT_SIGCONTEXT
-#endif // ZM_NO_CRASHTRACE
+#endif // OZ_NO_CRASHTRACE
 
     exit( signal );
 }

@@ -1,7 +1,7 @@
-#include "../base/zmApp.h"
-#include "../base/zmListener.h"
-#include "../providers/zmRawH264Input.h"
-#include "../protocols/zmRtspController.h"
+#include "../base/ozApp.h"
+#include "../base/ozListener.h"
+#include "../providers/ozRawH264Input.h"
+#include "../protocols/ozRtspController.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -14,7 +14,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 

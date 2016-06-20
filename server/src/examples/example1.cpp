@@ -1,6 +1,6 @@
-#include "../base/zmApp.h"
-#include "../providers/zmLocalVideoInput.h"
-#include "../consumers/zmMemoryOutput.h"
+#include "../base/ozApp.h"
+#include "../providers/ozLocalVideoInput.h"
+#include "../consumers/ozMemoryOutput.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -13,7 +13,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 

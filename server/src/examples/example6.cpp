@@ -1,14 +1,14 @@
-#include "../base/zmApp.h"
-#include "../base/zmListener.h"
-#include "../providers/zmNetworkAVInput.h"
-#include "../processors/zmMotionDetector.h"
-#include "../processors/zmQuadVideo.h"
-#include "../protocols/zmHttpController.h"
+#include "../base/ozApp.h"
+#include "../base/ozListener.h"
+#include "../providers/ozNetworkAVInput.h"
+#include "../processors/ozMotionDetector.h"
+#include "../processors/ozMatrixVideo.h"
+#include "../protocols/ozHttpController.h"
 
 #include "../libgen/libgenDebug.h"
 
 //
-// Run motion detection on a saved file, provide debug images in quad mode over HTTP
+// Run motion detection on a saved file, provide debug images in matrix mode over HTTP
 //
 int main( int argc, const char *argv[] )
 {
@@ -16,7 +16,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 
@@ -25,15 +25,15 @@ int main( int argc, const char *argv[] )
 
     MotionDetector motionDetector( "modect" );
     motionDetector.registerProvider( input );
-    //EventRecorder eventRecorder( "/transfer/zmx" );
+    //EventRecorder eventRecorder( "/transfer/ozx" );
     app.addThread( &motionDetector );
 
-    QuadVideo quadVideo( "quad", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-    quadVideo.registerProvider( *motionDetector.refImageSlave() );
-    quadVideo.registerProvider( *motionDetector.compImageSlave() );
-    quadVideo.registerProvider( *motionDetector.deltaImageSlave() );
-    quadVideo.registerProvider( *motionDetector.varImageSlave() );
-    app.addThread( &quadVideo );
+    MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    matrixVideo.registerProvider( *motionDetector.refImageSlave() );
+    matrixVideo.registerProvider( *motionDetector.compImageSlave() );
+    matrixVideo.registerProvider( *motionDetector.deltaImageSlave() );
+    matrixVideo.registerProvider( *motionDetector.varImageSlave() );
+    app.addThread( &matrixVideo );
 
     Listener listener;
     app.addThread( &listener );
@@ -43,7 +43,7 @@ int main( int argc, const char *argv[] )
 
     httpController.addStream( "file", input );
     httpController.addStream( "debug", SlaveVideo::cClass() );
-    httpController.addStream( "debug", quadVideo );
+    httpController.addStream( "debug", matrixVideo );
     httpController.addStream( "debug", motionDetector );
 
     app.run();

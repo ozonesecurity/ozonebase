@@ -1,9 +1,9 @@
-#include "../base/zmApp.h"
-#include "../base/zmListener.h"
-#include "../providers/zmNetworkAVInput.h"
-#include "../processors/zmMotionDetector.h"
-#include "../processors/zmQuadVideo.h"
-#include "../protocols/zmHttpController.h"
+#include "../base/ozApp.h"
+#include "../base/ozListener.h"
+#include "../providers/ozNetworkAVInput.h"
+#include "../processors/ozMotionDetector.h"
+#include "../processors/ozMatrixVideo.h"
+#include "../protocols/ozHttpController.h"
 
 #include "../libgen/libgenDebug.h"
 
@@ -23,7 +23,7 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-    ffmpegInit();
+    avInit();
 
     Application app;
 
@@ -44,12 +44,12 @@ int main( int argc, const char *argv[] )
    	app.addThread( &motionDetector2 );
 
 	// Let's make a mux/stitched handler for cam1 and cam2 and its debugs
-	QuadVideo quadVideo( "quadcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
-   	quadVideo.registerProvider( cam1 );
-   	quadVideo.registerProvider( *motionDetector1.deltaImageSlave() );
-   	quadVideo.registerProvider( cam2 );
-   	quadVideo.registerProvider( *motionDetector2.deltaImageSlave() );
-   	app.addThread( &quadVideo );
+	MatrixVideo matrixVideo( "matrixcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+   	matrixVideo.registerProvider( cam1 );
+   	matrixVideo.registerProvider( *motionDetector1.deltaImageSlave() );
+   	matrixVideo.registerProvider( cam2 );
+   	matrixVideo.registerProvider( *motionDetector2.deltaImageSlave() );
+   	app.addThread( &matrixVideo );
 
 
 	Listener listener;
@@ -61,7 +61,7 @@ int main( int argc, const char *argv[] )
 
 	httpController.addStream( "file", cam1 );
    	httpController.addStream( "debug", SlaveVideo::cClass() );
-   	httpController.addStream( "debug", quadVideo );
+   	httpController.addStream( "debug", matrixVideo );
    	httpController.addStream( "debug", motionDetector1 );
    	httpController.addStream( "debug", motionDetector2 );
 	

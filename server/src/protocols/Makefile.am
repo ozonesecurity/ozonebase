@@ -8,45 +8,45 @@ lib_LIBRARIES = \
     libprotocols.a
 
 libprotocols_a_SOURCES = \
-	zmHttp.cpp \
-	zmHttpConnection.cpp \
-	zmHttpController.cpp \
-	zmHttpSession.cpp \
-	zmHttpStream.cpp \
-	zmRtmp.cpp \
-	zmRtmpAmf.cpp \
-	zmRtmpConnection.cpp \
-	zmRtmpController.cpp \
-	zmRtmpRequest.cpp \
-	zmRtmpSession.cpp \
-	zmRtmpStream.cpp \
-	zmRtsp.cpp \
-	zmRtspConnection.cpp \
-	zmRtspController.cpp \
-	zmRtspSession.cpp \
-	zmRtspStream.cpp \
-	zmRtpCtrl.cpp \
-	zmRtpData.cpp \
-	zmRtpSession.cpp
+	ozHttp.cpp \
+	ozHttpConnection.cpp \
+	ozHttpController.cpp \
+	ozHttpSession.cpp \
+	ozHttpStream.cpp \
+	ozRtmp.cpp \
+	ozRtmpAmf.cpp \
+	ozRtmpConnection.cpp \
+	ozRtmpController.cpp \
+	ozRtmpRequest.cpp \
+	ozRtmpSession.cpp \
+	ozRtmpStream.cpp \
+	ozRtsp.cpp \
+	ozRtspConnection.cpp \
+	ozRtspController.cpp \
+	ozRtspSession.cpp \
+	ozRtspStream.cpp \
+	ozRtpCtrl.cpp \
+	ozRtpData.cpp \
+	ozRtpSession.cpp
 
 pkginclude_HEADERS = \
-	zmHttp.h \
-	zmHttpConnection.h \
-	zmHttpController.h \
-	zmHttpSession.h \
-	zmHttpStream.h \
-	zmRtmp.h \
-	zmRtmpAmf.h \
-	zmRtmpConnection.h \
-	zmRtmpController.h \
-	zmRtmpRequest.h \
-	zmRtmpSession.h \
-	zmRtmpStream.h \
-	zmRtsp.h \
-	zmRtspConnection.h \
-	zmRtspController.h \
-	zmRtspSession.h \
-	zmRtspStream.h \
-	zmRtpCtrl.h \
-	zmRtpData.h \
-	zmRtpSession.h
+	ozHttp.h \
+	ozHttpConnection.h \
+	ozHttpController.h \
+	ozHttpSession.h \
+	ozHttpStream.h \
+	ozRtmp.h \
+	ozRtmpAmf.h \
+	ozRtmpConnection.h \
+	ozRtmpController.h \
+	ozRtmpRequest.h \
+	ozRtmpSession.h \
+	ozRtmpStream.h \
+	ozRtsp.h \
+	ozRtspConnection.h \
+	ozRtspController.h \
+	ozRtspSession.h \
+	ozRtspStream.h \
+	ozRtpCtrl.h \
+	ozRtpData.h \
+	ozRtpSession.h
