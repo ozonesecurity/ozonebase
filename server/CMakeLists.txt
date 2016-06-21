@@ -300,7 +300,7 @@ set(SYSCONFDIR "/${CMAKE_INSTALL_SYSCONFDIR}")
 
 # Generate files from the .in files
 configure_file(src/base/ozConfig.h.in "${CMAKE_CURRENT_BINARY_DIR}/src/base/ozConfig.h" @ONLY)
-configure_file(src/base/config-cmake.h.in "${CMAKE_CURRENT_BINARY_DIR}/src/base/config.h" @ONLY)
+configure_file(config-cmake.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
 
 # Process subdirectories
 add_subdirectory(src/base)
