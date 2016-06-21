@@ -21,6 +21,10 @@ target_link_libraries(example8 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 target_link_libraries(starter_example ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
 # Do we install example programs??
-install(TARGETS example1 example2 example3 example4 example5 example6 example7 example8 starter_example RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}" PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(
+       TARGETS example1 example2 example3 example4 example5 example6 example7 example8 starter_example
+       RUNTIME DESTINATION bin
+       PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+       )
 
 

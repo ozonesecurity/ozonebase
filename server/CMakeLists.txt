@@ -60,7 +60,7 @@ mark_as_advanced(
     FORCE 
     OZ_EXTRA_LIBS 
 #    OZ_MYSQL_ENGINE 
-    CMAKE_INSTALL_FULL_BINDIR 
+#    CMAKE_INSTALL_FULL_BINDIR 
 #    OZ_TARGET_DISTRO 
     OZ_CONFIG_DIR)
 
@@ -294,10 +294,12 @@ endif (NOT HAVE_SYS_MMAP_H)
 
 # Some variables that oz expects
 set(OZ_PID "${OZ_RUNDIR}/zm.pid")
+#set(BINDIR "${CMAKE_INSTALL_FULL_BINDIR}")
+#set(LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 set(SYSCONFDIR "/${CMAKE_INSTALL_SYSCONFDIR}")
 
 # Generate files from the .in files
-configure_file(src/base/ozConfig.h.in "${CMAKE_CURRENT_BINARY_DIR}/base/ozConfig.h" @ONLY)
+configure_file(src/base/ozConfig.h.in "${CMAKE_CURRENT_BINARY_DIR}/src/base/ozConfig.h" @ONLY)
 
 # Process subdirectories
 add_subdirectory(src/base)
