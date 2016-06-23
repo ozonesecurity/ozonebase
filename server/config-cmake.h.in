@@ -16,7 +16,9 @@
 #cmakedefine HAVE_POSIX_MEMALIGN 1
 #cmakedefine HAVE_SIGINFO_T 1
 #cmakedefine HAVE_UCONTEXT_T 1
-#cmakedefine HAVE_SYS_MMAP_H
+#cmakedefine HAVE_STRUCT_SIGCONTEXT 1
+#cmakedefine HAVE_SYS_MMAP_H 1
+#cmakedefine HAVE_DECL_ROUND 1
 
 /* Library checks and their header files */
 #cmakedefine HAVE_MATH 1

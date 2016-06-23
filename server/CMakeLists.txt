@@ -50,7 +50,7 @@ include (CheckIncludeFiles)
 include (CheckFunctionExists)
 #include (CheckPrototypeDefinition_fixed)
 include (CheckTypeSize)
-#include (CheckStructHasMember)
+include (CheckStructHasMember)
 
 # Configuration options
 #
@@ -264,10 +264,13 @@ check_include_file("sys/mman.h" HAVE_SYS_MMAP_H)
 #check_function_exists("sendfile" HAVE_SENDFILE)
 check_function_exists("backtrace" HAVE_DECL_BACKTRACE)
 check_function_exists("backtrace_symbols" HAVE_DECL_BACKTRACE_SYMBOLS)
+check_function_exists("round" HAVE_DECL_ROUND)
 #check_function_exists("posix_memalign" HAVE_POSIX_MEMALIGN)
 
 check_type_size("siginfo_t" HAVE_SIGINFO_T)
 check_type_size("ucontext_t" HAVE_UCONTEXT_T)
+check_type_size("struct sigcontext" HAVE_STRUCT_SIGCONTEXT)
+check_struct_has_member("struct sigcontext" eip signal.h HAVE_STRUCT_SIGCONTEXT_EIP)
 
 foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
          memset select socket sqrt strcasecmp strchr strcspn strerror
