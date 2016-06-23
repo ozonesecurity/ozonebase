@@ -20,6 +20,26 @@
 #cmakedefine HAVE_SYS_MMAP_H 1
 #cmakedefine HAVE_DECL_ROUND 1
 
+/* function checks */
+#cmakedefine HAVE_GETHOSTBYNAME 1
+#cmakedefine HAVE_GETHOSTNAME 1
+#cmakedefine HAVE_GETTIMEOFDAY 1
+#cmakedefine HAVE_MEMMOVE 1
+#cmakedefine HAVE_MEMSET 1
+#cmakedefine HAVE_SELECT 1
+#cmakedefine HAVE_SOCKET 1
+#cmakedefine HAVE_SQRT 1
+#cmakedefine HAVE_STRCASECMP 1
+#cmakedefine HAVE_STRCHR 1
+#cmakedefine HAVE_STRCSPN 1
+#cmakedefine HAVE_STRERROR 1
+#cmakedefine HAVE_STRSIGNAL 1
+#cmakedefine HAVE_STRSPN 1
+#cmakedefine HAVE_STRSTR 1
+#cmakedefine HAVE_STRTOL 1
+#cmakedefine HAVE_MMAP 1
+#cmakedefine HAVE_MUNMAP 1
+
 /* Library checks and their header files */
 #cmakedefine HAVE_MATH 1
 #cmakedefine HAVE_MATH_H 1
