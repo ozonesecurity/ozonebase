@@ -282,11 +282,12 @@ foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
          memset select socket sqrt strcasecmp strchr strcspn strerror
          strsignal strspn strstr strtol mmap munmap
        )
-    check_function_exists("${FUNCVAR}" HAVE_${FUNCVAR})
-    if (NOT HAVE_${FUNCVAR})
+    string( TOUPPER ${FUNCVAR} FUNCVAR_U )
+    check_function_exists("${FUNCVAR}" HAVE_${FUNCVAR_U})
+    if (NOT HAVE_${FUNCVAR_U})
         message(FATAL_ERROR 
             "${FUNCVAR} function not found and this project requires it.")
-    endif (NOT HAVE_${FUNCVAR})
+    endif (NOT HAVE_${FUNCVAR_U})
 endforeach(FUNCVAR)
 
 # Abort if v4l2 headers not found
