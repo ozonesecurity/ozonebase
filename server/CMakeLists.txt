@@ -51,6 +51,7 @@ include (CheckFunctionExists)
 #include (CheckPrototypeDefinition_fixed)
 include (CheckTypeSize)
 include (CheckStructHasMember)
+include(ac_std_funcs)
 
 # Configuration options
 #
@@ -253,6 +254,8 @@ else(DL_LIBRARIES)
 endif(DL_LIBRARIES)
 
 # System Checks
+CMAKE_ALLOCA_D()
+CMAKE_HEADER_STDC_D()
 check_include_file("linux/videodev2.h" HAVE_LINUX_VIDEODEV2_H)
 check_include_file("execinfo.h" HAVE_EXECINFO_H)
 check_include_file("ucontext.h" HAVE_UCONTEXT_H)

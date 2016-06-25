@@ -4,6 +4,12 @@
 /* This file is used by cmake to create config.h */
 
 /* General system checks */
+#cmakedefine HAVE_ALLOCA_H 1
+#cmakedefine HAVE_ALLOCA 1
+#cmakedefine HAVE_STDLIB_H 1
+#cmakedefine HAVE_STRING_H 1
+#cmakedefine HAVE_HAVE_STRINGS_H 1
+#cmakedefine STDC_HEADERS 1
 #cmakedefine HAVE_LINUX_VIDEODEV2_H 1
 #cmakedefine HAVE_EXECINFO_H 1
 #cmakedefine HAVE_UCONTEXT_H 1
