@@ -10,6 +10,8 @@
 #cmakedefine HAVE_STRING_H 1
 #cmakedefine HAVE_HAVE_STRINGS_H 1
 #cmakedefine STDC_HEADERS 1
+#cmakedefine HAVE_MALLOC_H 1
+#cmakedefine HAVE_FORK 1
 #cmakedefine HAVE_LINUX_VIDEODEV2_H 1
 #cmakedefine HAVE_EXECINFO_H 1
 #cmakedefine HAVE_UCONTEXT_H 1

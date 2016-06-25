@@ -52,6 +52,7 @@ include (CheckFunctionExists)
 include (CheckTypeSize)
 include (CheckStructHasMember)
 include(ac_std_funcs)
+include(CheckIncludeFileCXX)
 
 # Configuration options
 #
@@ -256,6 +257,8 @@ endif(DL_LIBRARIES)
 # System Checks
 CMAKE_ALLOCA_D()
 CMAKE_HEADER_STDC_D()
+check_include_file_cxx("malloc.h" HAVE_MALLOC_H)
+check_function_exists(malloc HAVE_FORK)
 check_include_file("linux/videodev2.h" HAVE_LINUX_VIDEODEV2_H)
 check_include_file("execinfo.h" HAVE_EXECINFO_H)
 check_include_file("ucontext.h" HAVE_UCONTEXT_H)
