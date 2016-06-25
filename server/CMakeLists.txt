@@ -45,14 +45,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # Modules that we need:
 #include (GNUInstallDirs)
-include (CheckIncludeFile)
-include (CheckIncludeFiles)
-include (CheckFunctionExists)
-#include (CheckPrototypeDefinition_fixed)
-include (CheckTypeSize)
-include (CheckStructHasMember)
-include(ac_std_funcs)
+include(CheckIncludeFile)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckSymbolExists)
+#include(CheckPrototypeDefinition_fixed)
+include(CheckTypeSize)
+include(CheckStructHasMember)
+#include(ac_std_funcs)
 include(CheckIncludeFileCXX)
+include(TestSignalType)
+include(CheckPrototypeExists)
+include(TestSTDC)
 
 # Configuration options
 #
@@ -158,7 +162,7 @@ endif(PTHREAD_LIBRARIES)
 # zlib
 find_package(ZLIB)
 if(ZLIB_FOUND)
-	set(HAVE_LIBZLIB 1)
+	set(HAVE_LIBZ 1)
 	list(APPEND OZ_BIN_LIBS "${ZLIB_LIBRARIES}")
 	include_directories("${ZLIB_INCLUDE_DIR}")
 	set(CMAKE_REQUIRED_INCLUDES "${ZLIB_INCLUDE_DIR}")
@@ -201,6 +205,23 @@ else(AVCODEC_LIBRARIES)
     message(FATAL_ERROR 
             "ZoneMinder requires avcodec but it was not found on your system")
 endif(AVCODEC_LIBRARIES)
+
+# avdevice (using find_library and find_path)
+find_library(AVDEVICE_LIBRARIES avdevice)
+if(AVDEVICE_LIBRARIES)
+    set(HAVE_LIBAVDEVICE 1)
+    list(APPEND ZM_BIN_LIBS "${AVDEVICE_LIBRARIES}")
+    find_path(AVDEVICE_INCLUDE_DIR "libavdevice/avdevice.h" /usr/include/ffmpeg)
+    if(AVDEVICE_INCLUDE_DIR)
+        include_directories("${AVDEVICE_INCLUDE_DIR}")
+        set(CMAKE_REQUIRED_INCLUDES "${AVDEVICE_INCLUDE_DIR}")
+    endif(AVDEVICE_INCLUDE_DIR)
+    mark_as_advanced(FORCE AVDEVICE_LIBRARIES AVDEVICE_INCLUDE_DIR)
+    check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
+    set(optlibsfound "${optlibsfound} AVDevice")
+else(AVDEVICE_LIBRARIES)
+    set(optlibsnotfound "${optlibsnotfound} AVDevice")
+endif(AVDEVICE_LIBRARIES)
 
 # avutil (using find_library and find_path)
 find_library(AVUTIL_LIBRARIES avutil)
@@ -254,24 +275,37 @@ else(DL_LIBRARIES)
             "This project requires the dynamic link library but it was not found on your system")
 endif(DL_LIBRARIES)
 
-# System Checks
-CMAKE_ALLOCA_D()
-CMAKE_HEADER_STDC_D()
-check_include_file_cxx("malloc.h" HAVE_MALLOC_H)
-check_function_exists(malloc HAVE_FORK)
-check_include_file("linux/videodev2.h" HAVE_LINUX_VIDEODEV2_H)
-check_include_file("execinfo.h" HAVE_EXECINFO_H)
-check_include_file("ucontext.h" HAVE_UCONTEXT_H)
-#check_include_file("sys/sendfile.h" HAVE_SYS_SENDFILE_H)
-#check_include_file("sys/syscall.h" HAVE_SYS_SYSCALL_H)
-check_include_file("sys/mman.h" HAVE_SYS_MMAP_H)
+# check include files
+foreach( INCVAR alloca fcntl inttypes limits memory netdb
+         string strings execinfo stdbool stddef stdint syslog
+         unistd values
+       )
+    string( TOUPPER ${INCVAR} INCVAR_U )
+    check_include_file("${INCVAR}.h" HAVE_${INCVAR_U}_H)
+    if (NOT HAVE_${INCVAR_U}_H)
+        message(FATAL_ERROR 
+            "${ICVAR} function not found and this project requires it.")
+    endif (NOT HAVE_${INCVAR_U}_H)
+endforeach(INCVAR)
 
-#check_function_exists("syscall" HAVE_SYSCALL)
-#check_function_exists("sendfile" HAVE_SENDFILE)
+# System Checks
+check_symbol_exists(alloca alloca.h HAVE_ALLOCA)
+check_include_file(netinet/in.h HAVE_NETINET_IN_H)
+check_include_file(sys/ioctl.h HAVE_SYS_IOCTL_H)
+check_symbol_exists(x264_predict_16x16_init x264.h HAVE_LIBX264)
+check_include_file_cxx("malloc.h" HAVE_MALLOC_H)
+check_include_file("linux/videodev2.h" HAVE_LINUX_VIDEODEV2_H)
+check_include_file("sys/mman.h" HAVE_SYS_MMAN_H)
+check_include_file("sys/param.h" HAVE_SYS_PARAM_H)
+check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
+check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
+check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
+check_include_file("sys/time.h" HAVE_SYS_TIME_H)
+check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
+
 check_function_exists("backtrace" HAVE_DECL_BACKTRACE)
 check_function_exists("backtrace_symbols" HAVE_DECL_BACKTRACE_SYMBOLS)
 check_function_exists("round" HAVE_DECL_ROUND)
-#check_function_exists("posix_memalign" HAVE_POSIX_MEMALIGN)
 
 check_type_size("siginfo_t" HAVE_SIGINFO_T)
 check_type_size("ucontext_t" HAVE_UCONTEXT_T)
@@ -279,8 +313,9 @@ check_type_size("struct sigcontext" HAVE_STRUCT_SIGCONTEXT)
 check_struct_has_member("struct sigcontext" eip signal.h HAVE_STRUCT_SIGCONTEXT_EIP)
 
 foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
-         memset select socket sqrt strcasecmp strchr strcspn strerror
-         strsignal strspn strstr strtol mmap munmap
+         memset select socket sqrt strcasecmp strncasecmp strchr strrchr strcspn strerror
+         strsignal strspn strstr strtol strtoull mmap munmap getpagesize mkdir
+         putenv strftime malloc
        )
     string( TOUPPER ${FUNCVAR} FUNCVAR_U )
     check_function_exists("${FUNCVAR}" HAVE_${FUNCVAR_U})
@@ -291,16 +326,17 @@ foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
 endforeach(FUNCVAR)
 
 # Abort if v4l2 headers not found
-if (NOT HAVE_LINUX_VIDEODEV2_H)
+if (HAVE_LINUX_VIDEODEV2_H)
+    set(OZ_V4L 1)
+else (HAVE_LINUX_VIDEODEV2_H)
     message(FATAL_ERROR 
         "Video4Linux 2 header files not found and this project requires them.")
-endif (NOT HAVE_LINUX_VIDEODEV2_H)
+endif (HAVE_LINUX_VIDEODEV2_H)
 
 # Abort if mmap not found
-if (NOT HAVE_SYS_MMAP_H)
-    message(FATAL_ERROR 
-        "Mmap support not found and this project requires it.")
-endif (NOT HAVE_SYS_MMAP_H)
+if(HAVE_SYS_MMAN_H)
+    set(OZ_MEM_MAPPED 1)
+endif(HAVE_SYS_MMAN_H)
 
 # Some variables that oz expects
 set(OZ_PID "${OZ_RUNDIR}/zm.pid")
