@@ -396,6 +396,11 @@ public:
             mMaxSize = 0;
             mPixels = 0;
         }
+        ~BlobGroup()
+        {
+            for ( BlobList::iterator iter = mBlobList.begin(); iter != mBlobList.end(); iter++ )
+                delete *iter;
+        }
         //void addBlob( const Blob * )
         //{
         //}
