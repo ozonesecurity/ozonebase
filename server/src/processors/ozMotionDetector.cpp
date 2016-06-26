@@ -125,51 +125,52 @@ int MotionDetector::run()
                 Debug( 3, "Got %zd frames on queue", mFrameQueue.size() );
                 for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
                 {
+                    // Only operate on video frames
                     const VideoFrame *frame = dynamic_cast<const VideoFrame *>(iter->get());
-
-                    Image image( pixelFormat, width, height, frame->buffer().data() );
-                    //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
-                    if ( mRefImage.empty() )
+                    if ( frame )
                     {
-                        if ( writeImages )
-                            image.writeJpeg( stringtf( "%s/image-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
-                        mRefImage.assign( Image( Image::FMT_RGB48, image ) );
-                        if ( writeImages )
-                            mRefImage.writeJpeg( stringtf( "%s/ref-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
-                    }
-
-                    //struct timeval *timestamp = new struct timeval;
-                    //gettimeofday( timestamp, NULL );
-
-                    MotionData *motionData = new MotionData;
-                    //Image motionImage( Image::FMT_RGB, image );
-                    Image motionImage( image );
-                    //motionImage.erase();
-                    //motionData.reset();
-                    analyse( &image, motionData, &motionImage );
-                    if ( mAlarmed )
-                    {
-                        Info( "ALARM" );
-                    }
-                    MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, frame->timestamp(), motionImage.buffer(), mAlarmed, motionData );
-
-                    distributeFrame( FramePtr( motionFrame ) );
-
-                    if ( config.blend_alarmed_images || !mAlarmed )
-                    {
-                        int refBlend = mRefBlend;
-                        if ( refBlend > (mFrameCount+1) )
+                        Image image( pixelFormat, width, height, frame->buffer().data() );
+                        //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
+                        if ( mRefImage.empty() )
                         {
-                            while ( refBlend > (mFrameCount+1) )
-                                refBlend >>= 1;
-                            //printf( "Frame: %d, adjusting refBlend = %d\n", frameCount, refBlend );
+                            if ( writeImages )
+                                image.writeJpeg( stringtf( "%s/image-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
+                            mRefImage.assign( Image( Image::FMT_RGB48, image ) );
+                            if ( writeImages )
+                                mRefImage.writeJpeg( stringtf( "%s/ref-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                         }
-                        mRefImage.blend( image, refBlend );
-                    }
-                    //mRefImage.blend( image, mRefBlend );
-                    mFrameCount++;
 
-                    //delete *iter;
+                        //struct timeval *timestamp = new struct timeval;
+                        //gettimeofday( timestamp, NULL );
+
+                        MotionData *motionData = new MotionData;
+                        //Image motionImage( Image::FMT_RGB, image );
+                        Image motionImage( image );
+                        //motionImage.erase();
+                        //motionData.reset();
+                        analyse( &image, motionData, &motionImage );
+                        if ( mAlarmed )
+                        {
+                            Info( "ALARM" );
+                        }
+                        MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, frame->timestamp(), motionImage.buffer(), mAlarmed, motionData );
+
+                        distributeFrame( FramePtr( motionFrame ) );
+
+                        if ( config.blend_alarmed_images || !mAlarmed )
+                        {
+                            int refBlend = mRefBlend;
+                            if ( refBlend > (mFrameCount+1) )
+                            {
+                                while ( refBlend > (mFrameCount+1) )
+                                    refBlend >>= 1;
+                                //printf( "Frame: %d, adjusting refBlend = %d\n", frameCount, refBlend );
+                            }
+                            mRefImage.blend( image, refBlend );
+                        }
+                        //mRefImage.blend( image, mRefBlend );
+                        mFrameCount++;
+                    }
                 }
                 mFrameQueue.clear();
             }
