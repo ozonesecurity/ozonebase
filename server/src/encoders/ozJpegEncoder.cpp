@@ -135,39 +135,42 @@ int JpegEncoder::run()
                     const FeedFrame *frame = iter->get();
 
                     const VideoFrame *inputVideoFrame = dynamic_cast<const VideoFrame *>(frame);
-                    Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
-
-                    //encodeFrame( frame );
-                    avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
-
-                    outputFrame->pts = inputVideoFrame->timestamp();
-                    Debug( 5, "PTS %jd", outputFrame->pts );
-                    //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
-                   
-                    // Reformat the input frame to fit the desired output format
-                    Info( "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
-                    if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                        Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
-
-                    // Encode the image
-                    outSize = avcodec_encode_video( mCodecContext, outputBuffer.data(), outputBuffer.capacity(), outputFrame );
-                    Debug( 5, "Encoding reports %d bytes", outSize );
-                    if ( outSize > 0 )
+                    if ( inputVideoFrame )
                     {
-                        outputBuffer.size( outSize );
-                        Debug( 5, "PTS2 %jd", mCodecContext->coded_frame->pts );
-                        Debug( 3, "Queueing frame %ju, outSize = %d", mFrameCount, outSize );
-        /*
-                        if ( mBaseTimestamp == 0 )
+                        Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
+
+                        //encodeFrame( frame );
+                        avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+
+                        outputFrame->pts = inputVideoFrame->timestamp();
+                        Debug( 5, "PTS %jd", outputFrame->pts );
+                        //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
+
+                        // Reformat the input frame to fit the desired output format
+                        Info( "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
+                        if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
+                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
+
+                        // Encode the image
+                        outSize = avcodec_encode_video( mCodecContext, outputBuffer.data(), outputBuffer.capacity(), outputFrame );
+                        Debug( 5, "Encoding reports %d bytes", outSize );
+                        if ( outSize > 0 )
                         {
-                            struct timeval now;
-                            gettimeofday( &now, 0 );
-                            mBaseTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
+                            outputBuffer.size( outSize );
+                            Debug( 5, "PTS2 %jd", mCodecContext->coded_frame->pts );
+                            Debug( 3, "Queueing frame %ju, outSize = %d", mFrameCount, outSize );
+            /*
+                            if ( mBaseTimestamp == 0 )
+                            {
+                                struct timeval now;
+                                gettimeofday( &now, 0 );
+                                mBaseTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
+                            }
+                            uint64_t timestamp = mBaseTimestamp + ((packet.pts*mCodecContext->time_base.den)/mCodecContext->time_base.num);
+            */
+                            VideoFrame *outputVideoFrame = new VideoFrame( this, *iter, ++mFrameCount, mCodecContext->coded_frame->pts, outputBuffer );
+                            distributeFrame( FramePtr( outputVideoFrame ) );
                         }
-                        uint64_t timestamp = mBaseTimestamp + ((packet.pts*mCodecContext->time_base.den)/mCodecContext->time_base.num);
-        */
-                        VideoFrame *outputVideoFrame = new VideoFrame( this, *iter, ++mFrameCount, mCodecContext->coded_frame->pts, outputBuffer );
-                        distributeFrame( FramePtr( outputVideoFrame ) );
                     }
                 }
                 // Remove all other frames from the queue

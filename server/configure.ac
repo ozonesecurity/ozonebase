@@ -10,50 +10,13 @@ AC_SUBST(PATH_BUILD)
 TIME_BUILD=`date +'%s'`
 AC_SUBST(TIME_BUILD)
 
-AC_PREFIX_DEFAULT([/opt/])
-CPPFLAGS="-D__STDC_CONSTANT_MACROS"
+CPPFLAGS="$CPPFLAGS -D__STDC_CONSTANT_MACROS"
 
 AC_ARG_VAR(OZ_USER,[Name of ZoneMinder user, zoneminder])
 if test "$OZ_USER" == ""; then
     AC_SUBST(OZ_USER,[zoneminder])
 fi
-AC_ARG_VAR(OZ_WEB_DIR,[Location to install web GUI html files, default /opt/oz2/web/html])
-if test "$OZ_WEB_DIR" == ""; then
-    AC_SUBST(OZ_WEB_DIR,$prefix/web/html)
-fi
-AC_ARG_VAR(OZ_CGI_DIR,[Location to install web GUI cgi files, default /opt/oz2/web/cgi-bin])
-if test "$OZ_CGI_DIR" == ""; then
-    AC_SUBST(OZ_CGI_DIR,$prefix/web/cgi-bin)
-fi
-AC_ARG_VAR(OZ_WEB_HOST,[Hostname for virtual hosting, default current host name])
-if test "$OZ_WEB_HOST" == ""; then
-    AC_SUBST(OZ_WEB_HOST,`hostname`)
-fi
-AC_ARG_VAR(OZ_DB_HOST,[Hostname where ZoneMinder database located, default localhost])
-if test "$OZ_DB_HOST" == ""; then
-    AC_SUBST(OZ_DB_HOST,[localhost])
-fi
-AC_ARG_VAR(OZ_DB_NAME,[Name of ZoneMinder database, default oz])
-if test "$OZ_DB_NAME" == ""; then
-    AC_SUBST(OZ_DB_NAME,[oz])
-fi
-AC_ARG_VAR(OZ_DB_USER,[Name of ZoneMinder database user, default ozuser])
-if test "$OZ_DB_USER" == ""; then
-    AC_SUBST(OZ_DB_USER,[ozuser])
-fi
-AC_ARG_VAR(OZ_DB_PASS,[Password of ZoneMinder database user, default ozpass])
-if test "$OZ_DB_PASS" == ""; then
-    AC_SUBST(OZ_DB_PASS,[ozpass])
-fi
-AC_ARG_VAR(OZ_SSL_LIB,[Library to use for ssl functions, default gnutls])
-if test "$OZ_SSL_LIB" == ""; then
-    AC_SUBST(OZ_SSL_LIB,gnutls)
-fi
-AC_ARG_VAR(OZ_MYSQL_ENGINE,[MySQL engine to use with database, default MyISAM])
-if test "$OZ_MYSQL_ENGINE" == ""; then
-    AC_SUBST(OZ_MYSQL_ENGINE,MyISAM)
-fi
-AC_ARG_VAR(OZ_RUNDIR,[Location of transient process files, default /var/run/oz])
+AC_ARG_VAR(ZM_RUNDIR,[Location of transient process files, default /var/run/zm])
 if test "$OZ_RUNDIR" == ""; then
     AC_SUBST(OZ_RUNDIR,[/var/run/oz])
 fi
@@ -64,10 +27,6 @@ fi
 AC_ARG_VAR(OZ_LOGDIR,[Location of generated log files, default /var/log/oz])
 if test "$OZ_LOGDIR" == ""; then
     AC_SUBST(OZ_LOGDIR,[/var/log/oz])
-fi
-AC_ARG_VAR(OZ_LIBARCH,[Architecture specific library path, default lib, try lib64 on 64 bit systems])
-if test "$OZ_LIBARCH" == ""; then
-    AC_SUBST(OZ_LIBARCH,[/lib])
 fi
 
 ENABLE_V4L=yes
@@ -172,26 +131,19 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday memmove memset mkdir munmap putenv select socket sqrt strcasecmp strchr strcspn strerror strncasecmp strrchr strsignal strspn strstr strtol strtoull])
 
 # Checks for libraries.
-AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(oz requires libjpeg.a))
-AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(oz requires libpthread.a))
-AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(oz requires libdl.a))
-if test "$OZ_SSL_LIB" == "openssl"; then
-AC_CHECK_LIB(crypto,MD5,,AC_MSG_WARN([libcrypto.a is required for authenticated streaming - use OZ_SSL_LIB option to select gnutls instead]))
-else
-AC_CHECK_HEADERS(gcrypt.h,,AC_MSG_WARN(oz requires libgcrypt headers to be installed for gnutls),)
-AC_CHECK_LIB(gcrypt,gcry_check_version,,AC_MSG_WARN([libgcrypt.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead]))
-AC_CHECK_LIB(gnutls-openssl,MD5,,AC_MSG_WARN([gnutls-openssl.a is required for authenticated streaming - use OZ_SSL_LIB option to select openssl instead]))
-fi
-AC_CHECK_LIB(z,zlibVersion)
+AC_CHECK_LIB(z,compress,,)
+AC_CHECK_LIB(jpeg,jpeg_start_compress,,AC_MSG_ERROR(zm requires libjpeg.a))
+AC_CHECK_LIB(pthread,pthread_create,,AC_MSG_ERROR(zm requires libpthread.a))
+AC_CHECK_LIB(dl,dlsym,,AC_MSG_ERROR(zm requires libdl.a))
 AC_CHECK_LIB(x264,x264_predict_16x16_init)
 AC_CHECK_LIB(avcore,av_image_copy,,)
-AC_CHECK_LIB(avcodec,av_init_packet,,AC_MSG_WARN(libavcodec.a is required for MPEG streaming))
-AC_CHECK_LIB(avformat,av_register_all,,AC_MSG_WARN(libavformat.a is required for MPEG streaming))
-AC_CHECK_LIB(avdevice,avdevice_register_all,,AC_MSG_WARN(libavdevice.a may be required for MPEG streaming))
-AC_CHECK_LIB(avutil,av_malloc,,AC_MSG_ERROR(libavutil.a is required, please install ffmpeg development libraries))
-AC_CHECK_LIB(swscale,sws_scale,,AC_MSG_ERROR(libswscale.a is required, please install ffmpeg development libraries))
-AC_CHECK_LIB(bz2,BZ2_bzCompress,,AC_MSG_ERROR([libbz2.a is required with recent versions of ffmpeg]))
-AC_CHECK_LIB(z,compress,,)
+AC_CHECK_LIB(avutil,av_malloc,,AC_MSG_ERROR(libavutil.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avfilter,avfilter_register_all,,AC_MSG_ERROR(libavfilter.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avdevice,avdevice_register_all,,AC_MSG_ERROR(libavdevice.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avcodec,av_init_packet,,AC_MSG_ERROR(libavcodec.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(avformat,av_register_all,,AC_MSG_ERROR(libavformat.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(swscale,sws_scale,,AC_MSG_ERROR(libswscale.a is required - please install ffmpeg development libraries))
+AC_CHECK_LIB(swresample,swr_init,,)
 
 # Checks for header files.
 AC_FUNC_ALLOCA
@@ -213,15 +165,9 @@ fi
 AC_CHECK_HEADERS(zlib.h,,,)
 
 AC_CHECK_DECLS(round,,,[#include <math.h>])
-if test "$OZ_SSL_LIB" == "openssl"; then
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires openssl/md5.h - use OZ_SSL_LIB option to select gnutls instead]),[#include <stdlib.h>
-#include <openssl/md5.h>])
-else
-AC_CHECK_DECLS(MD5,,AC_MSG_ERROR([oz requires gnutls/openssl.h - use OZ_SSL_LIB option to select openssl instead]),[#include <stdlib.h>
-#include <gnutls/openssl.h>])
-fi
 AC_CHECK_DECLS(backtrace,,,[#include <execinfo.h>])
 
+AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
 AC_DEFINE_DIR([BINDIR],[bindir],[Expanded binary directory])

@@ -161,7 +161,7 @@ class VideoFrame : public FeedFrame
 {
 protected:
     VideoProvider   *mVideoProvider;        ///< Specialised pointer to the video provider
-    PixelFormat     mPixelFormat;           ///< The ffmpeg image format of this frame
+    AVPixelFormat   mPixelFormat;           ///< The ffmpeg image format of this frame
     uint16_t        mWidth;                 ///< Frame image width (in pixels)
     uint16_t        mHeight;                ///< Frame image height (in pixels)
 
@@ -173,7 +173,7 @@ public:
     VideoFrame( VideoProvider *provider, FramePtr parent );
 
     const VideoProvider *videoProvider() const { return( mVideoProvider ); }
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
 };

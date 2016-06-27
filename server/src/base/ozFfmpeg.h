@@ -18,14 +18,6 @@ extern "C" {
 }
 #endif
 
-#if LIBAVCODEC_VERSION_INT == ((52<<16)+(72<<8)+2)
-#define OZ_FFMPEG_061   1
-#elif LIBAVCODEC_VERSION_INT >= ((52<<16)+(72<<8)+2)
-#define OZ_FFMPEG_SVN   1
-#else
-#error ZoneMinder requires libavcodec version 52.72.2 or higher
-#endif
-
 AVRational double2Rational( double input, long maxden );
 
 class Rational : public AVRational

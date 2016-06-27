@@ -22,14 +22,14 @@ class MpegEncoder : public Encoder, public Thread
 CLASSID(MpegEncoder);
 
 protected:
-    uint16_t    mWidth;
-    uint16_t    mHeight;
-    FrameRate   mFrameRate;
-    uint32_t    mBitRate;
-    PixelFormat mPixelFormat;
-    uint8_t     mQuality;
+    uint16_t        mWidth;
+    uint16_t        mHeight;
+    FrameRate       mFrameRate;
+    uint32_t        mBitRate;
+    AVPixelFormat   mPixelFormat;
+    uint8_t         mQuality;
 
-    int         mAvcProfile;
+    int             mAvcProfile;
 
 public:
     static std::string getPoolKey( const std::string &name, uint16_t width, uint16_t height, FrameRate frameRate, uint32_t bitRate, uint8_t quality );
@@ -46,7 +46,7 @@ public:
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }
     uint32_t bitRate() const { return( mBitRate ); }
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint8_t quality() const { return( mQuality ); }
 
     int avcProfile() const

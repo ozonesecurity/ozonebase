@@ -178,7 +178,7 @@ bool RtspConnection::handleRequest( const std::string &request )
 
         const VideoProvider *videoProvider = dynamic_cast<const VideoProvider *>(provider);
 
-        int codec = CODEC_ID_MPEG4;
+        int codec = AV_CODEC_ID_MPEG4;
         int width = videoProvider->width();
         int height = videoProvider->height();
         FrameRate frameRate = 15;
@@ -202,7 +202,7 @@ bool RtspConnection::handleRequest( const std::string &request )
 
         std::string sdpString = stringtf( sdpFormatString, now64, now64, hostname );
 
-        if ( codec == CODEC_ID_H264 )
+        if ( codec == AV_CODEC_ID_H264 )
         {
             if ( provider->cl4ss() == "RawH264Input" )
             {
@@ -233,7 +233,7 @@ bool RtspConnection::handleRequest( const std::string &request )
                 responseHeaders.insert( Headers::value_type( "Content-length", stringtf( "%zd", sdpString.length() ) ) );
             }
         }
-        else if ( codec == CODEC_ID_MPEG4 )
+        else if ( codec == AV_CODEC_ID_MPEG4 )
         {
             std::string encoderKey = MpegEncoder::getPoolKey( provider->identity(), width, height, frameRate, bitRate, quality );
             if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )

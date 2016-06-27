@@ -137,13 +137,13 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
 * @param imageWidth
 * @param imageHeight
 */
-void MemoryIOV1::attachMemory( int imageCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
+void MemoryIOV1::attachMemory( int imageCount, AVPixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
 {
     if ( mMemPtr )
         Fatal( "Unable to attach to shared memory, already attached" );
     mImageCount = imageCount;
     Image tempImage( imageFormat, imageWidth, imageHeight, 0 );
-    Info( "Pixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
+    Info( "AVPixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
     size_t imageSize = tempImage.size();
 
     mMemSize = sizeof(SharedData)

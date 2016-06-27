@@ -154,7 +154,7 @@ protected:
     ~VideoProvider() { }
 
 public:
-    virtual PixelFormat pixelFormat() const=0;      ///< Return the image format of video frames supplied by this provider
+    virtual AVPixelFormat pixelFormat() const=0;    ///< Return the image format of video frames supplied by this provider
     virtual uint16_t width() const=0;               ///< Return the width (in pixels) of video frames supplied by this provider
     virtual uint16_t height() const=0;              ///< Return the height (in pixels) of video frames supplied by this provider
     virtual FrameRate frameRate() const=0;          ///< Return the frame rate at this this provider supplies frames. May not be available or accurate.

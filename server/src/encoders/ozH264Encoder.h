@@ -41,21 +41,21 @@ public:
     };
 
 protected:
-    uint16_t    mWidth;
-    uint16_t    mHeight;
-    FrameRate   mFrameRate;
-    uint32_t    mBitRate;
-    PixelFormat mPixelFormat;
-    uint8_t     mQuality;
+    uint16_t        mWidth;
+    uint16_t        mHeight;
+    FrameRate       mFrameRate;
+    uint32_t        mBitRate;
+    AVPixelFormat   mPixelFormat;
+    uint8_t         mQuality;
 
-    int         mAvcLevel;
-    int         mAvcProfile;
+    int             mAvcLevel;
+    int             mAvcProfile;
 
-    ByteBuffer  mSei;
-    ByteBuffer  mSps;
-    ByteBuffer  mPps;
+    ByteBuffer      mSei;
+    ByteBuffer      mSps;
+    ByteBuffer      mPps;
 
-    ByteBuffer  mInitialFrame;  ///< Contains SEI, SPS and PPS packets
+    ByteBuffer      mInitialFrame;  ///< Contains SEI, SPS and PPS packets
 
 protected:
     static const uint8_t *_findStartCode( const uint8_t *p, const uint8_t *end );
@@ -98,7 +98,7 @@ public:
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }
     uint32_t bitRate() const { return( mBitRate ); }
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint8_t quality() const { return( mQuality ); }
 
     ///
