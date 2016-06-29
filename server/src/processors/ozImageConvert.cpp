@@ -55,30 +55,30 @@ ImageConvert::~ImageConvert()
 */
 int ImageConvert::run()
 {
-    uint16_t inputWidth = videoProvider()->width();
-    uint16_t inputHeight = videoProvider()->height();
-    PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
-
-    // Prepare for image format and size conversions
-    mConvertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
-    if ( !mConvertContext )
-        Fatal( "Unable to create conversion context" );
-
-    Info( "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat );
-    Info( "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
-
     AVFrame *inputFrame = avcodec_alloc_frame();
     AVFrame *outputFrame = avcodec_alloc_frame();
 
-    // Make space for anything that is going to be output
-    ByteBuffer outputBuffer;
-    outputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
-
-    // To get offsets only
-    avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mPixelFormat, mWidth, mHeight );
-
     if ( waitForProviders() )
     {
+        uint16_t inputWidth = videoProvider()->width();
+        uint16_t inputHeight = videoProvider()->height();
+        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+
+        // Prepare for image format and size conversions
+        mConvertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
+        if ( !mConvertContext )
+            Fatal( "Unable to create conversion context" );
+
+        Info( "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat );
+        Info( "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+
+        // Make space for anything that is going to be output
+        ByteBuffer outputBuffer;
+        outputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+
+        // To get offsets only
+        avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mPixelFormat, mWidth, mHeight );
+
         while ( !mStop )
         {
             mQueueMutex.lock();
@@ -120,10 +120,10 @@ int ImageConvert::run()
             // Quite short so we can always keep up with the required packet rate for 25/30 fps
             usleep( INTERFRAME_TIMEOUT );
         }
+        FeedProvider::cleanup();
+        FeedConsumer::cleanup();
+        sws_freeContext( mConvertContext );
     }
-    FeedProvider::cleanup();
-    FeedConsumer::cleanup();
-    sws_freeContext( mConvertContext );
     av_free( outputFrame );
     av_free( inputFrame );
     return( !ended() );
