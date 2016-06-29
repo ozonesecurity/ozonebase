@@ -1,1 +1,79 @@
-/usr/share/automake-1.14/INSTALL
+Building the oZone project with cmake
+-------------------------------------
+
+cmake is the recommended way to build the oZone project. Autotools will be removed at some future time.
+
+How To Build
+------------
+The build steps, in their simplest form, should look familar:
+
+cmake .
+make
+sudo make install
+
+Configuration
+-------------
+cmake by default does not require any parameters, but it is possible to override the defaults with the options below.
+
+Configuration can be done in 2 ways:
+1) As a command line parameter, e.g. cmake -DCMAKE_VERBOSE_MAKEFILE=ON .
+2) Using cmake-gui
+
+NOTE: Many of these configuration options are not yet implented.
+
+Possible configuration options: 
+	OZ_RUNDIR		Location of transient process files, default: /var/run/zm
+	OZ_TMPDIR		Location of temporary files, default: /tmp/zm
+	OZ_LOGDIR 		Location of generated log files, default: /var/log/zm
+	OZ_WEB_DIR		Location of the web files, default: <prefix>/share/zoneminder/www
+	OZ_CGI_DIR		Location of the cgi-bin files, default: <prefix>/libexec/zoneminder/cgi-bin
+	OZ_DB_HOST		Hostname where ZoneMinder database located, default: localhost
+	OZ_DB_NAME		Name of ZoneMinder database, default: zm
+	OZ_DB_USER		Name of ZoneMinder database user, default: zmuser
+	OZ_DB_PASS		Password of ZoneMinder database user, default: zmpass
+Advanced:
+	OZ_EXTRA_LIBS		A list of optional libraries, separated by semicolons, e.g. ssl;theora
+	OZ_MYSQL_ENGINE		MySQL engine to use with database, default: InnoDB
+        OZ_CONFIG_DIR           Location of oZone configuration, default system config directory
+        OZ_LIBARCH              Architecture specific library path, default lib, try lib64 on 64 bit systems
+
+Useful configuration options provided by cmake:
+CMAKE_VERBOSE_MAKEFILE - Set this to ON (default OFF) to see what cmake is doing. Very useful for troubleshooting.
+CMAKE_BUILD_TYPE - Set this to Debug (default Release) to build ZoneMinder with debugging enabled.
+CMAKE_INSTALL_PREFIX - Use this to change the prefix (default /usr/local). This option behaves like --prefix from autoconf. Package maintainers will probably want to set this to "/usr".
+
+Useful environment variables provided by cmake:
+CMAKE_INCLUDE_PATH - Use this to add to the include search path.
+CMAKE_LIBRARY_PATH - Use this to add to the library search path.
+CMAKE_PREFIX_PATH - Use this to add to both include and library search paths. <path>/include will be added to the include search path and <path>/lib to the library search path. Multiple paths can be specified, separated by a : character. For example: export CMAKE_PREFIX_PATH="/opt/libjpeg-turbo:/opt/ffmpeg-from-git"
+
+CFLAGS, CPPFLAGS and other environment variables:
+To append to the CFLAGS and CXXFLAGS, please use the CFLAGS and CXXFLAGS environment variables.
+Or use the CMAKE_C_FLAGS and CMAKE_CXX_FLAGS configuration options.
+To replace the CFLAGS and CXXFLAGS entirely:
+*   For the Release build type: use CMAKE_C_FLAGS_RELEASE for the CFLAGS and CMAKE_CXX_FLAGS_RELEASE for the CXXFLAGS
+*   For the Debug build type: use CMAKE_C_FLAGS_DEBUG for the CFLAGS and CMAKE_CXX_FLAGS_DEBUG for the CXXFLAGS
+Other important environment variables (such as LDFLAGS) are also supported.
+
+The DESTDIR environment variable is also supported, however it needs to be set before invoking make install. For example: DESTDIR=mydestdir make install
+For more information about DESTDIR, see:
+* http://www.gnu.org/prep/standards/html_node/DESTDIR.html
+
+Common Mistakes
+---------------
+
+* Cmake caches its settings in a file called "CmakeCache.txt". 
+  Gererally you want to delete this file before attemping another build operation.
+  Otherwsie cmake reuses those cached settings instead of checking your envronment again.
+* Don't forget the trailing dot "." after the cmake command. You will strange results if it is missing.
+* When setting DESTDIR, export DESTDIR as an environment variable rather than a cmake parameter.
+  Setting this incorrectly will cause unredictable results.
+
+  For example, do NOT do this:
+
+  cmake . && make && sudo make install DESTDIR/tmp
+
+  Instead, do this:
+
+  export DESTDIR=/path/to/destdir
+  cmake . && make && sudo make install
