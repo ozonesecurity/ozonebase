@@ -164,7 +164,7 @@ public:
 };
 
 //
-// This is image class, and represents a frame captured from a 
+// This is image class, and represents a frame captured from a
 // camera in raw form.
 //
 class Image
@@ -345,6 +345,13 @@ public:
             mPixels( pixels )
         {
         }
+        Blob( const Blob &blob ) :
+            mMask( blob.mMask ),
+            mOrigin( blob.mOrigin ),
+            mCentre( blob.mCentre ),
+            mPixels( blob.mPixels )
+        {
+        }
         uint32_t pixels() const
         {
             return( mPixels );
@@ -374,7 +381,7 @@ public:
             return( mOrigin.x()+mMask.height() );
         }
     };
-    class BlobGroup 
+    class BlobGroup
     {
     friend class Image;
 
@@ -396,10 +403,21 @@ public:
             mMaxSize = 0;
             mPixels = 0;
         }
+        BlobGroup( const BlobGroup &blobGroup ) :
+            mMinSize( blobGroup.mMinSize ),
+            mMaxSize( blobGroup.mMaxSize ),
+            mPixels( blobGroup.mPixels ),
+            mExtent( blobGroup.mExtent ),
+            mCentre( blobGroup.mCentre )
+        {
+            for ( BlobList::const_iterator iter = blobGroup.mBlobList.begin(); iter != blobGroup.mBlobList.end(); iter++ )
+                mBlobList.push_back( new Blob( *(*iter) ) );
+        }
         ~BlobGroup()
         {
             for ( BlobList::iterator iter = mBlobList.begin(); iter != mBlobList.end(); iter++ )
                 delete *iter;
+            mBlobList.clear();
         }
         //void addBlob( const Blob * )
         //{
@@ -441,12 +459,28 @@ public:
         {
             return( mCentre );
         }
+        BlobGroup &operator=( const BlobGroup &blobGroup )
+        {
+            mMinSize = blobGroup.mMinSize;
+            mMaxSize = blobGroup.mMaxSize;
+            mPixels = blobGroup.mPixels;
+            mExtent = blobGroup.mExtent;
+            mCentre = blobGroup.mCentre;
+            for ( BlobList::iterator iter = mBlobList.begin(); iter != mBlobList.end(); iter++ )
+                delete *iter;
+            mBlobList.clear();
+            for ( BlobList::const_iterator iter = blobGroup.mBlobList.begin(); iter != blobGroup.mBlobList.end(); iter++ )
+                mBlobList.push_back( new Blob( *(*iter) ) );
+            return( *this );
+        }
         BlobGroup &operator+=( const BlobGroup &blobGroup )
         {
-            if ( mBlobList.empty() )
-                mBlobList = blobGroup.mBlobList;
-            else
-                std::copy( blobGroup.mBlobList.begin(), blobGroup.mBlobList.end(), mBlobList.rbegin() );
+            //if ( mBlobList.empty() )
+                //mBlobList = blobGroup.mBlobList;
+            //else
+                //std::copy( blobGroup.mBlobList.begin(), blobGroup.mBlobList.end(), mBlobList.rbegin() );
+            for ( BlobList::const_iterator iter = blobGroup.mBlobList.begin(); iter != blobGroup.mBlobList.end(); iter++ )
+                mBlobList.push_back( new Blob( *(*iter) ) );
             mMinSize = std::min( mMinSize, blobGroup.mMinSize );
             mMaxSize = std::max( mMaxSize, blobGroup.mMaxSize );
             mPixels += blobGroup.mPixels;
@@ -460,7 +494,6 @@ public:
             result += blobGroup2;
             return( result );
         }
-                          
     };
 
 protected:
@@ -707,7 +740,7 @@ public:
 
     inline int *rgbBuffer( unsigned int x, unsigned int y ) const;
     inline int *yChannel( unsigned int x, unsigned int y ) const;
-    
+
     bool crop( int loX, int loY, int hiX, int hiY );
     bool crop( const Box &limits );
 
