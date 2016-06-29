@@ -24,6 +24,8 @@
 #cmakedefine HAVE_SYS_STAT_H 1
 #cmakedefine HAVE_SYS_TIME_H 1
 #cmakedefine HAVE_SYS_TYPES_H 1
+#cmakedefine HAVE_SYS_IOCTL_H 1
+#cmakedefine HAVE_NETINET_IN_H 1
 
 /* General system checks */
 #cmakedefine HAVE_ALLOCA 1
@@ -84,6 +86,10 @@
 #cmakedefine HAVE_LIBSWSCALE 1
 #cmakedefine HAVE_LIBSWSCALE_SWSCALE_H 1
 #cmakedefine HAVE_LIBDL 1
+#cmakedefine HAVE_LIBOPENSSL 1
+#cmakedefine HAVE_LIBCRYPTO 1
+#cmakedefine HAVE_OPENSSL_SHA_H 1
+#cmakedefine HAVE_OPENSSL_HMAC_H 1
 #cmakedefine OZ_MEM_MAPPED 1
 #cmakedefine RETSIGTYPE void
 

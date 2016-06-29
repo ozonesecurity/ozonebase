@@ -70,14 +70,14 @@ mark_as_advanced(
 #    OZ_TARGET_DISTRO 
     OZ_CONFIG_DIR)
 
-#set(OZ_USER "zoneminder" CACHE STRING "The user apache or the local web server runs on. Leave empty for automatic detection. If that fails, you can use this variable to force")
-#set(OZ_WEB_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT}/www" CACHE PATH "Location of the web files, default: <prefix>/${CMAKE_INSTALL_DATADIR}/zoneminder/www")
-#set(OZ_CGI_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT}/cgi-bin" CACHE PATH "Location of the cgi-bin files, default: <prefix>/${CMAKE_INSTALL_LIBEXECDIR}/zoneminder/cgi-bin")
+#set(OZ_USER "ozone" CACHE STRING "The user apache or the local web server runs on. Leave empty for automatic detection. If that fails, you can use this variable to force")
+#set(OZ_WEB_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT}/www" CACHE PATH "Location of the web files, default: <prefix>/${CMAKE_INSTALL_DATADIR}/ozone/www")
+#set(OZ_CGI_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT}/cgi-bin" CACHE PATH "Location of the cgi-bin files, default: <prefix>/${CMAKE_INSTALL_LIBEXECDIR}/ozone/cgi-bin")
 #set(OZ_WEB_HOST "localhost" CACHE STRING "Hostname for virtual hosting, default: localhost")
-set(OZ_DB_HOST "localhost" CACHE STRING "Hostname where ZoneMinder database located, default: localhost")
-set(OZ_DB_NAME "oz" CACHE STRING "Name of ZoneMinder database, default: oz")
-set(OZ_DB_USER "ozuser" CACHE STRING "Name of ZoneMinder database user, default: ozuser")
-set(OZ_DB_PASS "ozpass" CACHE STRING "Password of ZoneMinder database user, default: ozpass")
+set(OZ_DB_HOST "localhost" CACHE STRING "Hostname where oZone database located, default: localhost")
+set(OZ_DB_NAME "oz" CACHE STRING "Name of oZone database, default: oz")
+set(OZ_DB_USER "ozuser" CACHE STRING "Name of oZone database user, default: ozuser")
+set(OZ_DB_PASS "ozpass" CACHE STRING "Password of oZone database user, default: ozpass")
 #set(OZ_SSL_LIB "gnutls" CACHE STRING "Library to use for ssl functions, default: gnutls")
 set(OZ_RUNDIR "/var/run/oz" CACHE PATH "Location of transient process files, default: /var/run/oz")
 #set(OZ_TMPDIR "/var/tmp/oz" CACHE PATH "Location of temporary files, default: /tmp/oz")
@@ -87,10 +87,9 @@ set(OZ_RUNDIR "/var/run/oz" CACHE PATH "Location of transient process files, def
 #Advanced
 #set(OZ_MYSQL_ENGINE "InnoDB" CACHE STRING "MySQL engine to use with database, default: InnoDB")
 set(OZ_CONFIG_DIR "/${CMAKE_INSTALL_SYSCONFDIR}" CACHE PATH 
-    "Location of ZoneMinder configuration, default system config directory")
+    "Location of oZone configuration, default system config directory")
 set(OZ_EXTRA_LIBS "" CACHE STRING 
     "A list of optional libraries, separated by semicolons, e.g. ssl;theora")
-
 
 # Required for certain checks to work
 set(CMAKE_EXTRA_INCLUDE_FILES 
@@ -131,12 +130,27 @@ if(JPEG_FOUND)
 	check_include_files("stdio.h;jpeglib.h" HAVE_JPEGLIB_H)
 	if(NOT HAVE_JPEGLIB_H)
 		message(FATAL_ERROR 
-                    "ZoneMinder requires libjpeg headers - check that libjpeg development packages are installed")
+                    "oZone requires libjpeg headers - check that libjpeg development packages are installed")
 	endif(NOT HAVE_JPEGLIB_H)
 else(JPEG_FOUND)
 	message(FATAL_ERROR 
-            "ZoneMinder requires jpeg but it was not found on your system")
+            "oZone requires jpeg but it was not found on your system")
 endif(JPEG_FOUND)
+
+# OpenSSL
+find_package(OpenSSL)
+if(OPENSSL_FOUND)
+	set(HAVE_LIBOPENSSL 1)
+	set(HAVE_LIBCRYPTO 1)
+	list(APPEND ZM_BIN_LIBS "${OPENSSL_LIBRARIES}")
+	include_directories("${OPENSSL_INCLUDE_DIR}")
+	set(CMAKE_REQUIRED_INCLUDES "${OPENSSL_INCLUDE_DIR}")
+	check_include_file("openssl/sha.h" HAVE_OPENSSL_SHA_H)
+	check_include_file("openssl/hmac.h" HAVE_OPENSSL_HMAC_H)
+else(OPENSSL_FOUND)
+		message(FATAL_ERROR 
+                    "oZone requires openssl headers - check that openssl development packages are installed")
+endif(OPENSSL_FOUND)
 
 # pthread (using find_library and find_path)
 find_library(PTHREAD_LIBRARIES pthread)
@@ -152,11 +166,11 @@ if(PTHREAD_LIBRARIES)
 	check_include_file("pthread.h" HAVE_PTHREAD_H)
 	if(NOT HAVE_PTHREAD_H)
 		message(FATAL_ERROR 
-                    "ZoneMinder requires pthread headers - check that pthread development packages are installed")
+                    "oZone requires pthread headers - check that pthread development packages are installed")
 	endif(NOT HAVE_PTHREAD_H)
 else(PTHREAD_LIBRARIES)
 	message(FATAL_ERROR 
-            "ZoneMinder requires pthread but it was not found on your system")
+            "oZone requires pthread but it was not found on your system")
 endif(PTHREAD_LIBRARIES)
 
 # zlib
@@ -186,7 +200,7 @@ if(AVFORMAT_LIBRARIES)
     check_include_file("libavformat/avformat.h" HAVE_LIBAVFORMAT_AVFORMAT_H)
 else(AVFORMAT_LIBRARIES)
     message(FATAL_ERROR 
-            "ZoneMinder requires avformat but it was not found on your system")
+            "oZone requires avformat but it was not found on your system")
 endif(AVFORMAT_LIBRARIES)
 
 # avcodec (using find_library and find_path)
@@ -203,14 +217,14 @@ if(AVCODEC_LIBRARIES)
     check_include_file("libavcodec/avcodec.h" HAVE_LIBAVCODEC_AVCODEC_H)
 else(AVCODEC_LIBRARIES)
     message(FATAL_ERROR 
-            "ZoneMinder requires avcodec but it was not found on your system")
+            "oZone requires avcodec but it was not found on your system")
 endif(AVCODEC_LIBRARIES)
 
 # avdevice (using find_library and find_path)
 find_library(AVDEVICE_LIBRARIES avdevice)
 if(AVDEVICE_LIBRARIES)
     set(HAVE_LIBAVDEVICE 1)
-    list(APPEND ZM_BIN_LIBS "${AVDEVICE_LIBRARIES}")
+    list(APPEND OZ_BIN_LIBS "${AVDEVICE_LIBRARIES}")
     find_path(AVDEVICE_INCLUDE_DIR "libavdevice/avdevice.h" /usr/include/ffmpeg)
     if(AVDEVICE_INCLUDE_DIR)
         include_directories("${AVDEVICE_INCLUDE_DIR}")
@@ -218,9 +232,9 @@ if(AVDEVICE_LIBRARIES)
     endif(AVDEVICE_INCLUDE_DIR)
     mark_as_advanced(FORCE AVDEVICE_LIBRARIES AVDEVICE_INCLUDE_DIR)
     check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
-    set(optlibsfound "${optlibsfound} AVDevice")
 else(AVDEVICE_LIBRARIES)
-    set(optlibsnotfound "${optlibsnotfound} AVDevice")
+    message(FATAL_ERROR 
+            "oZone requires avcodec but it was not found on your system")
 endif(AVDEVICE_LIBRARIES)
 
 # avutil (using find_library and find_path)
@@ -238,7 +252,7 @@ if(AVUTIL_LIBRARIES)
     check_include_file("libavutil/mathematics.h" HAVE_LIBAVUTIL_MATHEMATICS_H)
 else(AVUTIL_LIBRARIES)
     message(FATAL_ERROR 
-            "ZoneMinder requires avutil but it was not found on your system")
+            "oZone requires avutil but it was not found on your system")
 endif(AVUTIL_LIBRARIES)
 
 # swscale (using find_library and find_path)
@@ -255,7 +269,7 @@ if(SWSCALE_LIBRARIES)
     check_include_file("libswscale/swscale.h" HAVE_LIBSWSCALE_SWSCALE_H)
 else(SWSCALE_LIBRARIES)
     message(FATAL_ERROR 
-            "ZoneMinder requires swscale but it was not found on your system")
+            "oZone requires swscale but it was not found on your system")
 endif(SWSCALE_LIBRARIES)
 
 # libdl
@@ -278,39 +292,27 @@ endif(DL_LIBRARIES)
 # check include files
 foreach( INCVAR alloca fcntl inttypes limits memory netdb
          string strings execinfo stdbool stddef stdint syslog
-         unistd values
+         unistd values "sys/types" "sys/time" "sys/stat" "sys/socket"
+         "sys/select" "sys/param" "sys/mman" "linux/videodev2" "sys/ioctl"
+         "netinet/in"
        )
     string( TOUPPER ${INCVAR} INCVAR_U )
+    string( REPLACE "/" "_" INCVAR_U ${INCVAR_U} )
     check_include_file("${INCVAR}.h" HAVE_${INCVAR_U}_H)
     if (NOT HAVE_${INCVAR_U}_H)
+        # Make each check fatal. Change this is this is not the case.
         message(FATAL_ERROR 
             "${ICVAR} function not found and this project requires it.")
     endif (NOT HAVE_${INCVAR_U}_H)
 endforeach(INCVAR)
 
-# System Checks
-check_symbol_exists(alloca alloca.h HAVE_ALLOCA)
-check_include_file(netinet/in.h HAVE_NETINET_IN_H)
-check_include_file(sys/ioctl.h HAVE_SYS_IOCTL_H)
-check_symbol_exists(x264_predict_16x16_init x264.h HAVE_LIBX264)
-check_include_file_cxx("malloc.h" HAVE_MALLOC_H)
-check_include_file("linux/videodev2.h" HAVE_LINUX_VIDEODEV2_H)
-check_include_file("sys/mman.h" HAVE_SYS_MMAN_H)
-check_include_file("sys/param.h" HAVE_SYS_PARAM_H)
-check_include_file("sys/select.h" HAVE_SYS_SELECT_H)
-check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
-check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
-check_include_file("sys/time.h" HAVE_SYS_TIME_H)
-check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
+if (HAVE_LINUX_VIDEODEV2_H)
+    set(OZ_V4L 1)
+endif (HAVE_LINUX_VIDEODEV2_H)
 
-check_function_exists("backtrace" HAVE_DECL_BACKTRACE)
-check_function_exists("backtrace_symbols" HAVE_DECL_BACKTRACE_SYMBOLS)
-check_function_exists("round" HAVE_DECL_ROUND)
-
-check_type_size("siginfo_t" HAVE_SIGINFO_T)
-check_type_size("ucontext_t" HAVE_UCONTEXT_T)
-check_type_size("struct sigcontext" HAVE_STRUCT_SIGCONTEXT)
-check_struct_has_member("struct sigcontext" eip signal.h HAVE_STRUCT_SIGCONTEXT_EIP)
+if(HAVE_SYS_MMAN_H)
+    set(OZ_MEM_MAPPED 1)
+endif(HAVE_SYS_MMAN_H)
 
 foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
          memset select socket sqrt strcasecmp strncasecmp strchr strrchr strcspn strerror
@@ -320,26 +322,26 @@ foreach( FUNCVAR gethostbyname gethostname gettimeofday memmove
     string( TOUPPER ${FUNCVAR} FUNCVAR_U )
     check_function_exists("${FUNCVAR}" HAVE_${FUNCVAR_U})
     if (NOT HAVE_${FUNCVAR_U})
+        # Make each check fatal. Change this is this is not the case.
         message(FATAL_ERROR 
             "${FUNCVAR} function not found and this project requires it.")
     endif (NOT HAVE_${FUNCVAR_U})
 endforeach(FUNCVAR)
 
-# Abort if v4l2 headers not found
-if (HAVE_LINUX_VIDEODEV2_H)
-    set(OZ_V4L 1)
-else (HAVE_LINUX_VIDEODEV2_H)
-    message(FATAL_ERROR 
-        "Video4Linux 2 header files not found and this project requires them.")
-endif (HAVE_LINUX_VIDEODEV2_H)
-
-# Abort if mmap not found
-if(HAVE_SYS_MMAN_H)
-    set(OZ_MEM_MAPPED 1)
-endif(HAVE_SYS_MMAN_H)
+# Other checks, currently not fatal
+check_symbol_exists(alloca alloca.h HAVE_ALLOCA)
+check_symbol_exists(x264_predict_16x16_init x264.h HAVE_LIBX264)
+check_include_file_cxx("malloc.h" HAVE_MALLOC_H)
+check_function_exists("backtrace" HAVE_DECL_BACKTRACE)
+check_function_exists("backtrace_symbols" HAVE_DECL_BACKTRACE_SYMBOLS)
+check_function_exists("round" HAVE_DECL_ROUND)
+check_type_size("siginfo_t" HAVE_SIGINFO_T)
+check_type_size("ucontext_t" HAVE_UCONTEXT_T)
+check_type_size("struct sigcontext" HAVE_STRUCT_SIGCONTEXT)
+check_struct_has_member("struct sigcontext" eip signal.h HAVE_STRUCT_SIGCONTEXT_EIP)
 
 # Some variables that oz expects
-set(OZ_PID "${OZ_RUNDIR}/zm.pid")
+set(OZ_PID "${OZ_RUNDIR}/oz.pid")
 #set(BINDIR "${CMAKE_INSTALL_FULL_BINDIR}")
 #set(LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 set(SYSCONFDIR "/${CMAKE_INSTALL_SYSCONFDIR}")
@@ -348,20 +350,22 @@ set(SYSCONFDIR "/${CMAKE_INSTALL_SYSCONFDIR}")
 configure_file(src/base/ozConfig.h.in "${CMAKE_CURRENT_BINARY_DIR}/src/base/ozConfig.h" @ONLY)
 configure_file(config-cmake.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
 
+# The example programs need to link against the ozone libraries
+set(OZ_LIBS protocols encoders processors consumers providers base img gen)
+
 # Process subdirectories
 add_subdirectory(src/base)
 add_subdirectory(src/consumers)
 add_subdirectory(src/encoders)
-add_subdirectory(src/examples)
 add_subdirectory(src/libgen)
 add_subdirectory(src/libimg)
 add_subdirectory(src/processors)
 add_subdirectory(src/protocols)
 add_subdirectory(src/providers)
+add_subdirectory(src/examples) # process last
 
 # Print optional libraries detection status
 message(STATUS "Optional libraries found:${optlibsfound}")
 message(STATUS "Optional libraries not found:${optlibsnotfound}")
-
 
 
