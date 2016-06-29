@@ -20,6 +20,6 @@ add_library(base ${OZ_BASE_SRC_FILES})
 
 target_link_libraries(base ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS base DESTINATION lib)
-install(FILES ${OZ_BASE_HDR_FILES} DESTINATION include)
+install(TARGETS base DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
+install(FILES ${OZ_BASE_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 

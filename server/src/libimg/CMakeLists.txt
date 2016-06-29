@@ -13,6 +13,6 @@ add_library(img ${OZ_LIBIMG_SRC_FILES})
 
 target_link_libraries(img ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS img DESTINATION lib)
-install(FILES ${OZ_LIBIMG_HDR_FILES} DESTINATION include)
+install(TARGETS img DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
+install(FILES ${OZ_LIBIMG_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 

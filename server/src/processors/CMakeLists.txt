@@ -16,6 +16,6 @@ add_library(processors ${OZ_PROCESSORS_SRC_FILES})
 
 target_link_libraries(processors ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS processors DESTINATION lib)
-install(FILES ${OZ_PROCESSORS_HDR_FILES} DESTINATION include)
+install(TARGETS processors DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
+install(FILES ${OZ_PROCESSORS_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 

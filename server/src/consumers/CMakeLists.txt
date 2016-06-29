@@ -14,6 +14,6 @@ add_library(consumers ${OZ_CONSUMER_SRC_FILES})
 
 target_link_libraries(consumers ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS consumers DESTINATION lib)
-install(FILES ${OZ_CONSUMER_HDR_FILES} DESTINATION include)
+install(TARGETS consumers DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
+install(FILES ${OZ_CONSUMER_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 

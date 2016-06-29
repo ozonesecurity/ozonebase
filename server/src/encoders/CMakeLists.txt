@@ -12,6 +12,6 @@ add_library(encoders ${OZ_ENCODER_SRC_FILES})
 
 target_link_libraries(encoders ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS encoders DESTINATION lib)
-install(FILES ${OZ_ENCODER_HDR_FILES} DESTINATION include)
+install(TARGETS encoders DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
+install(FILES ${OZ_ENCODER_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 
