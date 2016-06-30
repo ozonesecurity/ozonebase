@@ -40,6 +40,7 @@ install:
       - sudo make install-libs
 
 script:
+      - cd $TRAVIS_BUILD_DIR/server
       - cmake .
       - make
       - sudo make install
