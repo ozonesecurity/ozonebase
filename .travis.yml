@@ -1,0 +1,47 @@
+language: cpp
+sudo: required
+dist: trusty
+compiler: gcc
+
+notifications:
+  slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
+
+branches:
+  only: master
+
+addons:
+  apt:
+    packages:
+      - nodejs-legacy
+      - npm
+      - build-essential
+      - make
+      - git
+      - vim
+      - cmake
+      - libass-dev
+      - libfreetype6-dev
+      - libjpeg-dev
+      - libjpeg8
+      - libtheora-dev
+      - libtool
+      - libvorbis-dev
+      - pkg-config
+      - texinfo
+      - yasm
+      - zlib1g-dev
+
+install:
+      - git clone -b n2.8 --depth=1 git://source.ffmpeg.org/ffmpeg.git
+      - cd ffmpeg
+      - ./configure --enable-shared
+      - make -j `grep processor /proc/cpuinfo|wc -l` 
+      - sudo make install 
+      - sudo make install-libs
+
+script:
+      - cd $TRAVIS_BUILD_DIR/server
+      - cmake .
+      - make
+      - sudo make install
+
