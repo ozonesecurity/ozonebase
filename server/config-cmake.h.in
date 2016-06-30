@@ -1,0 +1,96 @@
+#ifndef OZ_CMAKE_CONFIG_H
+#define OZ_CMAKE_CONFIG_H
+
+/* This file is used by cmake to create config.h */
+
+/* General header file checks */
+#cmakedefine HAVE_ALLOCA_H 1
+#cmakedefine HAVE_STDLIB_H 1
+#cmakedefine HAVE_STRING_H 1
+#cmakedefine HAVE_STRINGS_H 1
+#cmakedefine HAVE_MALLOC_H 1
+#cmakedefine HAVE_LINUX_VIDEODEV2_H 1
+#cmakedefine HAVE_EXECINFO_H 1
+#cmakedefine HAVE_UCONTEXT_H 1
+#cmakedefine HAVE_UNISTD_H 1
+#cmakedefine HAVE_VALUES_H 1
+#cmakedefine HAVE_SYS_SENDFILE_H 1
+#cmakedefine HAVE_SYS_SYSCALL_H 1
+#cmakedefine HAVE_SYS_MMAN_H 1
+#cmakedefine HAVE_SYSLOG_H 1
+#cmakedefine HAVE_SYS_PARAM_H 1
+#cmakedefine HAVE_SYS_SELECT_H 1
+#cmakedefine HAVE_SYS_SOCKET_H 1
+#cmakedefine HAVE_SYS_STAT_H 1
+#cmakedefine HAVE_SYS_TIME_H 1
+#cmakedefine HAVE_SYS_TYPES_H 1
+#cmakedefine HAVE_SYS_IOCTL_H 1
+#cmakedefine HAVE_NETINET_IN_H 1
+
+/* General system checks */
+#cmakedefine HAVE_ALLOCA 1
+#cmakedefine STDC_HEADERS 1
+#cmakedefine HAVE_FORK 1
+#cmakedefine HAVE_SYSCALL 1
+#cmakedefine HAVE_SENDFILE 1
+#cmakedefine HAVE_DECL_BACKTRACE 1
+#cmakedefine HAVE_DECL_BACKTRACE_SYMBOLS 1
+#cmakedefine HAVE_POSIX_MEMALIGN 1
+#cmakedefine HAVE_SIGINFO_T 1
+#cmakedefine HAVE_UCONTEXT_T 1
+#cmakedefine HAVE_STRUCT_SIGCONTEXT 1
+#cmakedefine HAVE_DECL_ROUND 1
+
+/* function checks */
+#cmakedefine HAVE_GETHOSTBYNAME 1
+#cmakedefine HAVE_GETHOSTNAME 1
+#cmakedefine HAVE_GETTIMEOFDAY 1
+#cmakedefine HAVE_MEMMOVE 1
+#cmakedefine HAVE_MEMSET 1
+#cmakedefine HAVE_SELECT 1
+#cmakedefine HAVE_SOCKET 1
+#cmakedefine HAVE_SQRT 1
+#cmakedefine HAVE_STRCASECMP 1
+#cmakedefine HAVE_STRNCASECMP 1
+#cmakedefine HAVE_STRCHR 1
+#cmakedefine HAVE_STRRCHR 1
+#cmakedefine HAVE_STRCSPN 1
+#cmakedefine HAVE_STRERROR 1
+#cmakedefine HAVE_STRSIGNAL 1
+#cmakedefine HAVE_STRSPN 1
+#cmakedefine HAVE_STRSTR 1
+#cmakedefine HAVE_STRTOL 1
+#cmakedefine HAVE_STRTOULL 1
+#cmakedefine HAVE_MMAP 1
+#cmakedefine HAVE_MUNMAP 1
+#cmakedefine HAVE_GETPAGESIZE 1
+#cmakedefine HAVE_MKDIR 1
+#cmakedefine HAVE_PUTENV 1
+#cmakedefine HAVE_STRFTIME 1
+
+/* Library checks and their header files */
+#cmakedefine HAVE_MATH 1
+#cmakedefine HAVE_MATH_H 1
+#cmakedefine HAVE_LIBJPEG 1
+#cmakedefine HAVE_JPEGLIB_H 1
+#cmakedefine HAVE_LIBPTHREAD 1
+#cmakedefine HAVE_PTHREAD_H
+#cmakedefine HAVE_LIBZLIB 1
+#cmakedefine HAVE_ZLIB_H 1
+#cmakedefine HAVE_LIBAVFORMAT 1
+#cmakedefine HAVE_LIBAVFORMAT_AVFORMAT_H 1
+#cmakedefine HAVE_LIBAVCODEC 1
+#cmakedefine HAVE_LIBAVCODEC_AVCODEC_H 1
+#cmakedefine HAVE_LIBAVUTIL 1
+#cmakedefine HAVE_LIBAVUTIL_AVUTIL_H 1
+#cmakedefine HAVE_LIBSWSCALE 1
+#cmakedefine HAVE_LIBSWSCALE_SWSCALE_H 1
+#cmakedefine HAVE_LIBDL 1
+#cmakedefine HAVE_LIBOPENSSL 1
+#cmakedefine HAVE_LIBCRYPTO 1
+#cmakedefine HAVE_OPENSSL_SHA_H 1
+#cmakedefine HAVE_OPENSSL_HMAC_H 1
+#cmakedefine OZ_MEM_MAPPED 1
+#cmakedefine RETSIGTYPE void
+
+#endif
