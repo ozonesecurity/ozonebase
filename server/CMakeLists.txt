@@ -365,9 +365,9 @@ add_subdirectory(src/protocols)
 add_subdirectory(src/providers)
 
 # Process the example subdirectory last, if it has been selected for build
-if (NOT OZ_EXAMPLES)
+if (OZ_EXAMPLES)
     add_subdirectory(src/examples) 
-endif (NOT OZ_EXAMPLES)
+endif (OZ_EXAMPLES)
 
 # Print optional libraries detection status
 message(STATUS "Optional libraries found:${optlibsfound}")
