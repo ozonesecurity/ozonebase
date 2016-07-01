@@ -16,6 +16,6 @@ add_library(providers ${OZ_PROVIDERS_SRC_FILES})
 
 target_link_libraries(providers ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS providers DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
-install(FILES ${OZ_PROVIDERS_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
+install(TARGETS providers DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase/providers")
+install(FILES ${OZ_PROVIDERS_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase/providers")
 
