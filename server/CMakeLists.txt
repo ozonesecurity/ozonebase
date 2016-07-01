@@ -83,6 +83,7 @@ set(OZ_RUNDIR "/var/run/oz" CACHE PATH "Location of transient process files, def
 #set(OZ_TMPDIR "/var/tmp/oz" CACHE PATH "Location of temporary files, default: /tmp/oz")
 #set(OZ_LOGDIR "/var/log/oz" CACHE PATH "Location of generated log files, default: /var/log/oz")
 #set(OZ_LIBARCH "/lib" CACHE PATH "Architecture specific library path, default lib, try lib64 on 64 bit systems")
+set(OZ_EXAMPLES "OFF" CACHE BOOL "Set to ON to build and install the example programs. default: OFF")
 
 #Advanced
 #set(OZ_MYSQL_ENGINE "InnoDB" CACHE STRING "MySQL engine to use with database, default: InnoDB")
@@ -362,7 +363,11 @@ add_subdirectory(src/libimg)
 add_subdirectory(src/processors)
 add_subdirectory(src/protocols)
 add_subdirectory(src/providers)
-add_subdirectory(src/examples) # process last
+
+# Process the example subdirectory last, if it has been selected for build
+if (NOT OZ_EXAMPLES)
+    add_subdirectory(src/examples) 
+endif (NOT OZ_EXAMPLES)
 
 # Print optional libraries detection status
 message(STATUS "Optional libraries found:${optlibsfound}")
