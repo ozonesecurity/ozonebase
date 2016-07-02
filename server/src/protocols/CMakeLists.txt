@@ -20,6 +20,6 @@ add_library(protocols ${OZ_PROTOCOLS_SRC_FILES})
 
 target_link_libraries(protocols ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS protocols DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
-install(FILES ${OZ_PROTOCOLS_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
+install(TARGETS protocols DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase/protocols")
+install(FILES ${OZ_PROTOCOLS_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase/protocols")
 

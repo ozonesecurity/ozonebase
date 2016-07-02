@@ -373,4 +373,5 @@ endif (OZ_EXAMPLES)
 message(STATUS "Optional libraries found:${optlibsfound}")
 message(STATUS "Optional libraries not found:${optlibsnotfound}")
 
+install(FILES config.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
 

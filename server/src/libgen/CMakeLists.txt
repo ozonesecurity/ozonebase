@@ -21,6 +21,6 @@ add_library(gen ${OZ_LIBGEN_SRC_FILES})
 
 target_link_libraries(gen ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
-install(TARGETS gen DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase")
-install(FILES ${OZ_LIBGEN_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
+install(TARGETS gen DESTINATION "${CMAKE_INSTALL_LIBDIR}/ozonebase/libgen")
+install(FILES ${OZ_LIBGEN_HDR_FILES} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase/libgen")
 
