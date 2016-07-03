@@ -34,6 +34,8 @@ public:
     const AVCodecContext *videoCodecContext() const { return( mVideoCodecContext ); }
     const AVCodecContext *audioCodecContext() const { return( mAudioCodecContext ); }
 
+    const std::string& source() const { return( mSource ); } 
+
     PixelFormat pixelFormat() const
     {
         return( mVideoCodecContext->pix_fmt );
@@ -68,6 +70,8 @@ public:
     {
         return( mAudioCodecContext->frame_size );   // Not sure about this
     }
+    
+   
 
 protected:
     int run();
