@@ -33,7 +33,7 @@ addons:
 
 cache:
 	directories:
-		-ffmpeg
+		- ffmpeg
 
 
 install:
