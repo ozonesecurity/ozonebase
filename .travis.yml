@@ -38,11 +38,11 @@ addons:
 cache:
     directories:
       - ffmpeg
+      - externals/ffmpeg
 
 
 install:
-      - git clone -b n2.8 --depth=1 git://source.ffmpeg.org/ffmpeg.git
-      - cd ffmpeg
+      - cd externals/ffmpeg
       - ./configure --enable-shared
       - make -j `grep processor /proc/cpuinfo|wc -l` 
       - sudo make install 
