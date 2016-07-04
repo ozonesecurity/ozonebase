@@ -11,7 +11,7 @@ using namespace std;
 #define MAX_CAMS 10
 NetworkAVInput* cam[MAX_CAMS];
 MotionDetector* motion[MAX_CAMS];
-Listener listener;
+Listener *listener;
 HttpController* httpController;
 Application app;
 int cam_ndx=-1;
@@ -22,14 +22,19 @@ void cmd_add()
 {
     string name;
     string source;
+
+    cin.clear(); cin.sync();
     cout << "camera name:";
-    cin >> name;
-    //cout << "RTSP source:";
-    //cin >> source;
-    // fixme- hardcoded
-    cam[0] = new NetworkAVInput ( name, "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
+    getline(cin,name);
+    cout << "RTSP source:";
+    getline(cin,source);
+    if (source.size() == 0)
+    {
+        source = "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa";
+    }
     cam_ndx++;
-    cout << "Adding:"<<cam[cam_ndx]->name() << endl;
+    cam[cam_ndx] = new NetworkAVInput ( name, source );
+    cout << "Adding @index:"<<cam_ndx<<":"<<cam[cam_ndx]->name() << endl;
     cout << cam[cam_ndx]->source() << endl;
     app.addThread( cam[cam_ndx] );
     cam[cam_ndx]->start();
@@ -41,11 +46,13 @@ void cmd_add()
     motion[cam_ndx]->start();
 
     // stop the listener, add new camera, restart
-    listener.stop();
-    //listener.removeController(httpController);
-    httpController->addStream("watch-"+name,*cam[cam_ndx]);
-    //listener.addController(httpController);
-    listener.start();
+    listener->stop(); // don't really need this, it seems
+    delete listener;
+    httpController->addStream("live",*cam[cam_ndx]);
+    httpController->addStream("debug",*motion[cam_ndx]);
+    listener = new Listener;
+    listener->addController(httpController);
+    listener->start();
 }
 
 void cmd_help()
@@ -70,7 +77,7 @@ void cli(Application app)
     for (;;) 
     { 
         cout << "?:";
-        cin >> command;
+        getline (cin,command);
         // really? no string lowercase?
         transform(command.begin(), command.end(), command.begin(), [](unsigned char c) { return tolower(c); });
         cout << "You entered: "<< command << endl;
@@ -96,9 +103,10 @@ int main( int argc, const char *argv[] )
     //fixme: convert this to a list later
     for (int i=0; i<MAX_CAMS; i++) { cam[i] = NULL; motion[i] = NULL; }
     
+    listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
-    listener.addController( httpController );
-    app.addThread( &listener );
+    listener->addController( httpController );
+    // app.addThread( &listener );
     thread t1(cli,app);
     app.run();
     cout << "Never here";
