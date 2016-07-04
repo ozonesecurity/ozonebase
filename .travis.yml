@@ -1,4 +1,6 @@
+#
 # travis configuration for oZone
+#
 
 language: cpp
 sudo: required
