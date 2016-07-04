@@ -2,8 +2,6 @@ language: cpp
 sudo: required
 dist: trusty
 compiler: gcc
-cache: ffmpeg
-
 
 notifications:
   slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
@@ -32,6 +30,11 @@ addons:
       - texinfo
       - yasm
       - zlib1g-dev
+
+cache:
+	directories:
+		-ffmpeg
+
 
 install:
       - git clone -b n2.8 --depth=1 git://source.ffmpeg.org/ffmpeg.git
