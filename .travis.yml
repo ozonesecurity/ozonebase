@@ -39,7 +39,6 @@ addons:
 
 cache:
     directories:
-      - ffmpeg
       - externals/ffmpeg
 
 
