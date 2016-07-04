@@ -10,7 +10,7 @@ set(OZ_CONSUMER_HDR_FILES
     ozMemoryOutput.h ozMovieFileOutput.h ozMp4FileOutput.h
    )
 
-add_library(consumers ${OZ_CONSUMER_SRC_FILES})
+add_library(consumers ${OZ_CONSUMER_SRC_FILES} ${OZ_CONSUMER_HDR_FILES})
 
 target_link_libraries(consumers ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

@@ -12,7 +12,7 @@ set(OZ_PROCESSORS_HDR_FILES
     ozVideoFilter.h
    )
 
-add_library(processors ${OZ_PROCESSORS_SRC_FILES})
+add_library(processors ${OZ_PROCESSORS_SRC_FILES} ${OZ_PROCESSORS_HDR_FILES})
 
 target_link_libraries(processors ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

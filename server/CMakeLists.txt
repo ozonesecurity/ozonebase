@@ -96,8 +96,8 @@ set(OZ_EXTRA_LIBS "" CACHE STRING
 set(CMAKE_EXTRA_INCLUDE_FILES 
     ${CMAKE_EXTRA_INCLUDE_FILES} stdio.h stdlib.h math.h signal.h
     )
-# Required for including headers from the this folder
-include_directories("${CMAKE_BINARY_DIR}")
+# Required for including headers created from ".in" files
+include_directories("${CMAKE_BINARY_DIR}" "${CMAKE_BINARY_DIR}/src/base")
 # This is required to enable searching in lib64 (if exists), do not change
 set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 
@@ -208,120 +208,120 @@ if(OZ_SUPERBUILD)
     message(STATUS "oZonebase Superbuild detected.")
 
     # avformat (built as external project, using find_library and find_path)
-    find_library(AVFORMAT_LIBRARIES avformat PATHS "${FFMPEG_BINARY_DIR}/libavformat" NO_DEFAULT_PATH)
+    find_library(AVFORMAT_LIBRARIES avformat PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVFORMAT_LIBRARIES)
         set(HAVE_LIBAVFORMAT 1)
         list(APPEND OZ_BIN_LIBS "${AVFORMAT_LIBRARIES}")
-        find_path(AVFORMAT_INCLUDE_DIR "avformat.h" PATHS "${FFMPEG_SOURCE_DIR}/libavformat" NO_DEFAULT_PATH)
+        find_path(AVFORMAT_INCLUDE_DIR "libavformat/avformat.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(AVFORMAT_INCLUDE_DIR)
             include_directories("${AVFORMAT_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${AVFORMAT_INCLUDE_DIR}")
         endif(AVFORMAT_INCLUDE_DIR)
         mark_as_advanced(FORCE AVFORMAT_LIBRARIES AVFORMAT_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavformat/avformat.h" HAVE_LIBAVFORMAT_AVFORMAT_H)
+        check_include_file("libavformat/avformat.h" HAVE_LIBAVFORMAT_AVFORMAT_H)
     else(AVFORMAT_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires avformat but it was not found on your system")
     endif(AVFORMAT_LIBRARIES)
     
     # avcodec (built as external project, using find_library and find_path)
-    find_library(AVCODEC_LIBRARIES avcodec PATHS "${FFMPEG_BINARY_DIR}/libavcodec" NO_DEFAULT_PATH)
+    find_library(AVCODEC_LIBRARIES avcodec PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVCODEC_LIBRARIES)
         set(HAVE_LIBAVCODEC 1)
         list(APPEND OZ_BIN_LIBS "${AVCODEC_LIBRARIES}")
-        find_path(AVCODEC_INCLUDE_DIR "avcodec.h" PATHS "${FFMPEG_SOURCE_DIR}/libavcodec" NO_DEFAULT_PATH)
+        find_path(AVCODEC_INCLUDE_DIR "libavcodec/avcodec.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(AVCODEC_INCLUDE_DIR)
             include_directories("${AVCODEC_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${AVCODEC_INCLUDE_DIR}")
         endif(AVCODEC_INCLUDE_DIR)
         mark_as_advanced(FORCE AVCODEC_LIBRARIES AVCODEC_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavcodec/avcodec.h" HAVE_LIBAVCODEC_AVCODEC_H)
+        check_include_file("libavcodec/avcodec.h" HAVE_LIBAVCODEC_AVCODEC_H)
     else(AVCODEC_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires avcodec but it was not found on your system")
     endif(AVCODEC_LIBRARIES)
 
     # avdevice (built as external project, using find_library and find_path)
-    find_library(AVDEVICE_LIBRARIES avdevice PATHS "${FFMPEG_BINARY_DIR}/libavdevice" NO_DEFAULT_PATH)
+    find_library(AVDEVICE_LIBRARIES avdevice PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVDEVICE_LIBRARIES)
         set(HAVE_LIBAVDEVICE 1)
         list(APPEND OZ_BIN_LIBS "${AVDEVICE_LIBRARIES}")
-        find_path(AVDEVICE_INCLUDE_DIR "avdevice.h" PATHS "${FFMPEG_SOURCE_DIR}/libavdevice" NO_DEFAULT_PATH)
+        find_path(AVDEVICE_INCLUDE_DIR "libavdevice/avdevice.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(AVDEVICE_INCLUDE_DIR)
             include_directories("${AVDEVICE_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${AVDEVICE_INCLUDE_DIR}")
         endif(AVDEVICE_INCLUDE_DIR)
         mark_as_advanced(FORCE AVDEVICE_LIBRARIES AVDEVICE_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
+        check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
     else(AVDEVICE_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires avcodec but it was not found on your system")
     endif(AVDEVICE_LIBRARIES)
 
     # avutil (built as external project, using find_library and find_path)
-    find_library(AVUTIL_LIBRARIES avutil PATHS "${FFMPEG_BINARY_DIR}/libavutil" NO_DEFAULT_PATH)
+    find_library(AVUTIL_LIBRARIES avutil PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVUTIL_LIBRARIES)
         set(HAVE_LIBAVUTIL 1)
         list(APPEND OZ_BIN_LIBS "${AVUTIL_LIBRARIES}")
-        find_path(AVUTIL_INCLUDE_DIR "avutil.h" PATHS "${FFMPEG_SOURCE_DIR}/libautil" NO_DEFAULT_PATH)
+        find_path(AVUTIL_INCLUDE_DIR "libavutil/avutil.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(AVUTIL_INCLUDE_DIR)
             include_directories("${AVUTIL_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${AVUTIL_INCLUDE_DIR}")
         endif(AVUTIL_INCLUDE_DIR)
         mark_as_advanced(FORCE AVUTIL_LIBRARIES AVUTIL_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavutil/avutil.h" HAVE_LIBAVUTIL_AVUTIL_H)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavutil/mathematics.h" HAVE_LIBAVUTIL_MATHEMATICS_H)
+        check_include_file("libavutil/avutil.h" HAVE_LIBAVUTIL_AVUTIL_H)
+        check_include_file("libavutil/mathematics.h" HAVE_LIBAVUTIL_MATHEMATICS_H)
     else(AVUTIL_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires avutil but it was not found on your system")
     endif(AVUTIL_LIBRARIES)
 
     # swscale (built as external project, using find_library and find_path)
-    find_library(SWSCALE_LIBRARIES swscale PATHS "${FFMPEG_BINARY_DIR}/libswscale" NO_DEFAULT_PATH)
+    find_library(SWSCALE_LIBRARIES swscale PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(SWSCALE_LIBRARIES)
         set(HAVE_LIBSWSCALE 1)
         list(APPEND OZ_BIN_LIBS "${SWSCALE_LIBRARIES}")
-        find_path(SWSCALE_INCLUDE_DIR "swscale.h" PATHS "${FFMPEG_SOURCE_DIR}/libswscale" NO_DEFAULT_PATH)
+        find_path(SWSCALE_INCLUDE_DIR "libswscale/swscale.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(SWSCALE_INCLUDE_DIR)
             include_directories("${SWSCALE_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${SWSCALE_INCLUDE_DIR}")
         endif(SWSCALE_INCLUDE_DIR)
         mark_as_advanced(FORCE SWSCALE_LIBRARIES SWSCALE_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libswscale/swscale.h" HAVE_LIBSWSCALE_SWSCALE_H)
+        check_include_file("libswscale/swscale.h" HAVE_LIBSWSCALE_SWSCALE_H)
     else(SWSCALE_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires swscale but it was not found on your system")
     endif(SWSCALE_LIBRARIES)
 
     # avfilter (built as external project, using find_library and find_path)
-    find_library(AVFILTER_LIBRARIES avfilter PATHS "${FFMPEG_BINARY_DIR}/libavfilter" NO_DEFAULT_PATH)
+    find_library(AVFILTER_LIBRARIES avfilter PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVFILTER_LIBRARIES)
         set(HAVE_AVFILTER 1)
         list(APPEND OZ_BIN_LIBS "${AVFILTER_LIBRARIES}")
-        find_path(AVFILTER_INCLUDE_DIR "avfilter.h" PATHS "${FFMPEG_SOURCE_DIR}/libavfilter" NO_DEFAULT_PATH)
+        find_path(AVFILTER_INCLUDE_DIR "libavfilter/avfilter.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(AVFILTER_INCLUDE_DIR)
             include_directories("${AVFILTER_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${AVFILTER_INCLUDE_DIR}")
         endif(AVFILTER_INCLUDE_DIR)
         mark_as_advanced(FORCE AVFILTER_LIBRARIES AVFILTER_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libavfilter/avfilter.h" HAVE_LIBAVFILTER_AVFILTER_H)
+        check_include_file("libavfilter/avfilter.h" HAVE_LIBAVFILTER_AVFILTER_H)
     else(AVFILTER_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires avfilter but it was not found on your system")
     endif(AVFILTER_LIBRARIES)
 
     # swresample (built as external project, using find_library and find_path)
-    find_library(SWRESAMPLE_LIBRARIES swresample PATHS "${FFMPEG_BINARY_DIR}/libswresample" NO_DEFAULT_PATH)
+    find_library(SWRESAMPLE_LIBRARIES swresample PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(SWRESAMPLE_LIBRARIES)
         set(HAVE_LIBSWRESAMPLE 1)
         list(APPEND OZ_BIN_LIBS "${SWRESAMPLE_LIBRARIES}")
-        find_path(SWRESAMPLE_INCLUDE_DIR "swresample.h" PATHS "${FFMPEG_SOURCE_DIR}/libswresample" NO_DEFAULT_PATH)
+        find_path(SWRESAMPLE_INCLUDE_DIR "libswresample/swresample.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
         if(SWRESAMPLE_INCLUDE_DIR)
             include_directories("${SWRESAMPLE_INCLUDE_DIR}")
             set(CMAKE_REQUIRED_INCLUDES "${SWRESAMPLE_INCLUDE_DIR}")
         endif(SWRESAMPLE_INCLUDE_DIR)
         mark_as_advanced(FORCE SWRESAMPLE_LIBRARIES SWRESAMPLE_INCLUDE_DIR)
-        check_include_file("${FFMPEG_SOURCE_DIR}/libswresample/swresample.h" HAVE_LIBSWRESAMPLE_SWRESAMPLE_H)
+        check_include_file("libswresample/swresample.h" HAVE_LIBSWRESAMPLE_SWRESAMPLE_H)
     else(SWRESAMPLE_LIBRARIES)
         message(FATAL_ERROR 
                 "oZone requires swresample but it was not found on your system")
@@ -515,6 +515,17 @@ configure_file(config-cmake.h.in "${CMAKE_CURRENT_BINARY_DIR}/config.h" @ONLY)
 # The example programs need to link against the ozone libraries
 set(OZ_LIBS protocols encoders processors consumers providers base img gen)
 
+# We need each library to see the header files from all the other libraries
+include_directories(src/base
+                    src/consumers
+                    src/encoders
+                    src/libgen
+                    src/libimg
+                    src/processors
+                    src/protocols
+                    src/providers
+                   )
+
 # Process subdirectories
 add_subdirectory(src/base)
 add_subdirectory(src/consumers)
@@ -534,5 +545,6 @@ endif (OZ_EXAMPLES)
 message(STATUS "Optional libraries found:${optlibsfound}")
 message(STATUS "Optional libraries not found:${optlibsnotfound}")
 
-install(FILES config.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
+
 

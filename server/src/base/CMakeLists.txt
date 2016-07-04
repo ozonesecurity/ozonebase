@@ -10,13 +10,14 @@ set(OZ_BASE_SRC_FILES
 
 set(OZ_BASE_HDR_FILES
     countedPtr.h linkedPtr.h ozAlarmFrame.h ozApp.h ozConfigDefines.h
-    ozConfig.h ozConnection.h ozController.h ozEncoder.h ozFeedBase.h
+    ozConnection.h ozController.h ozEncoder.h ozFeedBase.h
     ozFeedConsumer.h ozFeedFrame.h ozFeedProvider.h ozFfmpeg.h oz.h
     ozListener.h ozMemoryIO.h ozMemoryIOV1.h ozMotionData.h ozMotionFrame.h
     ozRegion.h ozSignal.h ozStream.h ozZone.h
+    "${CMAKE_CURRENT_BINARY_DIR}/ozConfig.h"
    )
 
-add_library(base ${OZ_BASE_SRC_FILES})
+add_library(base ${OZ_BASE_SRC_FILES} ${OZ_BASE_HDR_FILES})
 
 target_link_libraries(base ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

@@ -17,6 +17,10 @@ if( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
     file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/buildroot")
 endif( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
 
+set(FFMPEG_PREFIX "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}")
+set(FFMPEG_LIBDIR "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(FFMPEG_INCLUDEDIR "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+
 ExternalProject_Add(ffmpeg
 #                    GIT_REPOSITORY "https://git.ffmpeg.org/ffmpeg.git"
 #                    GIT_TAG release/2.8
@@ -25,21 +29,11 @@ ExternalProject_Add(ffmpeg
                     UPDATE_COMMAND ""
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure 
                                       --enable-shared
-                                      --libdir=${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
-                                      --prefix=${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}
+                                      --libdir=${FFMPEG_LIBDIR}
+                                      --prefix=${FFMPEG_PREFIX}
                     BUILD_COMMAND make
-                    INSTALL_COMMAND make install
+                    INSTALL_COMMAND make install && make install-libs
                    )
-
-# Retrive the ffmpeg source folder
-ExternalProject_Get_Property(ffmpeg source_dir)
-set(FFMPEG_SOURCE_DIR ${source_dir})
-#message(STATUS "FFMPEG_SOURCE_DIR set to: ${FFMPEG_SOURCE_DIR}")
-
-# Retrive the ffmpeg binary folder
-ExternalProject_Get_Property(ffmpeg binary_dir)
-set(FFMPEG_BINARY_DIR ${binary_dir})
-#message(STATUS "FFMPEG_BINARY_DIR set to: ${FFMPEG_BINARY_DIR}")
 
 ExternalProject_Add(ozonebase
                     DOWNLOAD_COMMAND ""
@@ -47,20 +41,17 @@ ExternalProject_Add(ozonebase
                     UPDATE_COMMAND ""
                     CMAKE_ARGS
                               -DOZ_SUPERBUILD=ON
-                              -DFFMPEG_SOURCE_DIR=${FFMPEG_SOURCE_DIR}
-                              -DFFMPEG_BINARY_DIR=${FFMPEG_BINARY_DIR}
+                              -DFFMPEG_LIBDIR=${FFMPEG_LIBDIR}
+                              -DFFMPEG_INCLUDEDIR=${FFMPEG_INCLUDEDIR}
                               -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/buildroot/${CMAKE_INSTALL_PREFIX}
+                              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                               -DOZ_EXAMPLES=${OZ_EXAMPLES}
                    )
 
 add_dependencies(ozonebase ffmpeg)
 
 message(STATUS
-        "NOTICE: This build has been configured for a cmake superbuild.
-
-        The make command will build each project into the following staging folder: 
-        ${CMAKE_BINARY_DIR}/buildroot
-        "
+        "NOTICE:This build has been configured for a cmake superbuild.\nThe make command will build each project into the following staging folder:\n${CMAKE_BINARY_DIR}/buildroot"
        )
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/buildroot/${CMAKE_INSTALL_PREFIX}/
