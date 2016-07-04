@@ -10,6 +10,7 @@ branches:
   only: master
 
 addons:
+  apt:
     packages:
       - nodejs-legacy
       - npm
