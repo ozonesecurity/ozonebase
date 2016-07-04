@@ -28,11 +28,15 @@ void cmd_add()
     getline(cin,name);
     cout << "RTSP source:";
     getline(cin,source);
-    if (source.size() == 0)
+    cam_ndx++;
+    if (source.size() == 0 && cam_ndx==0)
     {
         source = "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa";
     }
-    cam_ndx++;
+    if (source.size() == 0 && cam_ndx==1)
+    {
+        source = "rtsp://170.93.143.139:1935/rtplive/e0ffa81e00a200ab0050fa36c4235c0a";
+    }
     cam[cam_ndx] = new NetworkAVInput ( name, source );
     cout << "Adding @index:"<<cam_ndx<<":"<<cam[cam_ndx]->name() << endl;
     cout << cam[cam_ndx]->source() << endl;
@@ -47,7 +51,10 @@ void cmd_add()
 
     // stop the listener, add new camera, restart
     listener->stop(); // don't really need this, it seems
+    listener->join(); // don't really need this, it seems
+	cout << "listener killed\n";
     delete listener;
+   // listener->removeController(httpController);
     httpController->addStream("live",*cam[cam_ndx]);
     httpController->addStream("debug",*motion[cam_ndx]);
     listener = new Listener;
@@ -91,7 +98,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "starter-example", "", 0 );
+    debugInitialise( "nvrcli", "", 1 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
