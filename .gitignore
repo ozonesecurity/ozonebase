@@ -4,7 +4,6 @@
 .deps
 Makefile
 Makefile.in
-server/src/examples/*.
 server/src/zmConfigDefines.h
 docs/server/html/*
 docs/server/doxygen_*
