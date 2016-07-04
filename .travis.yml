@@ -10,7 +10,6 @@ branches:
   only: master
 
 addons:
-  apt:
     packages:
       - nodejs-legacy
       - npm
@@ -32,8 +31,8 @@ addons:
       - zlib1g-dev
 
 cache:
-	directories:
-		- ffmpeg
+    directories:
+      - ffmpeg
 
 
 install:
