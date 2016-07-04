@@ -7,6 +7,8 @@ compiler: gcc
 
 notifications:
   slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
+  on_success: never
+  on_failure: always
 
 branches:
   only: master
