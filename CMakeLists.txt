@@ -43,7 +43,7 @@ ExternalProject_Add(ozonebase
                               -DOZ_SUPERBUILD=ON
                               -DFFMPEG_LIBDIR=${FFMPEG_LIBDIR}
                               -DFFMPEG_INCLUDEDIR=${FFMPEG_INCLUDEDIR}
-                              -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/buildroot/${CMAKE_INSTALL_PREFIX}
+                              -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}
                               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                               -DOZ_EXAMPLES=${OZ_EXAMPLES}
                    )
