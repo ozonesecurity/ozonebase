@@ -17,9 +17,20 @@ if( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
     file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/buildroot")
 endif( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
 
-set(FFMPEG_PREFIX "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}")
-set(FFMPEG_LIBDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(FFMPEG_INCLUDEDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+# Default build type. To change the build type, 
+# use the CMAKE_BUILD_TYPE configuration option.
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE 
+            Release CACHE STRING "Build type: Release or Debug" FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
+set(OZ_EXAMPLES "OFF" CACHE BOOL "Set to ON to build the oZonebase example binaries. Default: OFF")
+
+# Internal variables. Not to be modified by the end user
+set(OZ_SUPERBUILD "ON" CACHE BOOL INTERNAL)
+set(FFMPEG_PREFIX "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}" CACHE PATH INTERNAL)
+set(FFMPEG_LIBDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH INTERNAL)
+set(FFMPEG_INCLUDEDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH INTERNAL)
 
 ExternalProject_Add(ffmpeg
 #                    GIT_REPOSITORY "https://git.ffmpeg.org/ffmpeg.git"
@@ -40,12 +51,14 @@ ExternalProject_Add(ozonebase
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}/server
                     UPDATE_COMMAND ""
                     CMAKE_ARGS
-                              -DOZ_SUPERBUILD=ON
+                              -DOZ_SUPERBUILD=${OZ_SUPERBUILD}
                               -DFFMPEG_LIBDIR=${FFMPEG_LIBDIR}
                               -DFFMPEG_INCLUDEDIR=${FFMPEG_INCLUDEDIR}
                               -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}
                               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                               -DOZ_EXAMPLES=${OZ_EXAMPLES}
+                              -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
+                              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    )
 
 add_dependencies(ozonebase ffmpeg)
