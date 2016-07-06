@@ -8,11 +8,16 @@
 #include <list>
 using namespace std;
 
+struct nvrCameras
+{
+	NetworkAVInput *cam;
+	MotionDetector *motion;	
+};
+
 
 #define MAX_CAMS 10
 // TBD: convert these two lists into a single one
-list<NetworkAVInput *> cams; // will hold configured cameras
-list <MotionDetector *> motions; // will hold configured modects
+list <struct nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
 HttpController* httpController;
@@ -35,7 +40,7 @@ const char* const defRtspUrls[] = {
 void cmd_add()
 {
 
-	if (cams.size() == MAX_CAMS)
+	if (nvrcams.size() == MAX_CAMS)
 	{
 		cout << "Cannot add any more cams!\n\n";
 		return;
@@ -57,27 +62,26 @@ void cmd_add()
 	}
     if (source.size() == 0 )
     {
-        source = defRtspUrls[cams.size() % MAX_CAMS];
+        source = defRtspUrls[nvrcams.size() % MAX_CAMS];
     }
     
     
-	NetworkAVInput *cam = new NetworkAVInput ( name, source );
-	cams.push_back(cam);
+	struct nvrCameras nvrcam;
+	nvrcam.cam = new NetworkAVInput ( name, source );
+    nvrcam.motion = new MotionDetector( "modect-"+name );
+    nvrcam.motion->registerProvider(*(nvrcam.cam) );
+	nvrcams.push_back(nvrcam); // add to list
 	
-	
-    cout << "Adding:"<<cams.back()->name() << endl;
-    cout << cams.back()->source() << endl;
-    cams.back()->start();
+    cout << "Added:"<<nvrcams.back().cam->name() << endl;
+    cout << nvrcams.back().cam->source() << endl;
 
-    // motion detect for cam
-    MotionDetector *motion = new MotionDetector( "modect-"+name );
-	motions.push_back(motion);
-    motion->registerProvider(*(cams.back()) );
-    motions.back()->start();
+    nvrcams.back().cam->start();
+    nvrcams.back().motion->start();
+
 
     listener->removeController(httpController);
-    httpController->addStream("live",*(cams.back()));
-    httpController->addStream("debug",*(motions.back()));
+    httpController->addStream("live",*(nvrcam.cam));
+    httpController->addStream("debug",*(nvrcam.motion));
     listener->addController(httpController);
 }
 
@@ -91,9 +95,9 @@ void cmd_help()
 void cmd_list()
 {
 	int i=0;
-	for (NetworkAVInput* c:cams)
+	for (struct nvrCameras n:nvrcams)
 	{
-		cout <<i<<":"<< c->name() <<"-->"<<c->source() << endl;
+		cout <<i<<":"<< n.cam->name() <<"-->"<<n.cam->source() << endl;
 		i++;
 	}
 }
@@ -102,7 +106,7 @@ void cmd_list()
 // CMD - delets a camera
 void cmd_delete()
 {
-	if (cams.size() == 0)
+	if (nvrcams.size() == 0)
 	{
 		cout << "No items to delete.\n\n";
 		return;
@@ -111,29 +115,22 @@ void cmd_delete()
 	string sx;
 	int x;
 	cin.clear(); cin.sync();
-	do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > cams.size());
-	list<NetworkAVInput *>::iterator ic = cams.begin();
-	list<MotionDetector *>::iterator im = motions.begin();
-	int mx = x;
-	while ( ic != cams.end())
+	do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
+	list<struct nvrCameras>::iterator i = nvrcams.begin();
+	while ( i != nvrcams.end())
     {
 		if (x==0) break;
 		x--;
     }
-	while ( im != motions.end())
-    {
-		if (mx==0) break;
-		mx--;
-    }
 	
-	(*ic)->stop();
-	(*im)->stop();
-	(*ic)->join();
+	
+	(*i).cam->stop();
+	(*i).motion->stop();
+	(*i).cam->join();
 	cout << "Camera killed\n";
-	(*im)->join();
+	(*i).motion->join();
 	cout << "Camera Motion killed\n";
-	cams.erase(ic);
-	motions.erase(im);
+	nvrcams.erase(i);
   }
 
 // CMD - default handler
