@@ -12,6 +12,7 @@ using namespace std;
 #define MAX_CAMS 10
 list<NetworkAVInput *> cams;
 list <MotionDetector *> motions;
+int camid=0;
 
 Listener *listener;
 HttpController* httpController;
@@ -27,7 +28,6 @@ const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 };
-
 
 // adds a new camera and motion detector
 void cmd_add()
@@ -49,7 +49,8 @@ void cmd_add()
     getline(cin,source);
 	if (name.size()==0 )
 	{
-		string n = to_string(cams.size());
+		string n = to_string(camid);
+		camid++;
 		name = "cam" + n;
 	}
     if (source.size() == 0 )
@@ -64,14 +65,14 @@ void cmd_add()
 	
     cout << "Adding:"<<cams.back()->name() << endl;
     cout << cams.back()->source() << endl;
-    app.addThread( cams.back() );
+    //app.addThread( cams.back() );
     cams.back()->start();
 
     // motion detect for cam
     MotionDetector *motion = new MotionDetector( "modect-"+name );
 	motions.push_back(motion);
     motion->registerProvider(*(cams.back()) );
-    app.addThread( motions.back() );
+    //app.addThread( motions.back() );
     motions.back()->start();
 
 
@@ -88,11 +89,50 @@ void cmd_help()
 
 void cmd_list()
 {
+	int i=0;
 	for (NetworkAVInput* c:cams)
 	{
-		cout << c->name() <<"-->"<<c->source() << endl;
+		cout <<i<<":"<< c->name() <<"-->"<<c->source() << endl;
+		i++;
 	}
 }
+
+
+void cmd_delete()
+{
+	if (cams.size() == 0)
+	{
+		cout << "No items to delete.\n\n";
+		return;
+	}
+	cmd_list();
+	string sx;
+	int x;
+	cin.clear(); cin.sync();
+	do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > cams.size());
+	list<NetworkAVInput *>::iterator ic = cams.begin();
+	list<MotionDetector *>::iterator im = motions.begin();
+	int mx = x;
+	while ( ic != cams.end())
+    {
+		if (x==0) break;
+		x--;
+    }
+	while ( im != motions.end())
+    {
+		if (mx==0) break;
+		mx--;
+    }
+	
+	(*ic)->stop();
+	(*im)->stop();
+	(*ic)->join();
+	cout << "Camera killed\n";
+	(*im)->join();
+	cout << "Camera Motion killed\n";
+	cams.erase(ic);
+	motions.erase(im);
+  }
 
 void cmd_unknown()
 {
@@ -106,6 +146,7 @@ void cli(Application app)
     cmd_map["help"] = &cmd_help;
     cmd_map["add"] = &cmd_add;
 	cmd_map["list"] = &cmd_list;
+	cmd_map["delete"] = &cmd_delete;
     
     
     string command;
