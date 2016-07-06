@@ -10,13 +10,15 @@ using namespace std;
 
 
 #define MAX_CAMS 10
-list<NetworkAVInput *> cams;
-list <MotionDetector *> motions;
-int camid=0;
-
+// TBD: convert these two lists into a single one
+list<NetworkAVInput *> cams; // will hold configured cameras
+list <MotionDetector *> motions; // will hold configured modects
+int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
 HttpController* httpController;
 Application app;
+
+// default URLs to use if none specified
 const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
@@ -65,16 +67,13 @@ void cmd_add()
 	
     cout << "Adding:"<<cams.back()->name() << endl;
     cout << cams.back()->source() << endl;
-    //app.addThread( cams.back() );
     cams.back()->start();
 
     // motion detect for cam
     MotionDetector *motion = new MotionDetector( "modect-"+name );
 	motions.push_back(motion);
     motion->registerProvider(*(cams.back()) );
-    //app.addThread( motions.back() );
     motions.back()->start();
-
 
     listener->removeController(httpController);
     httpController->addStream("live",*(cams.back()));
@@ -82,11 +81,13 @@ void cmd_add()
     listener->addController(httpController);
 }
 
+// CMD - help 
 void cmd_help()
 {
     cout << endl << "Possible commands: add, delete, list, stop, exit" << endl;
 }
 
+// CMD - prints a list of configured cameras
 void cmd_list()
 {
 	int i=0;
@@ -98,6 +99,7 @@ void cmd_list()
 }
 
 
+// CMD - delets a camera
 void cmd_delete()
 {
 	if (cams.size() == 0)
@@ -134,10 +136,12 @@ void cmd_delete()
 	motions.erase(im);
   }
 
+// CMD - default handler
 void cmd_unknown()
 {
     cout << endl << "unknown command. try help"<< endl;
 }
+
 //  This thread will listen to commands from users
 
 void cli(Application app)
@@ -176,7 +180,6 @@ int main( int argc, const char *argv[] )
 
     avInit();
 
-    
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
     listener->addController( httpController );
