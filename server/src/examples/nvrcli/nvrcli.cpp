@@ -5,18 +5,18 @@
 #include <cctype>
 #include <algorithm>
 #include <unordered_map>
+#include <list>
 using namespace std;
 
 
 #define MAX_CAMS 10
-NetworkAVInput* cam[MAX_CAMS];
-MotionDetector* motion[MAX_CAMS];
+list<NetworkAVInput *> cams;
+list <MotionDetector *> motions;
+
 Listener *listener;
 HttpController* httpController;
 Application app;
-int cam_ndx=-1;
 const char* const defRtspUrls[] = {
-   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
@@ -32,54 +32,66 @@ const char* const defRtspUrls[] = {
 // adds a new camera and motion detector
 void cmd_add()
 {
+
+	if (cams.size() == MAX_CAMS)
+	{
+		cout << "Cannot add any more cams!\n\n";
+		return;
+	}
+
     string name;
     string source;
 
     cin.clear(); cin.sync();
-    cout << "camera name:";
+    cout << "camera name (ENTER for default):";
     getline(cin,name);
-    cout << "RTSP source:";
+    cout << "RTSP source (ENTER for default):";
     getline(cin,source);
-    cam_ndx++;
 	if (name.size()==0 )
 	{
-		string n = to_string(cam_ndx);
+		string n = to_string(cams.size());
 		name = "cam" + n;
 	}
     if (source.size() == 0 )
     {
-        source = defRtspUrls[cam_ndx];
+        source = defRtspUrls[cams.size() % MAX_CAMS];
     }
     
-    cam[cam_ndx] = new NetworkAVInput ( name, source );
-    cout << "Adding @index:"<<cam_ndx<<":"<<cam[cam_ndx]->name() << endl;
-    cout << cam[cam_ndx]->source() << endl;
-    app.addThread( cam[cam_ndx] );
-    cam[cam_ndx]->start();
+    
+	NetworkAVInput *cam = new NetworkAVInput ( name, source );
+	cams.push_back(cam);
+	
+	
+    cout << "Adding:"<<cams.back()->name() << endl;
+    cout << cams.back()->source() << endl;
+    app.addThread( cams.back() );
+    cams.back()->start();
 
     // motion detect for cam
-    motion[cam_ndx] = new MotionDetector( "modect-"+name );
-    motion[cam_ndx]->registerProvider(*cam[cam_ndx] );
-    app.addThread( motion[cam_ndx] );
-    motion[cam_ndx]->start();
+    MotionDetector *motion = new MotionDetector( "modect-"+name );
+	motions.push_back(motion);
+    motion->registerProvider(*(cams.back()) );
+    app.addThread( motions.back() );
+    motions.back()->start();
 
-    // stop the listener, add new camera, restart
-    //listener->stop(); // don't really need this, it seems
-    //listener->join(); // don't really need this, it seems
-	//cout << "listener killed\n";
-    //delete listener;
-   // listener->removeController(httpController);
+
     listener->removeController(httpController);
-    httpController->addStream("live",*cam[cam_ndx]);
-    httpController->addStream("debug",*motion[cam_ndx]);
-    //listener = new Listener;
+    httpController->addStream("live",*(cams.back()));
+    httpController->addStream("debug",*(motions.back()));
     listener->addController(httpController);
-    //listener->start();
 }
 
 void cmd_help()
 {
     cout << endl << "Possible commands: add, delete, list, stop, exit" << endl;
+}
+
+void cmd_list()
+{
+	for (NetworkAVInput* c:cams)
+	{
+		cout << c->name() <<"-->"<<c->source() << endl;
+	}
 }
 
 void cmd_unknown()
@@ -93,6 +105,7 @@ void cli(Application app)
     unordered_map<std::string, std::function<void()>> cmd_map;
     cmd_map["help"] = &cmd_help;
     cmd_map["add"] = &cmd_add;
+	cmd_map["list"] = &cmd_list;
     
     
     string command;
@@ -113,7 +126,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "nvrcli", "", 1 );
+    debugInitialise( "nvrcli", "", 0 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
@@ -122,8 +135,6 @@ int main( int argc, const char *argv[] )
 
     avInit();
 
-    //fixme: convert this to a list later
-    for (int i=0; i<MAX_CAMS; i++) { cam[i] = NULL; motion[i] = NULL; }
     
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
