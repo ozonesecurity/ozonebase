@@ -1,4 +1,5 @@
 #include "ozone.h"
+#include "ozEventDetector.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -12,6 +13,7 @@ struct nvrCameras
 {
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
+	EventDetector *event;
 };
 
 
@@ -70,6 +72,9 @@ void cmd_add()
 	nvrcam.cam = new NetworkAVInput ( name, source );
     nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
+	nvrcam.event = new EventDetector( "event-"+name, "/tmp" );
+	nvrcam.event->registerProvider(*(nvrcam.motion));
+
 	nvrcams.push_back(nvrcam); // add to list
 	
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
@@ -77,6 +82,7 @@ void cmd_add()
 
     nvrcams.back().cam->start();
     nvrcams.back().motion->start();
+    nvrcams.back().event->start();
 
 
     listener->removeController(httpController);
