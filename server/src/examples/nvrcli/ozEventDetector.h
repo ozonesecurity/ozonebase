@@ -10,6 +10,7 @@
 #include <base/ozMotionFrame.h>
 
 #include <deque>
+#include <functional>
 
 
 ///
@@ -29,6 +30,7 @@ protected:
     typedef enum { IDLE, PREALARM, ALARM, ALERT } AlarmState;
 
 protected:
+	std::function< void(int) > mFunction;
     std::string     mLocation;                  ///< Where to store the saved files
     FrameStore      mFrameStore;
     AlarmState      mState;
@@ -41,7 +43,17 @@ protected:
     bool processFrame( FramePtr );
 
 public:
-    EventDetector( const std::string &name, const std::string &location ) :
+    EventDetector( const std::string &name, std::function<void(int)> mFunc ) :
+        VideoConsumer( cClass(), name, 5 ),
+        Thread( identity() ),
+        mState( IDLE ),
+        mFrameCount( 0 ),
+        mEventCount( 0 ),
+        mAlarmTime( 0 ),
+		mFunction(mFunc)
+    {
+    }
+     EventDetector( const std::string &name, const std::string &location ) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
         mLocation( location ),

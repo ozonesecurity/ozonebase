@@ -21,7 +21,8 @@ int EventDetector::run()
                 {
                     processFrame( *iter );
                 }*/
-				printf (">>>>>>>>>>>>>>>>>>>>> BAZOOKA GOT A FRAME ");
+				mFunction(1);
+				//printf (">>>>>>>>>>>>>>>>>>>>> BAZOOKA GOT A FRAME ");
                 mFrameQueue.clear();
             }
             mQueueMutex.unlock();

@@ -38,6 +38,12 @@ const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 };
 
+
+void eventCallback(int i)
+{
+	cout << "EVENT CALLBACK\n";
+}
+
 // adds a new camera and motion detector
 void cmd_add()
 {
@@ -72,7 +78,7 @@ void cmd_add()
 	nvrcam.cam = new NetworkAVInput ( name, source );
     nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
-	nvrcam.event = new EventDetector( "event-"+name, "/tmp" );
+	nvrcam.event = new EventDetector( "event-"+name, eventCallback );
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
 	nvrcams.push_back(nvrcam); // add to list
