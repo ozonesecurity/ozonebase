@@ -15,6 +15,18 @@ Listener *listener;
 HttpController* httpController;
 Application app;
 int cam_ndx=-1;
+const char* const defRtspUrls[] = {
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
+   "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+};
 
 
 // adds a new camera and motion detector
@@ -29,14 +41,16 @@ void cmd_add()
     cout << "RTSP source:";
     getline(cin,source);
     cam_ndx++;
-    if (source.size() == 0 && cam_ndx==0)
+	if (name.size()==0 )
+	{
+		string n = to_string(cam_ndx);
+		name = "cam" + n;
+	}
+    if (source.size() == 0 )
     {
-        source = "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa";
+        source = defRtspUrls[cam_ndx];
     }
-    if (source.size() == 0 && cam_ndx==1)
-    {
-        source = "rtsp://170.93.143.139:1935/rtplive/e0ffa81e00a200ab0050fa36c4235c0a";
-    }
+    
     cam[cam_ndx] = new NetworkAVInput ( name, source );
     cout << "Adding @index:"<<cam_ndx<<":"<<cam[cam_ndx]->name() << endl;
     cout << cam[cam_ndx]->source() << endl;
@@ -50,16 +64,17 @@ void cmd_add()
     motion[cam_ndx]->start();
 
     // stop the listener, add new camera, restart
-    listener->stop(); // don't really need this, it seems
-    listener->join(); // don't really need this, it seems
-	cout << "listener killed\n";
-    delete listener;
+    //listener->stop(); // don't really need this, it seems
+    //listener->join(); // don't really need this, it seems
+	//cout << "listener killed\n";
+    //delete listener;
    // listener->removeController(httpController);
+    listener->removeController(httpController);
     httpController->addStream("live",*cam[cam_ndx]);
     httpController->addStream("debug",*motion[cam_ndx]);
-    listener = new Listener;
+    //listener = new Listener;
     listener->addController(httpController);
-    listener->start();
+    //listener->start();
 }
 
 void cmd_help()
@@ -113,7 +128,7 @@ int main( int argc, const char *argv[] )
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
     listener->addController( httpController );
-    // app.addThread( &listener );
+    app.addThread( listener );
     thread t1(cli,app);
     app.run();
     cout << "Never here";
