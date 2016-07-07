@@ -19,7 +19,7 @@ struct nvrCameras
 
 
 #define MAX_CAMS 10
-// TBD: convert these two lists into a single one
+#define RECORD_VIDEO 0
 list <struct nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
@@ -77,15 +77,19 @@ void cmd_add()
     
 	struct nvrCameras nvrcam;
 	nvrcam.cam = new NetworkAVInput ( name, source );
-    nvrcam.motion = new MotionDetector( "modect-"+name );
+	nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
-	//nvrcam.event = new EventDetector( "event-"+name, eventCallback, "/tmp" );
-	//nvrcam.event->registerProvider(*(nvrcam.motion));
 
+#if RECORD_VIDEO
+	nvrcam.event = new EventDetector( "event-"+name, eventCallback, "/tmp" );
+	nvrcam.event->registerProvider(*(nvrcam.motion));
+
+#else
 	VideoParms* videoParms= new VideoParms( 640, 480 );
-    AudioParms* audioParms = new AudioParms;
+	AudioParms* audioParms = new AudioParms;
 	nvrcam.movie = new MovieFileOutput(name, "/tmp/events", "mp4", 300, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
+#endif
 
 	nvrcams.push_back(nvrcam); // add to list
 	
@@ -94,8 +98,11 @@ void cmd_add()
 
     nvrcams.back().cam->start();
     nvrcams.back().motion->start();
+#if RECORD_VIDEO
     nvrcams.back().movie->start();
-    //nvrcams.back().event->start();
+#else
+    nvrcams.back().event->start();
+#endif
 
 
     listener->removeController(httpController);
@@ -149,6 +156,16 @@ void cmd_delete()
 	cout << "Camera killed\n";
 	(*i).motion->join();
 	cout << "Camera Motion killed\n";
+#if RECORD_VIDEO
+	(*i).movie->stop();
+	(*i).movie->join();
+	cout << "Camera Movie Record killed\n";
+
+#else
+	(*i).event->stop();
+	(*i).event->join();
+	cout << "Camera Image Record killed\n";
+#endif
 	nvrcams.erase(i);
   }
 
@@ -187,7 +204,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "nvrcli", "", 0 );
+    debugInitialise( "nvrcli", "", 5 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
