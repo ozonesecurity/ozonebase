@@ -14,6 +14,7 @@ struct nvrCameras
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
 	EventDetector *event;
+	MovieFileOutput *movie;
 };
 
 
@@ -39,9 +40,9 @@ const char* const defRtspUrls[] = {
 };
 
 
-void eventCallback(int i)
+void eventCallback(string s)
 {
-	cout << "EVENT CALLBACK\n";
+	cout << "EVENT CALLBACK: " << s << endl;
 }
 
 // adds a new camera and motion detector
@@ -78,8 +79,13 @@ void cmd_add()
 	nvrcam.cam = new NetworkAVInput ( name, source );
     nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
-	nvrcam.event = new EventDetector( "event-"+name, eventCallback );
-	nvrcam.event->registerProvider(*(nvrcam.motion));
+	//nvrcam.event = new EventDetector( "event-"+name, eventCallback, "/tmp" );
+	//nvrcam.event->registerProvider(*(nvrcam.motion));
+
+	VideoParms* videoParms= new VideoParms( 640, 480 );
+    AudioParms* audioParms = new AudioParms;
+	nvrcam.movie = new MovieFileOutput(name, "/tmp/events", "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie->registerProvider(*(nvrcam.motion));
 
 	nvrcams.push_back(nvrcam); // add to list
 	
@@ -88,7 +94,8 @@ void cmd_add()
 
     nvrcams.back().cam->start();
     nvrcams.back().motion->start();
-    nvrcams.back().event->start();
+    nvrcams.back().movie->start();
+    //nvrcams.back().event->start();
 
 
     listener->removeController(httpController);

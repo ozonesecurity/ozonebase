@@ -13,6 +13,7 @@
 #include <processors/ozMotionDetector.h>
 #include <processors/ozMatrixVideo.h>
 #include <processors/ozRateLimiter.h>
+#include <processors/ozImageTimestamper.h>
 
 #include <protocols/ozHttpController.h>
 

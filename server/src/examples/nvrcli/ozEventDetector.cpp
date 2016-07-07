@@ -17,12 +17,10 @@ int EventDetector::run()
             mQueueMutex.lock();
             if ( !mFrameQueue.empty() )
             {
-                /*for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
+                for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
                 {
                     processFrame( *iter );
-                }*/
-				mFunction(1);
-				//printf (">>>>>>>>>>>>>>>>>>>>> BAZOOKA GOT A FRAME ");
+                }
                 mFrameQueue.clear();
             }
             mQueueMutex.unlock();
@@ -44,7 +42,6 @@ int EventDetector::run()
 bool EventDetector::processFrame( FramePtr frame )
 {
     const MotionFrame *motionFrame = dynamic_cast<const MotionFrame *>(frame.get());
-    //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
 
     AlarmState lastState = mState;
     uint64_t now = time64();
@@ -57,6 +54,7 @@ bool EventDetector::processFrame( FramePtr frame )
         {
             // Create new event
             mEventCount++;
+			mFunction(mName); // issue callback
             for ( FrameStore::const_iterator iter = mFrameStore.begin(); iter != mFrameStore.end(); iter++ )
             {
                 const MotionFrame *frame = dynamic_cast<const MotionFrame *>( iter->get() );

@@ -30,7 +30,7 @@ protected:
     typedef enum { IDLE, PREALARM, ALARM, ALERT } AlarmState;
 
 protected:
-	std::function< void(int) > mFunction;
+	std::function< void(std::string) > mFunction;
     std::string     mLocation;                  ///< Where to store the saved files
     FrameStore      mFrameStore;
     AlarmState      mState;
@@ -43,13 +43,14 @@ protected:
     bool processFrame( FramePtr );
 
 public:
-    EventDetector( const std::string &name, std::function<void(int)> mFunc ) :
+    EventDetector( const std::string &name, std::function<void(std::string)> mFunc, const std::string &location ) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
         mState( IDLE ),
         mFrameCount( 0 ),
         mEventCount( 0 ),
         mAlarmTime( 0 ),
+        mLocation( location ),
 		mFunction(mFunc)
     {
     }
