@@ -14,6 +14,7 @@ int EventDetector::run()
     {
         while( !mStop )
         {
+
             mQueueMutex.lock();
             if ( !mFrameQueue.empty() )
             {

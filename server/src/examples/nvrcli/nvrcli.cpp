@@ -81,14 +81,14 @@ void cmd_add()
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
 #if RECORD_VIDEO
+	VideoParms* videoParms= new VideoParms( 640, 480 );
+	AudioParms* audioParms = new AudioParms;
+	nvrcam.movie = new MovieFileOutput(name, "/tmp", "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie->registerProvider(*(nvrcam.motion));
+#else
 	nvrcam.event = new EventDetector( "event-"+name, eventCallback, "/tmp" );
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
-#else
-	VideoParms* videoParms= new VideoParms( 640, 480 );
-	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, "/tmp/events", "mp4", 300, *videoParms, *audioParms);
-	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #endif
 
 	nvrcams.push_back(nvrcam); // add to list
