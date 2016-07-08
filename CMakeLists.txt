@@ -5,13 +5,13 @@ include(ExternalProject)
 include(GNUInstallDirs)
 
 # Make sure the submodules are there
-if( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" AND
+if( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" OR
     NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/openh264/Makefile" )
 message(FATAL_ERROR 
         "The git submodules are not available. Please run:
          git submodule update --init --recursive"
        )
-endif( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" AND
+endif( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" OR
     NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/openh264/Makefile" )
 
 # Delete the buildroot staging folder if it exists from a previous build
