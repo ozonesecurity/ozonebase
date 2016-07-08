@@ -5,12 +5,14 @@ include(ExternalProject)
 include(GNUInstallDirs)
 
 # Make sure the submodules are there
-if( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" )
+if( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" AND
+    NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/openh264/Makefile" )
 message(FATAL_ERROR 
         "The git submodules are not available. Please run:
          git submodule update --init --recursive"
        )
-endif( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" )
+endif( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" AND
+    NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/openh264/Makefile" )
 
 # Delete the buildroot staging folder if it exists from a previous build
 if( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
@@ -32,19 +34,41 @@ set(FFMPEG_PREFIX "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}" CACHE P
 set(FFMPEG_LIBDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH INTERNAL)
 set(FFMPEG_INCLUDEDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH INTERNAL)
 
+ExternalProject_Add(openh264
+#                    GIT_REPOSITORY "https://github.com/cisco/openh264"
+#                    GIT_TAG master
+                    DOWNLOAD_COMMAND ""
+                    SOURCE_DIR ${CMAKE_SOURCE_DIR}/externals/openh264
+                    UPDATE_COMMAND ""
+                    CONFIGURE_COMMAND ""
+                    BUILD_COMMAND make
+                    INSTALL_COMMAND make install
+                                    DESTDIR=${CMAKE_BINARY_DIR}/buildroot
+                                    LIBDIR_NAME=${CMAKE_INSTALL_LIBDIR}
+                                    SHAREDLIB_DIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+                    BUILD_IN_SOURCE 1
+                   )
+
 ExternalProject_Add(ffmpeg
 #                    GIT_REPOSITORY "https://git.ffmpeg.org/ffmpeg.git"
 #                    GIT_TAG release/2.8
                     DOWNLOAD_COMMAND ""
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}/externals/ffmpeg
                     UPDATE_COMMAND ""
-                    CONFIGURE_COMMAND <SOURCE_DIR>/configure 
+                    CONFIGURE_COMMAND PKG_CONFIG_PATH=${FFMPEG_LIBDIR}/pkgconfig <SOURCE_DIR>/configure 
                                       --enable-shared
                                       --libdir=${FFMPEG_LIBDIR}
                                       --prefix=${FFMPEG_PREFIX}
+                                      --enable-libopenh264
+                                      --extra-ldflags=-L${FFMPEG_LIBDIR}
+                                      --extra-cflags=-I${FFMPEG_INCLUDEDIR}/wels
+                                      --pkg-config-flags=--define-variable=libdir=${FFMPEG_LIBDIR}
+                                      --pkg-config-flags=--define-variable=includedir=${FFMPEG_INCLUDEDIR}
                     BUILD_COMMAND make
                     INSTALL_COMMAND make install && make install-libs
                    )
+
+add_dependencies(ffmpeg openh264)
 
 ExternalProject_Add(ozonebase
                     DOWNLOAD_COMMAND ""
