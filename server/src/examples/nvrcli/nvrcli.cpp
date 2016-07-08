@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <unordered_map>
 #include <list>
+
+#define MAX_CAMS 10
+#define RECORD_VIDEO 0
+
 using namespace std;
 
 // Will hold all cameras and related functions
@@ -15,14 +19,20 @@ class  nvrCameras
 public:
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
-	EventDetector *event;
-	MovieFileOutput *movie;
-	void eventCallback (string s) { cout << "Member event called for camera " << cam->name()<< endl; }
+	EventDetector *event; // used if RECORD_VIDEO = 0
+	MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+
+	// callback issued when a event is starting to record for this cam
+	// note that this is only called once for each "recorded event"
+	// not for each motion frame
+
+	void eventCallback (string s) 
+	{ 	
+		cout << "New event reporred for:" << cam->name()<< endl; 
+	}
 };
 
 
-#define MAX_CAMS 10
-#define RECORD_VIDEO 0
 list <nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
@@ -101,8 +111,6 @@ void cmd_add()
 #else
     nvrcams.back().event->start();
 #endif
-
-
     listener->removeController(httpController);
     httpController->addStream("live",*(nvrcam.cam));
     httpController->addStream("debug",*(nvrcam.motion));
