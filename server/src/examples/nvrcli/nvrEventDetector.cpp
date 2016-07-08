@@ -1,12 +1,11 @@
-#include "ozEventDetector.h"
+#include "nvrEventDetector.h"
 
 #include <base/ozMotionFrame.h>
 #include <libgen/libgenTime.h>
 
 /**
-* @brief 
-*
-* @return 
+	This is a customization of ozEventRecorder --> it does the same thing,
+	but also issues a callback when a new event is detected 
 */
 int EventDetector::run()
 {

@@ -1,5 +1,5 @@
 #include "ozone.h"
-#include "ozEventDetector.h"
+#include "nvrEventDetector.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -9,18 +9,21 @@
 #include <list>
 using namespace std;
 
-struct nvrCameras
+// Will hold all cameras and related functions
+class  nvrCameras
 {
+public:
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
 	EventDetector *event;
 	MovieFileOutput *movie;
+	void eventCallback (string s) { cout << "Member event called for camera " << cam->name()<< endl; }
 };
 
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 0
-list <struct nvrCameras> nvrcams;
+list <nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
 HttpController* httpController;
@@ -39,13 +42,7 @@ const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 };
 
-
-void eventCallback(string s)
-{
-	cout << "EVENT CALLBACK: " << s << endl;
-}
-
-// adds a new camera and motion detector
+// Adds a camera
 void cmd_add()
 {
 
@@ -75,7 +72,7 @@ void cmd_add()
     }
     
     
-	struct nvrCameras nvrcam;
+	nvrCameras nvrcam;
 	nvrcam.cam = new NetworkAVInput ( name, source );
 	nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
@@ -86,7 +83,8 @@ void cmd_add()
 	nvrcam.movie = new MovieFileOutput(name, "/tmp", "mp4", 300, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name, eventCallback, "/tmp" );
+	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), "/tmp" );
+
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
 #endif
@@ -121,7 +119,7 @@ void cmd_help()
 void cmd_list()
 {
 	int i=0;
-	for (struct nvrCameras n:nvrcams)
+	for (nvrCameras n:nvrcams)
 	{
 		cout <<i<<":"<< n.cam->name() <<"-->"<<n.cam->source() << endl;
 		i++;
@@ -142,13 +140,12 @@ void cmd_delete()
 	int x;
 	cin.clear(); cin.sync();
 	do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
-	list<struct nvrCameras>::iterator i = nvrcams.begin();
+	list<nvrCameras>::iterator i = nvrcams.begin();
 	while ( i != nvrcams.end())
     {
 		if (x==0) break;
 		x--;
     }
-	
 	
 	(*i).cam->stop();
 	(*i).motion->stop();
