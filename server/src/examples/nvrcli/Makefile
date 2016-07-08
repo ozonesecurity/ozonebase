@@ -23,6 +23,7 @@ all: $(program_NAME)
 
 $(program_NAME): $(program_OBJS) ${program_HEADERDEPS}
 	$(CXX) $(CPPFLAGS) $(program_OBJS) $(LDFLAGS) -o $(program_NAME)
+	$(RM) *.o
 
 clean:
 	@- $(RM) $(program_NAME)

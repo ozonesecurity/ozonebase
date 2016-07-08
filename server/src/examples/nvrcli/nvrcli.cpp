@@ -14,7 +14,7 @@
 #define MAX_CAMS 10
 #define RECORD_VIDEO 0
 #define SHOW_FFMPEG_LOG 0 
-#define EVENT_REC_PATH "zmclievents"
+#define EVENT_REC_PATH "nvrcli_events"
 
 using namespace std;
 
@@ -111,10 +111,10 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, EVENT_REC_PATH, "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 300, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), EVENT_REC_PATH );
+	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), path );
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
