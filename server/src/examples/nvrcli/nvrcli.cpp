@@ -7,9 +7,14 @@
 #include <algorithm>
 #include <unordered_map>
 #include <list>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stdio.h>
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 0
+#define SHOW_FFMPEG_LOG 0 
+#define EVENT_REC_PATH "zmclievents"
 
 using namespace std;
 
@@ -28,7 +33,7 @@ public:
 
 	void eventCallback (string s) 
 	{ 	
-		cout << "New event reporred for:" << cam->name()<< endl; 
+		cout << "New event reported for:" << cam->name()<< endl; 
 	}
 };
 
@@ -51,6 +56,17 @@ const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 };
+
+static void avlog_cb(void *, int level, const char * fmt, va_list vl) 
+{
+#if SHOW_FFMPEG_LOG
+	char logbuf[2000];
+    vsnprintf(logbuf, sizeof(logbuf), fmt, vl);
+    logbuf[sizeof(logbuf) - 1] = '\0';
+	cout  << logbuf;
+#endif
+
+}
 
 // Adds a camera
 void cmd_add()
@@ -87,13 +103,18 @@ void cmd_add()
 	nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
+	char path[2000];
+	snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
+	cout << "Events recorded to: " << path << endl;
+	mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, "/tmp", "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutput(name, EVENT_REC_PATH, "mp4", 300, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), "/tmp" );
+	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), EVENT_REC_PATH );
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
@@ -209,14 +230,16 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "nvrcli", "", 5 );
+    dbgInit( "nvrcli", "", 5 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
 
     Info( "Starting" );
 
+	av_log_set_callback(avlog_cb);
     avInit();
+	mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
