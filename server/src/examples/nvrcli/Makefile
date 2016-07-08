@@ -6,6 +6,7 @@ program_INCLUDE_DIRS := /usr/local/include/ozonebase
 LIBPREFIX=/usr/local/lib/x86_64-linux-gnu/ozonebase
 program_LIBRARY_DIRS :=  $(LIBPREFIX)/base $(LIBPREFIX)/protocols $(LIBPREFIX)/libgen $(LIBPREFIX)/libimg $(LIBPREFIX)/encoders $(LIBPREFIX)/providers $(LIBPREFIX)/consumers $(LIBPREFIX)/processors
 program_LIBRARIES := m protocols encoders processors consumers providers base img gen  jpeg pthread z avformat avcodec avdevice avutil swscale dl 
+program_HEADERDEPS = $(wildcard *.h)
 
 CPPFLAGS += -g -std=gnu++11
 CPPFLAGS += $(foreach includedir,$(program_INCLUDE_DIRS),-I$(includedir))
@@ -16,7 +17,7 @@ LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
 
 all: $(program_NAME)
 
-$(program_NAME): $(program_OBJS)
+$(program_NAME): $(program_OBJS) ${program_HEADERDEPS}
 	$(CXX) $(CPPFLAGS) $(program_OBJS) $(LDFLAGS) -o $(program_NAME)
 
 clean:
