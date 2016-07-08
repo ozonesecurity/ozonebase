@@ -1,3 +1,15 @@
+
+/************************************************************
+*
+* This is an example of writing a simple command line NVR
+* The app is single process, which is often what one needs
+* for small systems. oZone can be used to create both
+* distributed systems (like ZoneMinder v1) or monolithic 
+* systems (not possible in ZoneMinder v1). 
+*
+*************************************************************/
+
+
 #include "ozone.h"
 #include "nvrEventDetector.h"
 #include <iostream>

@@ -6,15 +6,22 @@
 /**
 	This is a customization of ozEventRecorder --> it does the same thing,
 	but also issues a callback when a new event is detected 
+
+	This is actually a reasonable example to show you how you can write any custom
+	Consumer (or any other Provider/Input/etc for that matter)
 */
+
+// oZone expects a run method that does init for these classes. Write your own.
 int EventDetector::run()
 {
-    if ( waitForProviders() )
+    if ( waitForProviders() ) // if there is no registerProvider for this class, no need to work
     {
-        while( !mStop )
+        while( !mStop ) // set when you call ->stop()
         {
 
             mQueueMutex.lock();
+			// will contain a queue of frames. In this example, since we connected EventDetector 
+			// to MotionDetector as its provider, it will only be motion frames
             if ( !mFrameQueue.empty() )
             {
                 for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )

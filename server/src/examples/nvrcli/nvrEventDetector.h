@@ -1,8 +1,8 @@
 /** @addtogroup Consumers */
 /*@{*/
 
-#ifndef OZ_EVENT_DETECTOR_H
-#define OZ_EVENT_DETECTOR_H
+#ifndef NVR_EVENT_DETECTOR_H
+#define NVR_EVENT_DETECTOR_H
 
 #include <base/ozFeedConsumer.h>
 #include <libgen/libgenThread.h>
@@ -69,6 +69,6 @@ public:
     }
 };
 
-#endif // OZ_EVENT_DETECTOR_H
+#endif // NVR_EVENT_DETECTOR_H
 
 /*@}*/
