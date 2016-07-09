@@ -11,7 +11,7 @@
 * @param source
 * @param format
 */
-NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format ) :
+NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format, bool loop ) :
     AudioVideoProvider( cClass(), name ),
     Thread( identity() ),
     mSource( source ),
@@ -20,7 +20,8 @@ NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &sour
     mAudioCodecContext( NULL ),
     mVideoStream( NULL ),
     mAudioStream( NULL ),
-    mBaseTimestamp( 0 )
+    mBaseTimestamp( 0 ),
+	mLoop(loop)
 {
 }
 
@@ -184,7 +185,8 @@ int NetworkAVInput::run()
             int videoFrameComplete = false;
             int audioFrameComplete = false;
             //while ( !frameComplete && (av_read_frame( formatContext, &packet ) >= 0) )
-            while ( !mStop && (av_read_frame( formatContext, &packet ) >= 0) )
+			int readLeft = av_read_frame (formatContext, &packet);
+            while ( !mStop && readLeft  >=0 ) 
             {
                 Debug( 5, "Got packet from stream %d", packet.stream_index );
                 if ( mBaseTimestamp == 0 )
@@ -240,6 +242,15 @@ int NetworkAVInput::run()
                     }
                 }
                 av_free_packet( &packet );
+				readLeft = av_read_frame (formatContext, &packet);
+				if ((readLeft  <0)  && mLoop) 
+				{
+					Debug (2,"Looping video...");
+					if (av_seek_frame(formatContext, -1, 0, AVSEEK_FLAG_ANY) >=0)
+					{
+						readLeft = av_read_frame (formatContext, &packet);
+					}
+				}
             }
             usleep( INTERFRAME_TIMEOUT );
         }
