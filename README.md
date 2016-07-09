@@ -1,7 +1,7 @@
-# Ozone - state of the art framework for developing security and surveillance solutions for the Home, Commercial and more.
+# Ozone - state of the art framework for developing security and surveillance solutions.
+
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
-
 
 ### First an example:
 

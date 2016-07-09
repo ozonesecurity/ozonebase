@@ -1,3 +1,7 @@
+##
+# travis configuration for oZone
+##
+
 language: cpp
 sudo: required
 dist: trusty
@@ -5,6 +9,8 @@ compiler: gcc
 
 notifications:
   slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
+  on_success: never
+  on_failure: always
 
 branches:
   only: master
@@ -31,9 +37,13 @@ addons:
       - yasm
       - zlib1g-dev
 
+cache:
+    directories:
+      - externals/ffmpeg
+
+
 install:
-      - git clone -b n2.8 --depth=1 git://source.ffmpeg.org/ffmpeg.git
-      - cd ffmpeg
+      - cd externals/ffmpeg
       - ./configure --enable-shared
       - make -j `grep processor /proc/cpuinfo|wc -l` 
       - sudo make install 
