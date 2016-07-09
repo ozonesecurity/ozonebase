@@ -70,7 +70,6 @@ int LocalFileInput::run()
     }
     else
     {
-		do {
         uint64_t timeInterval = mFrameRate.intervalUsec();
         struct timeval now;
         gettimeofday( &now, NULL );
@@ -100,7 +99,6 @@ int LocalFileInput::run()
             VideoFrame *videoFrame = new VideoFrame( this, ++mFrameCount, currTime, image.buffer() );
             distributeFrame( FramePtr( videoFrame ) );
         }
-	} 	while (1);
 	}
 
     globfree( &pglob );
