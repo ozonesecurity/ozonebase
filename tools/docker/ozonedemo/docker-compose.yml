@@ -1,0 +1,9 @@
+ozone:
+  image: web2wire/ozonedemo:v1
+  ports:
+    - 9280:9280
+    - 9292:9292
+  #volumes:
+    #- ./ozonebase:/home/ozone/ozonebase 
+  tty: true
+  #command: /bin/bash
