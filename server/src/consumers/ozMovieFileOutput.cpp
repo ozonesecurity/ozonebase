@@ -76,7 +76,7 @@ int MovieFileOutput::run()
                 videoCodecContext->height = mVideoParms.height();
                 videoCodecContext->time_base = mVideoParms.frameRate();
                 videoCodecContext->time_base.num = 1;
-                videoCodecContext->time_base.den = 90000;
+                videoCodecContext->time_base.den = 25;
                 videoCodecContext->pix_fmt = mVideoParms.pixelFormat();
         #if 0
                 /* put sample parameters */
