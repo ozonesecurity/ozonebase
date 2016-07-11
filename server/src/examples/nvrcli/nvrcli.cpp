@@ -12,6 +12,7 @@
 
 #include "ozone.h"
 #include "nvrEventDetector.h"
+#include "nvrMovieFileOutputDetector.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -37,7 +38,7 @@ public:
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
 	EventDetector *event; // used if RECORD_VIDEO = 0
-	MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+	MovieFileOutputDetector *movie; // used if RECORD_VIDEO = 1
 
 	// callback issued when a event is starting to record for this cam
 	// note that this is only called once for each "recorded event"
@@ -123,7 +124,7 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutputDetector(name, path, "mp4", 60, *videoParms, *audioParms, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1));
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
 	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), path );
