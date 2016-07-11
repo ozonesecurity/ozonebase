@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 #define MAX_CAMS 10
-#define RECORD_VIDEO 0
+#define RECORD_VIDEO 1
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
@@ -72,10 +72,10 @@ const char* const defRtspUrls[] = {
 static void avlog_cb(void *, int level, const char * fmt, va_list vl) 
 {
 #if SHOW_FFMPEG_LOG
-	char logbuf[2000];
+    char logbuf[2000];
     vsnprintf(logbuf, sizeof(logbuf), fmt, vl);
     logbuf[sizeof(logbuf) - 1] = '\0';
-	cout  << logbuf;
+    cout  << logbuf;
 #endif
 
 }
@@ -123,7 +123,7 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
 	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), path );
@@ -249,9 +249,9 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-	av_log_set_callback(avlog_cb);
+    av_log_set_callback(avlog_cb);
     avInit();
-	mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
