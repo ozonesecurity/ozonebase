@@ -111,7 +111,7 @@ void cmd_add()
     
     
 	nvrCameras nvrcam;
-	nvrcam.cam = new NetworkAVInput ( name, source );
+	nvrcam.cam = new NetworkAVInput ( name, source,"",true );
 	nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
