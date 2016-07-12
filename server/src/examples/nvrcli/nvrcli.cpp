@@ -10,7 +10,6 @@
 *************************************************************/
 
 
-#include "ozone.h"
 #include "nvrEventDetector.h"
 #include "nvrMovieFileOutputDetector.h"
 #include <iostream>
@@ -25,7 +24,7 @@
 #include <stdio.h>
 
 #define MAX_CAMS 10
-#define RECORD_VIDEO 1
+#define RECORD_VIDEO 0
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
@@ -40,16 +39,7 @@ public:
 	EventDetector *event; // used if RECORD_VIDEO = 0
 	MovieFileOutputDetector *movie; // used if RECORD_VIDEO = 1
 
-	// callback issued when a event is starting to record for this cam
-	// note that this is only called once for each "recorded event"
-	// not for each motion frame
-
-	void eventCallback (string s) 
-	{ 	
-		cout << "New event reported for:" << cam->name()<< endl; 
-	}
 };
-
 
 list <nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
@@ -124,10 +114,10 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutputDetector(name, path, "mp4", 60, *videoParms, *audioParms, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1));
+	nvrcam.movie = new MovieFileOutputDetector(name, path, "mp4", 60, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), path );
+	nvrcam.event = new EventDetector( "event-"+name,  path, nvrcam.cam );
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
