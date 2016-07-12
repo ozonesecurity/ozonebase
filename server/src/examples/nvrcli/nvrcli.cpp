@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 #define MAX_CAMS 10
-#define RECORD_VIDEO 0
+#define RECORD_VIDEO 0 // 1 if video is on
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 

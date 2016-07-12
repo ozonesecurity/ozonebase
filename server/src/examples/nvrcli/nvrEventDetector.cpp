@@ -8,6 +8,8 @@ using namespace std;
 
 // oZone expects a run method that does init for these classes. Write your own.
 // don't call base run because it will run forever 
+//
+
 int EventDetector::run()
 {
 	if ( waitForProviders() )

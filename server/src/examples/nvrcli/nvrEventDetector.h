@@ -11,6 +11,7 @@
 #include <deque>
 #include <functional>
 
+// override relevant methods
 class EventDetector: public EventRecorder { 
 public:
 	EventDetector (const std::string &name, const std::string &location, NetworkAVInput *cam):
