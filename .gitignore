@@ -7,3 +7,7 @@ Makefile.in
 server/src/zmConfigDefines.h
 docs/server/html/*
 docs/server/doxygen_*
+**/CMakeCache.txt
+**/CMakeFiles
+**/cmake_install.cmake
+
