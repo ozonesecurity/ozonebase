@@ -17,7 +17,7 @@ set(OZ_BASE_HDR_FILES
     "${CMAKE_CURRENT_BINARY_DIR}/ozConfig.h"
    )
 
-add_library(base ${OZ_BASE_SRC_FILES} ${OZ_BASE_HDR_FILES})
+add_library(base STATIC ${OZ_BASE_SRC_FILES} ${OZ_BASE_HDR_FILES})
 
 target_link_libraries(base ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
