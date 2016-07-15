@@ -38,6 +38,15 @@ protected:
                                     ///< and provide an audit trail of what has happened to the frame
 
 protected:
+    /// Create a new empty frame
+    FeedFrame( FeedProvider *provider, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
+        mProvider( provider ),
+        mFeedType( mediaType ),
+        mId( id ),
+        mTimestamp( timestamp ),
+        mParent( NULL )
+    {
+    }
     /// Create a new frame from a data buffer
     FeedFrame( FeedProvider *provider, FeedType mediaType, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
         mProvider( provider ),
@@ -56,6 +65,15 @@ protected:
         mTimestamp( timestamp ),
         mBuffer( buffer, size ),
         mParent( NULL )
+    {
+    }
+    /// Create a new empty frame and relate it to a parent frame
+    FeedFrame( FeedProvider *provider, FramePtr parent, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
+        mProvider( provider ),
+        mFeedType( mediaType ),
+        mId( id ),
+        mTimestamp( timestamp ),
+        mParent( parent )
     {
     }
     /// Create a new frame from a data buffer and relate it to a parent frame
@@ -210,8 +228,10 @@ public:
 class DataFrame : public FeedFrame
 {
 public:
+    DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp );
     DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
     DataFrame( FeedProvider *provider, FramePtr parent );
