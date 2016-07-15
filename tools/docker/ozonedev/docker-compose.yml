@@ -1,5 +1,5 @@
 ozone:
-  image: web2wire/ozonedev:v0
+  image: web2wire/ozonedev:latest
   ports:
     - 9280:9280
     - 9292:9292
