@@ -27,7 +27,7 @@ ENV HOME /home/ozone
 WORKDIR $HOME
 COPY vimrc.txt .vimrc
 COPY bootstrap-ozone.sh .
-ADD demo.tgz .
+COPY demo/ demo
 RUN chown -R ozone:ozone .vimrc bootstrap-ozone.sh demo/
 USER ozone
 ENV INSTALLDIR "$HOME/install"
