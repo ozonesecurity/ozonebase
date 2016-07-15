@@ -26,18 +26,10 @@ RUN useradd --create-home --shell /bin/bash --password RnXP2VVrWMy/w -G sudo ozo
 ENV HOME /home/ozone
 WORKDIR $HOME
 COPY vimrc.txt .vimrc
+COPY bootstrap-ozone.sh .
 ADD demo.tgz .
-RUN chown -R ozone:ozone .vimrc demo/
+RUN chown -R ozone:ozone .vimrc bootstrap-ozone.sh demo/
 USER ozone
 ENV INSTALLDIR "$HOME/install"
-RUN mkdir $INSTALLDIR && git clone https://github.com/ozonesecurity/ozonebase.git ozonebase # Head commit is def7ff9
-WORKDIR $HOME/ozonebase
-RUN git submodule update --init --recursive && \ 
-    ( cd externals/openh264/ && make PREFIX="$INSTALLDIR" install && make clean ) && \
-    ( cd externals/ffmpeg && PKG_CONFIG_PATH=$INSTALLDIR/lib/pkgconfig ./configure --enable-shared --enable-libopenh264 --prefix=$INSTALLDIR && make install && make clean ) && \
-    ( cd server && cmake -DCMAKE_PREFIX_PATH=$INSTALLDIR -DOZ_EXAMPLES=ON -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib . && make install && make clean )
-##WORKDIR $HOME/demo
-#RUN npm install
-#ENV PATH $PATH:$HOME/demo/node_modules/.bin
-WORKDIR $HOME
+RUN mkdir $INSTALLDIR
 EXPOSE 9280 9292
