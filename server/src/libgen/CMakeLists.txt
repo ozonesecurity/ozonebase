@@ -12,7 +12,7 @@ set(OZ_LIBGEN_HDR_FILES
     libgenTime.h libgenUtils.h
    )
 
-add_library(gen ${OZ_LIBGEN_SRC_FILES} ${OZ_LIBGEN_HDR_FILES})
+add_library(gen STATIC ${OZ_LIBGEN_SRC_FILES} ${OZ_LIBGEN_HDR_FILES})
 
 target_link_libraries(gen ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

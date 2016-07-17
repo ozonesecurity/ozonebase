@@ -12,7 +12,7 @@ set(OZ_PROVIDERS_HDR_FILES
     ozRemoteVideoInput.h ozSlaveVideo.h ozVideo4LinuxInput.h
    )
 
-add_library(providers ${OZ_PROVIDERS_SRC_FILES} ${OZ_PROVIDERS_HDR_FILES})
+add_library(providers STATIC ${OZ_PROVIDERS_SRC_FILES} ${OZ_PROVIDERS_HDR_FILES})
 
 target_link_libraries(providers ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
