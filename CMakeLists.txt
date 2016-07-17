@@ -44,6 +44,7 @@ ExternalProject_Add(openh264
                     BUILD_COMMAND make
                     INSTALL_COMMAND make install
                                     DESTDIR=${CMAKE_BINARY_DIR}/buildroot
+                                    PREFIX=${CMAKE_INSTALL_PREFIX}
                                     LIBDIR_NAME=${CMAKE_INSTALL_LIBDIR}
                                     SHAREDLIB_DIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
                     BUILD_IN_SOURCE 1
