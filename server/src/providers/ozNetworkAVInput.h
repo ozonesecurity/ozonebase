@@ -18,6 +18,7 @@ class NetworkAVInput : public AudioVideoProvider, public Thread
 CLASSID(NetworkAVInput);
 
 private:
+	bool			mLoop;					// true if video needs to loop
     std::string     mSource;                ///< String containing address of network media
     std::string     mFormat;                ///< String containing hint regarding format of network media
     AVCodecContext  *mVideoCodecContext;    ///< Structure containing details of the received video, if present
@@ -28,7 +29,7 @@ private:
                                         ///< this is the initial timestamp for reference
 
 public:
-    NetworkAVInput( const std::string &name, const std::string &source, const std::string &format="" );
+    NetworkAVInput( const std::string &name, const std::string &source, const std::string &format="", bool  loop=false );
     ~NetworkAVInput();
 
     const AVCodecContext *videoCodecContext() const { return( mVideoCodecContext ); }

@@ -1,8 +1,15 @@
-#include "../base/oz.h"
-#include "ozMovieFileOutput.h"
+/*
+	simple customization of MoveFileOutput
+	adds a callback for a new event
 
-#include "../base/ozFeedFrame.h"
-#include "../base/ozFeedProvider.h"
+*/
+
+
+#include <base/oz.h>
+#include "nvrMovieFileOutputDetector.h"
+
+#include <base/ozFeedFrame.h>
+#include <base/ozFeedProvider.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -16,7 +23,7 @@
 *
 * @return 
 */
-int MovieFileOutput::run()
+int MovieFileOutputDetector::run()
 {
     if ( waitForProviders() )
     {
@@ -184,6 +191,7 @@ int MovieFileOutput::run()
                 time_t now = time( NULL );
                 std::string filename = stringtf( "%s/%s-%ld.%s", mLocation.c_str(), cname(), now, mFormat.c_str() );
                 snprintf( outputContext->filename, sizeof(outputContext->filename), "%s", filename.c_str() );
+				mFunction(mName);
                 Info( "Writing to movie file '%s'", outputContext->filename );
                 /* open the output file, if needed */
                 if ( !(outputFormat->flags & AVFMT_NOFILE) )

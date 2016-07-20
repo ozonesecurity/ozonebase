@@ -10,8 +10,8 @@
 *************************************************************/
 
 
-#include "ozone.h"
 #include "nvrEventDetector.h"
+#include "nvrMovieFileOutputDetector.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -24,7 +24,7 @@
 #include <stdio.h>
 
 #define MAX_CAMS 10
-#define RECORD_VIDEO 0
+#define RECORD_VIDEO 0 // 1 if video is on
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
@@ -37,18 +37,9 @@ public:
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
 	EventDetector *event; // used if RECORD_VIDEO = 0
-	MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+	MovieFileOutputDetector *movie; // used if RECORD_VIDEO = 1
 
-	// callback issued when a event is starting to record for this cam
-	// note that this is only called once for each "recorded event"
-	// not for each motion frame
-
-	void eventCallback (string s) 
-	{ 	
-		cout << "New event reported for:" << cam->name()<< endl; 
-	}
 };
-
 
 list <nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
@@ -72,10 +63,10 @@ const char* const defRtspUrls[] = {
 static void avlog_cb(void *, int level, const char * fmt, va_list vl) 
 {
 #if SHOW_FFMPEG_LOG
-	char logbuf[2000];
+    char logbuf[2000];
     vsnprintf(logbuf, sizeof(logbuf), fmt, vl);
     logbuf[sizeof(logbuf) - 1] = '\0';
-	cout  << logbuf;
+    cout  << logbuf;
 #endif
 
 }
@@ -111,7 +102,7 @@ void cmd_add()
     
     
 	nvrCameras nvrcam;
-	nvrcam.cam = new NetworkAVInput ( name, source );
+	nvrcam.cam = new NetworkAVInput ( name, source,"",true );
 	nvrcam.motion = new MotionDetector( "modect-"+name );
     nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
@@ -123,10 +114,10 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 300, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutputDetector(name, path, "mp4", 60, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name, std::bind(&nvrCameras::eventCallback,nvrcam,std::placeholders::_1), path );
+	nvrcam.event = new EventDetector( "event-"+name,  path, nvrcam.cam );
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
@@ -249,9 +240,9 @@ int main( int argc, const char *argv[] )
 
     Info( "Starting" );
 
-	av_log_set_callback(avlog_cb);
+    av_log_set_callback(avlog_cb);
     avInit();
-	mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );

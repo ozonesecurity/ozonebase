@@ -75,6 +75,7 @@ int LocalFileInput::run()
         gettimeofday( &now, NULL );
         uint64_t currTime = (1000000LL*now.tv_sec)+now.tv_usec;
         uint64_t nextTime = currTime;
+		
         for ( int i = 0; i < pglob.gl_pathc && !mStop; i++ )
         {
             // Synchronise the output with the desired output frame rate
@@ -98,7 +99,8 @@ int LocalFileInput::run()
             VideoFrame *videoFrame = new VideoFrame( this, ++mFrameCount, currTime, image.buffer() );
             distributeFrame( FramePtr( videoFrame ) );
         }
-    }
+	}
+
     globfree( &pglob );
     cleanup();
     return( !ended() );
