@@ -1,5 +1,6 @@
 #!/bin/bash
 cd $HOME
+mkdir $INSTALLDIR
 git clone https://github.com/ozonesecurity/ozonebase.git
 cd $HOME/ozonebase
 git submodule update --init --recursive

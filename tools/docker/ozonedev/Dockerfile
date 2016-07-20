@@ -31,5 +31,4 @@ COPY demo/ demo
 RUN chown -R ozone:ozone .vimrc bootstrap-ozone.sh demo/
 USER ozone
 ENV INSTALLDIR "$HOME/install"
-RUN mkdir $INSTALLDIR
 EXPOSE 9280 9292

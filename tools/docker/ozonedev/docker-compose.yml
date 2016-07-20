@@ -4,5 +4,5 @@ ozone:
     - 9280:9280
     - 9292:9292
   volumes:
-    - ./ozonebase:/home/ozone/ozonebase 
+    - ../../../../ozonebase:/home/ozone/ozonebase
   tty: true
