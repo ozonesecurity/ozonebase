@@ -8,7 +8,7 @@ set(OZ_ENCODER_HDR_FILES
     ozH264Encoder.h ozH264Relay.h ozMpegEncoder.h ozJpegEncoder.h
    )
 
-add_library(encoders ${OZ_ENCODER_SRC_FILES})
+add_library(encoders STATIC ${OZ_ENCODER_SRC_FILES} ${OZ_ENCODER_HDR_FILES})
 
 target_link_libraries(encoders ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 
