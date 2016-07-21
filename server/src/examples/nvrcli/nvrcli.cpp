@@ -21,9 +21,10 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include "ozone.h"
+#include "nvrNotifyOutput.h"
 
 #define MAX_CAMS 10
-#define RECORD_VIDEO 0 // 1 if video is on
+#define RECORD_VIDEO 1 // 1 if video is on
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
@@ -43,6 +44,7 @@ public:
 list <nvrCameras> nvrcams;
 int camid=0; // id to suffix to cam-name. always increasing
 Listener *listener;
+NotifyOutput *notifier;
 HttpController* httpController;
 Application app;
 
@@ -103,25 +105,29 @@ void cmd_add()
 	nvrCameras nvrcam;
 	nvrcam.cam = new NetworkAVInput ( name, source,"",true );
 	nvrcam.motion = new MotionDetector( "modect-"+name );
-    nvrcam.motion->registerProvider(*(nvrcam.cam) );
+	nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
 	char path[2000];
 	snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
 	cout << "Events recorded to: " << path << endl;
-	mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
 	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
+	notifier->registerProvider(*(nvrcam.movie));
 #else
 	nvrcam.event = new EventRecorder( "event-"+name,  path);
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
+	notifier->registerProvider(*(nvrcam.event));
 
 #endif
 
+	notifier->start();
 	nvrcams.push_back(nvrcam); // add to list
 	
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
@@ -138,6 +144,8 @@ void cmd_add()
     httpController->addStream("live",*(nvrcam.cam));
     httpController->addStream("debug",*(nvrcam.motion));
     listener->addController(httpController);
+
+	
 }
 
 // CMD - help 
@@ -247,6 +255,10 @@ int main( int argc, const char *argv[] )
     httpController = new HttpController( "watch", 9292 );
     listener->addController( httpController );
     app.addThread( listener );
+
+    notifier = new NotifyOutput("notifier");
+    app.addThread(notifier);
+
     thread t1(cli,app);
     app.run();
     cout << "Never here";
