@@ -4,6 +4,7 @@
 #include "ozFeedBase.h"
 
 #include "../libimg/libimgImage.h"
+#include "../libgen/libgenTime.h"
 extern "C" {
 #include <libavformat/avformat.h>
 }
@@ -38,6 +39,15 @@ protected:
                                     ///< and provide an audit trail of what has happened to the frame
 
 protected:
+    /// Create a new empty frame
+    FeedFrame( FeedProvider *provider, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
+        mProvider( provider ),
+        mFeedType( mediaType ),
+        mId( id ),
+        mTimestamp( timestamp ),
+        mParent( NULL )
+    {
+    }
     /// Create a new frame from a data buffer
     FeedFrame( FeedProvider *provider, FeedType mediaType, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
         mProvider( provider ),
@@ -56,6 +66,15 @@ protected:
         mTimestamp( timestamp ),
         mBuffer( buffer, size ),
         mParent( NULL )
+    {
+    }
+    /// Create a new empty frame and relate it to a parent frame
+    FeedFrame( FeedProvider *provider, FramePtr parent, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
+        mProvider( provider ),
+        mFeedType( mediaType ),
+        mId( id ),
+        mTimestamp( timestamp ),
+        mParent( parent )
     {
     }
     /// Create a new frame from a data buffer and relate it to a parent frame
@@ -127,14 +146,8 @@ public:
     double age( uint64_t checkTimestamp=0 ) const                   /// How old this frame is (in seconds) relative to 'now' or the supplied timestamp
     {
         if ( !checkTimestamp )
-        {
-            struct timeval now;
-            gettimeofday( &now, NULL );
-            checkTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
-        }
-        int64_t age = 0;
-        age = checkTimestamp - mTimestamp;
-        return( age/1000000.0L );
+            checkTimestamp = time64();
+        return( (((double)checkTimestamp-mTimestamp)/1000000.0) );
     }
     const ByteBuffer &buffer() const { return( mBuffer ); }
     //ByteBuffer &buffer() { return( mBuffer ); }
@@ -210,8 +223,10 @@ public:
 class DataFrame : public FeedFrame
 {
 public:
+    DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp );
     DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
     DataFrame( FeedProvider *provider, FramePtr parent );

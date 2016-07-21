@@ -5,6 +5,7 @@
 #define OZ_MOVIE_FILE_OUTPUT_H
 
 #include "../base/ozFeedConsumer.h"
+#include "../base/ozFeedProvider.h"
 #include "../libgen/libgenThread.h"
 #include "../base/ozFfmpeg.h"
 
@@ -69,7 +70,7 @@ public:
 /// Consumer that just just writes received video frames to files on the local filesystem.
 /// The file will be written to the given location and be called <instance name>-<timestamp>.<format>
 ///
-class MovieFileOutput : public VideoConsumer, public Thread
+class MovieFileOutput : public VideoConsumer, public DataProvider, public Thread
 {
 CLASSID(MovieFileOutput);
 
