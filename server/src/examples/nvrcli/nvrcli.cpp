@@ -10,8 +10,6 @@
 *************************************************************/
 
 
-#include "nvrEventDetector.h"
-#include "nvrMovieFileOutputDetector.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -22,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include "ozone.h"
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 0 // 1 if video is on
@@ -36,8 +35,8 @@ class  nvrCameras
 public:
 	NetworkAVInput *cam;
 	MotionDetector *motion;	
-	EventDetector *event; // used if RECORD_VIDEO = 0
-	MovieFileOutputDetector *movie; // used if RECORD_VIDEO = 1
+	EventRecorder *event; // used if RECORD_VIDEO = 0
+	MovieFileOutput *movie; // used if RECORD_VIDEO = 1
 
 };
 
@@ -114,10 +113,10 @@ void cmd_add()
 #if RECORD_VIDEO
 	VideoParms* videoParms= new VideoParms( 640, 480 );
 	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutputDetector(name, path, "mp4", 60, *videoParms, *audioParms);
+	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
 	nvrcam.movie->registerProvider(*(nvrcam.motion));
 #else
-	nvrcam.event = new EventDetector( "event-"+name,  path, nvrcam.cam );
+	nvrcam.event = new EventRecorder( "event-"+name,  path);
 
 	nvrcam.event->registerProvider(*(nvrcam.motion));
 
