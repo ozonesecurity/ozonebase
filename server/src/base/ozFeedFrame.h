@@ -4,6 +4,7 @@
 #include "ozFeedBase.h"
 
 #include "../libimg/libimgImage.h"
+#include "../libgen/libgenTime.h"
 extern "C" {
 #include <libavformat/avformat.h>
 }
@@ -145,14 +146,8 @@ public:
     double age( uint64_t checkTimestamp=0 ) const                   /// How old this frame is (in seconds) relative to 'now' or the supplied timestamp
     {
         if ( !checkTimestamp )
-        {
-            struct timeval now;
-            gettimeofday( &now, NULL );
-            checkTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
-        }
-        int64_t age = 0;
-        age = checkTimestamp - mTimestamp;
-        return( age/1000000.0L );
+            checkTimestamp = time64();
+        return( (((double)checkTimestamp-mTimestamp)/1000000.0) );
     }
     const ByteBuffer &buffer() const { return( mBuffer ); }
     //ByteBuffer &buffer() { return( mBuffer ); }

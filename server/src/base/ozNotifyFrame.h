@@ -57,7 +57,7 @@ public:
 
         public:
             //! General constructor
-            DiskIODetail( IOType type, IOStage stage, const std::string name, size_t size, IOResult result=SUCCESS, int error=0 ) :
+            DiskIODetail( IOType type, IOStage stage, const std::string name, size_t size=0, IOResult result=SUCCESS, int error=0 ) :
                 mType( type ),
                 mStage( stage ),
                 mName( name ),
@@ -124,7 +124,7 @@ public:
 };
 
 ///
-/// Notification frame for general disk I/O
+/// Notification frame for motion or other 'events'
 ///
 class EventNotification : public NotifyFrame
 {
@@ -140,7 +140,7 @@ public:
 
         public:
             //! General constructor
-            EventDetail( ozId_t id, Stage stage, double length ) :
+            EventDetail( ozId_t id, Stage stage, double length=0.0 ) :
                 mId( id ),
                 mStage( stage ),
                 mLength( length )
