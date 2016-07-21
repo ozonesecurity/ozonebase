@@ -34,10 +34,10 @@ using namespace std;
 class  nvrCameras
 {
 public:
-	NetworkAVInput *cam;
-	MotionDetector *motion;	
-	EventRecorder *event; // used if RECORD_VIDEO = 0
-	MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+    NetworkAVInput *cam;
+    MotionDetector *motion; 
+    EventRecorder *event; // used if RECORD_VIDEO = 0
+    MovieFileOutput *movie; // used if RECORD_VIDEO = 1
 
 };
 
@@ -76,11 +76,11 @@ static void avlog_cb(void *, int level, const char * fmt, va_list vl)
 void cmd_add()
 {
 
-	if (nvrcams.size() == MAX_CAMS)
-	{
-		cout << "Cannot add any more cams!\n\n";
-		return;
-	}
+    if (nvrcams.size() == MAX_CAMS)
+    {
+        cout << "Cannot add any more cams!\n\n";
+        return;
+    }
 
     string name;
     string source;
@@ -90,46 +90,46 @@ void cmd_add()
     getline(cin,name);
     cout << "RTSP source (ENTER for default):";
     getline(cin,source);
-	if (name.size()==0 )
-	{
-		string n = to_string(camid);
-		camid++;
-		name = "cam" + n;
-	}
+    if (name.size()==0 )
+    {
+        string n = to_string(camid);
+        camid++;
+        name = "cam" + n;
+    }
     if (source.size() == 0 )
     {
         source = defRtspUrls[nvrcams.size() % MAX_CAMS];
     }
     
     
-	nvrCameras nvrcam;
-	nvrcam.cam = new NetworkAVInput ( name, source,"",true );
-	nvrcam.motion = new MotionDetector( "modect-"+name );
-	nvrcam.motion->registerProvider(*(nvrcam.cam) );
+    nvrCameras nvrcam;
+    nvrcam.cam = new NetworkAVInput ( name, source,"",true );
+    nvrcam.motion = new MotionDetector( "modect-"+name );
+    nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
-	char path[2000];
-	snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
-	cout << "Events recorded to: " << path << endl;
+    char path[2000];
+    snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
+    cout << "Events recorded to: " << path << endl;
 
-mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 #if RECORD_VIDEO
-	VideoParms* videoParms= new VideoParms( 640, 480 );
-	AudioParms* audioParms = new AudioParms;
-	nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
-	nvrcam.movie->registerProvider(*(nvrcam.motion));
-	notifier->registerProvider(*(nvrcam.movie));
+    VideoParms* videoParms= new VideoParms( 640, 480 );
+    AudioParms* audioParms = new AudioParms;
+    nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
+    nvrcam.movie->registerProvider(*(nvrcam.motion));
+    notifier->registerProvider(*(nvrcam.movie));
 #else
-	nvrcam.event = new EventRecorder( "event-"+name,  path);
+    nvrcam.event = new EventRecorder( "event-"+name,  path);
 
-	nvrcam.event->registerProvider(*(nvrcam.motion));
-	notifier->registerProvider(*(nvrcam.event));
+    nvrcam.event->registerProvider(*(nvrcam.motion));
+    notifier->registerProvider(*(nvrcam.event));
 
 #endif
 
-	notifier->start();
-	nvrcams.push_back(nvrcam); // add to list
-	
+    notifier->start();
+    nvrcams.push_back(nvrcam); // add to list
+    
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
     cout << nvrcams.back().cam->source() << endl;
 
@@ -144,8 +144,6 @@ mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     httpController->addStream("live",*(nvrcam.cam));
     httpController->addStream("debug",*(nvrcam.motion));
     listener->addController(httpController);
-
-	
 }
 
 // CMD - help 
@@ -157,52 +155,52 @@ void cmd_help()
 // CMD - prints a list of configured cameras
 void cmd_list()
 {
-	int i=0;
-	for (nvrCameras n:nvrcams)
-	{
-		cout <<i<<":"<< n.cam->name() <<"-->"<<n.cam->source() << endl;
-		i++;
-	}
+    int i=0;
+    for (nvrCameras n:nvrcams)
+    {
+        cout <<i<<":"<< n.cam->name() <<"-->"<<n.cam->source() << endl;
+        i++;
+    }
 }
 
 
 // CMD - delets a camera
 void cmd_delete()
 {
-	if (nvrcams.size() == 0)
-	{
-		cout << "No items to delete.\n\n";
-		return;
-	}
-	cmd_list();
-	string sx;
-	int x;
-	cin.clear(); cin.sync();
-	do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
-	list<nvrCameras>::iterator i = nvrcams.begin();
-	while ( i != nvrcams.end())
+    if (nvrcams.size() == 0)
     {
-		if (x==0) break;
-		x--;
+        cout << "No items to delete.\n\n";
+        return;
     }
-	
-	(*i).cam->stop();
-	(*i).motion->stop();
-	(*i).cam->join();
-	cout << "Camera killed\n";
-	(*i).motion->join();
-	cout << "Camera Motion killed\n";
+    cmd_list();
+    string sx;
+    int x;
+    cin.clear(); cin.sync();
+    do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
+    list<nvrCameras>::iterator i = nvrcams.begin();
+    while ( i != nvrcams.end())
+    {
+        if (x==0) break;
+        x--;
+    }
+    
+    (*i).cam->stop();
+    (*i).motion->stop();
+    (*i).cam->join();
+    cout << "Camera killed\n";
+    (*i).motion->join();
+    cout << "Camera Motion killed\n";
 #if RECORD_VIDEO
-	(*i).movie->stop();
-	(*i).movie->join();
-	cout << "Camera Movie Record killed\n";
+    (*i).movie->stop();
+    (*i).movie->join();
+    cout << "Camera Movie Record killed\n";
 
 #else
-	(*i).event->stop();
-	(*i).event->join();
-	cout << "Camera Image Record killed\n";
+    (*i).event->stop();
+    (*i).event->join();
+    cout << "Camera Image Record killed\n";
 #endif
-	nvrcams.erase(i);
+    nvrcams.erase(i);
   }
 
 // CMD - default handler
@@ -218,8 +216,8 @@ void cli(Application app)
     unordered_map<std::string, std::function<void()>> cmd_map;
     cmd_map["help"] = &cmd_help;
     cmd_map["add"] = &cmd_add;
-	cmd_map["list"] = &cmd_list;
-	cmd_map["delete"] = &cmd_delete;
+    cmd_map["list"] = &cmd_list;
+    cmd_map["delete"] = &cmd_delete;
     
     
     string command;
