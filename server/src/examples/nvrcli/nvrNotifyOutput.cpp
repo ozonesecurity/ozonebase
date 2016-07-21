@@ -1,5 +1,6 @@
 #include "nvrNotifyOutput.h"
 
+// This is a custom class that checks for frames to be available from any of its providers
 int NotifyOutput::run()
 {
 
@@ -28,6 +29,8 @@ int NotifyOutput::run()
     return( 0 );
 }
 
+// processFrame is invoked by run() above and this uses the ozone Notify class
+// to classify if  and of the Frames are Notifications (Frames can be of Data/AV/NotifyFrame)
 bool NotifyOutput::processFrame( FramePtr frame )
 {
 
@@ -39,7 +42,6 @@ bool NotifyOutput::processFrame( FramePtr frame )
         const DiskIONotification *diskNotifyFrame = dynamic_cast<const DiskIONotification *>(notifyFrame);
         if ( diskNotifyFrame )
         {
-            printf( "Got disk I/O notification frame\n" );
             const DiskIONotification::DiskIODetail &detail = diskNotifyFrame->detail();
             std::string typeString;
             switch( detail.type() )
@@ -82,7 +84,6 @@ bool NotifyOutput::processFrame( FramePtr frame )
         const EventNotification *eventNotifyFrame = dynamic_cast<const EventNotification *>(notifyFrame);
         if ( eventNotifyFrame )
         {
-            printf( "Got event notification frame\n" );
             const EventNotification::EventDetail &detail = eventNotifyFrame->detail();
             switch ( detail.stage() )
             {

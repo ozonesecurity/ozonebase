@@ -149,7 +149,7 @@ void cmd_add()
 // CMD - help 
 void cmd_help()
 {
-    cout << endl << "Possible commands: add, delete, list, stop, exit" << endl;
+    cout << endl << "Possible commands: add, delete, list, stop, quit" << endl;
 }
 
 // CMD - prints a list of configured cameras
@@ -201,7 +201,13 @@ void cmd_delete()
     cout << "Camera Image Record killed\n";
 #endif
     nvrcams.erase(i);
-  }
+}
+
+void cmd_quit()
+{
+    cout << endl << "Bye."<<endl<<endl;
+    exit(0);
+}
 
 // CMD - default handler
 void cmd_unknown()
@@ -218,11 +224,13 @@ void cli(Application app)
     cmd_map["add"] = &cmd_add;
     cmd_map["list"] = &cmd_list;
     cmd_map["delete"] = &cmd_delete;
+    cmd_map["quit"] = &cmd_quit;
     
     
     string command;
     for (;;) 
     { 
+        cin.clear(); cin.sync();
         cout << "?:";
         getline (cin,command);
         // really? no string lowercase?
