@@ -11,7 +11,7 @@
 //
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "example4", "", 5 );
+    debugInitialise( "example4", "", 0 );
 
     Info( "Starting" );
 
