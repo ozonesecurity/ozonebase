@@ -133,7 +133,7 @@ bool NotifyOutput::processFrame( FramePtr frame )
 //
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "example3", "", 5 );
+    debugInitialise( "example9", "", 0 );
 
     Info( "Starting" );
 
