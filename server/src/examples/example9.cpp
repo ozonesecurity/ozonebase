@@ -1,7 +1,7 @@
 #include "../base/ozApp.h"
 #include "../providers/ozNetworkAVInput.h"
 #include "../processors/ozMotionDetector.h"
-#include "../consumers/ozEventRecorder.h"
+#include "../consumers/ozVideoRecorder.h"
 #include "../consumers/ozMovieFileOutput.h"
 #include "../base/ozNotifyFrame.h"
 
@@ -148,19 +148,15 @@ int main( int argc, const char *argv[] )
     motionDetector.registerProvider( input );
     app.addThread( &motionDetector );
 
-    EventRecorder recorder( "recorder" , "/tmp" );
+    VideoParms videoParms( 640, 480 );
+    AudioParms audioParms;
+    VideoRecorder recorder( "recorder" , "/transfer", "mp4", videoParms, audioParms );
+    //MovieFileOutput recorder( "recorder" , "/tmp", "mp4", 300, videoParms, audioParms );
     recorder.registerProvider( motionDetector );
     app.addThread( &recorder );
 
-    VideoParms videoParms( 640, 480 );
-    AudioParms audioParms;
-    MovieFileOutput output( input.cname(), "/tmp", "mp4", 60, videoParms, audioParms );
-    output.registerProvider( motionDetector );
-    app.addThread( &output );
-
     NotifyOutput notifier( "notifier" );
     notifier.registerProvider( recorder );
-    notifier.registerProvider( output );
     app.addThread( &notifier );
 
     app.run();
