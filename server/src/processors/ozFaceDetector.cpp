@@ -66,16 +66,16 @@ int FaceDetector::run()
                         //assign_image( img, frame->buffer().data() );
 
                         std::vector<dlib::rectangle> dets = detector(img);
-                        Info( "Got %jd faces", dets.size() );
+                        Info( "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
 
                         if ( dets.size() > 0 )
                         {
-                            for ( int i = 0; i < dets.size(); i++ )
+                            for ( unsigned int i = 0; i < dets.size(); i++ )
                             {
                                 draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
                             }
-                            dlib::save_png( img, "/transfer/image.png" );
-                            Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
+                            //dlib::save_png( img, "/transfer/image.png" );
+                            //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
                             VideoFrame *imageFrame = new VideoFrame( this, *iter, mFrameCount, time64(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img) );
 
                             distributeFrame( FramePtr( imageFrame ) );
