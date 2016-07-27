@@ -449,6 +449,17 @@ else(OZ_SUPERBUILD)
                 "oZone requires swresample but it was not found on your system")
     endif(SWRESAMPLE_LIBRARIES)
 
+    # dlib (using find_library and find_path)
+    find_library(DLIB_LIBRARIES dlib)
+    if(DLIB_LIBRARIES)
+        set(HAVE_LIBDLIB 1)
+        list(APPEND OZ_BIN_LIBS "${DLIB_LIBRARIES}")
+        mark_as_advanced(FORCE DLIB_LIBRARIES)
+    else(DLIB_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires dlib but it was not found on your system")
+    endif(DLIB_LIBRARIES)
+
 endif(OZ_SUPERBUILD)
 
 # check include files
