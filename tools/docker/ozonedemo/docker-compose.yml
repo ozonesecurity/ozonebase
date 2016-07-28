@@ -1,4 +1,5 @@
 ozone:
+  hostname: ozonedemo
   image: web2wire/ozonedemo:latest
   ports:
     - 9280:9280
