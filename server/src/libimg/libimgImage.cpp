@@ -942,7 +942,7 @@ AVPixelFormat Image::getFfPixFormat( Format format )
             pixFormat = AV_PIX_FMT_GRAY16;
             break;
         case FMT_RGB :
-            pixFormat = AV_PIX_FMT_BGR24;
+            pixFormat = AV_PIX_FMT_RGB24;
             break;
         case FMT_RGB48 :
             pixFormat = AV_PIX_FMT_RGB48BE;
