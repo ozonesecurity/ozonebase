@@ -3,11 +3,13 @@
 
 #include "../base/ozAlarmFrame.h"
 #include <dlib/image_processing/frontal_face_detector.h>
+#include <dlib/image_processing.h>
 #include <dlib/image_io.h>
+#include <iostream>
 #include <vector>
 
 /**
-* @brief 
+* @brief
 *
 * @param name
 */
@@ -18,16 +20,16 @@ FaceDetector::FaceDetector( const std::string &name ) :
 }
 
 /**
-* @brief 
+* @brief
 */
 FaceDetector::~FaceDetector()
 {
 }
 
 /**
-* @brief 
+* @brief
 *
-* @return 
+* @return
 */
 int FaceDetector::run()
 {
@@ -42,7 +44,15 @@ int FaceDetector::run()
         int16_t height = videoProvider()->height();
         Info( "pf:%d, %dx%d", pixelFormat, width, height );
 
+        // We need a face detector.  We will use this to get bounding boxes for
+        // each face in an image.
         dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
+        // And we also need a shape_predictor.  This is the tool that will predict face
+        // landmark positions given an image and face bounding box.  Here we are just
+        // loading the model from the shape_predictor_68_face_landmarks.dat file you gave
+        // as a command line argument.
+        dlib::shape_predictor sp;
+        dlib::deserialize( "./shape_predictor_68_face_landmarks.dat" ) >> sp;
 
         setReady();
         while ( !mStop )
@@ -70,17 +80,76 @@ int FaceDetector::run()
 
                         if ( dets.size() > 0 )
                         {
+                            // Now we will go ask the shape_predictor to tell us the pose of
+                            // each face we detected.
+                            std::vector<dlib::full_object_detection> shapes;
+                            const dlib::rgb_pixel color = dlib::rgb_pixel(0,255,0);
+                            typedef std::pair<dlib::point,dlib::point> line_t;
+                            std::vector<line_t> lines;
                             for ( unsigned int i = 0; i < dets.size(); i++ )
                             {
                                 draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
+
+                                dlib::full_object_detection shape = sp(img, dets[i]);
+                                Info( "Face %u - %ju parts", i, shape.num_parts() );
+
+                                // Around Chin. Ear to Ear
+                                for (unsigned long p = 1; p <= 16; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+
+                                // Line on top of nose
+                                for (unsigned long p = 28; p <= 30; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+
+                                // left eyebrow
+                                for (unsigned long p = 18; p <= 21; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                // Right eyebrow
+                                for (unsigned long p = 23; p <= 26; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                // Bottom part of the nose
+                                for (unsigned long p = 31; p <= 35; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                // Line from the nose to the bottom part above
+                                lines.push_back(line_t(shape.part(30), shape.part(35)));
+
+                                // Left eye
+                                for (unsigned long p = 37; p <= 41; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                lines.push_back(line_t(shape.part(36), shape.part(41)));
+
+                                // Right eye
+                                for (unsigned long p = 43; p <= 47; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                lines.push_back(line_t(shape.part(42), shape.part(47)));
+
+                                // Lips outer part
+                                for (unsigned long p = 49; p <= 59; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                lines.push_back(line_t(shape.part(48), shape.part(59)));
+
+                                // Lips inside part
+                                for (unsigned long p = 61; p <= 67; ++p)
+                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                lines.push_back(line_t(shape.part(60), shape.part(67)));
+
+                                shapes.push_back(shape);
                             }
+
+                            for ( std::vector<line_t>::const_iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++ )
+                            {
+                                const line_t &line = *lineIter;
+                                dlib::draw_line( img, line.first, line.second, color );
+                            }
+
                             //dlib::save_png( img, "/transfer/image.png" );
                             //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
-                            VideoFrame *imageFrame = new VideoFrame( this, *iter, mFrameCount, time64(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img) );
-
-                            distributeFrame( FramePtr( imageFrame ) );
-                            mFrameCount++;
                         }
+                        // Move inside preceding 'if' to only output 'face' frames
+                        VideoFrame *imageFrame = new VideoFrame( this, *iter, frame->id(), frame->timestamp(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img) );
+
+                        distributeFrame( FramePtr( imageFrame ) );
+                        mFrameCount++;
                     }
                 }
                 mFrameQueue.clear();
