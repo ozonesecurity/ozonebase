@@ -923,7 +923,6 @@ Image::Format Image::getFormatFromPalette( int palette )
     return( format );
 }
 
-#if HAVE_LIBAVUTIL_AVUTIL_H
 /**
 * @brief 
 *
@@ -1028,8 +1027,6 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
     }
     return( format );
 }
-
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
 
 /**
 * @brief 
