@@ -52,7 +52,7 @@ install:
       - sudo make install 
       - sudo make install-libs
       - cd ../dlib
-      - mkdir build
+      - mkdir -p build
       - cd build
       - cmake ..
       - sudo make install 
