@@ -38,6 +38,7 @@ addons:
       - zlib1g-dev
       - libopenblas-dev
       - liblapack-dev
+      - libatlas-base-dev
 
 cache:
     directories:
@@ -51,7 +52,7 @@ install:
       - sudo make install 
       - sudo make install-libs
       - cd ../dlib
-      - mkdir build
+      - mkdir -p build
       - cd build
       - cmake ..
       - sudo make install 
