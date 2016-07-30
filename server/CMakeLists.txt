@@ -465,6 +465,30 @@ else(OZ_SUPERBUILD)
                 "oZone requires dlib but it was not found on your system")
     endif(DLIB_LIBRARIES)
 
+    # dlib requires us to link against cblas
+    # cblas (using find_library)
+    find_library(CBLAS_LIBRARIES cblas)
+    if(CBLAS_LIBRARIES)
+        set(HAVE_LIBCBLAS 1)
+        list(APPEND OZ_BIN_LIBS "${CBLAS_LIBRARIES}")
+        mark_as_advanced(FORCE CBLAS_LIBRARIES)
+    else(CBLAS_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires cblas but it was not found on your system")
+    endif(CBLAS_LIBRARIES)
+
+    # dlib requires us to link against lapack
+    # lapack (using find_library)
+    find_library(LAPACK_LIBRARIES lapack)
+    if(LAPACK_LIBRARIES)
+        set(HAVE_LIBCLAPACK 1)
+        list(APPEND OZ_BIN_LIBS "${LAPACK_LIBRARIES}")
+        mark_as_advanced(FORCE LAPACK_LIBRARIES)
+    else(LAPACK_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires lapack but it was not found on your system")
+    endif(LAPACK_LIBRARIES)
+
 endif(OZ_SUPERBUILD)
 
 # check include files

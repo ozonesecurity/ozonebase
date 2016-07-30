@@ -38,6 +38,7 @@ addons:
       - zlib1g-dev
       - libopenblas-dev
       - liblapack-dev
+      - libatlas-base-dev
 
 cache:
     directories:
