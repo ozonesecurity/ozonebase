@@ -255,7 +255,7 @@ if(OZ_SUPERBUILD)
         check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
     else(AVDEVICE_LIBRARIES)
         message(FATAL_ERROR 
-                "oZone requires avcodec but it was not found on your system")
+                "oZone requires avdevice but it was not found on your system")
     endif(AVDEVICE_LIBRARIES)
 
     # avutil (built as external project, using find_library and find_path)
@@ -377,7 +377,7 @@ else(OZ_SUPERBUILD)
         check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
     else(AVDEVICE_LIBRARIES)
         message(FATAL_ERROR 
-                "oZone requires avcodec but it was not found on your system")
+                "oZone requires avdevice but it was not found on your system")
     endif(AVDEVICE_LIBRARIES)
 
     # avutil (using find_library and find_path)
