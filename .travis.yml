@@ -51,7 +51,9 @@ install:
       - sudo make install 
       - sudo make install-libs
       - cd ../dlib
-      - cmake .
+      - mkdir build
+      - cd build
+      - cmake ..
       - sudo make install 
 
 script:
