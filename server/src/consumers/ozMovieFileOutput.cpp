@@ -103,7 +103,7 @@ int MovieFileOutput::run()
             }
 
             struct SwsContext *convertContext = NULL;
-            if ( inputWidth != mVideoParms.width() || inputHeight != mVideoParms.height() )
+            if ( inputWidth != mVideoParms.width() || inputHeight != mVideoParms.height() || inputPixelFormat != mVideoParms.pixelFormat() )
             {
                 // Prepare for image format and size conversions
                 convertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mVideoParms.width(), mVideoParms.height(), mVideoParms.pixelFormat(), SWS_BICUBIC, NULL, NULL, NULL );
