@@ -2,6 +2,7 @@
 *.a
 .*.sw?
 Makefile
+!docs/server/guide/Makefile
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
