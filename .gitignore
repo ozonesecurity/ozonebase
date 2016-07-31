@@ -10,3 +10,4 @@ server/config.h
 server/src/base/ozConfig.h
 docs/server/html/*
 docs/server/doxygen_*
+docs/server/guide/_build/*
