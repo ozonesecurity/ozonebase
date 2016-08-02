@@ -8,6 +8,7 @@
 
 #include <consumers/ozEventRecorder.h>
 #include <consumers/ozMovieFileOutput.h>
+#include <consumers/ozVideoRecorder.h>
 
 
 #include <processors/ozMotionDetector.h>
