@@ -25,7 +25,7 @@
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 1 // 1 if video is on
-#define SHOW_FFMPEG_LOG 0 
+#define SHOW_FFMPEG_LOG 1 
 #define EVENT_REC_PATH "nvrcli_events"
 
 using namespace std;
@@ -35,9 +35,10 @@ class  nvrCameras
 {
 public:
     NetworkAVInput *cam;
+    //LocalVideoInput *cam;
     MotionDetector *motion; 
     EventRecorder *event; // used if RECORD_VIDEO = 0
-    MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+    VideoRecorder *movie; // used if RECORD_VIDEO = 1
 
 };
 
@@ -116,7 +117,7 @@ void cmd_add()
 #if RECORD_VIDEO
     VideoParms* videoParms= new VideoParms( 640, 480 );
     AudioParms* audioParms = new AudioParms;
-    nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
+    nvrcam.movie = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms);
     nvrcam.movie->registerProvider(*(nvrcam.motion));
     notifier->registerProvider(*(nvrcam.movie));
 #else
