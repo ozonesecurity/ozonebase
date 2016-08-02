@@ -504,7 +504,7 @@ foreach( INCVAR alloca fcntl inttypes limits memory netdb
     if (NOT HAVE_${INCVAR_U}_H)
         # Make each check fatal. Change this is this is not the case.
         message(FATAL_ERROR 
-            "${ICVAR} function not found and this project requires it.")
+            "${INCVAR} function not found and this project requires it.")
     endif (NOT HAVE_${INCVAR_U}_H)
 endforeach(INCVAR)
 
