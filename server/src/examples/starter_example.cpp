@@ -13,7 +13,7 @@
 //
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "starter-example", "", 5 );
+    debugInitialise( "starter-example", "", 0 );
 
 	std::cout << " ---------------------- Starter Example ------------------\n"
 			" do a export PRINT_DBG=0/1 to turn off/on logs\n"

@@ -7,6 +7,8 @@
 #include <string>
 #include <list>
 
+typedef uint64_t ozId_t;
+
 class FeedFrame;
 ///
 /// Garbage collected pointer to frames.

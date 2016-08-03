@@ -174,6 +174,18 @@ AudioFrame::AudioFrame( const AudioFrame &frame ) :
 * @param provider
 * @param id
 * @param timestamp
+*/
+DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp ) :
+    FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp )
+{
+}
+
+/**
+* @brief 
+*
+* @param provider
+* @param id
+* @param timestamp
 * @param buffer
 */
 DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
@@ -192,6 +204,19 @@ DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, c
 */
 DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, FRAME_TYPE_DATA, id, timestamp, buffer, size )
+{
+}
+
+/**
+* @brief 
+*
+* @param provider
+* @param parent
+* @param id
+* @param timestamp
+*/
+DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp ) :
+    FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp )
 {
 }
 
