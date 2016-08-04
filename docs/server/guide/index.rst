@@ -28,7 +28,7 @@ Welcome to oZone's documentation!
   Frequently Asked Questions
 
 :doc:`contributing/index`
-  How to contribute to ZoneMinder. As a community project we always need help, you don't need to be a coder to test or update documentation.
+  How to contribute to oZone.
 
 Indices and tables
 ==================
