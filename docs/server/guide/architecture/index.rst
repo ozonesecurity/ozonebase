@@ -3,6 +3,6 @@ Architecture
 
 .. toctree::
 
-    introduction
-    components
+    principles
+    lifecycle
     
