@@ -4,7 +4,9 @@
 
 ## Quick start
 [What is it?] (http://ozone.network)
+
 [Key Concepts] (http://ozone-framework.readthedocs.io/en/latest/index.html)
+
 [Current API] (http://ozone.network/apidocs/index.html)
 
 
