@@ -83,4 +83,10 @@ This bit of code would allow for browsers to connect to port 9292 and render the
 .. figure:: images/basic_arch.png
    :width: 600px
 
-   A typical application linking components
+   An abstract view of  application linking components
+
+.. figure:: images/ozone_component.png
+    :width: 600px
+
+    An application specific instance of chaining components
+
