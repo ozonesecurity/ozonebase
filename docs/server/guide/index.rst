@@ -30,10 +30,3 @@ Welcome to oZone's documentation!
 :doc:`contributing/index`
   How to contribute to oZone.
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
