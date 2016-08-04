@@ -21,8 +21,7 @@ We expect OEMs, ISVs and 3rd party developers to use this library to build their
 As of today, there is no roadmap to merge this with version 1. Version 1 has a seperate goal from Version 2 and we think its best to leave it that way for now.
 
 ## Who is developing and maintaining Ozone?
-The Ozonebase server framework is developed by [Philip Coombes](https://github.com/web2wire), the original developer of ZoneMinder.
-The codebase will be maintained by Phil and [Pliable Pixels](https://github.com/pliablepixels) and other key contributors who will be added soon.
+The Ozonebase server framework was initially developed by [Philip Coombes](https://github.com/web2wire), the original developer of ZoneMinder. The codebase will be maintained and extended by Phil and [Pliable Pixels](https://github.com/pliablepixels) 
 
 Ozonebase part of a solution suite being developed by [Ozone Networks](http://ozone.network). The full solution suite will eventually include a server framework (this code), a mobile framework for white-labelled apps and a reference solution using them.
 
