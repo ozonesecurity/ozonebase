@@ -6,12 +6,29 @@
 Welcome to oZone's documentation!
 =================================
 
-Contents:
-
 .. toctree::
-   :maxdepth: 2
+   :hidden:
+
+   architecture/index
+   examples/index
+   api/index
+   faq/index
 
 
+:doc:`architecture/index`
+    Understanding the oZone architecture is an important part of developing your own NVR app. 
+
+:doc:`examples/index`
+  Walks you through creating a live example using code snippets with annotation.
+
+:doc:`api/index`
+  Interface document for oZone
+
+:doc:`faq/index`
+  Frequently Asked Questions
+
+:doc:`contributing/index`
+  How to contribute to ZoneMinder. As a community project we always need help, you don't need to be a coder to test or update documentation.
 
 Indices and tables
 ==================

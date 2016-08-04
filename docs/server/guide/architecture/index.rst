@@ -1,0 +1,8 @@
+Architecture
+============
+
+.. toctree::
+
+    introduction
+    components
+    
