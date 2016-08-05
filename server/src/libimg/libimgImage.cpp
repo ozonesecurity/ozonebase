@@ -1038,6 +1038,7 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
 Image::BlendTablePtr Image::getBlendTable( int transparency )
 {
     static Mutex blendMutex;
+
     blendMutex.lock();
     BlendTablePtr blendPtr = smBlendTables[transparency];
     if ( !blendPtr )
@@ -2327,9 +2328,7 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
 
     Format format = FMT_UNDEF;
 
-    static unsigned char *tempData = NULL;
-    if ( !tempData )
-        tempData = new unsigned char[MAX_IMAGE_SIZE];
+    unsigned char tempData[MAX_IMAGE_SIZE];
     unsigned char *imageData = data;
     switch( pixFormat )
     {
