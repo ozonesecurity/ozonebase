@@ -467,7 +467,7 @@ else(OZ_SUPERBUILD)
 
     # dlib requires us to link against cblas
     # cblas (using find_library)
-    find_library(CBLAS_LIBRARIES cblas)
+    find_library(CBLAS_LIBRARIES NAMES cblas satlas )
     if(CBLAS_LIBRARIES)
         set(HAVE_LIBCBLAS 1)
         list(APPEND OZ_BIN_LIBS "${CBLAS_LIBRARIES}")
