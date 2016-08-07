@@ -94,6 +94,8 @@
 #cmakedefine HAVE_LIBSWRESAMPLE 1
 #cmakedefine HAVE_LIBSWRESAMPLE_SWRESAMPLE_H 1
 #cmakedefine HAVE_LIBDL 1
+#cmakedefine HAVE_LIBCBLAS 1
+#cmakedefine HAVE_LIBCLAPACK 1
 #cmakedefine HAVE_LIBOPENSSL 1
 #cmakedefine HAVE_LIBCRYPTO 1
 #cmakedefine HAVE_OPENSSL_SHA_H 1
