@@ -103,6 +103,7 @@ int MotionDetector::run()
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
         Info( "pf:%d, %dx%d", pixelFormat, width, height );
+        printf( "pf:%d, %dx%d\n", pixelFormat, width, height );
 
         if ( !mZones.size() )
         {
@@ -130,6 +131,7 @@ int MotionDetector::run()
                     if ( frame )
                     {
                         Image image( pixelFormat, width, height, frame->buffer().data() );
+                        //Image image( Image::FMT_YUVP, width, height, frame->buffer().data() );
                         //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
                         if ( mRefImage.empty() )
                         {
@@ -148,6 +150,7 @@ int MotionDetector::run()
                         Image motionImage( image );
                         //motionImage.erase();
                         //motionData.reset();
+
                         analyse( &image, motionData, &motionImage );
                         if ( mAlarmed )
                         {

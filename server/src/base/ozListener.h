@@ -1,3 +1,5 @@
+/** @addtogroup Utilities */
+/*@{*/
 #ifndef OZ_LISTENER_H
 #define OZ_LISTENER_H
 
@@ -39,3 +41,4 @@ private:
 };
 
 #endif // OZ_LISTENER_H
+/*@}*/
