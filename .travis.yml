@@ -1,3 +1,7 @@
+##
+# travis configuration for oZone
+##
+
 language: cpp
 sudo: required
 dist: trusty
@@ -5,6 +9,8 @@ compiler: gcc
 
 notifications:
   slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
+  on_success: never
+  on_failure: always
 
 branches:
   only: master
@@ -30,18 +36,30 @@ addons:
       - texinfo
       - yasm
       - zlib1g-dev
+      - libopenblas-dev
+      - liblapack-dev
+      - libatlas-base-dev
+
+cache:
+    directories:
+      - externals/ffmpeg
+      - externals/dlib
 
 install:
-      - git clone -b n2.8 --depth=1 git://source.ffmpeg.org/ffmpeg.git
-      - cd ffmpeg
+      - cd externals/ffmpeg
       - ./configure --enable-shared
       - make -j `grep processor /proc/cpuinfo|wc -l` 
       - sudo make install 
       - sudo make install-libs
+      - cd ../dlib
+      - mkdir -p build
+      - cd build
+      - cmake ..
+      - sudo make install 
 
 script:
       - cd $TRAVIS_BUILD_DIR/server
-      - cmake -DOZ_EXMAPLES=ON .
+      - cmake -DOZ_EXAMPLES=ON .
       - make
       - sudo make install
 

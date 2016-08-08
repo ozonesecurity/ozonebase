@@ -130,6 +130,7 @@ int MotionDetector::run()
                     if ( frame )
                     {
                         Image image( pixelFormat, width, height, frame->buffer().data() );
+                        //Image image( Image::FMT_YUVP, width, height, frame->buffer().data() );
                         //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
                         if ( mRefImage.empty() )
                         {
@@ -148,12 +149,15 @@ int MotionDetector::run()
                         Image motionImage( image );
                         //motionImage.erase();
                         //motionData.reset();
+
                         analyse( &image, motionData, &motionImage );
                         if ( mAlarmed )
                         {
                             Info( "ALARM" );
                         }
-                        MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, frame->timestamp(), motionImage.buffer(), mAlarmed, motionData );
+                        // XXX - Generate a new timestamp as using the original frame may be subject to process/decoding delays
+                        // Need to check if there is a better way to handle this generally
+                        MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, time64(), motionImage.buffer(), mAlarmed, motionData );
 
                         distributeFrame( FramePtr( motionFrame ) );
 

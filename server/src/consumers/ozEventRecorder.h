@@ -16,7 +16,7 @@
 /// Consumer class used to record video stream for which motion or other significant
 /// activity has been detected. Ultimately will write to a DB, but for now just to filesystem.
 ///
-class EventRecorder : public VideoConsumer, public Thread
+class EventRecorder : public VideoConsumer, public DataProvider, public Thread
 {
 CLASSID(EventRecorder);
 

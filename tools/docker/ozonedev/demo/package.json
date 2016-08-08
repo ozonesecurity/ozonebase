@@ -1,0 +1,18 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "description": "Ozone Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "express": "~4.13.4",
+    "errorhandler": "~1.4.3",
+    "forever": "~0.15.2"
+  }
+}

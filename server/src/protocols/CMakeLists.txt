@@ -16,7 +16,7 @@ set(OZ_PROTOCOLS_HDR_FILES
     ozRtspStream.h ozRtpCtrl.h ozRtpData.h ozRtpSession.h
    )
 
-add_library(protocols ${OZ_PROTOCOLS_SRC_FILES})
+add_library(protocols STATIC ${OZ_PROTOCOLS_SRC_FILES} ${OZ_PROTOCOLS_HDR_FILES})
 
 target_link_libraries(protocols ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

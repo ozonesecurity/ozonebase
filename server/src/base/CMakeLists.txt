@@ -5,18 +5,21 @@ set(OZ_BASE_SRC_FILES
     ozController.cpp ozEncoder.cpp ozFeedBase.cpp ozFeedConsumer.cpp
     ozFeedFrame.cpp ozFeedProvider.cpp ozFfmpeg.cpp ozListener.cpp
     ozMemoryIO.cpp ozMemoryIOV1.cpp ozMotionData.cpp ozMotionFrame.cpp
-    ozRegion.cpp ozSignal.cpp ozStream.cpp ozZone.cpp
+    ozNotifyFrame.cpp ozParameters.cpp ozRegion.cpp ozSignal.cpp
+    ozStream.cpp ozZone.cpp
    )
 
 set(OZ_BASE_HDR_FILES
     countedPtr.h linkedPtr.h ozAlarmFrame.h ozApp.h ozConfigDefines.h
-    ozConfig.h ozConnection.h ozController.h ozEncoder.h ozFeedBase.h
+    ozConnection.h ozController.h ozEncoder.h ozFeedBase.h
     ozFeedConsumer.h ozFeedFrame.h ozFeedProvider.h ozFfmpeg.h oz.h
     ozListener.h ozMemoryIO.h ozMemoryIOV1.h ozMotionData.h ozMotionFrame.h
-    ozRegion.h ozSignal.h ozStream.h ozZone.h
+    ozNotifyFrame.h ozParameters.h ozRegion.h ozSignal.h
+    ozStream.h ozZone.h
+    "${CMAKE_CURRENT_BINARY_DIR}/ozConfig.h"
    )
 
-add_library(base ${OZ_BASE_SRC_FILES})
+add_library(base STATIC ${OZ_BASE_SRC_FILES} ${OZ_BASE_HDR_FILES})
 
 target_link_libraries(base ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

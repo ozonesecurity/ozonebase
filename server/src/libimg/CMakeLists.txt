@@ -9,7 +9,7 @@ set(OZ_LIBIMG_HDR_FILES
     libimgBox.h libimgPoly.h libimgImage.h
    )
 
-add_library(img ${OZ_LIBIMG_SRC_FILES})
+add_library(img STATIC ${OZ_LIBIMG_SRC_FILES} ${OZ_LIBIMG_HDR_FILES})
 
 target_link_libraries(img ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS})
 

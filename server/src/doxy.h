@@ -17,10 +17,23 @@
 *
 */
 
+/** @defgroup Application
+*
+* The main application object that keeps track of various component threads
+*/
+
+/** @defgroup Utilities
+*
+* Various utility classes
+*/
+
 /*! \mainpage Welcome
  
   <a href="http://ozone.network">&lt;oZone</a>
   <br/>
+
+  Please refer to the <a href="http://ozone-framework.readthedocs.io/en/latest/">User Guide</a> for an introduction to the architecture.
+
   At a high level, the oZone server framework is distributed into the following key components:<br/>
   
   <ul>

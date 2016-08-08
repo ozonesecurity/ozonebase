@@ -11,7 +11,7 @@
 * @param source
 * @param format
 */
-NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format ) :
+NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format, bool loop ) :
     AudioVideoProvider( cClass(), name ),
     Thread( identity() ),
     mSource( source ),
@@ -20,7 +20,8 @@ NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &sour
     mAudioCodecContext( NULL ),
     mVideoStream( NULL ),
     mAudioStream( NULL ),
-    mBaseTimestamp( 0 )
+    mBaseTimestamp( 0 ),
+	mLoop(loop)
 {
 }
 
@@ -184,7 +185,8 @@ int NetworkAVInput::run()
             int videoFrameComplete = false;
             int audioFrameComplete = false;
             //while ( !frameComplete && (av_read_frame( formatContext, &packet ) >= 0) )
-            while ( !mStop && (av_read_frame( formatContext, &packet ) >= 0) )
+			int readLeft = av_read_frame (formatContext, &packet);
+            while ( !mStop && readLeft  >=0 ) 
             {
                 Debug( 5, "Got packet from stream %d", packet.stream_index );
                 if ( mBaseTimestamp == 0 )
@@ -199,17 +201,24 @@ int NetworkAVInput::run()
                     if ( avcodec_decode_video2( mVideoCodecContext, avVideoFrame, &videoFrameComplete, &packet ) < 0 )
                         Fatal( "%s: Unable to decode video frame at frame %ju", cidentity(), VideoProvider::mFrameCount );
 
-                    Debug( 3, "%s: Decoded video packet at frame %d, pts %jd", cidentity(), mVideoCodecContext->frame_number, packet.pts );
+                    int64_t pts;
+                    if( packet.dts != AV_NOPTS_VALUE) {
+                        pts = av_frame_get_best_effort_timestamp(avVideoFrame);
+                    } else {
+                        pts = 0;
+                    }
+
+                    Debug( 3, "%s: Decoded video packet at frame %d, pts %jd", cidentity(), mVideoCodecContext->frame_number, pts );
 
                     if ( videoFrameComplete )
                     {
-                        double timeOffset = (((double)packet.pts*mVideoStream->time_base.num)/mVideoStream->time_base.den);
-                        Debug( 3, "%s: Got video frame %d, pts %jd (%.3f)", cidentity(), mVideoCodecContext->frame_number, avVideoFrame->pkt_pts, timeOffset );
+                        double timeOffset = pts * av_q2d(mVideoStream->time_base);
+                        Debug( 3, "%s: Got video frame %d, pts %jd (%.3f)", cidentity(), mVideoCodecContext->frame_number, pts, timeOffset );
 
                         avpicture_layout( (AVPicture *)avVideoFrame, mVideoCodecContext->pix_fmt, mVideoCodecContext->width, mVideoCodecContext->height, videoFrameBuffer.data(), videoFrameBuffer.capacity() );
 
                         uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
-                        Info( "%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
+                        //Info( "%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
      
                         VideoFrame *videoFrame = new VideoFrame( this, mVideoCodecContext->frame_number, timestamp, videoFrameBuffer );
                         distributeFrame( FramePtr( videoFrame ) );
@@ -225,12 +234,19 @@ int NetworkAVInput::run()
 
                     if ( audioFrameComplete )
                     {
-                        double timeOffset = (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den);
+                        int64_t pts;
+                        if( packet.dts != AV_NOPTS_VALUE) {
+                            pts = av_frame_get_best_effort_timestamp(avVideoFrame);
+                        } else {
+                            pts = 0;
+                        }
+
+                        double timeOffset = pts * av_q2d(mAudioStream->time_base);
 
                         audioFrameSize = av_samples_get_buffer_size( avAudioFrame->linesize, mAudioCodecContext->channels, avAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 ) + FF_INPUT_BUFFER_PADDING_SIZE;
                         audioFrameBuffer.size( audioFrameSize );
 
-                        Debug( 3, "Got audio frame %d, pts %jd (%.3f)", mAudioCodecContext->frame_number, avAudioFrame->pkt_pts, timeOffset );
+                        Debug( 3, "Got audio frame %d, pts %jd (%.3f)", mAudioCodecContext->frame_number, pts, timeOffset );
 
                         uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
                         //Debug( 3, "%d: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, ((1000000LL*packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den), (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den) );
@@ -240,6 +256,15 @@ int NetworkAVInput::run()
                     }
                 }
                 av_free_packet( &packet );
+				readLeft = av_read_frame (formatContext, &packet);
+				if ((readLeft  <0)  && mLoop) 
+				{
+					Debug (2,"Looping video...");
+					if (av_seek_frame(formatContext, -1, 0, AVSEEK_FLAG_ANY) >=0)
+					{
+						readLeft = av_read_frame (formatContext, &packet);
+					}
+				}
             }
             usleep( INTERFRAME_TIMEOUT );
         }

@@ -923,7 +923,6 @@ Image::Format Image::getFormatFromPalette( int palette )
     return( format );
 }
 
-#if HAVE_LIBAVUTIL_AVUTIL_H
 /**
 * @brief 
 *
@@ -943,7 +942,7 @@ AVPixelFormat Image::getFfPixFormat( Format format )
             pixFormat = AV_PIX_FMT_GRAY16;
             break;
         case FMT_RGB :
-            pixFormat = AV_PIX_FMT_BGR24;
+            pixFormat = AV_PIX_FMT_RGB24;
             break;
         case FMT_RGB48 :
             pixFormat = AV_PIX_FMT_RGB48BE;
@@ -1029,8 +1028,6 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
     return( format );
 }
 
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
-
 /**
 * @brief 
 *
@@ -1041,6 +1038,7 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
 Image::BlendTablePtr Image::getBlendTable( int transparency )
 {
     static Mutex blendMutex;
+
     blendMutex.lock();
     BlendTablePtr blendPtr = smBlendTables[transparency];
     if ( !blendPtr )
@@ -2330,9 +2328,7 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
 
     Format format = FMT_UNDEF;
 
-    static unsigned char *tempData = NULL;
-    if ( !tempData )
-        tempData = new unsigned char[MAX_IMAGE_SIZE];
+    unsigned char tempData[MAX_IMAGE_SIZE];
     unsigned char *imageData = data;
     switch( pixFormat )
     {

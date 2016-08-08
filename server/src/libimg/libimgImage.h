@@ -22,9 +22,7 @@ extern "C"
 
 extern "C"
 {
-#if HAVE_LIBAVUTIL_AVUTIL_H
 #include <libavutil/avutil.h>
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
 #include <libavcodec/avcodec.h>
 }
 
@@ -621,14 +619,12 @@ public:
 
 public:
     static Format getFormatFromPalette( int palette );
-#if HAVE_LIBAVUTIL_AVUTIL_H
     static AVPixelFormat getFfPixFormat( Format format );
     static Format getFormatFromPixelFormat( AVPixelFormat pixelFormat );
     static AVPixelFormat getNativePixelFormat( AVPixelFormat pixelFormat )
     {
         return( getFfPixFormat( getFormatFromPixelFormat( pixelFormat ) ) );
     }
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
 
 protected:
     Format mFormat;
@@ -660,9 +656,7 @@ public:
     Image( const char *filename );
     Image( Format format, int width, int height, unsigned char *data=NULL, bool adoptData=false );
     Image( int v4lPalette, int width, int height, unsigned char *data=NULL );
-#if HAVE_LIBAVUTIL_AVUTIL_H
     Image( AVPixelFormat ffFormat, int width, int height, unsigned char *data=NULL );
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
     Image( const Image &image );
     Image( Format format, const Image &image );
     ~Image();
@@ -681,9 +675,7 @@ public:
     inline int stride() const { return( mStride ); }
     inline int size() const { return( mSize ); }
 
-#if HAVE_LIBAVUTIL_AVUTIL_H
     AVPixelFormat pixelFormat() const { return( getFfPixFormat( mFormat ) ); }
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
 
     const ByteBuffer &buffer() const { return( mBuffer ); }
     ByteBuffer &buffer() { return( mBuffer ); }

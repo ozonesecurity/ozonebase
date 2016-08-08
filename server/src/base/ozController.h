@@ -1,3 +1,5 @@
+/** @addtogroup Utilities */
+/*@{*/
 #ifndef OZ_CONTROLLER_H
 #define OZ_CONTROLLER_H
 
@@ -55,3 +57,4 @@ public:
 };
 
 #endif // OZ_CONTROLLER_H
+/*@}*/
