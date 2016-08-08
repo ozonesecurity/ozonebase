@@ -12,14 +12,19 @@ oZone is light enough to be embedded inside a camera and scalable enough to be u
 .. toctree::
    :hidden:
 
-   architecture/index
+   architecture/index 
+   installation/index
    examples/index
    api/index
    faq/index
+   contributing/index
 
 
 :doc:`architecture/index`
     Understanding the oZone architecture is an important part of developing your own NVR app. 
+
+:doc:`installation/index`
+   How to download and install oZone
 
 :doc:`examples/index`
   Walks you through creating a live example using code snippets with annotation.
@@ -32,4 +37,5 @@ oZone is light enough to be embedded inside a camera and scalable enough to be u
 
 :doc:`contributing/index`
   How to contribute to oZone.
+
 
