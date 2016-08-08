@@ -103,7 +103,6 @@ int MotionDetector::run()
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
         Info( "pf:%d, %dx%d", pixelFormat, width, height );
-        printf( "pf:%d, %dx%d\n", pixelFormat, width, height );
 
         if ( !mZones.size() )
         {
