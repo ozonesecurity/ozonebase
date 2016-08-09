@@ -30,7 +30,7 @@ This is a great way to isolate your install from other libraries you may already
 	cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON
 
 	# Note, the above command builds a release version. To enable a debug build
-	# add -DBUILD_TYPE=Debug -- this adds -g and -O0
+	# add -DCMAKE_BUILD_TYPE=Debug -- this adds -g and -O0
 
 	make 
 	make install
