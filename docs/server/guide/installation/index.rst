@@ -28,6 +28,10 @@ This is a great way to isolate your install from other libraries you may already
 	export INSTALLDIR=~/ozoneroot/ # change this to whatever you want
 
 	cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON
+
+	# Note, the above command builds a release version. To enable a debug build
+	# add -DBUILD_TYPE=Debug -- this adds -g and -O0
+
 	make 
 	make install
 
@@ -40,6 +44,10 @@ This is a great way to isolate your install from other libraries you may already
 	# ----- Optional: build nvrcli - a starter NVR example ----------
 	cd nvrcli
 	export LD_LIBRARY_PATH=$INSTALLDIR/lib/
+
+	# modify the library and header file paths
+	# in the Makefile to point to your path, then
+
 	make
 
 That's all!
@@ -47,6 +55,7 @@ That's all!
 Building Documentation
 =======================
 oZone documentation has two parts: 
+
 * The API document that uses Doxygen
 * The User Guide which is developed using Sphinx
 
