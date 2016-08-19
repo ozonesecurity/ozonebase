@@ -14,11 +14,6 @@ message(FATAL_ERROR
 endif( NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/ffmpeg/configure" OR
     NOT EXISTS "${CMAKE_SOURCE_DIR}/externals/openh264/Makefile" )
 
-# Delete the buildroot staging folder if it exists from a previous build
-if( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
-    file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/buildroot")
-endif( EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
-
 # Default build type. To change the build type, 
 # use the CMAKE_BUILD_TYPE configuration option.
 if(NOT CMAKE_BUILD_TYPE)
@@ -27,12 +22,33 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(OZ_EXAMPLES "OFF" CACHE BOOL "Set to ON to build the oZonebase example binaries. Default: OFF")
+set(OZ_KEEP_BUILDROOT "OFF" CACHE BOOL "Set to ON to prevent oZonebase from deleting the buildroot folder from a previous build attempt. Default: OFF")
 
 # Internal variables. Not to be modified by the end user
 set(OZ_SUPERBUILD "ON" CACHE BOOL INTERNAL)
 set(FFMPEG_PREFIX "${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}" CACHE PATH INTERNAL)
 set(FFMPEG_LIBDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_LIBDIR}" CACHE PATH INTERNAL)
 set(FFMPEG_INCLUDEDIR "${FFMPEG_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH INTERNAL)
+
+# Delete the buildroot staging folder if it exists from a previous build
+if( NOT ${OZ_KEEP_BUILDROOT} AND EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
+    file(REMOVE_RECURSE "${CMAKE_BINARY_DIR}/buildroot")
+endif( NOT ${OZ_KEEP_BUILDROOT} AND EXISTS "${CMAKE_BINARY_DIR}/buildroot" )
+
+ExternalProject_Add(dlib
+#                    GIT_REPOSITORY "https://github.com/davisking/dlib"
+#                    GIT_TAG master
+                    DOWNLOAD_COMMAND ""
+                    SOURCE_DIR ${CMAKE_SOURCE_DIR}/externals/dlib
+                    UPDATE_COMMAND ""
+                    CMAKE_ARGS
+                              -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/buildroot${CMAKE_INSTALL_PREFIX}
+                              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                              -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
+                              -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                              -DLIB_INSTALL_DIR=${CMAKE_INSTALL_LIBDIR}
+                   )
+
 
 ExternalProject_Add(openh264
 #                    GIT_REPOSITORY "https://github.com/cisco/openh264"

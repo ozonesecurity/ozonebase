@@ -15,6 +15,19 @@ At a conceptual level, initializing the oZone framework involves:
 * Adding all components to the :code:`Application` object so they can be started
 * Invoke the :code:`Application` object's :code:`run()` method
 
+.. figure:: images/applicationlifecycle.png
+    :width: 600px
+    
+    A high level view of the application lifecycle
+
+The :code:`Application` object can be thought of as the master object that keeps track of all the components. When components are instantiated, they register with the :code:`Application` object by invoking its :code:`addThread()` method. This essentially adds the object to the :code:`Application` queue. 
+
+When you invoke the :code:`Application` :code:`run()` method, it iterates through the list of components and invokes the :code:`start()` methof of each object, which essentially launches a thread for each component. Following this, it invokes the :code:`run()` method of each component, which is what is expected to be the entry point of each component's functionality. 
+
+Note that the :code:`Application` object is just a convenience. You can easily invoke the :code:`start()` method of each component yourelf. The latter approach is typically useful when you dynamically create new components and remove them after you start the application.
+
+The :code:`Listerner` and :code:`HTTPController` components are used when you need to convert the frames of a component into a browser viewable version. :code:`Listerner` along with :code:`HTTPController` are an easy way to create MJPEG images which you can display on the browser with a simple :code:`<img src="">` tag. 
+
 .. sidebar::  Summary of oZone framework lifecycle
 
     * Initialize debug and AV subsystems

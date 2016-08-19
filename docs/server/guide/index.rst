@@ -5,18 +5,26 @@
 
 Welcome to oZone's documentation!
 =================================
+oZone is a powerful framework to develop innovative solutions around video surveillance. At its core, it offers powerful components that implement important functions (such as reading video feeds from multiple sources, performing motion/face/people detection, event recording and more), allowing easy daisy-chaining of components with each other. It also allows developers to create their own components to implement innovative solutions on top of the provided base primitives.
+
+oZone is light enough to be embedded inside a camera and scalable enough to be used as a base for a cloud based NVR.
 
 .. toctree::
    :hidden:
 
-   architecture/index
+   architecture/index 
+   installation/index
    examples/index
    api/index
    faq/index
+   contributing/index
 
 
 :doc:`architecture/index`
     Understanding the oZone architecture is an important part of developing your own NVR app. 
+
+:doc:`installation/index`
+   How to download and install oZone
 
 :doc:`examples/index`
   Walks you through creating a live example using code snippets with annotation.
@@ -29,4 +37,5 @@ Welcome to oZone's documentation!
 
 :doc:`contributing/index`
   How to contribute to oZone.
+
 

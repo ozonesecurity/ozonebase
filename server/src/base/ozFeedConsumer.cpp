@@ -100,7 +100,7 @@ bool FeedConsumer::waitForProviders()
     mProviderMutex.lock();
     if ( mProviders.empty() )
     {
-        Warning( "%s: No providers registered for consumer", cidentity() );
+        Debug( 5,"%s: No providers registered for consumer", cidentity() );
     }
     mProviderMutex.unlock();
     int waitCount, readyCount, badCount;
@@ -110,7 +110,7 @@ bool FeedConsumer::waitForProviders()
         readyCount = 0;
         badCount = 0;
         mProviderMutex.lock();
-        Info( "%s: Got %lu providers", cidentity(), mProviders.size() );
+        Debug( 5,"%s: Got %lu providers", cidentity(), mProviders.size() );
         for ( ProviderMap::const_iterator iter = mProviders.begin(); iter != mProviders.end(); iter++ )
         {
             if ( iter->first->ready() )
