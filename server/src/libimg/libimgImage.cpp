@@ -2342,9 +2342,9 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
         }
         case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
         {
-            format = FMT_RGB;
+            format = FMT_YUVP;
             if ( !data ) break;
-            copyYUYV2RGB( tempData, data, width, height );
+            copyYUYV2YUVP( tempData, data, width, height );
             imageData = tempData;
             break;
         }
