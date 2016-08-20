@@ -12,6 +12,7 @@
 
 
 #include <processors/ozMotionDetector.h>
+#include <processors/ozImageConvert.h>
 #include <processors/ozFaceDetector.h>
 #include <processors/ozMatrixVideo.h>
 #include <processors/ozRateLimiter.h>
@@ -21,4 +22,5 @@
 
 #include <libgen/libgenDebug.h>
 
-
+class Detector:public VideoConsumer, public VideoProvider, public Thread
+{};

@@ -39,6 +39,8 @@ public:
     FaceDetector *face;   
     EventRecorder *event; // used if RECORD_VIDEO = 0
     VideoRecorder *movie; // used if RECORD_VIDEO = 1
+    RateLimiter *rate;
+    ImageConvert *resize; 
 
 };
 
@@ -118,7 +120,11 @@ void cmd_add()
 	if (type == "f")
 	{
     	nvrcam.face = new FaceDetector( "modect-"+name );
-    	nvrcam.face->registerProvider(*(nvrcam.cam) );
+		nvrcam.resize = new ImageConvert ("resize-"+name, nvrcam.face->pixelFormat(),640,480);
+    	nvrcam.rate = new RateLimiter( "rate-"+name,1,true );
+    	nvrcam.rate->registerProvider(*(nvrcam.cam) );
+    	nvrcam.resize->registerProvider(*(nvrcam.rate) );
+    	nvrcam.face->registerProvider(*(nvrcam.resize) );
 	}
 	else
 	{
@@ -174,12 +180,14 @@ void cmd_add()
 	}
 	else
 	{
+		nvrcams.back().rate->start();
+		nvrcams.back().resize->start();
 		nvrcams.back().face->start();
 	}
 #if RECORD_VIDEO
-    nvrcams.back().movie->start();
+    //nvrcams.back().movie->start();
 #else
-    nvrcams.back().event->start();
+    //nvrcams.back().event->start();
 #endif
     listener->removeController(httpController);
     httpController->addStream("live",*(nvrcam.cam));

@@ -20,7 +20,7 @@ int main( int argc, const char *argv[] )
 
     Application app;
 
-    NetworkAVInput input( "input", "http://kxhcm10/nphMotionJpeg?Resolution=640x480&Quality=Standard", "mjpeg" );
+    NetworkAVInput input( "input", "/dev/video1" );
     //NetworkAVInput input( "input", "Shop Door Camera.mp4" );
     //NetworkAVInput input( "input", "mcem0_head.mpg" );
     app.addThread( &input );
@@ -37,7 +37,7 @@ int main( int argc, const char *argv[] )
     // Writes out movie
     VideoParms videoParms( 320, 240 );
     AudioParms audioParms;
-    MovieFileOutput output2( detector.cname(), "/transfer", "mp4", 60, videoParms, audioParms );
+    MovieFileOutput output2( detector.cname(), "/tmp", "mp4", 30, videoParms, audioParms );
     output2.registerProvider( detector );
     app.addThread( &output2 );
 
