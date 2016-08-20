@@ -2328,7 +2328,7 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
 
     Format format = FMT_UNDEF;
 
-    unsigned char tempData[MAX_IMAGE_SIZE];
+    unsigned char *tempData = new unsigned char[MAX_IMAGE_SIZE];
     unsigned char *imageData = data;
     switch( pixFormat )
     {
@@ -2494,6 +2494,7 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
         }
     }
     assign( format, width, height, imageData );
+    delete[] tempData;
 }
 
 /**
