@@ -13,7 +13,7 @@ program_OBJS := $(program_CXX_OBJS)
 program_LIBRARY_DIRS :=  $(LIBPREFIX)/base $(LIBPREFIX)/protocols $(LIBPREFIX)/libgen $(LIBPREFIX)/libimg $(LIBPREFIX)/encoders $(LIBPREFIX)/providers $(LIBPREFIX)/consumers $(LIBPREFIX)/processors
 program_LIBRARY_DIRS += $(FFMPEGLIBPREFIX)
 
-program_LIBRARIES := m protocols encoders processors consumers providers base img gen  jpeg pthread z avformat avcodec avdevice avutil swscale dl 
+program_LIBRARIES := m protocols encoders processors consumers providers base img gen  jpeg pthread z avformat avcodec avdevice avutil avfilter swresample swscale dl cblas lapack dlib
 program_HEADERDEPS = $(wildcard *.h)
 
 CPPFLAGS += -g -std=gnu++11
@@ -21,6 +21,7 @@ CPPFLAGS += $(foreach includedir,$(program_INCLUDE_DIRS),-I$(includedir))
 CPPFLAGS += -I$(FFMPEG_INCLUDE_DIRS)
 LDFLAGS += $(foreach librarydir,$(program_LIBRARY_DIRS),-L$(librarydir))
 LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
+LDFLAGS +=  -Wl,-rpath,$(FFMPEGLIBPREFIX):
 
 .PHONY: all clean distclean
 
