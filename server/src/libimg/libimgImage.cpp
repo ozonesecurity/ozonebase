@@ -2197,6 +2197,44 @@ Image::Image( Format format, int width, int height, unsigned char *data, bool ad
 * @param v4lPalette
 * @param width
 * @param height
+*/
+size_t Image::calcBufferSize( int v4lPalette, int width, int height )
+{
+    size_t pixels = width*height;
+    switch( v4lPalette )
+    {
+        case V4L2_PIX_FMT_YUV420 :
+            return( (pixels*(16+4+4))/16 );
+        case V4L2_PIX_FMT_YUV410 :
+            return( (pixels*(16+1+1))/16 );
+        case V4L2_PIX_FMT_YUV422P :
+            return( (pixels*(16+8+8))/16 );
+        case V4L2_PIX_FMT_YUV411P :
+            return( (pixels*(16+4+4))/16 );
+        case V4L2_PIX_FMT_YUYV :
+            return( (pixels*(1+1+0+1+0+1))/2 );
+        case V4L2_PIX_FMT_UYVY :
+            return( (pixels*(1+0+1+0+1+1))/2 );
+        case V4L2_PIX_FMT_RGB555 :
+            return( (pixels*(5+5+5+1))/8 );
+        case V4L2_PIX_FMT_RGB565 :
+            return( (pixels*(5+6+5))/8 );
+        case V4L2_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_RGB24 :
+            return( (pixels*(8+8+8))/8 );
+        case V4L2_PIX_FMT_GREY :
+            return( (pixels*8)/8 );
+    }
+    Panic( "Can't calculate image size for unexpected V4L2 palette %08x", v4lPalette );
+    return( 0 );
+}
+
+/**
+* @brief 
+*
+* @param v4lPalette
+* @param width
+* @param height
 * @param data
 */
 Image::Image( int v4lPalette, int width, int height, unsigned char *data )
@@ -2207,8 +2245,9 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 
     Format format = FMT_UNDEF;
 
-    unsigned char tempData[MAX_IMAGE_SIZE];
-    unsigned char *imageData = data;
+    size_t bufferSize = calcBufferSize( v4lPalette, width, height );
+    uint8_t *tempData = new uint8_t [bufferSize];
+    uint8_t *imageData = data;
     switch( v4lPalette )
     {
         case V4L2_PIX_FMT_YUV420 :
@@ -2305,11 +2344,24 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 #endif
         default :
         {
-            Panic( "Can't convert palette %d to image format", v4lPalette );
+            Panic( "Can't convert V4L2 palette %08x to image format", v4lPalette );
             break;
         }
     }
     assign( format, width, height, imageData );
+    delete[] tempData;
+}
+
+/**
+* @brief 
+*
+* @param pixFormat
+* @param width
+* @param height
+*/
+size_t Image::calcBufferSize( AVPixelFormat pixFormat, int width, int height )
+{
+    return( avpicture_get_size( pixFormat, width, height ) );
 }
 
 /**
@@ -2328,8 +2380,9 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
 
     Format format = FMT_UNDEF;
 
-    unsigned char *tempData = new unsigned char[MAX_IMAGE_SIZE];
-    unsigned char *imageData = data;
+    size_t bufferSize = calcBufferSize( pixFormat, width, height );
+    uint8_t *tempData = new uint8_t[bufferSize];
+    uint8_t *imageData = data;
     switch( pixFormat )
     {
         case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
