@@ -662,6 +662,10 @@ public:
     ~Image();
 
 public:
+    static size_t calcBufferSize( int v4lPalette, int width, int height );
+    static size_t calcBufferSize( AVPixelFormat pixFormat, int width, int height );
+
+public:
     inline Format format() const { return( mFormat ); }
     inline ColourSpace colourSpace() const { return( mColourSpace ); }
     inline int width() const { return( mWidth ); }
