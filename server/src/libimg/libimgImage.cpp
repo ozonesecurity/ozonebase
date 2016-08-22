@@ -2204,28 +2204,30 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
     switch( v4lPalette )
     {
         case V4L2_PIX_FMT_YUV420 :
-            return( (pixels*(16+4+4))/16 );
         case V4L2_PIX_FMT_YUV410 :
-            return( (pixels*(16+1+1))/16 );
         case V4L2_PIX_FMT_YUV422P :
-            return( (pixels*(16+8+8))/16 );
         case V4L2_PIX_FMT_YUV411P :
-            return( (pixels*(16+4+4))/16 );
         case V4L2_PIX_FMT_YUYV :
-            return( (pixels*(1+1+0+1+0+1))/2 );
         case V4L2_PIX_FMT_UYVY :
-            return( (pixels*(1+0+1+0+1+1))/2 );
+        {
+            // Converts to YUV expanded planar format
+            return( pixels*3 );
+        }
         case V4L2_PIX_FMT_RGB555 :
-            return( (pixels*(5+5+5+1))/8 );
         case V4L2_PIX_FMT_RGB565 :
-            return( (pixels*(5+6+5))/8 );
         case V4L2_PIX_FMT_BGR24 :
         case V4L2_PIX_FMT_RGB24 :
-            return( (pixels*(8+8+8))/8 );
+        {
+            // Converts to RGB format
+            return( pixels*3 );
+        }
         case V4L2_PIX_FMT_GREY :
-            return( (pixels*8)/8 );
+        {
+            // Converts to greyscale format
+            return( pixels);
+        }
     }
-    Panic( "Can't calculate image size for unexpected V4L2 palette %08x", v4lPalette );
+    Panic( "No conversion for unexpected V4L2 palette %08x", v4lPalette );
     return( 0 );
 }
 
@@ -2361,7 +2363,51 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 */
 size_t Image::calcBufferSize( AVPixelFormat pixFormat, int width, int height )
 {
-    return( avpicture_get_size( pixFormat, width, height ) );
+    size_t pixels = width*height;
+    switch( pixFormat )
+    {
+        case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
+        case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
+        case AV_PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
+        case AV_PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
+        case AV_PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
+        case AV_PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
+        case AV_PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
+        case AV_PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range
+        case AV_PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range
+        case AV_PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range
+        case AV_PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
+        case AV_PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range
+        {
+            // Converts to YUV expanded planar format
+            return( pixels*3 );
+        }
+        case AV_PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
+        case AV_PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
+        case AV_PIX_FMT_RGB565:
+        case AV_PIX_FMT_RGB555:
+        {
+            // Converts to RGB format
+            return( pixels*3 );
+        }
+        case AV_PIX_FMT_RGB48:
+        {
+            // Converts to RGB 48 bits format
+            return( pixels*6 );
+        }
+        case AV_PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
+        {
+            // Converts to greyscale format
+            return( pixels );
+        }
+        case AV_PIX_FMT_GRAY16 :
+        {
+            // Converts to greyscale 16 bits format
+            return( pixels*2 );
+        }
+    }
+    Panic( "No conversion for unexpected AVPixelFormat palette %d", pixFormat );
+    return( 0 );
 }
 
 /**
