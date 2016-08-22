@@ -23,7 +23,12 @@ public:
         mAlarmed( alarmed )
     {
     }
-    //AlarmFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    /// Create a new frame from a data pointer and relate it to a parent frame
+    AlarmFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size, bool alarmed ) :
+        VideoFrame( provider, parent, id, timestamp, buffer, size ),
+        mAlarmed( alarmed )
+    {
+    }
     AlarmFrame( VideoProvider *provider, FramePtr parent, bool alarmed ) :
         VideoFrame( provider, parent ),
         mAlarmed( alarmed )

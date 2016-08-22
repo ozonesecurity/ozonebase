@@ -51,13 +51,16 @@ int VideoRecorder::run()
 */
 bool VideoRecorder::processFrame( FramePtr frame )
 {
-    const MotionFrame *motionFrame = dynamic_cast<const MotionFrame *>(frame.get());
+    const AlarmFrame *alarmFrame = dynamic_cast<const MotionFrame *>(frame.get());
     //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
     static uint64_t mLastAlarmTime;
 
+    if ( !alarmFrame )
+        return( false );
+
     AlarmState lastState = mState;
 
-    if ( motionFrame->alarmed() )
+    if ( alarmFrame->alarmed() )
     {
         mState = ALARM;
         mLastAlarmTime = time64();
@@ -67,14 +70,19 @@ bool VideoRecorder::processFrame( FramePtr frame )
             mAlarmTime = mLastAlarmTime;
             mEventCount++;
             EventNotification::EventDetail detail( mEventCount, EventNotification::EventDetail::BEGIN );
-            EventNotification *notification = new EventNotification( this, motionFrame->id(), detail );
+            EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
             distributeFrame( FramePtr( notification ) );
             std::string filename = stringtf( "%s/%s-%d.%s", mLocation.c_str(), mName.c_str(), mEventCount, mFormat.c_str() );
             initEncoder();
             openVideoFile( filename );
             for ( FrameStore::const_iterator iter = mFrameStore.begin(); iter != mFrameStore.end(); iter++ )
             {
-                const MotionFrame *frame = dynamic_cast<const MotionFrame *>( iter->get() );
+                const AlarmFrame *frame = dynamic_cast<const AlarmFrame *>( iter->get() );
+                if ( !frame )
+                {
+                    Error( "Unexpected frame type in frame store" );
+                    continue;
+                }
                 encodeFrame( frame );
             }
         }
@@ -92,14 +100,14 @@ bool VideoRecorder::processFrame( FramePtr frame )
             deinitEncoder();
             mState = IDLE;
             EventNotification::EventDetail detail( mEventCount, ((double)mLastAlarmTime-mAlarmTime)/1000000.0 );
-            EventNotification *notification = new EventNotification( this, motionFrame->id(), detail );
+            EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
             distributeFrame( FramePtr( notification ) );
         }
     }
 
     if ( mState > IDLE )
     {
-        encodeFrame( motionFrame );
+        encodeFrame( alarmFrame );
     }
 
     // Clear out old frames
