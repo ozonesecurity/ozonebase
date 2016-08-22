@@ -51,7 +51,7 @@ int VideoRecorder::run()
 */
 bool VideoRecorder::processFrame( FramePtr frame )
 {
-    const AlarmFrame *alarmFrame = dynamic_cast<const MotionFrame *>(frame.get());
+    const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
     //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
     static uint64_t mLastAlarmTime;
 
