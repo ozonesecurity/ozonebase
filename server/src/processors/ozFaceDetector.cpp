@@ -146,9 +146,9 @@ int FaceDetector::run()
                             //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
                         }
                         // Move inside preceding 'if' to only output 'face' frames
-                        AlarmFrame *imageFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img), dets.size()>1 );
+                        AlarmFrame *alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img), dets.size()>0 );
 
-                        distributeFrame( FramePtr( imageFrame ) );
+                        distributeFrame( FramePtr( alarmFrame ) );
                         mFrameCount++;
                     }
                 }
