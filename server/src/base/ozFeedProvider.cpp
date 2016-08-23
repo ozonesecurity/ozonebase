@@ -74,7 +74,7 @@ void FeedProvider::removeFromMap()
 {
     smProviderMutex.lock();
     if ( smProviders.erase( identity() ) != 1 )
-        Fatal( "Unable to remove provider %s from map, not found", cidentity() )
+        Error( "Unable to remove provider %s from map, not found", cidentity() )
     smProviderMutex.unlock();
 }
 

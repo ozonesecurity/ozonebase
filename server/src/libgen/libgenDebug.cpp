@@ -10,6 +10,7 @@
 #include <stdarg.h>
 #include <syscall.h>
 #include <errno.h>
+#include <stdexcept>
 
 int dbgLevel = 0;
 
@@ -537,6 +538,8 @@ void dbgOutput( int hex, const char * const file, const int line, const int leve
     {
         if ( level <= DBG_PNC )
             abort();
-        exit( -1 );
+        // let's not exit, throw instead
+        //exit( -1 );
+        throw std::runtime_error(dbgString);
     }
 }

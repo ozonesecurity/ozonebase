@@ -17,6 +17,15 @@ void FeedConsumer::cleanup()
     mFrameQueue.clear();
     mQueueMutex.unlock();
 }
+/**
+* @brief 
+*
+* @return 
+*/
+bool FeedConsumer::deregisterAllProviders()
+{
+    cleanup();
+}
 
 /**
 * @brief 

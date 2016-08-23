@@ -66,6 +66,12 @@ public:
     ///
     virtual bool deregisterProvider( FeedProvider &provider, bool reciprocate=true );
 
+
+    ///
+    /// Deregisters all providers (and reciprocal consumers in providers)
+    ///
+    virtual bool deregisterAllProviders();
+
     /// Return the first provider, shortcut for when providers == 1 
     FeedProvider *provider() const { return( mProviders.empty() ? NULL : mProviders.begin()->first ); }
 
