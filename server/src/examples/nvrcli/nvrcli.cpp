@@ -25,7 +25,7 @@
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 1 // 1 if video is on
-#define SHOW_FFMPEG_LOG 1 
+#define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
 #define face_resize_w 640
@@ -106,7 +106,7 @@ void cmd_add()
 
     if (record.size() ==0 || (record != "y" && record != "n" ))
     {
-        record = "y";
+        record = "n";
     }
     if (type.size() ==0 || (type != "m" && type != "f" && type != "b"))
     {
@@ -140,6 +140,16 @@ void cmd_add()
     
     
     nvrCameras nvrcam;
+
+    // NULLify everything so I know what to delete later
+    nvrcam.cam = NULL;
+    nvrcam.motion = NULL;
+    nvrcam.face = NULL;
+    nvrcam.event = NULL;
+    nvrcam.movie = NULL;
+    nvrcam.rate = NULL;
+    nvrcam.resize = NULL;
+
     nvrcam.cam = new NetworkAVInput ( name, source,"",true );
     if (type == "f")
     {
@@ -348,6 +358,41 @@ void cmd_unknown()
     cout << endl << "unknown command. try help"<< endl;
 }
 
+void monitorStatus(Application app)
+{
+    for (;;)
+    {
+        list<nvrCameras>::iterator i = nvrcams.begin();
+        while ( i!= nvrcams.end())
+        {
+            int isTerminated = (*i).cam->ended() + (*i).cam->error();
+            
+            //cout << "Index: " << (*i).cam->name() << "WAIT:"<< (*i).cam->wait() << " READY:"<< (*i).cam->ready() << " ENDED:" << (*i).cam->ended() << " ERROR:"<< (*i).cam->error()<<endl;
+            if (isTerminated >0)
+            {
+                cout << "Bad state found for " << (*i).cam->name() << "..deleting..."<<endl;
+
+               
+                if ((*i).cam) { cout << "cam kill"<< endl;  (*i).cam->stop(); (*i).cam->join();}
+                if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
+                if ((*i).face) { cout<<  "face kill"<< endl;(*i).face->deregisterAllProviders();(*i).face->stop(); (*i).face->join(); }
+                if ((*i).event) { cout << "event kill"<< endl;(*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
+                if ((*i).movie) { cout << "movie kill"<< endl;(*i).movie->deregisterAllProviders();(*i).movie->stop(); (*i).movie->join();}
+                if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
+                if ((*i).resize) { cout << "resize kill"<< endl; (*i).resize->deregisterAllProviders();(*i).resize->stop(); (*i).resize->join();}
+                i = nvrcams.erase(i); // point to next iterator on delete
+    
+            }
+            else
+            {
+                i++; // increment if not deleted
+            }
+        }
+        
+        sleep(5);
+    }
+}
+
 //  This thread will listen to commands from users
 
 void cli(Application app)
@@ -399,6 +444,7 @@ int main( int argc, const char *argv[] )
     app.addThread(notifier);
 
     thread t1(cli,app);
+    thread t2(monitorStatus,app);
     
     app.run();
     cout << "Never here";
