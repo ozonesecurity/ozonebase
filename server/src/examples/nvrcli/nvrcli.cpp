@@ -28,9 +28,12 @@
 #define SHOW_FFMPEG_LOG 0 
 #define EVENT_REC_PATH "nvrcli_events"
 
-#define face_resize_w 640
-#define face_resize_h 480
-#define face_refresh_rate 2
+#define face_resize_w 1024
+#define face_resize_h 768
+#define face_refresh_rate 10
+
+#define video_record_w 640
+#define video_record_h 480
 
 using namespace std;
 
@@ -101,7 +104,7 @@ void cmd_add()
     getline(cin,source);
     cout << "Detection type ([m]otion/[f]ace/[b]oth) (ENTER for default = b):";
     getline (cin, type);
-    cout << "Record events? ([y]es/[n]o) (ENTER for default = y):";
+    cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
     getline (cin, record);
 
     if (record.size() ==0 || (record != "y" && record != "n" ))
@@ -154,11 +157,11 @@ void cmd_add()
     if (type == "f")
     {
         nvrcam.face = new FaceDetector( "face-"+name );
-        nvrcam.resize = new ImageConvert ("resize-"+name, nvrcam.face->pixelFormat(),face_resize_w,face_resize_h);
+        //nvrcam.resize = new ImageConvert ("resize-"+name, AV_PIX_FMT_YUYV422,face_resize_w,face_resize_h);
         nvrcam.rate = new RateLimiter( "rate-"+name,face_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.resize->registerProvider(*(nvrcam.rate) );
-        nvrcam.face->registerProvider(*(nvrcam.resize) );
+        //nvrcam.resize->registerProvider(*(nvrcam.rate) );
+        nvrcam.face->registerProvider(*(nvrcam.rate) );
         //nvrcam.face->registerProvider(*(nvrcam.rate) ); //sidestep resize
         //nvrcam.face->registerProvider(*(nvrcam.cam) ); // sidestep rate and resize
     }
@@ -167,15 +170,15 @@ void cmd_add()
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
-    else
+    else // both
     {
         nvrcam.face = new FaceDetector( "face-"+name );
-        nvrcam.resize = new ImageConvert ("resize-"+name, nvrcam.face->pixelFormat(),face_resize_w,face_resize_h);
+       // nvrcam.resize = new ImageConvert ("resize-"+name, AV_PIX_FMT_YUYV422,face_resize_w,face_resize_h);
         nvrcam.rate = new RateLimiter( "rate-"+name,face_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.resize->registerProvider(*(nvrcam.rate) );
-        nvrcam.face->registerProvider(*(nvrcam.resize) );
-        //nvrcam.face->registerProvider(*(nvrcam.cam) );
+        //nvrcam.resize->registerProvider(*(nvrcam.rate) );
+        //nvrcam.face->registerProvider(*(nvrcam.resize) );
+        nvrcam.face->registerProvider(*(nvrcam.rate) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
@@ -195,7 +198,7 @@ void cmd_add()
     mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 #if RECORD_VIDEO
-    VideoParms* videoParms= new VideoParms( 640, 480 );
+    VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
     AudioParms* audioParms = new AudioParms;
     nvrcam.movie = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms);
     if (type=="m")
@@ -249,14 +252,14 @@ void cmd_add()
     else if (type=="f")
     {
         nvrcams.back().rate->start();
-        nvrcams.back().resize->start();
+        //nvrcams.back().resize->start();
         nvrcams.back().face->start();
     }
     else if (type=="b")
     {
         nvrcams.back().motion->start();
         nvrcams.back().rate->start();
-        nvrcams.back().resize->start();
+       // nvrcams.back().resize->start();
         nvrcams.back().face->start();
 }
 #if RECORD_VIDEO
@@ -376,10 +379,10 @@ void monitorStatus(Application app)
                 if ((*i).cam) { cout << "cam kill"<< endl;  (*i).cam->stop(); (*i).cam->join();}
                 if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
                 if ((*i).face) { cout<<  "face kill"<< endl;(*i).face->deregisterAllProviders();(*i).face->stop(); (*i).face->join(); }
-                if ((*i).event) { cout << "event kill"<< endl;(*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
-                if ((*i).movie) { cout << "movie kill"<< endl;(*i).movie->deregisterAllProviders();(*i).movie->stop(); (*i).movie->join();}
+                if ((*i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((*i).event)); (*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
+                if ((*i).movie) { cout << "movie kill"<< endl;notifier->deregisterProvider(*((*i).movie)); (*i).movie->deregisterAllProviders();(*i).movie->stop(); (*i).movie->join();}
                 if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
-                if ((*i).resize) { cout << "resize kill"<< endl; (*i).resize->deregisterAllProviders();(*i).resize->stop(); (*i).resize->join();}
+                //if ((*i).resize) { cout << "resize kill"<< endl; (*i).resize->deregisterAllProviders();(*i).resize->stop(); (*i).resize->join();}
                 i = nvrcams.erase(i); // point to next iterator on delete
     
             }
