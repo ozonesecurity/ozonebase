@@ -6,7 +6,7 @@ set(OZ_BASE_SRC_FILES
     ozFeedFrame.cpp ozFeedProvider.cpp ozFfmpeg.cpp ozListener.cpp
     ozMemoryIO.cpp ozMemoryIOV1.cpp ozMotionData.cpp ozMotionFrame.cpp
     ozNotifyFrame.cpp ozParameters.cpp ozRegion.cpp ozSignal.cpp
-    ozStream.cpp ozZone.cpp
+    ozStream.cpp ozZone.cpp ozDetector.cpp ozRecorder.cpp
    )
 
 set(OZ_BASE_HDR_FILES
