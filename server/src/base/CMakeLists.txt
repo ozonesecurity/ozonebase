@@ -15,7 +15,7 @@ set(OZ_BASE_HDR_FILES
     ozFeedConsumer.h ozFeedFrame.h ozFeedProvider.h ozFfmpeg.h oz.h
     ozListener.h ozMemoryIO.h ozMemoryIOV1.h ozMotionData.h ozMotionFrame.h
     ozNotifyFrame.h ozParameters.h ozRegion.h ozSignal.h
-    ozStream.h ozZone.h
+    ozStream.h ozZone.h ozDetector.h ozRecorder.h
     "${CMAKE_CURRENT_BINARY_DIR}/ozConfig.h"
    )
 

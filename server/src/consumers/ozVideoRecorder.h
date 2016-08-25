@@ -9,7 +9,7 @@
 
 #include "../base/ozMotionFrame.h"
 #include "../base/ozParameters.h"
-
+#include "../base/ozRecorder.h"
 #include <deque>
 
 
@@ -17,7 +17,7 @@
 /// Consumer class used to record video stream for which motion or other significant
 /// activity has been detected. Ultimately will write to a DB, but for now just to filesystem.
 ///
-class VideoRecorder : public VideoConsumer, public DataProvider, public Thread
+class VideoRecorder : public virtual Recorder
 {
 CLASSID(VideoRecorder);
 

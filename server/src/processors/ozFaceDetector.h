@@ -4,10 +4,8 @@
 #ifndef OZ_FACE_DETECTOR_H
 #define OZ_FACE_DETECTOR_H
 
-#include "../base/ozFeedProvider.h"
-#include "../base/ozFeedConsumer.h"
-#include "../libimg/libimgImage.h"
-#include "../providers/ozSlaveVideo.h"
+#include "../base/ozDetector.h"
+
 
 #include <set>
 #include <map>
@@ -19,7 +17,7 @@ class MotionData;
 /// Processor that detects motion on a video frame feed and reports on the nature of the motion via
 /// MotionFrame objects.
 ///
-class FaceDetector : public VideoConsumer, public VideoProvider, public Thread
+class FaceDetector : public virtual Detector
 {
 CLASSID(FaceDetector);
 
