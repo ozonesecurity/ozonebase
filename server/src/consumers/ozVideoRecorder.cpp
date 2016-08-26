@@ -5,6 +5,7 @@
 #include "../base/ozNotifyFrame.h"
 #include "../libgen/libgenTime.h"
 
+
 /**
 * @brief 
 *
@@ -59,11 +60,17 @@ bool VideoRecorder::processFrame( FramePtr frame )
         return( false );
 
     AlarmState lastState = mState;
+    
+   
 
     if ( alarmFrame->alarmed() )
     {
+     
+        
         mState = ALARM;
         mLastAlarmTime = time64();
+        
+        
         if ( lastState == IDLE )
         {
             // Create new event
@@ -94,15 +101,24 @@ bool VideoRecorder::processFrame( FramePtr frame )
 
     if ( mState == ALERT )
     {
+        
         if ( frame->age( mLastAlarmTime ) < -MAX_EVENT_TAIL_AGE )
         {
-            closeVideoFile();
-            deinitEncoder();
-            mState = IDLE;
-            EventNotification::EventDetail detail( mEventCount, ((double)mLastAlarmTime-mAlarmTime)/1000000.0 );
-            EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
-            distributeFrame( FramePtr( notification ) );
+           
+            if ((((double)mLastAlarmTime-mAlarmTime)/1000000.0) >= mMinTime)
+            {
+                closeVideoFile();
+                deinitEncoder();
+                mState = IDLE;
+                EventNotification::EventDetail detail( mEventCount, ((double)mLastAlarmTime-mAlarmTime)/1000000.0 );
+                EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
+                distributeFrame( FramePtr( notification ) );
+                
+            }
+           
+            
         }
+        
     }
 
     if ( mState > IDLE )

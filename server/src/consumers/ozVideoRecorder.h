@@ -54,6 +54,7 @@ protected:
 
     int             mVideoFrameCount;
     int             mAudioFrameCount;
+    double          mMinTime;
 
 
 protected:
@@ -66,7 +67,7 @@ protected:
     void encodeFrame( const VideoFrame *frame );
 
 public:
-    VideoRecorder( const std::string &name, const std::string &location, const std::string &format, const VideoParms &videoParms, const AudioParms &audioParms ) :
+    VideoRecorder( const std::string &name, const std::string &location, const std::string &format, const VideoParms &videoParms, const AudioParms &audioParms , double minTime = 0) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
         mLocation( location ),
@@ -83,7 +84,8 @@ public:
         mVideoStream( NULL ),
         mAudioStream( NULL ),
         mAvInputFrame( NULL ),
-        mAvInterFrame( NULL )
+        mAvInterFrame( NULL ),
+        mMinTime(minTime)
     {
     }
     ~VideoRecorder()
