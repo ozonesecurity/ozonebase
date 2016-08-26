@@ -199,7 +199,7 @@ void cmd_add()
 #if RECORD_VIDEO
     VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
     AudioParms* audioParms = new AudioParms;
-    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms);
+    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
     if (type=="m")
     { 
         nvrcam.event->registerProvider(*(nvrcam.motion));
@@ -217,7 +217,7 @@ void cmd_add()
     }
     notifier->registerProvider(*(nvrcam.event));
 #else
-    nvrcam.event = new EventRecorder( "event-"+name,  path);
+    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
 
     if (type=="m")
     {
