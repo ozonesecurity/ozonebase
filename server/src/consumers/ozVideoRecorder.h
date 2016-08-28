@@ -67,6 +67,23 @@ protected:
     void encodeFrame( const VideoFrame *frame );
 
 public:
+/**
+* @brief 
+*
+* @param name Name of instance
+* @param location Base path where to store videos
+* @param format "mp4" and other filetypes. Use "mp4" for now
+* @param videoParms VideoParms object that has been created
+* @param audioParms AudioParms object that has been created
+* @param minTime Minimum amount of time (in seconds) to record after an alarm is triggered
+
+\code{.cpp}
+    VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
+    AudioParms* audioParms = new AudioParms;
+    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
+\endcode
+
+*/
     VideoRecorder( const std::string &name, const std::string &location, const std::string &format, const VideoParms &videoParms, const AudioParms &audioParms , double minTime = 0) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
