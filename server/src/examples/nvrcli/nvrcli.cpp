@@ -25,7 +25,7 @@
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 1 // 1 if video is on
-#define SHOW_FFMPEG_LOG 0 
+#define SHOW_FFMPEG_LOG 0
 #define EVENT_REC_PATH "nvrcli_events"
 
 #define face_resize_w 1024
@@ -42,12 +42,11 @@ class  nvrCameras
 {
 public:
     NetworkAVInput *cam;
-    MotionDetector *motion; 
-    FaceDetector *face;   
-    EventRecorder *event; // used if RECORD_VIDEO = 0
-    VideoRecorder *movie; // used if RECORD_VIDEO = 1
+    Detector *motion; // keeping two detectors as they can run in parallel
+    Detector *face;   
+    Recorder *event; // will either store video or images 
     RateLimiter *rate;
-    ImageConvert *resize; 
+    ImageConvert *resize; // not used 
 
 };
 
@@ -98,8 +97,12 @@ void cmd_add()
     string record;
 
     cin.clear(); cin.sync();
-    cout << "camera name (ENTER for default):";
-    getline(cin,name);
+    
+    
+    //cout << "camera name (ENTER for default):";
+    //getline(cin,name);
+    name = "";
+    
     cout << "RTSP source (ENTER for default):";
     getline(cin,source);
     cout << "Detection type ([m]otion/[f]ace/[b]oth) (ENTER for default = b):";
@@ -107,10 +110,27 @@ void cmd_add()
     cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
     getline (cin, record);
 
+    // Process input, fill in defaults if needed
+    if (name.size()==0 )
+    {
+        string n = to_string(camid);
+        camid++;
+        name = "cam" + n;
+    }
+    cout << "Camera name:" << name << endl;
+    
+    if (source.size() == 0 )
+    {
+        source = defRtspUrls[nvrcams.size() % MAX_CAMS];
+    }
+    cout << "Camera source:" << source << endl;
+    
     if (record.size() ==0 || (record != "y" && record != "n" ))
     {
         record = "n";
     }
+    cout << "Recording will be " << (record=="n"?"skipped":"stored") << " for:" << name << endl;
+    
     if (type.size() ==0 || (type != "m" && type != "f" && type != "b"))
     {
         type = "b";
@@ -128,19 +148,7 @@ void cmd_add()
     {
         cout << "Face+Motion";
     }
-    cout << endl;
-
-    if (name.size()==0 )
-    {
-        string n = to_string(camid);
-        camid++;
-        name = "cam" + n;
-    }
-    if (source.size() == 0 )
-    {
-        source = defRtspUrls[nvrcams.size() % MAX_CAMS];
-    }
-    
+    cout << endl; 
     
     nvrCameras nvrcam;
 
@@ -149,7 +157,6 @@ void cmd_add()
     nvrcam.motion = NULL;
     nvrcam.face = NULL;
     nvrcam.event = NULL;
-    nvrcam.movie = NULL;
     nvrcam.rate = NULL;
     nvrcam.resize = NULL;
 
@@ -157,13 +164,9 @@ void cmd_add()
     if (type == "f")
     {
         nvrcam.face = new FaceDetector( "face-"+name );
-        //nvrcam.resize = new ImageConvert ("resize-"+name, AV_PIX_FMT_YUYV422,face_resize_w,face_resize_h);
         nvrcam.rate = new RateLimiter( "rate-"+name,face_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        //nvrcam.resize->registerProvider(*(nvrcam.rate) );
         nvrcam.face->registerProvider(*(nvrcam.rate) );
-        //nvrcam.face->registerProvider(*(nvrcam.rate) ); //sidestep resize
-        //nvrcam.face->registerProvider(*(nvrcam.cam) ); // sidestep rate and resize
     }
     else if (type=="m")
     {
@@ -173,15 +176,11 @@ void cmd_add()
     else // both
     {
         nvrcam.face = new FaceDetector( "face-"+name );
-       // nvrcam.resize = new ImageConvert ("resize-"+name, AV_PIX_FMT_YUYV422,face_resize_w,face_resize_h);
         nvrcam.rate = new RateLimiter( "rate-"+name,face_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        //nvrcam.resize->registerProvider(*(nvrcam.rate) );
-        //nvrcam.face->registerProvider(*(nvrcam.resize) );
         nvrcam.face->registerProvider(*(nvrcam.rate) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
-
     }
 
     char path[2000];
@@ -200,25 +199,25 @@ void cmd_add()
 #if RECORD_VIDEO
     VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
     AudioParms* audioParms = new AudioParms;
-    nvrcam.movie = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms);
+    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
     if (type=="m")
     { 
-        nvrcam.movie->registerProvider(*(nvrcam.motion));
+        nvrcam.event->registerProvider(*(nvrcam.motion));
     }
     else if (type == "f")
     {
         
-        nvrcam.movie->registerProvider(*(nvrcam.face));
+        nvrcam.event->registerProvider(*(nvrcam.face));
     }
     else if (type == "b")
     {
         
         cout << "only registering face detection events" << endl;
-        nvrcam.movie->registerProvider(*(nvrcam.face));
+        nvrcam.event->registerProvider(*(nvrcam.face));
     }
-    notifier->registerProvider(*(nvrcam.movie));
+    notifier->registerProvider(*(nvrcam.event));
 #else
-    nvrcam.event = new EventRecorder( "event-"+name,  path);
+    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
 
     if (type=="m")
     {
@@ -252,27 +251,19 @@ void cmd_add()
     else if (type=="f")
     {
         nvrcams.back().rate->start();
-        //nvrcams.back().resize->start();
         nvrcams.back().face->start();
     }
     else if (type=="b")
     {
         nvrcams.back().motion->start();
         nvrcams.back().rate->start();
-       // nvrcams.back().resize->start();
         nvrcams.back().face->start();
-}
-#if RECORD_VIDEO
-    if (record == "y")
-    {
-        nvrcams.back().movie->start();
     }
-#else
+
     if (record == "y")
     {
         nvrcams.back().event->start();
     }
-#endif
     listener->removeController(httpController);
     httpController->addStream("live",*(nvrcam.cam));
     if (type=="m")
@@ -336,16 +327,11 @@ void cmd_delete()
     cout << "Camera killed\n";
     (*i).motion->join();
     cout << "Camera Motion killed\n";
-#if RECORD_VIDEO
-    (*i).movie->stop();
-    (*i).movie->join();
-    cout << "Camera Movie Record killed\n";
 
-#else
     (*i).event->stop();
     (*i).event->join();
-    cout << "Camera Image Record killed\n";
-#endif
+    cout << "Camera  Record killed\n";
+
     nvrcams.erase(i);
 }
 
@@ -369,8 +355,6 @@ void monitorStatus(Application app)
         while ( i!= nvrcams.end())
         {
             int isTerminated = (*i).cam->ended() + (*i).cam->error();
-            
-            //cout << "Index: " << (*i).cam->name() << "WAIT:"<< (*i).cam->wait() << " READY:"<< (*i).cam->ready() << " ENDED:" << (*i).cam->ended() << " ERROR:"<< (*i).cam->error()<<endl;
             if (isTerminated >0)
             {
                 cout << "Bad state found for " << (*i).cam->name() << "..deleting..."<<endl;
@@ -380,9 +364,8 @@ void monitorStatus(Application app)
                 if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
                 if ((*i).face) { cout<<  "face kill"<< endl;(*i).face->deregisterAllProviders();(*i).face->stop(); (*i).face->join(); }
                 if ((*i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((*i).event)); (*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
-                if ((*i).movie) { cout << "movie kill"<< endl;notifier->deregisterProvider(*((*i).movie)); (*i).movie->deregisterAllProviders();(*i).movie->stop(); (*i).movie->join();}
                 if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
-                //if ((*i).resize) { cout << "resize kill"<< endl; (*i).resize->deregisterAllProviders();(*i).resize->stop(); (*i).resize->join();}
+              
                 i = nvrcams.erase(i); // point to next iterator on delete
     
             }
@@ -414,8 +397,7 @@ void cli(Application app)
         cin.clear(); cin.sync();
         cout << "?:";
         getline (cin,command);
-        // really? no string lowercase?
-        transform(command.begin(), command.end(), command.begin(), [](unsigned char c) { return tolower(c); });
+        transform(command.begin(), command.end(), command.begin(), [](unsigned char c) { return tolower(c); }); // lowercase 
         cout << "You entered: "<< command << endl;
         if (cmd_map.find(command) == cmd_map.end()) 
             cmd_unknown();

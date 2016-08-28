@@ -22,5 +22,3 @@
 
 #include <libgen/libgenDebug.h>
 
-class Detector:public VideoConsumer, public VideoProvider, public Thread
-{};

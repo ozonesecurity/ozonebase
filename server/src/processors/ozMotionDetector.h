@@ -5,15 +5,11 @@
 #ifndef OZ_MOTION_DETECTOR_H
 #define OZ_MOTION_DETECTOR_H
 
-#include "../base/ozFeedProvider.h"
-#include "../base/ozFeedConsumer.h"
-#include "../libimg/libimgImage.h"
-#include "../providers/ozSlaveVideo.h"
+#include "../base/ozDetector.h"
 
 #include <set>
 #include <map>
 #include <list>
-
 #define SIGNAL_CAUSE "Signal"
 #define MOTION_CAUSE "Motion"
 #define LINKED_CAUSE "Linked"
@@ -25,7 +21,7 @@ class MotionData;
 /// Processor that detects motion on a video frame feed and reports on the nature of the motion via
 /// MotionFrame objects.
 ///
-class MotionDetector : public VideoConsumer, public VideoProvider, public Thread
+class MotionDetector : public virtual Detector
 {
 CLASSID(MotionDetector);
 

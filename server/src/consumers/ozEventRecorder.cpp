@@ -90,10 +90,13 @@ bool EventRecorder::processFrame( FramePtr frame )
     {
         if ( frame->age( mLastAlarmTime ) < -MAX_EVENT_TAIL_AGE )
         {
-            mState = IDLE;
-            EventNotification::EventDetail detail( mEventCount, ((double)mLastAlarmTime-mAlarmTime)/1000000.0 );
-            EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
-            distributeFrame( FramePtr( notification ) );
+            if ((((double)mLastAlarmTime-mAlarmTime)/1000000.0) >= mMinTime)
+            {
+                mState = IDLE;
+                EventNotification::EventDetail detail( mEventCount, ((double)mLastAlarmTime-mAlarmTime)/1000000.0 );
+                EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
+                distributeFrame( FramePtr( notification ) );
+            }
         }
     }
 

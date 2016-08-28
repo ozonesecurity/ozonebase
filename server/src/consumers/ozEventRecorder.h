@@ -8,6 +8,7 @@
 #include "../libgen/libgenThread.h"
 
 #include "../base/ozMotionFrame.h"
+#include "../base/ozRecorder.h"
 
 #include <deque>
 
@@ -16,7 +17,7 @@
 /// Consumer class used to record video stream for which motion or other significant
 /// activity has been detected. Ultimately will write to a DB, but for now just to filesystem.
 ///
-class EventRecorder : public VideoConsumer, public DataProvider, public Thread
+class EventRecorder : public virtual Recorder
 {
 CLASSID(EventRecorder);
 
@@ -35,20 +36,22 @@ protected:
     int             mFrameCount;
     int             mEventCount;                ///< Temp, in lieu of DB event index
     uint64_t        mAlarmTime;
+    double          mMinTime;
 
 protected:
     int run();
     bool processFrame( FramePtr );
 
 public:
-    EventRecorder( const std::string &name, const std::string &location ) :
+    EventRecorder( const std::string &name, const std::string &location, double minTime=0 ) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
         mLocation( location ),
         mState( IDLE ),
         mFrameCount( 0 ),
         mEventCount( 0 ),
-        mAlarmTime( 0 )
+        mAlarmTime( 0 ),
+        mMinTime (minTime)
     {
     }
     ~EventRecorder()
