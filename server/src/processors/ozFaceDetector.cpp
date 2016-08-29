@@ -13,9 +13,10 @@
 *
 * @param name
 */
-FaceDetector::FaceDetector( const std::string &name ) :
+FaceDetector::FaceDetector( const std::string &name, FaceMarkup faceMarkup ) :
     VideoProvider( cClass(), name ),
-    Thread( identity() )
+    Thread( identity() ),
+    mFaceMarkup( faceMarkup )
 {
 }
 
@@ -78,7 +79,7 @@ int FaceDetector::run()
                         std::vector<dlib::rectangle> dets = detector(img);
                         Info( "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
 
-                        if ( dets.size() > 0 )
+                        if ( dets.size() > 0 && mFaceMarkup != OZ_FACE_MARKUP_NONE )
                         {
                             // Now we will go ask the shape_predictor to tell us the pose of
                             // each face we detected.
@@ -88,58 +89,65 @@ int FaceDetector::run()
                             std::vector<line_t> lines;
                             for ( unsigned int i = 0; i < dets.size(); i++ )
                             {
-                                draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
+                                if ( mFaceMarkup & OZ_FACE_MARKUP_OUTLINE )
+                                    draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
 
-                                dlib::full_object_detection shape = sp(img, dets[i]);
-                                Info( "Face %u - %ju parts", i, shape.num_parts() );
+                                if ( mFaceMarkup & OZ_FACE_MARKUP_DETAIL )
+                                {
+                                    dlib::full_object_detection shape = sp(img, dets[i]);
+                                    Info( "Face %u - %ju parts", i, shape.num_parts() );
 
-                                // Around Chin. Ear to Ear
-                                for (unsigned long p = 1; p <= 16; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    // Around Chin. Ear to Ear
+                                    for (unsigned long p = 1; p <= 16; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
 
-                                // Line on top of nose
-                                for (unsigned long p = 28; p <= 30; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    // Line on top of nose
+                                    for (unsigned long p = 28; p <= 30; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
 
-                                // left eyebrow
-                                for (unsigned long p = 18; p <= 21; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                // Right eyebrow
-                                for (unsigned long p = 23; p <= 26; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                // Bottom part of the nose
-                                for (unsigned long p = 31; p <= 35; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                // Line from the nose to the bottom part above
-                                lines.push_back(line_t(shape.part(30), shape.part(35)));
+                                    // left eyebrow
+                                    for (unsigned long p = 18; p <= 21; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    // Right eyebrow
+                                    for (unsigned long p = 23; p <= 26; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    // Bottom part of the nose
+                                    for (unsigned long p = 31; p <= 35; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    // Line from the nose to the bottom part above
+                                    lines.push_back(line_t(shape.part(30), shape.part(35)));
 
-                                // Left eye
-                                for (unsigned long p = 37; p <= 41; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                lines.push_back(line_t(shape.part(36), shape.part(41)));
+                                    // Left eye
+                                    for (unsigned long p = 37; p <= 41; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    lines.push_back(line_t(shape.part(36), shape.part(41)));
 
-                                // Right eye
-                                for (unsigned long p = 43; p <= 47; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                lines.push_back(line_t(shape.part(42), shape.part(47)));
+                                    // Right eye
+                                    for (unsigned long p = 43; p <= 47; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    lines.push_back(line_t(shape.part(42), shape.part(47)));
 
-                                // Lips outer part
-                                for (unsigned long p = 49; p <= 59; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                lines.push_back(line_t(shape.part(48), shape.part(59)));
+                                    // Lips outer part
+                                    for (unsigned long p = 49; p <= 59; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    lines.push_back(line_t(shape.part(48), shape.part(59)));
 
-                                // Lips inside part
-                                for (unsigned long p = 61; p <= 67; ++p)
-                                    lines.push_back(line_t(shape.part(p), shape.part(p-1)));
-                                lines.push_back(line_t(shape.part(60), shape.part(67)));
+                                    // Lips inside part
+                                    for (unsigned long p = 61; p <= 67; ++p)
+                                        lines.push_back(line_t(shape.part(p), shape.part(p-1)));
+                                    lines.push_back(line_t(shape.part(60), shape.part(67)));
 
-                                shapes.push_back(shape);
+                                    shapes.push_back(shape);
+                                }
                             }
 
-                            for ( std::vector<line_t>::const_iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++ )
+                            if ( mFaceMarkup & OZ_FACE_MARKUP_DETAIL )
                             {
-                                const line_t &line = *lineIter;
-                                dlib::draw_line( img, line.first, line.second, color );
+                                for ( std::vector<line_t>::const_iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++ )
+                                {
+                                    const line_t &line = *lineIter;
+                                    dlib::draw_line( img, line.first, line.second, color );
+                                }
                             }
 
                             //dlib::save_png( img, "/transfer/image.png" );

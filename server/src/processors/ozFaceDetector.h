@@ -26,6 +26,11 @@ class FaceDetector : public virtual Detector
 CLASSID(FaceDetector);
 
 public:
+    typedef enum { OZ_FACE_MARKUP_NONE=0, OZ_FACE_MARKUP_OUTLINE=1, OZ_FACE_MARKUP_DETAIL=2, OZ_FACE_MARKUP_ALL=3 } FaceMarkup;
+
+private:
+    FaceMarkup  mFaceMarkup;
+
 /**
 * @brief 
 *
@@ -35,7 +40,8 @@ public:
 nvrcam.face = new FaceDetector( "face-cam0" );
 \endcode
 */
-    FaceDetector( const std::string &name );
+public:
+    FaceDetector( const std::string &name, FaceMarkup faceMarkup=OZ_FACE_MARKUP_ALL );
     ~FaceDetector();
 
     uint16_t width() const { return( videoProvider()->width() ); }
