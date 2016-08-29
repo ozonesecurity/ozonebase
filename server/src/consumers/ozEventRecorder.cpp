@@ -6,18 +6,21 @@
 #include "../libgen/libgenTime.h"
 
 /**
-* @brief 
+* @brief  default run method
 *
 * @return 
 */
 int EventRecorder::run()
 {
-    if ( waitForProviders() )
+    if ( waitForProviders() ) 
     {
         setReady();
-        while( !mStop )
+        while( !mStop ) // loop till this component is not stopped
         {
             mQueueMutex.lock();
+            
+            // components communicate with each other by filling up frame queues
+            // of registered components
             if ( !mFrameQueue.empty() )
             {
                 for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
@@ -63,6 +66,8 @@ bool EventRecorder::processFrame( FramePtr frame )
             // Create new event
             mAlarmTime = mLastAlarmTime;
             mEventCount++;
+
+            // lets set up notification 
             EventNotification::EventDetail detail( mEventCount, EventNotification::EventDetail::BEGIN );
             EventNotification *notification = new EventNotification( this, alarmFrame->id(), detail );
             distributeFrame( FramePtr( notification ) );
@@ -86,10 +91,12 @@ bool EventRecorder::processFrame( FramePtr frame )
         mState = ALERT;
     }
 
-    if ( mState == ALERT )
+    if ( mState == ALERT ) // alarm is over, in 'transition' period
     {
         if ( frame->age( mLastAlarmTime ) < -MAX_EVENT_TAIL_AGE )
         {
+            // if we have specified a min. record time, honor that before
+            // we close the current recording
             if ((((double)mLastAlarmTime-mAlarmTime)/1000000.0) >= mMinTime)
             {
                 mState = IDLE;
@@ -111,7 +118,6 @@ bool EventRecorder::processFrame( FramePtr frame )
         {
             path = stringtf( "%s/img-%s-%d-%ju.jpg", mLocation.c_str(), mName.c_str(), mEventCount, alarmFrame->id() );
         }
-        //Info( "PF:%d @ %dx%d", alarmFrame->pixelFormat(), alarmFrame->width(), alarmFrame->height() );
         Image image( alarmFrame->pixelFormat(), alarmFrame->width(), alarmFrame->height(), alarmFrame->buffer().data() );
         image.writeJpeg( path.c_str() );
     }

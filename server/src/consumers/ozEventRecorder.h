@@ -43,6 +43,17 @@ protected:
     bool processFrame( FramePtr );
 
 public:
+/**
+* @brief 
+*
+* @param name Name of instance
+* @param location location base path where to store videos
+* @param minTime    Minimum amount of time (in seconds) to record after an alarm is triggered
+
+\code
+nvrcam.event = new EventRecorder( "event-"+name,  path,30);
+\endcode
+*/
     EventRecorder( const std::string &name, const std::string &location, double minTime=0 ) :
         VideoConsumer( cClass(), name, 5 ),
         Thread( identity() ),
