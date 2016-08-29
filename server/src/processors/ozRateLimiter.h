@@ -23,6 +23,18 @@ private:
     FrameRate   mFrameRate;
 
 public:
+/**
+* @brief 
+*
+* @param name name of instance
+* @param frameRate rate in seconds to limit it to (can use fractions as well)
+* @param skip if true, will keep itself updated with latest frame from provider, else will not skip frames as it rate limits
+
+\code
+ nvrcam.rate = new RateLimiter( "rate-"+name,0.1,true );
+ nvrcam.rate->registerProvider(*(nvrcam.cam) );
+\endcode
+*/
     RateLimiter( const std::string &name, FrameRate frameRate, bool skip=true );
     RateLimiter( FrameRate frameRate, bool skip, VideoProvider &provider, const FeedLink &link=gQueuedFeedLink );
     ~RateLimiter();

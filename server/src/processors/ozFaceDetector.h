@@ -14,14 +14,27 @@
 class MotionData;
 
 ///
-/// Processor that detects motion on a video frame feed and reports on the nature of the motion via
-/// MotionFrame objects.
-///
+/// Processor that detects faces on a video frame feed 
+/// This processor uses dlib and also requires presence
+/// of the dlib shape detector dat file in the same directory
+/// as the invoking application as of now
+///  You can get the shape_predictor_68_face_landmarks.dat file from:
+///   http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+
 class FaceDetector : public virtual Detector
 {
 CLASSID(FaceDetector);
 
 public:
+/**
+* @brief 
+*
+* @param name Name of instance
+
+\code
+nvrcam.face = new FaceDetector( "face-cam0" );
+\endcode
+*/
     FaceDetector( const std::string &name );
     ~FaceDetector();
 

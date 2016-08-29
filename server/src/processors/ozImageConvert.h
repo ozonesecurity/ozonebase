@@ -11,7 +11,7 @@
 
 ///
 /// Processor that simply resizes the input frame to the specified size
-///
+/// Note: Deprecated - will be replacing with something better
 class ImageConvert : public VideoConsumer, public VideoProvider, public Thread
 {
 CLASSID(ImageConvert);

@@ -9,7 +9,7 @@
 #include "../base/ozFeedConsumer.h"
 
 ///
-/// Processor that amalgamates up to four video streams into a 2x2 matrix video matrix. Can easily
+/// Processor that amalgamates video streams into a mxn matrix video matrix. Can easily
 /// be extended for other geometries but the overall image size must be exactly divisble by the number
 /// of tiles. Bit of a kludge implementation, a more flexible variant should be possible using ffmpeg
 /// filters.
@@ -36,6 +36,29 @@ private:
     struct SwsContext **mConvertContexts;
 
 public:
+/**
+* @brief 
+*
+* @param name Instance name
+* @param pixelFormat format of image (PIX_FMT_YUV420 or other AVPixelFormat types)
+* @param widtha Total width of matrix
+* @param height Total height of matrix
+* @param frameRate  framerate per second to update the matrix feeds
+* @param xTiles m (of mxn tiles)
+* @param yTiles n (of mxn tiles)
+
+\code
+    MatrixVideo matrixVideo( "matrixcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    matrixVideo.registerProvider( cam1 );
+    matrixVideo.registerProvider( *motionDetector1.deltaImageSlave() );
+    matrixVideo.registerProvider( cam2 );
+    matrixVideo.registerProvider( *motionDetector2.deltaImageSlave() );
+    app.addThread( &matrixVideo );
+\endcode
+
+
+
+*/
     MatrixVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles=2, int yTiles=2 );
     ~MatrixVideo();
 

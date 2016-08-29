@@ -30,7 +30,7 @@
 
 #define face_resize_w 1024
 #define face_resize_h 768
-#define face_refresh_rate 10
+#define face_refresh_rate  0.1
 
 #define video_record_w 640
 #define video_record_h 480
@@ -47,6 +47,7 @@ public:
     Recorder *event; // will either store video or images 
     RateLimiter *rate;
     ImageConvert *resize; // not used 
+    LocalFileOutput *fileOut;
 
 };
 
@@ -159,6 +160,7 @@ void cmd_add()
     nvrcam.event = NULL;
     nvrcam.rate = NULL;
     nvrcam.resize = NULL;
+    nvrcam.fileOut = NULL;
 
     nvrcam.cam = new NetworkAVInput ( name, source,"",true );
     if (type == "f")
@@ -176,9 +178,11 @@ void cmd_add()
     else // both
     {
         nvrcam.face = new FaceDetector( "face-"+name );
+        nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,face_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
         nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
@@ -258,6 +262,7 @@ void cmd_add()
         nvrcams.back().motion->start();
         nvrcams.back().rate->start();
         nvrcams.back().face->start();
+        nvrcams.back().fileOut->start();
     }
 
     if (record == "y")

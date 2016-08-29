@@ -17,6 +17,26 @@ class VideoFrame;
 /// Video processor that adds a timestamp annotation (derived from the frame timestamp) onto
 /// a video frame feed.
 ///
+
+/**
+* @brief 
+
+\code
+    NetworkAVInput input( "input1", "rtsp://test:test@webcam.com/mpeg4/media.amp" );
+    app.addThread( &input );
+
+    ImageTimestamper timestamper( input.cname() );
+    app.addThread( &timestamper );
+
+    VideoParms videoParms( 640, 480 );
+    AudioParms audioParms;
+    MovieFileOutput output( input.cname(), "/tmp", "mp4", 300, videoParms, audioParms );
+    output.registerProvider( timestamper );
+    app.addThread( &output );
+
+\endcode
+
+*/
 class ImageTimestamper : public VideoConsumer, public VideoProvider, public Thread
 {
 CLASSID(ImageTimestamper);
