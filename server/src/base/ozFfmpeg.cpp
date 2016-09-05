@@ -199,6 +199,7 @@ void avInit()
 
     avcodec_register_all();
     avdevice_register_all();
+    avfilter_register_all();
     av_register_all();
     avformat_network_init();
 }
