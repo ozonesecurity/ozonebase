@@ -1,9 +1,17 @@
 #include "oz.h"
 #include "ozFeedBase.h"
+#include "ozFeedProvider.h"
 #include "ozFeedConsumer.h"
 
 FeedLink gQueuedFeedLink( FEED_QUEUED );
+FeedLink gQueuedVideoLink( FEED_QUEUED, FeedProvider::videoFramesOnly );
+FeedLink gQueuedAudioLink( FEED_QUEUED, FeedProvider::audioFramesOnly );
+FeedLink gQueuedDataLink( FEED_QUEUED, FeedProvider::dataFramesOnly );
+
 FeedLink gPolledFeedLink( FEED_POLLED );
+FeedLink gPolledVideoLink( FEED_POLLED, FeedProvider::videoFramesOnly );
+FeedLink gPolledAudioLink( FEED_POLLED, FeedProvider::audioFramesOnly );
+FeedLink gPolledDataLink( FEED_POLLED, FeedProvider::dataFramesOnly );
 
 /**
 * @brief 
