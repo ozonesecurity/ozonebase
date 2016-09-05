@@ -1,13 +1,13 @@
 # CMakeLists.txt for the ozone processors subfolder
 
 set(OZ_PROCESSORS_SRC_FILES
-    ozDelayBuffer.cpp ozFaceDetector.cpp ozFilterSwapUV.cpp ozImageConvert.cpp
+    ozDelayBuffer.cpp ozFaceDetector.cpp ozFilterSwapUV.cpp ozImageConvert.cpp ozImageScale.cpp
     ozImageTimestamper.cpp ozMotionDetector.cpp ozMatrixVideo.cpp
     ozRateLimiter.cpp ozSignalChecker.cpp ozVideoFilter.cpp
    )
 
 set(OZ_PROCESSORS_HDR_FILES
-    ozDelayBuffer.h ozFaceDetector.h ozFilterSwapUV.h ozImageConvert.h ozImageTimestamper.h
+    ozDelayBuffer.h ozFaceDetector.h ozFilterSwapUV.h ozImageConvert.h ozImageTimestamper.h ozImageScale.h
     ozMotionDetector.h ozMatrixVideo.h ozRateLimiter.h ozSignalChecker.h
     ozVideoFilter.h
    )
