@@ -39,7 +39,7 @@ protected:
     FeedConsumer( FeedProvider &provider, const FeedLink &link=gQueuedFeedLink ) :
         mProviderLimit( 1 )
     {
-         registerProvider( provider, link );
+        registerProvider( provider, link );
     }
 
     bool waitForProviders();                    ///< Return when all providers are ready to supply frames. Returns false

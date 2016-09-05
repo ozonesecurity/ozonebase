@@ -217,7 +217,7 @@ bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
 {
     bool result = true;
     mQueueMutex.lock();
-    if ( mFrameQueue.size() > MAX_QUEUE_SIZE )
+    if ( mFrameQueue.size() >= MAX_QUEUE_SIZE )
     {
         Error( "%s: Maximum queue size exceeded, got %lu frames, not running?", cidentity(), mFrameQueue.size() );
         result = false;
