@@ -58,6 +58,11 @@ public:
     //static bool verify( const std::string &identity );
 
 public:
+    static bool videoFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only video frames.
+    static bool audioFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only audio frames.
+    static bool dataFramesOnly( FramePtr, const FeedConsumer * );   ///< Comparator function to allow consumers to select only data frames.
+
+public:
     static bool noFrames( FramePtr, const FeedConsumer * )  /// Comparator function that can be used to suppress frames
     {
         return( false );
@@ -182,10 +187,6 @@ public:
 ///
 class AudioVideoProvider : public VideoProvider, public AudioProvider
 {
-public:
-    static bool videoFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only video frames.
-    static bool audioFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only audio frames.
-
 protected:
     AudioVideoProvider( const std::string &tag, const std::string &id );
     ~AudioVideoProvider() { }
