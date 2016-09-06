@@ -38,11 +38,11 @@ private:
 * @param name Name of instance
 
 \code
-nvrcam.face = new ShapeDetector( "face-cam0" );
+nvrcam.shape = new ShapeDetector( "shape-cam0" );
 \endcode
 */
 public:
-    ShapeDetector( const std::string &name, const std::string &objectData, ShapeMarkup faceMarkup=OZ_SHAPE_MARKUP_ALL );
+    ShapeDetector( const std::string &name, const std::string &objectData, ShapeMarkup shapeMarkup=OZ_SHAPE_MARKUP_ALL );
     ShapeDetector( const std::string &objectData, ShapeMarkup faceMarkup, VideoProvider &provider, const FeedLink &link=gQueuedFeedLink );
     ~ShapeDetector();
 

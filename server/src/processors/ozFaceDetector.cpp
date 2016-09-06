@@ -13,10 +13,12 @@
 *
 * @param name
 */
-FaceDetector::FaceDetector( const std::string &name, FaceMarkup faceMarkup ) :
+FaceDetector::FaceDetector( const std::string &name, const std::string &objectData, FaceMarkup faceMarkup ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
+    mObjectData(objectData),
     mFaceMarkup( faceMarkup )
+    
 {
 }
 
@@ -53,7 +55,7 @@ int FaceDetector::run()
         // loading the model from the shape_predictor_68_face_landmarks.dat file you gave
         // as a command line argument.
         dlib::shape_predictor sp;
-        dlib::deserialize( "./shape_predictor_68_face_landmarks.dat" ) >> sp;
+        dlib::deserialize( mObjectData.c_str() ) >> sp;
 
         setReady();
         while ( !mStop )
