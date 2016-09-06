@@ -25,7 +25,7 @@ int main( int argc, const char *argv[] )
     //NetworkAVInput input( "input", "mcem0_head.mpg" );
     app.addThread( &input );
 
-    FaceDetector detector( "detector" );
+    FaceDetector detector( "detector" ,"./shape_predictor_68_face_landmarks.dat");
     detector.registerProvider( input );
     app.addThread( &detector );
 
