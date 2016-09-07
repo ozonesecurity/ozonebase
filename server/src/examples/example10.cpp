@@ -1,5 +1,5 @@
 #include "../base/ozApp.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozFaceDetector.h"
 #include "../consumers/ozMovieFileOutput.h"
 #include "../consumers/ozLocalFileOutput.h"

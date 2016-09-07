@@ -1,8 +1,8 @@
 /** @addtogroup Providers */
 /*@{*/
 
-#ifndef OZ_NETWORK_AV_INPUT_H
-#define OZ_NETWORK_AV_INPUT_H
+#ifndef OZ_AV_INPUT_H
+#define OZ_AV_INPUT_H
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
@@ -12,9 +12,9 @@
 /// Class using ffmpeg libavcodec functions to read and decode video and audio from any
 /// supported network source.
 ///
-class NetworkAVInput : public AudioVideoProvider, public Thread
+class AVInput : public AudioVideoProvider, public Thread
 {
-CLASSID(NetworkAVInput);
+CLASSID(AVInput);
 
 private:
 	bool			mLoop;					// true if video needs to loop
@@ -38,13 +38,13 @@ public:
 
 \code
 
-nvrcam.cam = new NetworkAVInput ( "cam0", "/tmp/myvideo.mp4","",true );
-nvrcam.cam = new NetworkAVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain","",false );
+nvrcam.cam = new AVInput ( "cam0", "/tmp/myvideo.mp4","",true );
+nvrcam.cam = new AVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain","",false );
 
 \endcode
 */
-    NetworkAVInput( const std::string &name, const std::string &source, const std::string &format="", bool  loop=false );
-    ~NetworkAVInput();
+    AVInput( const std::string &name, const std::string &source, const std::string &format="", bool  loop=false );
+    ~AVInput();
 
     const AVCodecContext *videoCodecContext() const { return( mVideoCodecContext ); }
     const AVCodecContext *audioCodecContext() const { return( mAudioCodecContext ); }
@@ -92,7 +92,7 @@ protected:
     int run();
 };
 
-#endif // OZ_NETWORK_AV_INPUT_H
+#endif // OZ_AV_INPUT_H
 
 
 /*@}*/

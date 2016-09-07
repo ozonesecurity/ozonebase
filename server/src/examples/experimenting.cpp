@@ -4,7 +4,7 @@
 //------------------------------------------
 #include "../base/ozApp.h"
 #include "../base/ozListener.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozMotionDetector.h"
 #include "../processors/ozMatrixVideo.h"
 #include "../protocols/ozHttpController.h"
@@ -34,8 +34,8 @@ int main( int argc, const char *argv[] )
     Application app;
 
    	// Two RTSP sources 
-    NetworkAVInput cam1( "cam1", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
-    NetworkAVInput cam2("cam2","rtsp://170.93.143.139:1935/rtplive/e0ffa81e00a200ab0050fa36c4235c0a");
+    AVInput cam1( "cam1", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
+    AVInput cam2("cam2","rtsp://170.93.143.139:1935/rtplive/e0ffa81e00a200ab0050fa36c4235c0a");
     app.addThread( &cam1 );
     app.addThread( &cam2 );
 

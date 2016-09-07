@@ -1,5 +1,5 @@
 #include "../base/oz.h"
-#include "ozNetworkAVInput.h"
+#include "ozAVInput.h"
 
 #include "../base/ozFfmpeg.h"
 #include "../libgen/libgenDebug.h"
@@ -11,7 +11,7 @@
 * @param source
 * @param format
 */
-NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &source, const std::string &format, bool loop ) :
+AVInput::AVInput( const std::string &name, const std::string &source, const std::string &format, bool loop ) :
     AudioVideoProvider( cClass(), name ),
     Thread( identity() ),
     mSource( source ),
@@ -28,7 +28,7 @@ NetworkAVInput::NetworkAVInput( const std::string &name, const std::string &sour
 /**
 * @brief 
 */
-NetworkAVInput::~NetworkAVInput()
+AVInput::~AVInput()
 {
 }
 
@@ -37,7 +37,7 @@ NetworkAVInput::~NetworkAVInput()
 *
 * @return 
 */
-int NetworkAVInput::run()
+int AVInput::run()
 {
     try
     {

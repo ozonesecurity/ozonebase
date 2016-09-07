@@ -1,6 +1,6 @@
 #include "../base/ozApp.h"
 #include "../base/ozListener.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../protocols/ozHttpController.h"
 #include "../protocols/ozRtspController.h"
 
@@ -19,7 +19,7 @@ int main( int argc, const char *argv[] )
 
     Application app;
 
-    NetworkAVInput input( "input", "/tmp/movie.mp4" );
+    AVInput input( "input", "/tmp/movie.mp4" );
     app.addThread( &input );
 
     Listener listener;
