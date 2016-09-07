@@ -56,9 +56,7 @@ int NetworkAVInput::run()
 
         while ( !mStop )
         {
-            struct timeval now;
-            gettimeofday( &now, 0 );
-            mBaseTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
+            mBaseTimestamp = time64();
 
             AVFormatContext *formatContext = NULL;
             if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/NULL ) !=0 )
@@ -67,7 +65,7 @@ int NetworkAVInput::run()
             // Locate stream info from input
             if ( avformat_find_stream_info( formatContext, /*&dict*/NULL ) < 0 )
                 Fatal( "Unable to find stream info from %s due to: %s", mSource.c_str(), strerror(errno) );
-            
+
             if ( dbgLevel > DBG_INF )
                 av_dump_format(formatContext, 0, mSource.c_str(), 0);
 
@@ -163,7 +161,7 @@ int NetworkAVInput::run()
             // Determine required buffer size and allocate buffer
             int videoFrameSize = 0;
             int audioFrameSize = 0;
-         
+
             // Allocate space for the native video frame
             if ( mHasVideo )
             {
@@ -179,7 +177,7 @@ int NetworkAVInput::run()
 
             ByteBuffer videoFrameBuffer( videoFrameSize );
             ByteBuffer audioFrameBuffer( audioFrameSize );
-            
+
             AVPacket packet;
             av_init_packet(&packet);
             while( !mStop )
@@ -188,15 +186,11 @@ int NetworkAVInput::run()
                 int audioFrameComplete = false;
                 //while ( !frameComplete && (av_read_frame( formatContext, &packet ) >= 0) )
                 int readLeft = av_read_frame (formatContext, &packet);
-                while ( !mStop && readLeft  >=0 ) 
+                while ( !mStop && readLeft >=0 )
                 {
                     Debug( 5, "Got packet from stream %d", packet.stream_index );
-                    if ( mBaseTimestamp == 0 )
-                    {
-                        struct timeval now;
-                        gettimeofday( &now, 0 );
-                        mBaseTimestamp = ((uint64_t)now.tv_sec*1000000LL)+now.tv_usec;
-                    }
+                    //if ( mBaseTimestamp == 0 )
+                        //mBaseTimestamp = time64();
                     if ( mHasVideo && (packet.stream_index == videoStreamId) )
                     {
                         videoFrameComplete = false;
@@ -221,7 +215,12 @@ int NetworkAVInput::run()
 
                             uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
                             //Info( "%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
-         
+
+                            uint64_t mNowTimestamp = time64();
+                            //Info( "n:%jd, t:%jd, D:%jd", mNowTimestamp, timestamp, (timestamp - mNowTimestamp) );
+                            if ( timestamp > mNowTimestamp )
+                                usleep( timestamp - mNowTimestamp );
+
                             VideoFrame *videoFrame = new VideoFrame( this, mVideoCodecContext->frame_number, timestamp, videoFrameBuffer );
                             distributeFrame( FramePtr( videoFrame ) );
                         }
@@ -232,17 +231,17 @@ int NetworkAVInput::run()
                         if ( avcodec_decode_audio4( mAudioCodecContext, avAudioFrame, &audioFrameComplete, &packet ) < 0 )
                             Fatal( "Unable to decode audio frame at frame %ju", AudioProvider::mFrameCount );
 
-                        Debug( 3, "Decoded audio packet at frame %d, pts %jd", mAudioCodecContext->frame_number, packet.pts );
+                        int64_t pts;
+                        if( packet.dts != AV_NOPTS_VALUE) {
+                            pts = av_frame_get_best_effort_timestamp(avAudioFrame);
+                        } else {
+                            pts = 0;
+                        }
+
+                        Debug( 3, "Decoded audio packet at frame %d, pts %jd", mAudioCodecContext->frame_number, pts );
 
                         if ( audioFrameComplete )
                         {
-                            int64_t pts;
-                            if( packet.dts != AV_NOPTS_VALUE) {
-                                pts = av_frame_get_best_effort_timestamp(avVideoFrame);
-                            } else {
-                                pts = 0;
-                            }
-
                             double timeOffset = pts * av_q2d(mAudioStream->time_base);
 
                             audioFrameSize = av_samples_get_buffer_size( avAudioFrame->linesize, mAudioCodecContext->channels, avAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 ) + FF_INPUT_BUFFER_PADDING_SIZE;
@@ -253,13 +252,18 @@ int NetworkAVInput::run()
                             uint64_t timestamp = mBaseTimestamp + (1000000.0L*timeOffset);
                             //Debug( 3, "%d: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), timestamp, packet.pts, ((1000000LL*packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den), (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den) );
 
+                            uint64_t mNowTimestamp = time64();
+                            //Info( "n:%jd, t:%jd, D:%jd", mNowTimestamp, timestamp, (timestamp - mNowTimestamp) );
+                            if ( timestamp > mNowTimestamp )
+                                usleep( timestamp - mNowTimestamp );
+
                             AudioFrame *audioFrame = new AudioFrame( this, mAudioCodecContext->frame_number, timestamp, audioFrameBuffer, avAudioFrame->nb_samples );
                             distributeFrame( FramePtr( audioFrame ) );
                         }
                     }
                     av_free_packet( &packet );
                     readLeft = av_read_frame (formatContext, &packet);
-                    if ((readLeft  <0)  && mLoop) 
+                    if ( (readLeft < 0) && mLoop)
                     {
                         Debug (2,"Looping video...");
                         if (av_seek_frame(formatContext, -1, 0, AVSEEK_FLAG_ANY) >=0)
@@ -311,7 +315,5 @@ int NetworkAVInput::run()
         cleanup();
         setError();
         return (error());
-           
     }
-    
 }

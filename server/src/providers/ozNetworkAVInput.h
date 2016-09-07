@@ -1,7 +1,6 @@
 /** @addtogroup Providers */
 /*@{*/
 
-
 #ifndef OZ_NETWORK_AV_INPUT_H
 #define OZ_NETWORK_AV_INPUT_H
 
@@ -26,7 +25,7 @@ private:
     AVStream        *mVideoStream;          ///< Structure containing details of the received video stream, if present
     AVStream        *mAudioStream;          ///< Structure containing details of the received audio stream, if present
     uint64_t        mBaseTimestamp;         ///< Remote streams tend to be timebased on time at stream start,
-                                        ///< this is the initial timestamp for reference
+                                            ///< this is the initial timestamp for reference
 
 public:
 /**
