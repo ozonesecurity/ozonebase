@@ -144,8 +144,8 @@ int JpegEncoder::run()
                         //encodeFrame( frame );
                         avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
 
-                        outputFrame->pts = inputVideoFrame->timestamp();
-                        Debug( 5, "PTS %jd", outputFrame->pts );
+                        outputFrame->pts = inputVideoFrame->timestamp() * av_q2d(mCodecContext->time_base);
+                        Debug( 5, "TS:%jd, PTS %jd", inputVideoFrame->timestamp(), outputFrame->pts );
                         //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
 
                         // Reformat the input frame to fit the desired output format
