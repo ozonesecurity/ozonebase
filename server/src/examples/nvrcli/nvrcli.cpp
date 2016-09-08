@@ -30,7 +30,7 @@
 
 #define person_resize_w 1024
 #define person_resize_h 768
-#define person_refresh_rate  5
+#define person_refresh_rate 10 
 
 #define video_record_w 640
 #define video_record_h 480
@@ -42,8 +42,9 @@ class  nvrCameras
 {
 public:
     NetworkAVInput *cam;
-    Detector *motion; // keeping two detectors as they can run in parallel
+    Detector *motion; // keeping multiple detectors
     Detector *person;   
+    Detector *face;   
     Recorder *event; // will either store video or images 
     RateLimiter *rate;
     LocalFileOutput *fileOut;
@@ -105,7 +106,7 @@ void cmd_add()
     
     cout << "RTSP source (ENTER for default):";
     getline(cin,source);
-    cout << "Detection type ([m]otion/[f]ace/[b]oth/[p]erson) (ENTER for default = b):";
+    cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll) (ENTER for default = a):";
     getline (cin, type);
     cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
     getline (cin, record);
@@ -131,9 +132,9 @@ void cmd_add()
     }
     cout << "Recording will be " << (record=="n"?"skipped":"stored") << " for:" << name << endl;
     
-    if (type.size() ==0 || (type != "m" && type != "f" && type != "b" && type !="p"))
+    if (type.size() ==0 || (type != "m" && type != "f" && type != "a" && type !="p"))
     {
-        type = "b";
+        type = "a";
     }
     cout << "Detection type is: ";
     if (type=="f")
@@ -148,9 +149,9 @@ void cmd_add()
     {
         cout << "Person";
     }
-    else if (type=="b")
+    else if (type=="a")
     {
-        cout << "Face+Motion";
+        cout << "Face+Motion+Person";
     }
     cout << endl; 
     
@@ -160,6 +161,7 @@ void cmd_add()
     nvrcam.cam = NULL;
     nvrcam.motion = NULL;
     nvrcam.person = NULL;
+    nvrcam.face = NULL;
     nvrcam.event = NULL;
     nvrcam.rate = NULL;
     nvrcam.fileOut = NULL;
@@ -167,16 +169,17 @@ void cmd_add()
     nvrcam.cam = new NetworkAVInput ( name, source,"",true );
     if (type == "f")
     {
-        nvrcam.person = new FaceDetector( "person-"+name,"./shape_predictor_68_face_landmarks.dat" );
+        nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate) );
+        nvrcam.face->registerProvider(*(nvrcam.rate) );
     }
     else if (type=="p")
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"./dlib_pedestrian_detector.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
+        //nvrcam.person->registerProvider(*(nvrcam.rate) );
         nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
 }
     else if (type=="m")
@@ -184,14 +187,16 @@ void cmd_add()
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
-    else // both face and motion
+    else // face/motion/person
     {
-        nvrcam.person = new FaceDetector( "person-"+name, "./shape_predictor_68_face_landmarks.dat" );
+        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.face = new FaceDetector( "face-"+name, "./shape_predictor_68_face_landmarks.dat" );
         nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
         nvrcam.person->registerProvider(*(nvrcam.rate) );
-        nvrcam.fileOut->registerProvider(*(nvrcam.person) );
+        nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
@@ -220,12 +225,12 @@ void cmd_add()
     else if (type == "f")
     {
         
-        nvrcam.event->registerProvider(*(nvrcam.person));
+        nvrcam.event->registerProvider(*(nvrcam.face));
     }
-    else if (type == "b")
+    else if (type == "a")
     {
         
-        cout << "only registering face detection events" << endl;
+        cout << "only registering person detection events" << endl;
         nvrcam.event->registerProvider(*(nvrcam.person));
     }
     notifier->registerProvider(*(nvrcam.event));
@@ -236,14 +241,18 @@ void cmd_add()
     {
         nvrcam.event->registerProvider(*(nvrcam.motion));
     }
-    else if (type=="f" || type=="p")
+    else if (type=="p")
     {
         nvrcam.event->registerProvider(*(nvrcam.person));
     }
-    else if (type == "b")
+    else if (type=="f")
+    {
+        nvrcam.event->registerProvider(*(nvrcam.face));
+    }
+    else if (type == "a")
     {
         
-        cout << "only registering face detection events" << endl;
+        cout << "only registering shape detection events" << endl;
         nvrcam.event->registerProvider(*(nvrcam.person));
     }
     notifier->registerProvider(*(nvrcam.event));
@@ -261,16 +270,22 @@ void cmd_add()
     {
         nvrcams.back().motion->start();
     }
-    else if (type=="f" || type=="p")
+    else if (type=="p")
     {
         nvrcams.back().rate->start();
         nvrcams.back().person->start();
     }
-    else if (type=="b")
+    else if (type=="f")
+    {
+        nvrcams.back().rate->start();
+        nvrcams.back().face->start();
+    }
+    else if (type=="a")
     {
         nvrcams.back().motion->start();
         nvrcams.back().rate->start();
         nvrcams.back().person->start();
+        nvrcams.back().face->start();
         nvrcams.back().fileOut->start();
     }
 
@@ -284,14 +299,19 @@ void cmd_add()
     {
         httpController->addStream("debug",*(nvrcam.motion));
     }
-    else if (type =="f" || type == "p")
+    else if (type == "p")
     {
         httpController->addStream("debug",*(nvrcam.person));
     }
-    else if (type == "b")
+    else if (type =="f")
+    {
+        httpController->addStream("face",*(nvrcam.person));
+    }
+else if (type == "a")
     {
         httpController->addStream("debug",*(nvrcam.motion));
         httpController->addStream("debug",*(nvrcam.person));
+        httpController->addStream("debug",*(nvrcam.face));
     }
     listener->addController(httpController);
     
@@ -377,6 +397,7 @@ void monitorStatus(Application app)
                 if ((*i).cam) { cout << "cam kill"<< endl;  (*i).cam->stop(); (*i).cam->join();}
                 if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
                 if ((*i).person) { cout<<  "person kill"<< endl;(*i).person->deregisterAllProviders();(*i).person->stop(); (*i).person->join(); }
+                if ((*i).face) { cout<<  "face kill"<< endl;(*i).face->deregisterAllProviders();(*i).face->stop(); (*i).face->join(); }
                 if ((*i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((*i).event)); (*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
                 if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
               
