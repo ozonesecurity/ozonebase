@@ -6,6 +6,7 @@
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
+#include "../base/ozOptions.h"
 #include "../libgen/libgenThread.h"
 
 ///
@@ -17,15 +18,22 @@ class AVInput : public AudioVideoProvider, public Thread
 CLASSID(AVInput);
 
 private:
-	bool			mLoop;					// true if video needs to loop
     std::string     mSource;                ///< String containing address of network media
-    std::string     mFormat;                ///< String containing hint regarding format of network media
+	Options			mOptions;               ///< Various options
     AVCodecContext  *mVideoCodecContext;    ///< Structure containing details of the received video, if present
     AVCodecContext  *mAudioCodecContext;    ///< Structure containing details of the received audio, if present
     AVStream        *mVideoStream;          ///< Structure containing details of the received video stream, if present
     AVStream        *mAudioStream;          ///< Structure containing details of the received audio stream, if present
+    int             mVideoStreamId;
+    int             mAudioStreamId;
+    AVFrame         *mVideoFrame;
+    AVFrame         *mAudioFrame;
+    ByteBuffer      mVideoFrameBuffer;
+    ByteBuffer      mAudioFrameBuffer;
     uint64_t        mBaseTimestamp;         ///< Remote streams tend to be timebased on time at stream start,
                                             ///< this is the initial timestamp for reference
+    uint64_t        mLastTimestamp;         ///< Remote streams tend to be timebased on time at stream start,
+    bool            mRealtime;
 
 public:
 /**
@@ -43,7 +51,7 @@ nvrcam.cam = new AVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain"
 
 \endcode
 */
-    AVInput( const std::string &name, const std::string &source, const std::string &format="", bool  loop=false );
+    AVInput( const std::string &name, const std::string &source, const Options &options=gNullOptions );
     ~AVInput();
 
     const AVCodecContext *videoCodecContext() const { return( mVideoCodecContext ); }
@@ -86,9 +94,9 @@ nvrcam.cam = new AVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain"
         return( mAudioCodecContext->frame_size );   // Not sure about this
     }
     
-   
-
 protected:
+    int decodePacket( AVPacket &packet, int &frameComplete );
+
     int run();
 };
 
