@@ -61,13 +61,6 @@ int JpegEncoder::run()
     if ( !codec )
         Fatal( "Can't find encoder codec" );
 
-    AVDictionary *opts = NULL;
-    avDictSet( &opts, "width", mWidth );
-    avDictSet( &opts, "height", mHeight );
-    avDictSet( &opts, "framerate", (double)mFrameRate );
-    //char pixelFormat[64] = "";
-    //avDictSet( &opts, "pixel_format", av_get_pix_fmt_string( pixelFormat, sizeof(pixelFormat), mPixelFormat) );
-
     mCodecContext = avcodec_alloc_context3( codec );
 
     mCodecContext->width = mWidth;
@@ -79,11 +72,9 @@ int JpegEncoder::run()
     Debug( 2, "Time base = %d/%d", mCodecContext->time_base.num, mCodecContext->time_base.den );
     Debug( 2, "Pix fmt = %d", mCodecContext->pix_fmt );
 
-    avDumpDict( opts );
     /* open it */
-    if ( avcodec_open2( mCodecContext, codec, &opts ) < 0 )
+    if ( avcodec_open2( mCodecContext, codec, NULL ) < 0 )
         Fatal( "Unable to open encoder codec" );
-    avDumpDict( opts );
 
     AVFrame *inputFrame = avcodec_alloc_frame();
 
