@@ -126,9 +126,17 @@ int JpegEncoder::run()
                 if ( !mConsumers.empty() )
                 {
                     FrameQueue::iterator iter = mFrameQueue.begin();
-                    const FeedFrame *frame = iter->get();
+                    const VideoFrame *inputVideoFrame = NULL;
 
-                    const VideoFrame *inputVideoFrame = dynamic_cast<const VideoFrame *>(frame);
+                    while ( iter != mFrameQueue.end() )
+                    {
+                        const FeedFrame *frame = iter->get();
+                        inputVideoFrame = dynamic_cast<const VideoFrame *>(frame);
+                        if ( inputVideoFrame )
+                            break;
+                        iter++;
+                    }
+
                     if ( inputVideoFrame )
                     {
                         Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
