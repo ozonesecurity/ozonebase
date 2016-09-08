@@ -1,6 +1,6 @@
 #include "../base/ozApp.h"
 #include "../base/ozListener.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozMotionDetector.h"
 #include "../processors/ozFaceDetector.h"
 #include "../processors/ozShapeDetector.h"
@@ -33,40 +33,38 @@ int main( int argc, const char *argv[] )
     Application app;
 
     // Two RTSP sources 
-    NetworkAVInput traffic( "traffic", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
-    NetworkAVInput people( "people", "face-input.mp4", "", true );
-    //app.addThread( &traffic );
+    AVInput traffic( "traffic", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
+    Options peopleOptions;
+    peopleOptions.add( "realtime", true );
+    peopleOptions.add( "loop", true );
+    AVInput people( "people", "/transfer/recorder-1.mov", peopleOptions );
+    app.addThread( &traffic );
     app.addThread( &people );
 
     // motion detect for traffic
-    MotionDetector trafficDetector( "traffic" );
-    trafficDetector.registerProvider( traffic );
-    //app.addThread( &trafficDetector );
+    MotionDetector trafficDetector( traffic );
+    app.addThread( &trafficDetector );
 
     // rate limiter for people detector
-    RateLimiter peopleLimiter( "people-limiter", 5 );
-    peopleLimiter.registerProvider( people, FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+    RateLimiter peopleLimiter( 5, people );
     app.addThread( &peopleLimiter );
 
     // Scale video up
-    //ImageScale peopleScalePre( "people-scale-pre", Rational( 1, 2 ) );
-    //peopleScalePre.registerProvider( peopleLimiter );
+    //ImageScale peopleScalePre( Rational( 1, 2 ), peopleLimiter );
     //app.addThread( &peopleScalePre );
 
     // people detect for people
-    ShapeDetector peopleDetector( "people-detector", "dlib_pedestrian_detector.svm", ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE );
-    peopleDetector.registerProvider( people );
+    ShapeDetector peopleDetector( "dlib_pedestrian_detector.svm", ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE, peopleLimiter );
     app.addThread( &peopleDetector );
 
     // Scale video down
-    ImageScale peopleScalePost( "people-scale-post", Rational( 1, 2 ) );
-    peopleScalePost.registerProvider( peopleDetector );
-    app.addThread( &peopleScalePost );
+    //ImageScale peopleScalePost( Rational( 1, 2 ), peopleDetector );
+    //app.addThread( &peopleScalePost );
 
     // Turn black and white
-    VideoFilter peopleFilter( "people-filter", "hue=s=0, scale=iw/2:-1" );
+    //VideoFilter peopleFilter( "hue=s=0, scale=iw/2:-1", people );
     //VideoFilter peopleFilter( "people-filter", "scale=iw/2:-1" );
-    peopleFilter.registerProvider( peopleScalePost );
+    //peopleFilter.registerProvider( people );
     //app.addThread( &peopleFilter );
 
     // Let's make a mux/stitched handler for traffic and people and its debugs
@@ -75,21 +73,20 @@ int main( int argc, const char *argv[] )
     trafficMatrix.registerProvider( *trafficDetector.refImageSlave() );
     trafficMatrix.registerProvider( *trafficDetector.varImageSlave() );
     trafficMatrix.registerProvider( *trafficDetector.deltaImageSlave() );
-    //app.addThread( &trafficMatrix );
+    app.addThread( &trafficMatrix );
 
     Listener listener;
     app.addThread( &listener );
 
     HttpController httpController( "watch", 9292 );
-    //httpController.addStream("watch",traffic);
+    httpController.addStream( "watch",traffic );
     httpController.addStream( "watch", people );
 
-    //httpController.addStream( "detect", trafficDetector );
+    httpController.addStream( "detect", trafficDetector );
     httpController.addStream( "detect", peopleDetector );
-    httpController.addStream( "detect", peopleScalePost );
-    httpController.addStream( "detect", peopleFilter );
+    //httpController.addStream( "filter", peopleFilter );
 
-    //httpController.addStream( "debug", trafficMatrix );
+    httpController.addStream( "debug", trafficMatrix );
     
     listener.addController( &httpController );
 
