@@ -99,7 +99,7 @@ public:
         const std::pair<const t&,OptionMap::const_iterator> result = _get( name, notFoundValue );
         return( result.first );
     }
-    const std::string &get( const std::string &name, const char *notFoundValue )
+    const std::string &get( const std::string &name, const char *&notFoundValue )
     {
         const std::pair<const std::string&,OptionMap::const_iterator> result = _get( name, std::string(notFoundValue) );
         return( result.first );
@@ -111,7 +111,7 @@ public:
             mOptionMap.erase( result.second );
         return( result.first );
     }
-    const std::string &extract( const std::string &name, const char *notFoundValue )
+    const std::string &extract( const std::string &name, const char *&notFoundValue )
     {
         const std::pair<const std::string&,OptionMap::const_iterator> result = _get( name, std::string(notFoundValue) );
         if ( result.second != mOptionMap.end() )
