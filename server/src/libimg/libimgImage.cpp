@@ -923,7 +923,6 @@ Image::Format Image::getFormatFromPalette( int palette )
     return( format );
 }
 
-#if HAVE_LIBAVUTIL_AVUTIL_H
 /**
 * @brief 
 *
@@ -943,7 +942,7 @@ AVPixelFormat Image::getFfPixFormat( Format format )
             pixFormat = AV_PIX_FMT_GRAY16;
             break;
         case FMT_RGB :
-            pixFormat = AV_PIX_FMT_BGR24;
+            pixFormat = AV_PIX_FMT_RGB24;
             break;
         case FMT_RGB48 :
             pixFormat = AV_PIX_FMT_RGB48BE;
@@ -1029,8 +1028,6 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
     return( format );
 }
 
-#endif // HAVE_LIBAVUTIL_AVUTIL_H
-
 /**
 * @brief 
 *
@@ -1041,6 +1038,7 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
 Image::BlendTablePtr Image::getBlendTable( int transparency )
 {
     static Mutex blendMutex;
+
     blendMutex.lock();
     BlendTablePtr blendPtr = smBlendTables[transparency];
     if ( !blendPtr )
@@ -2199,6 +2197,46 @@ Image::Image( Format format, int width, int height, unsigned char *data, bool ad
 * @param v4lPalette
 * @param width
 * @param height
+*/
+size_t Image::calcBufferSize( int v4lPalette, int width, int height )
+{
+    size_t pixels = width*height;
+    switch( v4lPalette )
+    {
+        case V4L2_PIX_FMT_YUV420 :
+        case V4L2_PIX_FMT_YUV410 :
+        case V4L2_PIX_FMT_YUV422P :
+        case V4L2_PIX_FMT_YUV411P :
+        case V4L2_PIX_FMT_YUYV :
+        case V4L2_PIX_FMT_UYVY :
+        {
+            // Converts to YUV expanded planar format
+            return( pixels*3 );
+        }
+        case V4L2_PIX_FMT_RGB555 :
+        case V4L2_PIX_FMT_RGB565 :
+        case V4L2_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_RGB24 :
+        {
+            // Converts to RGB format
+            return( pixels*3 );
+        }
+        case V4L2_PIX_FMT_GREY :
+        {
+            // Converts to greyscale format
+            return( pixels);
+        }
+    }
+    Panic( "No conversion for unexpected V4L2 palette %08x", v4lPalette );
+    return( 0 );
+}
+
+/**
+* @brief 
+*
+* @param v4lPalette
+* @param width
+* @param height
 * @param data
 */
 Image::Image( int v4lPalette, int width, int height, unsigned char *data )
@@ -2209,8 +2247,9 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 
     Format format = FMT_UNDEF;
 
-    unsigned char tempData[MAX_IMAGE_SIZE];
-    unsigned char *imageData = data;
+    size_t bufferSize = calcBufferSize( v4lPalette, width, height );
+    uint8_t *tempData = new uint8_t [bufferSize];
+    uint8_t *imageData = data;
     switch( v4lPalette )
     {
         case V4L2_PIX_FMT_YUV420 :
@@ -2307,11 +2346,68 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 #endif
         default :
         {
-            Panic( "Can't convert palette %d to image format", v4lPalette );
+            Panic( "Can't convert V4L2 palette %08x to image format", v4lPalette );
             break;
         }
     }
     assign( format, width, height, imageData );
+    delete[] tempData;
+}
+
+/**
+* @brief 
+*
+* @param pixFormat
+* @param width
+* @param height
+*/
+size_t Image::calcBufferSize( AVPixelFormat pixFormat, int width, int height )
+{
+    size_t pixels = width*height;
+    switch( pixFormat )
+    {
+        case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
+        case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
+        case AV_PIX_FMT_UYVY422 :   ///< packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1
+        case AV_PIX_FMT_YUV422P :   ///< planar YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples)
+        case AV_PIX_FMT_YUV444P :   ///< planar YUV 4:4:4, 24bpp, (1 Cr & Cb sample per 1x1 Y samples)
+        case AV_PIX_FMT_YUV410P :   ///< planar YUV 4:1:0,  9bpp, (1 Cr & Cb sample per 4x4 Y samples)
+        case AV_PIX_FMT_YUV411P :   ///< planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples)
+        case AV_PIX_FMT_YUVJ420P :  ///< planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range
+        case AV_PIX_FMT_YUVJ422P :  ///< planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range
+        case AV_PIX_FMT_YUVJ444P :  ///< planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range
+        case AV_PIX_FMT_YUV440P :   ///< planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples)
+        case AV_PIX_FMT_YUVJ440P :  ///< planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range
+        {
+            // Converts to YUV expanded planar format
+            return( pixels*3 );
+        }
+        case AV_PIX_FMT_RGB24 :     ///< packed RGB 8:8:8, 24bpp, RGBRGB...
+        case AV_PIX_FMT_BGR24 :     ///< packed RGB 8:8:8, 24bpp, BGRBGR...
+        case AV_PIX_FMT_RGB565:
+        case AV_PIX_FMT_RGB555:
+        {
+            // Converts to RGB format
+            return( pixels*3 );
+        }
+        case AV_PIX_FMT_RGB48:
+        {
+            // Converts to RGB 48 bits format
+            return( pixels*6 );
+        }
+        case AV_PIX_FMT_GRAY8 :     ///<        Y        ,  8bpp
+        {
+            // Converts to greyscale format
+            return( pixels );
+        }
+        case AV_PIX_FMT_GRAY16 :
+        {
+            // Converts to greyscale 16 bits format
+            return( pixels*2 );
+        }
+    }
+    Panic( "No conversion for unexpected AVPixelFormat palette %d", pixFormat );
+    return( 0 );
 }
 
 /**
@@ -2330,10 +2426,9 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
 
     Format format = FMT_UNDEF;
 
-    static unsigned char *tempData = NULL;
-    if ( !tempData )
-        tempData = new unsigned char[MAX_IMAGE_SIZE];
-    unsigned char *imageData = data;
+    size_t bufferSize = calcBufferSize( pixFormat, width, height );
+    uint8_t *tempData = new uint8_t[bufferSize];
+    uint8_t *imageData = data;
     switch( pixFormat )
     {
         case AV_PIX_FMT_YUV420P :   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
@@ -2346,9 +2441,9 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
         }
         case AV_PIX_FMT_YUYV422 :   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
         {
-            format = FMT_RGB;
+            format = FMT_YUVP;
             if ( !data ) break;
-            copyYUYV2RGB( tempData, data, width, height );
+            copyYUYV2YUVP( tempData, data, width, height );
             imageData = tempData;
             break;
         }
@@ -2498,6 +2593,7 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
         }
     }
     assign( format, width, height, imageData );
+    delete[] tempData;
 }
 
 /**

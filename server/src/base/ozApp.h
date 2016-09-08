@@ -1,3 +1,5 @@
+/** @addtogroup Application */
+/*@{*/
 #ifndef OZ_APP_H
 #define OZ_APP_H
 
@@ -21,3 +23,4 @@ public:
 };
 
 #endif // OZ_APP_H
+/*@}*/

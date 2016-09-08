@@ -20,13 +20,20 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
-#include "ozone.h"
+#include "nvrcli.h"
 #include "nvrNotifyOutput.h"
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 1 // 1 if video is on
-#define SHOW_FFMPEG_LOG 0 
+#define SHOW_FFMPEG_LOG 0
 #define EVENT_REC_PATH "nvrcli_events"
+
+#define person_resize_w 1024
+#define person_resize_h 768
+#define person_refresh_rate  5
+
+#define video_record_w 640
+#define video_record_h 480
 
 using namespace std;
 
@@ -35,9 +42,11 @@ class  nvrCameras
 {
 public:
     NetworkAVInput *cam;
-    MotionDetector *motion; 
-    EventRecorder *event; // used if RECORD_VIDEO = 0
-    MovieFileOutput *movie; // used if RECORD_VIDEO = 1
+    Detector *motion; // keeping two detectors as they can run in parallel
+    Detector *person;   
+    Recorder *event; // will either store video or images 
+    RateLimiter *rate;
+    LocalFileOutput *fileOut;
 
 };
 
@@ -84,45 +93,159 @@ void cmd_add()
 
     string name;
     string source;
+    string type;
+    string record;
 
     cin.clear(); cin.sync();
-    cout << "camera name (ENTER for default):";
-    getline(cin,name);
+    
+    
+    //cout << "camera name (ENTER for default):";
+    //getline(cin,name);
+    name = "";
+    
     cout << "RTSP source (ENTER for default):";
     getline(cin,source);
+    cout << "Detection type ([m]otion/[f]ace/[b]oth/[p]erson) (ENTER for default = b):";
+    getline (cin, type);
+    cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
+    getline (cin, record);
+
+    // Process input, fill in defaults if needed
     if (name.size()==0 )
     {
         string n = to_string(camid);
         camid++;
         name = "cam" + n;
     }
+    cout << "Camera name:" << name << endl;
+    
     if (source.size() == 0 )
     {
         source = defRtspUrls[nvrcams.size() % MAX_CAMS];
     }
+    cout << "Camera source:" << source << endl;
     
+    if (record.size() ==0 || (record != "y" && record != "n" ))
+    {
+        record = "n";
+    }
+    cout << "Recording will be " << (record=="n"?"skipped":"stored") << " for:" << name << endl;
+    
+    if (type.size() ==0 || (type != "m" && type != "f" && type != "b" && type !="p"))
+    {
+        type = "b";
+    }
+    cout << "Detection type is: ";
+    if (type=="f")
+    {
+        cout << "Face";
+    }
+    else if (type =="m")
+    {
+        cout << "Motion";
+    }
+    else if (type == "p")
+    {
+        cout << "Person";
+    }
+    else if (type=="b")
+    {
+        cout << "Face+Motion";
+    }
+    cout << endl; 
     
     nvrCameras nvrcam;
+
+    // NULLify everything so I know what to delete later
+    nvrcam.cam = NULL;
+    nvrcam.motion = NULL;
+    nvrcam.person = NULL;
+    nvrcam.event = NULL;
+    nvrcam.rate = NULL;
+    nvrcam.fileOut = NULL;
+
     nvrcam.cam = new NetworkAVInput ( name, source,"",true );
-    nvrcam.motion = new MotionDetector( "modect-"+name );
-    nvrcam.motion->registerProvider(*(nvrcam.cam) );
+    if (type == "f")
+    {
+        nvrcam.person = new FaceDetector( "person-"+name,"./shape_predictor_68_face_landmarks.dat" );
+        nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
+        nvrcam.rate->registerProvider(*(nvrcam.cam) );
+        nvrcam.person->registerProvider(*(nvrcam.rate) );
+    }
+    else if (type=="p")
+    {
+        nvrcam.person = new ShapeDetector( "person-"+name,"./dlib_pedestrian_detector.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
+        nvrcam.rate->registerProvider(*(nvrcam.cam) );
+        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+}
+    else if (type=="m")
+    {
+        nvrcam.motion = new MotionDetector( "modect-"+name );
+        nvrcam.motion->registerProvider(*(nvrcam.cam) );
+    }
+    else // both face and motion
+    {
+        nvrcam.person = new FaceDetector( "person-"+name, "./shape_predictor_68_face_landmarks.dat" );
+        nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
+        nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
+        nvrcam.rate->registerProvider(*(nvrcam.cam) );
+        nvrcam.person->registerProvider(*(nvrcam.rate) );
+        nvrcam.fileOut->registerProvider(*(nvrcam.person) );
+        nvrcam.motion = new MotionDetector( "modect-"+name );
+        nvrcam.motion->registerProvider(*(nvrcam.cam) );
+    }
 
     char path[2000];
     snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
-    cout << "Events recorded to: " << path << endl;
+    if (record == "y")
+    {
+        cout << "Events recorded to: " << path << endl;
+    }
+    else 
+    {
+        cout << "Recording will be skipped" << endl;
+    }
 
     mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 #if RECORD_VIDEO
-    VideoParms* videoParms= new VideoParms( 640, 480 );
+    VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
     AudioParms* audioParms = new AudioParms;
-    nvrcam.movie = new MovieFileOutput(name, path, "mp4", 60, *videoParms, *audioParms);
-    nvrcam.movie->registerProvider(*(nvrcam.motion));
-    notifier->registerProvider(*(nvrcam.movie));
+    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
+    if (type=="m")
+    { 
+        nvrcam.event->registerProvider(*(nvrcam.motion));
+    }
+    else if (type == "f")
+    {
+        
+        nvrcam.event->registerProvider(*(nvrcam.person));
+    }
+    else if (type == "b")
+    {
+        
+        cout << "only registering face detection events" << endl;
+        nvrcam.event->registerProvider(*(nvrcam.person));
+    }
+    notifier->registerProvider(*(nvrcam.event));
 #else
-    nvrcam.event = new EventRecorder( "event-"+name,  path);
+    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
 
-    nvrcam.event->registerProvider(*(nvrcam.motion));
+    if (type=="m")
+    {
+        nvrcam.event->registerProvider(*(nvrcam.motion));
+    }
+    else if (type=="f" || type=="p")
+    {
+        nvrcam.event->registerProvider(*(nvrcam.person));
+    }
+    else if (type == "b")
+    {
+        
+        cout << "only registering face detection events" << endl;
+        nvrcam.event->registerProvider(*(nvrcam.person));
+    }
     notifier->registerProvider(*(nvrcam.event));
 
 #endif
@@ -134,16 +257,44 @@ void cmd_add()
     cout << nvrcams.back().cam->source() << endl;
 
     nvrcams.back().cam->start();
-    nvrcams.back().motion->start();
-#if RECORD_VIDEO
-    nvrcams.back().movie->start();
-#else
-    nvrcams.back().event->start();
-#endif
+    if (type=="m")
+    {
+        nvrcams.back().motion->start();
+    }
+    else if (type=="f" || type=="p")
+    {
+        nvrcams.back().rate->start();
+        nvrcams.back().person->start();
+    }
+    else if (type=="b")
+    {
+        nvrcams.back().motion->start();
+        nvrcams.back().rate->start();
+        nvrcams.back().person->start();
+        nvrcams.back().fileOut->start();
+    }
+
+    if (record == "y")
+    {
+        nvrcams.back().event->start();
+    }
     listener->removeController(httpController);
     httpController->addStream("live",*(nvrcam.cam));
-    httpController->addStream("debug",*(nvrcam.motion));
+    if (type=="m")
+    {
+        httpController->addStream("debug",*(nvrcam.motion));
+    }
+    else if (type =="f" || type == "p")
+    {
+        httpController->addStream("debug",*(nvrcam.person));
+    }
+    else if (type == "b")
+    {
+        httpController->addStream("debug",*(nvrcam.motion));
+        httpController->addStream("debug",*(nvrcam.person));
+    }
     listener->addController(httpController);
+    
 }
 
 // CMD - help 
@@ -190,16 +341,11 @@ void cmd_delete()
     cout << "Camera killed\n";
     (*i).motion->join();
     cout << "Camera Motion killed\n";
-#if RECORD_VIDEO
-    (*i).movie->stop();
-    (*i).movie->join();
-    cout << "Camera Movie Record killed\n";
 
-#else
     (*i).event->stop();
     (*i).event->join();
-    cout << "Camera Image Record killed\n";
-#endif
+    cout << "Camera  Record killed\n";
+
     nvrcams.erase(i);
 }
 
@@ -213,6 +359,38 @@ void cmd_quit()
 void cmd_unknown()
 {
     cout << endl << "unknown command. try help"<< endl;
+}
+
+void monitorStatus(Application app)
+{
+    for (;;)
+    {
+        list<nvrCameras>::iterator i = nvrcams.begin();
+        while ( i!= nvrcams.end())
+        {
+            int isTerminated = (*i).cam->ended() + (*i).cam->error();
+            if (isTerminated >0)
+            {
+                cout << "Bad state found for " << (*i).cam->name() << "..deleting..."<<endl;
+
+               
+                if ((*i).cam) { cout << "cam kill"<< endl;  (*i).cam->stop(); (*i).cam->join();}
+                if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
+                if ((*i).person) { cout<<  "person kill"<< endl;(*i).person->deregisterAllProviders();(*i).person->stop(); (*i).person->join(); }
+                if ((*i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((*i).event)); (*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
+                if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
+              
+                i = nvrcams.erase(i); // point to next iterator on delete
+    
+            }
+            else
+            {
+                i++; // increment if not deleted
+            }
+        }
+        
+        sleep(5);
+    }
 }
 
 //  This thread will listen to commands from users
@@ -233,8 +411,7 @@ void cli(Application app)
         cin.clear(); cin.sync();
         cout << "?:";
         getline (cin,command);
-        // really? no string lowercase?
-        transform(command.begin(), command.end(), command.begin(), [](unsigned char c) { return tolower(c); });
+        transform(command.begin(), command.end(), command.begin(), [](unsigned char c) { return tolower(c); }); // lowercase 
         cout << "You entered: "<< command << endl;
         if (cmd_map.find(command) == cmd_map.end()) 
             cmd_unknown();
@@ -266,6 +443,8 @@ int main( int argc, const char *argv[] )
     app.addThread(notifier);
 
     thread t1(cli,app);
+    thread t2(monitorStatus,app);
+    
     app.run();
     cout << "Never here";
 }

@@ -130,6 +130,7 @@ int MotionDetector::run()
                     if ( frame )
                     {
                         Image image( pixelFormat, width, height, frame->buffer().data() );
+                        //Image image( Image::FMT_YUVP, width, height, frame->buffer().data() );
                         //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
                         if ( mRefImage.empty() )
                         {
@@ -148,6 +149,7 @@ int MotionDetector::run()
                         Image motionImage( image );
                         //motionImage.erase();
                         //motionData.reset();
+
                         analyse( &image, motionData, &motionImage );
                         if ( mAlarmed )
                         {

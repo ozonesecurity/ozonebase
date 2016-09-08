@@ -36,10 +36,10 @@ endif(NOT CMAKE_BUILD_TYPE)
 #set(CMAKE_INSTALL_ALWAYS ON)
 
 # Default CLFAGS and CXXFLAGS:
-set(CMAKE_C_FLAGS_RELEASE "-Wall -D__STDC_CONSTANT_MACROS -O2")
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall -D__STDC_CONSTANT_MACROS -O2")
-set(CMAKE_C_FLAGS_DEBUG "-Wall -D__STDC_CONSTANT_MACROS -g")
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -D__STDC_CONSTANT_MACROS -g")
+set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O2")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O2")
+set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
@@ -255,7 +255,7 @@ if(OZ_SUPERBUILD)
         check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
     else(AVDEVICE_LIBRARIES)
         message(FATAL_ERROR 
-                "oZone requires avcodec but it was not found on your system")
+                "oZone requires avdevice but it was not found on your system")
     endif(AVDEVICE_LIBRARIES)
 
     # avutil (built as external project, using find_library and find_path)
@@ -292,7 +292,6 @@ if(OZ_SUPERBUILD)
         message(FATAL_ERROR 
                 "oZone requires swscale but it was not found on your system")
     endif(SWSCALE_LIBRARIES)
-
     # avfilter (built as external project, using find_library and find_path)
     find_library(AVFILTER_LIBRARIES avfilter PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
     if(AVFILTER_LIBRARIES)
@@ -327,6 +326,52 @@ if(OZ_SUPERBUILD)
                 "oZone requires swresample but it was not found on your system")
     endif(SWRESAMPLE_LIBRARIES)
 
+    # dlib (using find_library and find_path)
+    find_library(DLIB_LIBRARIES dlib PATHS "${FFMPEG_LIBDIR}" NO_DEFAULT_PATH)
+    if(DLIB_LIBRARIES)
+        set(HAVE_LIBDLIB 1)
+        list(APPEND OZ_BIN_LIBS "${DLIB_LIBRARIES}")
+        find_path(IMG_PROCESSING_INCLUDE_DIR "dlib/image_processing/frontal_face_detector.h" PATHS "${FFMPEG_INCLUDEDIR}" NO_DEFAULT_PATH)
+message(STATUS "Value of IMG_PROCESSING_INCLUDE_DIR: ${IMG_PROCESSING_INCLUDE_DIR}")
+        if(IMG_PROCESSING_INCLUDE_DIR)
+            include_directories("${IMG_PROCESSING_INCLUDE_DIR}")
+            set(CMAKE_REQUIRED_INCLUDES "${IMG_PROCESSING_INCLUDE_DIR}")
+        endif(IMG_PROCESSING_INCLUDE_DIR)
+        mark_as_advanced(FORCE DLIB_LIBRARIES)
+    else(DLIB_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires dlib but it was not found on your system")
+    endif(DLIB_LIBRARIES)
+
+    # dlib requires us to link against cblas
+    # cblas (using find_library)
+    # This check is a little different than the others
+    # It will look for libcblas in the standard locations, in addition to the buildroot include folder
+    # rather than only in the buildroot include folder
+    find_library(CBLAS_LIBRARIES NAMES cblas satlas PATHS "/usr/${CMAKE_INSTALL_LIBDIR}/atlas" "/usr/local/${CMAKE_INSTALL_LIBDIR}/atlas" "${FFMPEG_LIBDIR}")
+    if(CBLAS_LIBRARIES)
+        set(HAVE_LIBCBLAS 1)
+        list(APPEND OZ_BIN_LIBS "${CBLAS_LIBRARIES}")
+        mark_as_advanced(FORCE CBLAS_LIBRARIES)
+    else(CBLAS_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires cblas but it was not found on your system")
+    endif(CBLAS_LIBRARIES)
+
+    # dlib requires us to link against lapack
+    # lapack (using find_library)
+    # This check is a little different than the others
+    # It will look for liblapack in the standard locations, in addition to the buildroot include folder
+    # rather than only in the buildroot include folder
+    find_library(LAPACK_LIBRARIES lapack PATHS "${FFMPEG_LIBDIR}")
+    if(LAPACK_LIBRARIES)
+        set(HAVE_LIBCLAPACK 1)
+        list(APPEND OZ_BIN_LIBS "${LAPACK_LIBRARIES}")
+        mark_as_advanced(FORCE LAPACK_LIBRARIES)
+    else(LAPACK_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires lapack but it was not found on your system")
+    endif(LAPACK_LIBRARIES)
 else(OZ_SUPERBUILD)
 
     # avformat (using find_library and find_path)
@@ -377,7 +422,7 @@ else(OZ_SUPERBUILD)
         check_include_file("libavdevice/avdevice.h" HAVE_LIBAVDEVICE_AVDEVICE_H)
     else(AVDEVICE_LIBRARIES)
         message(FATAL_ERROR 
-                "oZone requires avcodec but it was not found on your system")
+                "oZone requires avdevice but it was not found on your system")
     endif(AVDEVICE_LIBRARIES)
 
     # avutil (using find_library and find_path)
@@ -449,6 +494,46 @@ else(OZ_SUPERBUILD)
                 "oZone requires swresample but it was not found on your system")
     endif(SWRESAMPLE_LIBRARIES)
 
+    # dlib (using find_library and find_path)
+    find_library(DLIB_LIBRARIES dlib)
+    if(DLIB_LIBRARIES)
+        set(HAVE_LIBDLIB 1)
+        list(APPEND OZ_BIN_LIBS "${DLIB_LIBRARIES}")
+        find_path(IMG_PROCESSING_INCLUDE_DIR "image_processing/frontal_face_detector.h")
+        if(IMG_PROCESSING_INCLUDE_DIR)
+            include_directories("${IMG_PROCESSING_INCLUDE_DIR}")
+            set(CMAKE_REQUIRED_INCLUDES "${IMG_PROCESSING_INCLUDE_DIR}")
+        endif(IMG_PROCESSING_INCLUDE_DIR)
+        mark_as_advanced(FORCE DLIB_LIBRARIES)
+    else(DLIB_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires dlib but it was not found on your system")
+    endif(DLIB_LIBRARIES)
+
+    # dlib requires us to link against cblas
+    # cblas (using find_library)
+    find_library(CBLAS_LIBRARIES NAMES cblas satlas PATHS /usr/${CMAKE_INSTALL_LIBDIR}/atlas /usr/local/${CMAKE_INSTALL_LIBDIR}/atlas)
+    if(CBLAS_LIBRARIES)
+        set(HAVE_LIBCBLAS 1)
+        list(APPEND OZ_BIN_LIBS "${CBLAS_LIBRARIES}")
+        mark_as_advanced(FORCE CBLAS_LIBRARIES)
+    else(CBLAS_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires cblas but it was not found on your system")
+    endif(CBLAS_LIBRARIES)
+
+    # dlib requires us to link against lapack
+    # lapack (using find_library)
+    find_library(LAPACK_LIBRARIES lapack)
+    if(LAPACK_LIBRARIES)
+        set(HAVE_LIBCLAPACK 1)
+        list(APPEND OZ_BIN_LIBS "${LAPACK_LIBRARIES}")
+        mark_as_advanced(FORCE LAPACK_LIBRARIES)
+    else(LAPACK_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires lapack but it was not found on your system")
+    endif(LAPACK_LIBRARIES)
+
 endif(OZ_SUPERBUILD)
 
 # check include files
@@ -464,7 +549,7 @@ foreach( INCVAR alloca fcntl inttypes limits memory netdb
     if (NOT HAVE_${INCVAR_U}_H)
         # Make each check fatal. Change this is this is not the case.
         message(FATAL_ERROR 
-            "${ICVAR} function not found and this project requires it.")
+            "${INCVAR} header file not found and this project requires it.")
     endif (NOT HAVE_${INCVAR_U}_H)
 endforeach(INCVAR)
 
@@ -546,5 +631,4 @@ message(STATUS "Optional libraries found:${optlibsfound}")
 message(STATUS "Optional libraries not found:${optlibsnotfound}")
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ozonebase")
-
 

@@ -10,11 +10,15 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     libass-dev \
+    libatlas-base-dev \
     libfreetype6-dev \
     libjpeg-dev \
     libjpeg8 \
+    liblapack-dev \
+    libopenblas-dev \
     libtheora-dev \
     libtool \
+    libv4l-dev \
     libvorbis-dev \
     pkg-config \
     texinfo \
@@ -22,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     yasm \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
-RUN useradd --create-home --shell /bin/bash --password RnXP2VVrWMy/w -G sudo ozone
+RUN useradd --create-home --shell /bin/bash --password RnXP2VVrWMy/w -G sudo,video ozone
 ENV HOME /home/ozone
 WORKDIR $HOME
 COPY vimrc.txt .vimrc
@@ -31,4 +35,5 @@ COPY demo/ demo
 RUN chown -R ozone:ozone .vimrc bootstrap-ozone.sh demo/
 USER ozone
 ENV INSTALLDIR "$HOME/install"
+ENV PATH "$PATH:$INSTALLDIR/bin"
 EXPOSE 9280 9292

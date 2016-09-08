@@ -1,3 +1,5 @@
+/** @addtogroup Utilities */
+/*@{*/
 #ifndef OZ_NOTIFY_FRAME_H
 #define OZ_NOTIFY_FRAME_H
 
@@ -191,3 +193,4 @@ public:
 };
 
 #endif // OZ_NOTIFY_FRAME_H
+/*@}*/

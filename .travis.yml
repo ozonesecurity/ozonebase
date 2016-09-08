@@ -36,11 +36,14 @@ addons:
       - texinfo
       - yasm
       - zlib1g-dev
+      - libopenblas-dev
+      - liblapack-dev
+      - libatlas-base-dev
 
 cache:
     directories:
       - externals/ffmpeg
-
+      - externals/dlib
 
 install:
       - cd externals/ffmpeg
@@ -48,10 +51,15 @@ install:
       - make -j `grep processor /proc/cpuinfo|wc -l` 
       - sudo make install 
       - sudo make install-libs
+      - cd ../dlib
+      - mkdir -p build
+      - cd build
+      - cmake ..
+      - sudo make install 
 
 script:
       - cd $TRAVIS_BUILD_DIR/server
-      - cmake -DOZ_EXMAPLES=ON .
+      - cmake -DOZ_EXAMPLES=ON .
       - make
       - sudo make install
 

@@ -39,7 +39,7 @@ protected:
     FeedConsumer( FeedProvider &provider, const FeedLink &link=gQueuedFeedLink ) :
         mProviderLimit( 1 )
     {
-         registerProvider( provider, link );
+        registerProvider( provider, link );
     }
 
     bool waitForProviders();                    ///< Return when all providers are ready to supply frames. Returns false
@@ -65,6 +65,12 @@ public:
     /// deregister this provider from the consumer. Returns true for success, false for failure.
     ///
     virtual bool deregisterProvider( FeedProvider &provider, bool reciprocate=true );
+
+
+    ///
+    /// Deregisters all providers (and reciprocal consumers in providers)
+    ///
+    virtual bool deregisterAllProviders();
 
     /// Return the first provider, shortcut for when providers == 1 
     FeedProvider *provider() const { return( mProviders.empty() ? NULL : mProviders.begin()->first ); }

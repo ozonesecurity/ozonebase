@@ -17,6 +17,15 @@ void FeedConsumer::cleanup()
     mFrameQueue.clear();
     mQueueMutex.unlock();
 }
+/**
+* @brief 
+*
+* @return 
+*/
+bool FeedConsumer::deregisterAllProviders()
+{
+    cleanup();
+}
 
 /**
 * @brief 
@@ -100,7 +109,7 @@ bool FeedConsumer::waitForProviders()
     mProviderMutex.lock();
     if ( mProviders.empty() )
     {
-        Warning( "%s: No providers registered for consumer", cidentity() );
+        Debug( 5,"%s: No providers registered for consumer", cidentity() );
     }
     mProviderMutex.unlock();
     int waitCount, readyCount, badCount;
@@ -110,7 +119,7 @@ bool FeedConsumer::waitForProviders()
         readyCount = 0;
         badCount = 0;
         mProviderMutex.lock();
-        Info( "%s: Got %lu providers", cidentity(), mProviders.size() );
+        Debug( 5,"%s: Got %lu providers", cidentity(), mProviders.size() );
         for ( ProviderMap::const_iterator iter = mProviders.begin(); iter != mProviders.end(); iter++ )
         {
             if ( iter->first->ready() )
@@ -208,7 +217,7 @@ bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
 {
     bool result = true;
     mQueueMutex.lock();
-    if ( mFrameQueue.size() > MAX_QUEUE_SIZE )
+    if ( mFrameQueue.size() >= MAX_QUEUE_SIZE )
     {
         Error( "%s: Maximum queue size exceeded, got %lu frames, not running?", cidentity(), mFrameQueue.size() );
         result = false;

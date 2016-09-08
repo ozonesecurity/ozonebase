@@ -23,6 +23,48 @@ FeedProvider *FeedProvider::find( const std::string &identity )
     return( provider );
 }
 
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
+bool FeedProvider::videoFramesOnly( FramePtr frame, const FeedConsumer * )
+{
+    const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
+    return( videoFrame != NULL );
+}
+
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
+bool FeedProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
+{
+    const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame.get());
+    return( audioFrame != NULL );
+}
+
+/**
+* @brief 
+*
+* @param frame
+* @param 
+*
+* @return 
+*/
+bool FeedProvider::dataFramesOnly( FramePtr frame, const FeedConsumer * )
+{
+    const DataFrame *dataFrame = dynamic_cast<const DataFrame *>(frame.get());
+    return( dataFrame != NULL );
+}
+
 /*
 bool FeedProvider::verify( const std::string &identity )
 {
@@ -74,7 +116,7 @@ void FeedProvider::removeFromMap()
 {
     smProviderMutex.lock();
     if ( smProviders.erase( identity() ) != 1 )
-        Fatal( "Unable to remove provider %s from map, not found", cidentity() )
+        Error( "Unable to remove provider %s from map, not found", cidentity() )
     smProviderMutex.unlock();
 }
 
@@ -257,34 +299,6 @@ AudioVideoProvider::AudioVideoProvider( const std::string &cl4ss, const std::str
     setIdentity( cl4ss, name );
     addToMap();
     //Info( "AudioVideoProvider : %s + %s", mTag.c_str(), mId.c_str() );
-}
-
-/**
-* @brief 
-*
-* @param frame
-* @param 
-*
-* @return 
-*/
-bool AudioVideoProvider::videoFramesOnly( FramePtr frame, const FeedConsumer * )
-{
-    const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
-    return( videoFrame != NULL );
-}
-
-/**
-* @brief 
-*
-* @param frame
-* @param 
-*
-* @return 
-*/
-bool AudioVideoProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
-{
-    const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame.get());
-    return( audioFrame != NULL );
 }
 
 /**

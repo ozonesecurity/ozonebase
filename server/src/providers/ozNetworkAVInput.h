@@ -29,6 +29,21 @@ private:
                                         ///< this is the initial timestamp for reference
 
 public:
+/**
+* @brief 
+*
+* @param name instance name
+* @param source AV source (example "rtsp://foo", "/dev/video0", "/tmp/test.mp4" etc)
+* @param format
+* @param loop if true, loops the source. Makes sense only if you have provided a file
+
+\code
+
+nvrcam.cam = new NetworkAVInput ( "cam0", "/tmp/myvideo.mp4","",true );
+nvrcam.cam = new NetworkAVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain","",false );
+
+\endcode
+*/
     NetworkAVInput( const std::string &name, const std::string &source, const std::string &format="", bool  loop=false );
     ~NetworkAVInput();
 
