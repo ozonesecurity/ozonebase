@@ -22,7 +22,6 @@ void MotionDetector::construct()
     mAlarmCount = 0;
     mFastStart = true;
     mReadyCount = mFastStart?min(mRefBlend,mVarBlend)/2:max(mRefBlend,mVarBlend);
-    Info( "Ready Count: %d", mReadyCount );
     mFirstAlarmCount = 0;
     mLastAlarmCount = 0;
     mAlarmed = false;

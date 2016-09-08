@@ -94,6 +94,9 @@ int FaceDetector::run()
                         memcpy( image_data( img ), convImage.buffer().data(), convImage.buffer().size() );
                         //assign_image( img, frame->buffer().data() );
 
+                        //Info( "B4: %d x %d", num_rows(img), num_columns(img) );
+                        //dlib::pyramid_up(img);
+                        //Info( "AFT: %d x %d", num_rows(img), num_columns(img) );
                         std::vector<dlib::rectangle> dets = detector(img);
                         Info( "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
 
