@@ -20,9 +20,9 @@ int main( int argc, const char *argv[] )
 
     Application app;
 
-    NetworkAVInput input( "input", "/dev/video1" );
-    //NetworkAVInput input( "input", "Shop Door Camera.mp4" );
-    //NetworkAVInput input( "input", "mcem0_head.mpg" );
+    AVInput input( "input", "/dev/video1" );
+    //AVInput input( "input", "Shop Door Camera.mp4" );
+    //AVInput input( "input", "mcem0_head.mpg" );
     app.addThread( &input );
 
     FaceDetector detector( "detector" ,"./shape_predictor_68_face_landmarks.dat");

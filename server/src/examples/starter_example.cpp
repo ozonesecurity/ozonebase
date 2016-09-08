@@ -42,11 +42,13 @@ int main( int argc, const char *argv[] )
     app.addThread( &people );
 
     // motion detect for traffic
-    MotionDetector trafficDetector( traffic );
+    MotionDetector trafficDetector( "traffic" );
+    trafficDetector.registerProvider( traffic );
     app.addThread( &trafficDetector );
 
     // rate limiter for people detector
-    RateLimiter peopleLimiter( 5, people );
+    RateLimiter peopleLimiter( "people", 5, true );
+    peopleLimiter.registerProvider( people );
     app.addThread( &peopleLimiter );
 
     // Scale video up
