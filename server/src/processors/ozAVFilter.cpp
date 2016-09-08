@@ -188,9 +188,10 @@ int VideoFilter::run()
                 Debug( 3, "Got %zd frames on queue", mFrameQueue.size() );
                 for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
                 {
-                    //const VideoFrame *frame = dynamic_cast<const VideoFrame *>(iter->get());
-                    //FramePtr framePtr( *iter );
-                    const FeedFrame *frame = (*iter).get();
+                    const VideoFrame *frame = dynamic_cast<const VideoFrame *>(iter->get());
+
+                    if ( !frame )
+                        continue;
 
                     inputFrame->width = inputWidth;
                     inputFrame->height = inputHeight;
@@ -203,7 +204,6 @@ int VideoFilter::run()
                         Error( "Error while feeding the filtergraph" );
                         break;
                     }
-                        Hexdump( 0, inputFrame->data[0], 16 );
                     while ( true )
                     {
                         int result = av_buffersink_get_frame( mBufferSinkContext, filterFrame );
