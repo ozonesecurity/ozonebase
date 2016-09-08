@@ -41,7 +41,7 @@ using namespace std;
 class  nvrCameras
 {
 public:
-    NetworkAVInput *cam;
+    AVInput *cam;
     Detector *motion; // keeping multiple detectors
     Detector *person;   
     Detector *face;   
@@ -57,6 +57,7 @@ Listener *listener;
 NotifyOutput *notifier;
 HttpController* httpController;
 Application app;
+Options avOptions;
 
 // default URLs to use if none specified
 const char* const defRtspUrls[] = {
@@ -166,7 +167,7 @@ void cmd_add()
     nvrcam.rate = NULL;
     nvrcam.fileOut = NULL;
 
-    nvrcam.cam = new NetworkAVInput ( name, source,"",true );
+    nvrcam.cam = new AVInput ( name, source,avOptions );
     if (type == "f")
     {
         nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
@@ -176,7 +177,7 @@ void cmd_add()
     }
     else if (type=="p")
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
         //nvrcam.person->registerProvider(*(nvrcam.rate) );
@@ -454,6 +455,9 @@ int main( int argc, const char *argv[] )
     av_log_set_callback(avlog_cb);
     avInit();
     mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    
+    avOptions.add("realtime",true);
+    avOptions.add("loop",true);
 
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
