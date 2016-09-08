@@ -36,6 +36,11 @@ void MotionDetector::construct()
     mNoiseLevelSq = (mNoiseLevel*mNoiseLevel) << 16;
 
     mStartTime = time( 0 );
+
+    mCompImageSlave = new SlaveVideo( mName+"-compImage" );
+    mRefImageSlave = new SlaveVideo( mName+"-refImage" );
+    mDeltaImageSlave = new SlaveVideo( mName+"-deltaImage" );
+    mVarImageSlave = new SlaveVideo( mName+"-varImage" );
 }
 
 /**
@@ -53,11 +58,22 @@ MotionDetector::MotionDetector( const std::string &name ) :
     mVarImageSlave( NULL )
 {
     construct();
+}
 
-    mCompImageSlave = new SlaveVideo( name+"-compImage" );
-    mRefImageSlave = new SlaveVideo( name+"-refImage" );
-    mDeltaImageSlave = new SlaveVideo( name+"-deltaImage" );
-    mVarImageSlave = new SlaveVideo( name+"-varImage" );
+/**
+* @brief 
+*/
+MotionDetector::MotionDetector( VideoProvider &provider, const FeedLink &link ) :
+    VideoConsumer( cClass(), provider, link ),
+    VideoProvider( cClass(), provider.name() ),
+    Thread( identity() ),
+    mVarImage( NULL ),
+    mCompImageSlave( NULL ),
+    mRefImageSlave( NULL ),
+    mDeltaImageSlave( NULL ),
+    mVarImageSlave( NULL )
+{
+    construct();
 }
 
 /**

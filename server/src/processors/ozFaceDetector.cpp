@@ -24,6 +24,22 @@ FaceDetector::FaceDetector( const std::string &name, const std::string &objectDa
 
 /**
 * @brief
+*
+* @param markup
+* @param provider
+* @param link
+*/
+FaceDetector::FaceDetector( const std::string &objectData, FaceMarkup faceMarkup, VideoProvider &provider, const FeedLink &link ) :
+    VideoConsumer( cClass(), provider, link ),
+    VideoProvider( cClass(), provider.name() ),
+    Thread( identity() ),
+    mObjectData(objectData),
+    mFaceMarkup( faceMarkup )
+{
+}
+
+/**
+* @brief
 */
 FaceDetector::~FaceDetector()
 {
