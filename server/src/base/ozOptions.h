@@ -120,4 +120,6 @@ public:
     }
 };
 
+extern const Options gNullOptions;
+
 #endif // OZ_OPTIONS_H
