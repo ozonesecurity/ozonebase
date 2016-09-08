@@ -24,6 +24,21 @@ RateLimiter::RateLimiter( const std::string &name, FrameRate frameRate, bool ski
 * @brief 
 *
 * @param frameRate
+* @param provider
+*/
+RateLimiter::RateLimiter( FrameRate frameRate, VideoProvider &provider ) :
+    VideoConsumer( cClass(), provider, gPolledVideoLink ),
+    VideoProvider( cClass(), provider.name() ),
+    Thread( identity() ),
+    mSkip( false ),
+    mFrameRate( frameRate )
+{
+}
+
+/**
+* @brief 
+*
+* @param frameRate
 * @param skip
 * @param provider
 * @param link
@@ -67,7 +82,7 @@ int RateLimiter::run()
             {
                 gettimeofday( &now, 0 );
                 currTime = now.tv_sec+((double)now.tv_usec/1000000.0);
-                usleep( 1000 );
+                usleep( INTERFRAME_TIMEOUT );
             }
             nextTime += timeInterval;
 

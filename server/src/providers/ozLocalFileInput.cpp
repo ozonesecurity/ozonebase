@@ -83,7 +83,7 @@ int LocalFileInput::run()
             {
                 gettimeofday( &now, 0 );
                 currTime = (1000000LL*now.tv_sec)+now.tv_usec;
-                usleep( 1000 );
+                usleep( INTERFRAME_TIMEOUT );
             }
             nextTime += timeInterval;
 

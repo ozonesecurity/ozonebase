@@ -220,7 +220,7 @@ int H264Encoder::run()
             while ( currTime < nextTime )
             {
                 currTime = time64();
-                usleep( 1000 );
+                usleep( INTERFRAME_TIMEOUT );
             }
             nextTime += timeInterval;
 

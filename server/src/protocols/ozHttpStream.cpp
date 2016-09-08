@@ -85,7 +85,7 @@ int HttpStream::run()
 HttpImageStream::HttpImageStream( HttpSession *httpSession, Connection *connection, FeedProvider *provider, uint16_t width, uint16_t height, FrameRate frameRate, uint8_t quality ) :
     HttpStream( cClass(), httpSession, connection, provider )
 {
-    Debug( 2, "New HTTP image stream" );
+    Debug( 2, "New HTTP image stream %d x %d @ %.2f (%d)", width, height, (double)frameRate, quality );
     std::string encoderKey = JpegEncoder::getPoolKey( provider->identity(), width, height, frameRate, quality );
     if ( !(mEncoder = Encoder::getPooledEncoder( encoderKey )) )
     {

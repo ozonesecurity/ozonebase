@@ -42,6 +42,7 @@ nvrcam.face = new FaceDetector( "face-cam0" );
 */
 public:
     FaceDetector( const std::string &name, const std::string &objectData, FaceMarkup faceMarkup=OZ_FACE_MARKUP_ALL );
+    FaceDetector( const std::string &objectData, FaceMarkup faceMarkup, VideoProvider &provider, const FeedLink &link=gQueuedVideoLink );
     ~FaceDetector();
 
     uint16_t width() const { return( videoProvider()->width() ); }

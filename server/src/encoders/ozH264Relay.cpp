@@ -169,7 +169,7 @@ int H264Relay::run()
         uint64_t startTime = 0;
         while ( !mStop )
         {
-            usleep( 1000 );
+            usleep( INTERFRAME_TIMEOUT );
             FramePtr framePtr;
             mQueueMutex.lock();
             if ( !mFrameQueue.empty() )

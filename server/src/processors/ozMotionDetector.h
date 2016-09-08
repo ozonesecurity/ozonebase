@@ -82,6 +82,7 @@ private:
 
 public:
     MotionDetector( const std::string &name );
+    MotionDetector( VideoProvider &provider, const FeedLink &link=gQueuedVideoLink );
     ~MotionDetector();
 
     bool addZone( Zone *zone );
