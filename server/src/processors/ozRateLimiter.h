@@ -36,7 +36,8 @@ public:
 \endcode
 */
     RateLimiter( const std::string &name, FrameRate frameRate, bool skip=true );
-    RateLimiter( FrameRate frameRate, bool skip, VideoProvider &provider, const FeedLink &link=gQueuedFeedLink );
+    RateLimiter( FrameRate frameRate, VideoProvider &provider );
+    RateLimiter( FrameRate frameRate, bool skip, VideoProvider &provider, const FeedLink &link=gQueuedVideoLink );
     ~RateLimiter();
 
     uint16_t width() const { return( videoProvider()->width() ); }
