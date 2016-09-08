@@ -106,6 +106,9 @@ int JpegEncoder::run()
         long double currTime = now.tv_sec+((double)now.tv_usec/1000000.0);
         long double nextTime = currTime;
         outputFrame->pts = 0;
+        outputFrame->width = mCodecContext->width;
+        outputFrame->height = mCodecContext->height;
+        outputFrame->format = mCodecContext->pix_fmt;
         while ( !mStop )
         {
             // Synchronise the output with the desired output frame rate
