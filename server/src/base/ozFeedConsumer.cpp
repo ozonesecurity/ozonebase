@@ -153,7 +153,7 @@ bool FeedConsumer::waitForProviders()
             mQueueMutex.lock();
             mFrameQueue.clear();
             mQueueMutex.unlock();
-            usleep( 10000 );
+            usleep( INTERFRAME_TIMEOUT );
         }
     } while( waitCount > 0 && badCount == 0 );
     //Info( "%s: Returning %d", cidentity(), readyCount > 0 && badCount == 0 );

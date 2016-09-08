@@ -116,7 +116,7 @@ int JpegEncoder::run()
             {
                 gettimeofday( &now, 0 );
                 currTime = now.tv_sec+((double)now.tv_usec/1000000.0);
-                usleep( 10000 );
+                usleep( INTERFRAME_TIMEOUT );
             }
             nextTime += timeInterval;
 
