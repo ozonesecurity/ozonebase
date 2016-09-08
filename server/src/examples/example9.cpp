@@ -1,5 +1,5 @@
 #include "../base/ozApp.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozMotionDetector.h"
 #include "../consumers/ozVideoRecorder.h"
 #include "../consumers/ozMovieFileOutput.h"
@@ -141,7 +141,7 @@ int main( int argc, const char *argv[] )
 
     Application app;
 
-    NetworkAVInput input( "input", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
+    AVInput input( "input", "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" );
     app.addThread( &input );
 
     MotionDetector motionDetector( "detector" );

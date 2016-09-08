@@ -5,7 +5,7 @@ set(OZ_BASE_SRC_FILES
     ozController.cpp ozEncoder.cpp ozFeedBase.cpp ozFeedConsumer.cpp
     ozFeedFrame.cpp ozFeedProvider.cpp ozFfmpeg.cpp ozListener.cpp
     ozMemoryIO.cpp ozMemoryIOV1.cpp ozMotionData.cpp ozMotionFrame.cpp
-    ozNotifyFrame.cpp ozParameters.cpp ozRegion.cpp ozSignal.cpp
+    ozNotifyFrame.cpp ozOptions.cpp ozParameters.cpp ozRegion.cpp ozSignal.cpp
     ozStream.cpp ozZone.cpp ozDetector.cpp ozRecorder.cpp
    )
 
@@ -14,7 +14,7 @@ set(OZ_BASE_HDR_FILES
     ozConnection.h ozController.h ozEncoder.h ozFeedBase.h
     ozFeedConsumer.h ozFeedFrame.h ozFeedProvider.h ozFfmpeg.h oz.h
     ozListener.h ozMemoryIO.h ozMemoryIOV1.h ozMotionData.h ozMotionFrame.h
-    ozNotifyFrame.h ozParameters.h ozRegion.h ozSignal.h
+    ozNotifyFrame.h ozOptions.h ozParameters.h ozRegion.h ozSignal.h
     ozStream.h ozZone.h ozDetector.h ozRecorder.h
     "${CMAKE_CURRENT_BINARY_DIR}/ozConfig.h"
    )

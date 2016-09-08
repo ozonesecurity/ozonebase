@@ -1,5 +1,5 @@
 #include "../base/ozApp.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozImageTimestamper.h"
 #include "../consumers/ozMovieFileOutput.h"
 
@@ -19,7 +19,7 @@ int main( int argc, const char *argv[] )
     Application app;
 
     //RemoteVideoInput input( "rtsp://test:test123@axis207.home/mpeg4/media.amp" );
-    NetworkAVInput input( "input1", "rtsp://test:test@webcam.com/mpeg4/media.amp" );
+    AVInput input( "input1", "rtsp://test:test@webcam.com/mpeg4/media.amp" );
     app.addThread( &input );
 
     ImageTimestamper timestamper( input.cname() );

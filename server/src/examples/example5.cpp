@@ -1,7 +1,7 @@
 #include "../base/ozApp.h"
 #include "../base/ozListener.h"
 #include "../providers/ozLocalVideoInput.h"
-#include "../providers/ozNetworkAVInput.h"
+#include "../providers/ozAVInput.h"
 #include "../processors/ozMatrixVideo.h"
 #include "../protocols/ozRtspController.h"
 
@@ -22,11 +22,11 @@ int main( int argc, const char *argv[] )
 
     LocalVideoInput input1( "input1", "/dev/video0" );
     app.addThread( &input1 );
-    NetworkAVInput input2( "input1", "rtsp://test:test@webcam1/mpeg4/media.amp" );
+    AVInput input2( "input1", "rtsp://test:test@webcam1/mpeg4/media.amp" );
     app.addThread( &input2 );
-    NetworkAVInput input3( "input1", "rtsp://test:test@webcam2/mpeg4/media.amp" );
+    AVInput input3( "input1", "rtsp://test:test@webcam2/mpeg4/media.amp" );
     app.addThread( &input3 );
-    NetworkAVInput input4( "input", "/tmp/movie.mp4" );
+    AVInput input4( "input", "/tmp/movie.mp4" );
     app.addThread( &input4 );
 
     MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
