@@ -4,13 +4,6 @@
 #include "../base/ozFfmpeg.h"
 #include "../libgen/libgenDebug.h"
 
-/**
-* @brief 
-*
-* @param name
-* @param source
-* @param format
-*/
 AVInput::AVInput( const std::string &name, const std::string &source, const Options &options ) :
     AudioVideoProvider( cClass(), name ),
     Thread( identity() ),

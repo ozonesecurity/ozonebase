@@ -41,13 +41,14 @@ public:
 *
 * @param name instance name
 * @param source AV source (example "rtsp://foo", "/dev/video0", "/tmp/test.mp4" etc)
-* @param format
-* @param loop if true, loops the source. Makes sense only if you have provided a file
+* @param options list of options that you can use to configure the input with
 
 \code
+AVOptions avOptions;
+avOptions.add("realtime",true); // respects FPS if video is not live
+avOptions.add("loop",true); // keeps looping video if file
 
-nvrcam.cam = new AVInput ( "cam0", "/tmp/myvideo.mp4","",true );
-nvrcam.cam = new AVInput ( "cam1", "rtsp://user:password@192.168.1.12/videoMain","",false );
+nvrcam.cam = new AVInput ( name, source,avOptions );
 
 \endcode
 */
