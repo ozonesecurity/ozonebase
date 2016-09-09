@@ -29,20 +29,20 @@
 
 
         <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> Live RTSP feeds, auto-converted to MJPEG for browser display, along with live motion tracking
+            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>Live/recorded feeds, auto-converted to MJPEG for browser display, along with live motion tracking
         </div>
         <div class="row">
             <!-- live frames -->
             <div class="col-sm-4">
                 <figure class="figure">
                     <figcaption class="bg-success figure-caption text-xs-right">Camera 1: Live Feed</figcaption>
-                    <img class="figure-img img-fluid img-thumbnail" src="/watchcam1/cam1" />
+                    <img class="figure-img img-fluid img-thumbnail" src="/watch/traffic" />
                 </figure>
             </div>
             <div class="col-sm-4">
                 <figure class="figure">
-                    <figcaption class="bg-info figure-caption text-xs-right">Camera 2: Live Feed</figcaption>
-                    <img class="figure-img img-fluid img-thumbnail" src="/watchcam2/cam2" />
+                    <figcaption class="bg-info figure-caption text-xs-right">Camera 2: Looping Recorded Feed</figcaption>
+                    <img class="figure-img img-fluid img-thumbnail" src="/watch/people" />
                 </figure>
             </div>
         </div>
@@ -52,13 +52,13 @@
             <div class="col-sm-4">
                 <figure class="figure">
                     <figcaption class="bg-success figure-caption text-xs-right">Motion detection on Cam1</figcaption>
-                    <img class="img-thumbnail" src="/debug/modectcam1" />
+                    <img class="img-thumbnail" src="/detect/traffic" />
                 </figure>
             </div>
             <div class="col-sm-4">
                 <figure class="figure">
-                    <figcaption class="bg-info figure-caption text-xs-right">Motion detection on Cam2</figcaption>
-                    <img class="img-thumbnail" src="/debug/modectcam2" />
+                    <figcaption class="bg-info figure-caption text-xs-right">Face detection on Cam2</figcaption>
+                    <img class="img-thumbnail" src="/detect/people" />
                 </figure>
             </div>
         </div>
@@ -69,7 +69,7 @@
         </div>
         <figure class="figure">
             <figcaption class="figure-caption text-xs-right">4 feed mux of live and debug feeds</figcaption>
-            <img class="figure-img img-fluid img-thumbnail" src="/debug/matrixcammux" />
+            <img class="figure-img img-fluid img-thumbnail" src="/debug/trafficmatrix" />
         </figure>
 
 
