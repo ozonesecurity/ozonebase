@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     vim \
     libass-dev \
     libatlas-base-dev \
+    libfontconfig \
+    libfreetype6 \
     libfreetype6-dev \
     libjpeg-dev \
     libjpeg8 \
@@ -21,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     libv4l-dev \
     libvorbis-dev \
     pkg-config \
+    supervisor \
     texinfo \
     nasm \
     yasm \

@@ -6,6 +6,7 @@ WORKDIR $HOME
 RUN ./bootstrap-ozone.sh
 RUN rm -rf ozonebase
 WORKDIR $HOME/demo
+COPY shape_predictor_68_face_landmarks.dat face-input.mp4 ./
 RUN npm install
 ENV PATH $PATH:$HOME/demo/node_modules/.bin
 USER root
