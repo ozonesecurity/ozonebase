@@ -37,18 +37,16 @@ int main( int argc, const char *argv[] )
     Options peopleOptions;
     peopleOptions.add( "realtime", true );
     peopleOptions.add( "loop", true );
-    AVInput people( "people", "/transfer/recorder-1.mov", peopleOptions );
+    AVInput people( "people", "face-input.mp4", peopleOptions );
     app.addThread( &traffic );
     app.addThread( &people );
 
     // motion detect for traffic
-    MotionDetector trafficDetector( "traffic" );
-    trafficDetector.registerProvider( traffic );
+    MotionDetector trafficDetector( traffic );
     app.addThread( &trafficDetector );
 
     // rate limiter for people detector
-    RateLimiter peopleLimiter( "people", 5, true );
-    peopleLimiter.registerProvider( people );
+    RateLimiter peopleLimiter( 5, true, people );
     app.addThread( &peopleLimiter );
 
     // Scale video up
@@ -56,7 +54,8 @@ int main( int argc, const char *argv[] )
     //app.addThread( &peopleScalePre );
 
     // people detect for people
-    ShapeDetector peopleDetector( "dlib_pedestrian_detector.svm", ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE, peopleLimiter );
+    //ShapeDetector peopleDetector( "dlib_pedestrian_detector.svm", ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE, peopleLimiter );
+    FaceDetector peopleDetector( "shape_predictor_68_face_landmarks.dat", FaceDetector::OZ_FACE_MARKUP_ALL, peopleLimiter );
     app.addThread( &peopleDetector );
 
     // Scale video down
