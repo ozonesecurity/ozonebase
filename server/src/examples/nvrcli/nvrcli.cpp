@@ -8,8 +8,6 @@
 * systems (not possible in ZoneMinder v1). 
 *
 *************************************************************/
-
-
 #include <iostream>
 #include <thread>
 #include <string>
