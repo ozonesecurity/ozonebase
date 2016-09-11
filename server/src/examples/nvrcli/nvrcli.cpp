@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <mutex>
 #include "nvrcli.h"
 #include "nvrNotifyOutput.h"
 
@@ -58,6 +59,7 @@ NotifyOutput *notifier;
 HttpController* httpController;
 Application app;
 Options avOptions;
+std::mutex mtx;
 
 // default URLs to use if none specified
 // feel free to add custom URLs here
@@ -88,12 +90,17 @@ static void avlog_cb(void *, int level, const char * fmt, va_list vl)
 // releases resources of a camera object
 void destroyCam (nvrCameras i)
 {
-     if ((i).cam) { cout << "cam kill"<< endl;  (i).cam->stop(); (i).cam->join();}
-     if ((i).motion) { cout<<  "motion kill"<< endl;(i).motion->deregisterAllProviders();(i).motion->stop(); (i).motion->join(); }
-     if ((i).person) { cout<<  "person kill"<< endl;(i).person->deregisterAllProviders();(i).person->stop(); (i).person->join(); }
-     if ((i).face) { cout<<  "face kill"<< endl;(i).face->deregisterAllProviders();(i).face->stop(); (i).face->join(); }
-     if ((i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((i).event)); (i).event->deregisterAllProviders();(i).event->stop(); (i).event->join();  }
-     if ((i).rate) { cout << "rate kill"<< endl; (i).rate->deregisterAllProviders();(i).rate->stop(); (i).rate->join(); }
+    cout << "waiting for mutex lock..." << endl;
+    mtx.lock();
+    cout << "got mutex!" << endl;
+     if (i.cam) { cout << "cam kill"<< endl;  i.cam->stop(); i.cam->join(); i.cam = NULL;}
+     if ((i).motion) { cout<<  "motion kill"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); i.motion->join(); i.motion = NULL; }
+     if (i.person) { cout<<  "person kill"<< endl;i.person->deregisterAllProviders();i.person->stop(); i.person->join(); i.person = NULL; }
+     if (i.face) { cout<<  "face kill"<< endl;i.face->deregisterAllProviders();i.face->stop(); i.face->join(); i.face = NULL;}
+     if (i.event) { cout << "event kill"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop(); i.event->join();  i.event = NULL; }
+     if (i.rate) { cout << "rate kill"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); i.rate->join(); i.rate = NULL;}
+    cout << "mutex released" << endl;
+    mtx.unlock();
       
 }
 
