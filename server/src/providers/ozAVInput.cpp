@@ -144,6 +144,7 @@ int AVInput::run()
 
         while ( !mStop )
         {
+            Info ("AVInput mStop is:%d",mStop);
             AVFormatContext *formatContext = NULL;
             if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/NULL ) !=0 )
                 Fatal( "Unable to open input %s due to: %s", mSource.c_str(), strerror(errno) );
@@ -308,7 +309,7 @@ int AVInput::run()
                     }
                 }
             }
-            if ( mHasVideo )
+            if ( mHasVideo && !mStop)
             {
                 av_freep( &mVideoFrame );
                 mVideoStream = NULL;
@@ -318,7 +319,7 @@ int AVInput::run()
                     mVideoCodecContext = NULL; // Freed by avformat_close_input
                 }
             }
-            if ( mHasAudio )
+            if ( mHasAudio && !mStop)
             {
                 av_freep( &mAudioFrame );
                 mAudioStream = NULL;
@@ -328,13 +329,13 @@ int AVInput::run()
                     mAudioCodecContext = NULL; // Freed by avformat_close_input
                 }
             }
-            if ( formatContext )
+            if ( formatContext && !mStop)
             {
                 avformat_close_input( &formatContext );
                 formatContext = NULL;
                 //av_free( formatContext );
             }
-            if ( loop )
+            if ( loop && !mStop)
             {
                 // For network input just restart from scratch as not seekable
                 if ( formatContext->iformat->flags & AVFMT_NOFILE )
@@ -344,6 +345,7 @@ int AVInput::run()
                 }
             }
         }
+        Info ("cleanup in AVInput");
         cleanup();
         return( !ended() );
     } // try
