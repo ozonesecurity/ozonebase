@@ -57,7 +57,7 @@ Here is a live example:
 
     Application app;
 
-    NetworkAVInput input( "input", "http://kxhcm10/nphMotionJpeg?Resolution=640x480&Quality=Standard", "mjpeg" );
+    AVInput input( "input", "http://kxhcm10/nphMotionJpeg?Resolution=640x480&Quality=Standard");
     app.addThread( &input );
 
     FaceDetector detector( "detector" );

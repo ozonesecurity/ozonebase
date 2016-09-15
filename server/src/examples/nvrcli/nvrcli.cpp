@@ -8,8 +8,6 @@
 * systems (not possible in ZoneMinder v1). 
 *
 *************************************************************/
-
-
 #include <iostream>
 #include <thread>
 #include <string>
@@ -20,6 +18,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include <mutex>
 #include "nvrcli.h"
 #include "nvrNotifyOutput.h"
 
@@ -48,6 +47,7 @@ public:
     Recorder *event; // will either store video or images 
     RateLimiter *rate;
     LocalFileOutput *fileOut;
+    bool scheduleDelete;
 
 };
 
@@ -58,8 +58,10 @@ NotifyOutput *notifier;
 HttpController* httpController;
 Application app;
 Options avOptions;
+std::mutex mtx;
 
 // default URLs to use if none specified
+// feel free to add custom URLs here
 const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov",
@@ -72,6 +74,7 @@ const char* const defRtspUrls[] = {
    "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 };
 
+// traps the ultra-verbose ffmpeg logs. If you want them on enable SHOW_FFMPEG_LOG above
 static void avlog_cb(void *, int level, const char * fmt, va_list vl) 
 {
 #if SHOW_FFMPEG_LOG
@@ -81,6 +84,23 @@ static void avlog_cb(void *, int level, const char * fmt, va_list vl)
     cout  << logbuf;
 #endif
 
+}
+
+// releases resources of a camera object
+void destroyCam (nvrCameras& i)
+{
+    cout << "waiting for mutex lock..." << endl;
+    mtx.lock();
+    cout << "got mutex!" << endl;
+     if (i.cam) { cout << "cam kill"<< endl;  i.cam->stop(); }
+     if (i.motion) { cout<<  "motion kill"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); }
+     if (i.person) { cout<<  "person kill"<< endl;i.person->deregisterAllProviders();i.person->stop(); }
+     if (i.face) { cout<<  "face kill"<< endl;i.face->deregisterAllProviders();i.face->stop(); }
+     if (i.event) { cout << "event kill"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop();}
+     if (i.rate) { cout << "rate kill"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); }
+    cout << "mutex released" << endl;
+    mtx.unlock();
+      
 }
 
 // Adds a camera
@@ -100,11 +120,7 @@ void cmd_add()
 
     cin.clear(); cin.sync();
     
-    
-    //cout << "camera name (ENTER for default):";
-    //getline(cin,name);
     name = "";
-    
     cout << "RTSP source (ENTER for default):";
     getline(cin,source);
     cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll) (ENTER for default = a):";
@@ -166,29 +182,29 @@ void cmd_add()
     nvrcam.event = NULL;
     nvrcam.rate = NULL;
     nvrcam.fileOut = NULL;
+    nvrcam.scheduleDelete = false;
 
     nvrcam.cam = new AVInput ( name, source,avOptions );
-    if (type == "f")
+    if (type == "f") // only instantiate face recog
     {
         nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
         nvrcam.face->registerProvider(*(nvrcam.rate) );
     }
-    else if (type=="p")
+    else if (type=="p") // only instantiate people recog
     {
         nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        //nvrcam.person->registerProvider(*(nvrcam.rate) );
         nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
 }
-    else if (type=="m")
+    else if (type=="m") // only instantate motion detect
     {
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
-    else // face/motion/person
+    else // face/motion/person - turn them all on
     {
         nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.face = new FaceDetector( "face-"+name, "./shape_predictor_68_face_landmarks.dat" );
@@ -202,6 +218,7 @@ void cmd_add()
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
 
+    //setup path for events recording
     char path[2000];
     snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
     if (record == "y")
@@ -350,24 +367,14 @@ void cmd_delete()
     cin.clear(); cin.sync();
     do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
     list<nvrCameras>::iterator i = nvrcams.begin();
-    while ( i != nvrcams.end())
+    while ( i != nvrcams.end()) // iterate to that index selected
     {
         if (x==0) break;
         x--;
+        i++;
     }
     
-    (*i).cam->stop();
-    (*i).motion->stop();
-    (*i).cam->join();
-    cout << "Camera killed\n";
-    (*i).motion->join();
-    cout << "Camera Motion killed\n";
-
-    (*i).event->stop();
-    (*i).event->join();
-    cout << "Camera  Record killed\n";
-
-    nvrcams.erase(i);
+    (*i).scheduleDelete = true;
 }
 
 void cmd_quit()
@@ -382,6 +389,8 @@ void cmd_unknown()
     cout << endl << "unknown command. try help"<< endl;
 }
 
+
+
 void monitorStatus(Application app)
 {
     for (;;)
@@ -390,18 +399,13 @@ void monitorStatus(Application app)
         while ( i!= nvrcams.end())
         {
             int isTerminated = (*i).cam->ended() + (*i).cam->error();
-            if (isTerminated >0)
+            if (isTerminated >0 || (*i).scheduleDelete == true)
             {
                 cout << "Bad state found for " << (*i).cam->name() << "..deleting..."<<endl;
 
                
-                if ((*i).cam) { cout << "cam kill"<< endl;  (*i).cam->stop(); (*i).cam->join();}
-                if ((*i).motion) { cout<<  "motion kill"<< endl;(*i).motion->deregisterAllProviders();(*i).motion->stop(); (*i).motion->join(); }
-                if ((*i).person) { cout<<  "person kill"<< endl;(*i).person->deregisterAllProviders();(*i).person->stop(); (*i).person->join(); }
-                if ((*i).face) { cout<<  "face kill"<< endl;(*i).face->deregisterAllProviders();(*i).face->stop(); (*i).face->join(); }
-                if ((*i).event) { cout << "event kill"<< endl;notifier->deregisterProvider(*((*i).event)); (*i).event->deregisterAllProviders();(*i).event->stop(); (*i).event->join();  }
-                if ((*i).rate) { cout << "rate kill"<< endl; (*i).rate->deregisterAllProviders();(*i).rate->stop(); (*i).rate->join(); }
-              
+                (*i).scheduleDelete = false;
+                destroyCam(*i);        
                 i = nvrcams.erase(i); // point to next iterator on delete
     
             }

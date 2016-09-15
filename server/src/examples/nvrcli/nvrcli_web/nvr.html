@@ -37,29 +37,29 @@
             <span data-ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]">
                       <!-- live frames -->
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="border col-lg-6">
                             <figure class="figure">
                                 <figcaption class="bg-success figure-caption text-xs-right">Camera {{i}}: Live Feed</figcaption>
-                                <img class="figure-img img-fluid img-thumbnail" src="{{baseurl}}/live/cam{{i}}" />
+                                <img class="figure-img img-fluid" width="{{w}}" src="{{baseurl}}/live/cam{{i}}" />
                             </figure>
                         </div>
                           <!-- debug frames -->
-                        <div class="col-sm-4">
+                        <div class="border col-lg-6">
                             <figure class="figure">
                                 <figcaption class="bg-success figure-caption text-xs-right">Camera {{i}}: MotionDect Feed</figcaption>
-                                <img class="figure-img img-fluid img-thumbnail" src="{{baseurl}}/debug/modect-cam{{i}}" />
+                                <img class="figure-img img-fluid" width="{{w}}" src="{{baseurl}}/debug/modect-cam{{i}}" />
                             </figure>
-                       </div>
-                        <div class="col-sm-4">
+                        </div>
+                        <div class="border col-lg-6">
                             <figure class="figure">
                                 <figcaption class="bg-success figure-caption text-xs-right">Camera {{i}}: FaceDect Feed</figcaption>
-                                <img class="figure-img img-fluid img-thumbnail" src="{{baseurl}}/debug/face-cam{{i}}" />
+                                <img class="figure-img img-fluid" width="{{w}}" src="{{baseurl}}/debug/face-cam{{i}}" />
                             </figure>
                        </div>
-                       <div class="col-sm-4">
+                       <div class="border col-lg-6">
                             <figure class="figure">
                                 <figcaption class="bg-success figure-caption text-xs-right">Camera {{i}}: PersonDect Feed</figcaption>
-                                <img class="figure-img img-fluid img-thumbnail" src="{{baseurl}}/debug/person-cam{{i}}" />
+                                <img class="figure-img img-fluid" width="{{w}}" src="{{baseurl}}/debug/person-cam{{i}}" />
                             </figure>
                        </div>
                     </div>

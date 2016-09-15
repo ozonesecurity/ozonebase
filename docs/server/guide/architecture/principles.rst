@@ -44,7 +44,7 @@ Given that components are a critical part of oZone, lets talk about the types of
 * Listeners
 * Controllers
 
-A **Provider** is a type of component that "generates" frames. A perfect example of a Provider is `NetworkAVInput <http://ozone.network/apidocs/class_network_a_v_input.html>`_, which is able to connect to a source like :code:`/dev/video0` for a local webcam, :code:`/path/to/file/fulldayrecording.mp4` for a recorded video, or, :code:`rtsp://myliveurl` for a RTSP camera. It can connect to *any* such input source and produces audio and/or video frame, completely abstracting the nature of the source for other components down the chain.
+A **Provider** is a type of component that "generates" frames. A perfect example of a Provider is `AVInput <http://ozone.network/apidocs/class_a_v_input.html>`_, which is able to connect to a source like :code:`/dev/video0` for a local webcam, :code:`/path/to/file/fulldayrecording.mp4` for a recorded video, or, :code:`rtsp://myliveurl` for a RTSP camera. It can connect to *any* such input source and produces audio and/or video frame, completely abstracting the nature of the source for other components down the chain.
 
 A **Consumer** is a type of component that "consumes" frames. Unlike a Provider, it doesn't generate any frames, so there is no point "registering" for frames with a consumer. A good example of a Consumer is `EventRecorder <http://ozone.network/apidocs/class_event_recorder.html>`_, that writes motion events to disk.
 
