@@ -47,6 +47,7 @@ public:
     Recorder *event; // will either store video or images 
     RateLimiter *rate;
     LocalFileOutput *fileOut;
+    bool scheduleDelete;
 
 };
 
@@ -86,17 +87,17 @@ static void avlog_cb(void *, int level, const char * fmt, va_list vl)
 }
 
 // releases resources of a camera object
-void destroyCam (nvrCameras i)
+void destroyCam (nvrCameras& i)
 {
     cout << "waiting for mutex lock..." << endl;
     mtx.lock();
     cout << "got mutex!" << endl;
-     if (i.cam) { cout << "cam kill"<< endl;  i.cam->stop(); i.cam->join(); i.cam = NULL;}
-     if ((i).motion) { cout<<  "motion kill"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); i.motion->join(); i.motion = NULL; }
-     if (i.person) { cout<<  "person kill"<< endl;i.person->deregisterAllProviders();i.person->stop(); i.person->join(); i.person = NULL; }
-     if (i.face) { cout<<  "face kill"<< endl;i.face->deregisterAllProviders();i.face->stop(); i.face->join(); i.face = NULL;}
-     if (i.event) { cout << "event kill"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop(); i.event->join();  i.event = NULL; }
-     if (i.rate) { cout << "rate kill"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); i.rate->join(); i.rate = NULL;}
+     if (i.cam) { cout << "cam kill"<< endl;  i.cam->stop(); }
+     if (i.motion) { cout<<  "motion kill"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); }
+     if (i.person) { cout<<  "person kill"<< endl;i.person->deregisterAllProviders();i.person->stop(); }
+     if (i.face) { cout<<  "face kill"<< endl;i.face->deregisterAllProviders();i.face->stop(); }
+     if (i.event) { cout << "event kill"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop();}
+     if (i.rate) { cout << "rate kill"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); }
     cout << "mutex released" << endl;
     mtx.unlock();
       
@@ -181,6 +182,7 @@ void cmd_add()
     nvrcam.event = NULL;
     nvrcam.rate = NULL;
     nvrcam.fileOut = NULL;
+    nvrcam.scheduleDelete = false;
 
     nvrcam.cam = new AVInput ( name, source,avOptions );
     if (type == "f") // only instantiate face recog
@@ -372,8 +374,7 @@ void cmd_delete()
         i++;
     }
     
-    destroyCam(*i);
-    nvrcams.erase(i);
+    (*i).scheduleDelete = true;
 }
 
 void cmd_quit()
@@ -398,11 +399,12 @@ void monitorStatus(Application app)
         while ( i!= nvrcams.end())
         {
             int isTerminated = (*i).cam->ended() + (*i).cam->error();
-            if (isTerminated >0)
+            if (isTerminated >0 || (*i).scheduleDelete == true)
             {
                 cout << "Bad state found for " << (*i).cam->name() << "..deleting..."<<endl;
 
                
+                (*i).scheduleDelete = false;
                 destroyCam(*i);        
                 i = nvrcams.erase(i); // point to next iterator on delete
     
