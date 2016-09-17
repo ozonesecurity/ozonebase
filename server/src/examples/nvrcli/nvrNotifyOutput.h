@@ -1,11 +1,11 @@
 
-#include <base/ozApp.h>
-#include <providers/ozNetworkAVInput.h>
-#include <processors/ozMotionDetector.h>
-#include <consumers/ozEventRecorder.h>
-#include <consumers/ozMovieFileOutput.h>
-#include <base/ozNotifyFrame.h>
-#include <libgen/libgenDebug.h>
+#include "../../base/ozApp.h"
+#include "../../providers/ozAVInput.h"
+#include "../../processors/ozMotionDetector.h"
+#include "../../consumers/ozEventRecorder.h"
+#include "../../consumers/ozMovieFileOutput.h"
+#include "../../base/ozNotifyFrame.h"
+#include "../../libgen/libgenDebug.h"
 
 class NotifyOutput : public DataConsumer, public Thread
 {
