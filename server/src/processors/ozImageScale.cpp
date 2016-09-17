@@ -76,8 +76,8 @@ int ImageScale::run()
         if ( !mScaleContext )
             Fatal( "Unable to create scale context" );
 
-        Info( "Scaling from %d x %d -> %d x %d", inputWidth, inputHeight, mWidth, mHeight );
-        Info( "%d bytes -> %d bytes",  avpicture_get_size( pixelFormat, inputWidth, inputHeight ), avpicture_get_size( pixelFormat, mWidth, mHeight ) );
+        Debug( 1,"Scaling from %d x %d -> %d x %d", inputWidth, inputHeight, mWidth, mHeight );
+        Debug( 1,"%d bytes -> %d bytes",  avpicture_get_size( pixelFormat, inputWidth, inputHeight ), avpicture_get_size( pixelFormat, mWidth, mHeight ) );
 
         // Make space for anything that is going to be output
         ByteBuffer outputBuffer;
@@ -101,7 +101,7 @@ int ImageScale::run()
                     if ( mWidth != inputWidth || mHeight != inputHeight )
                     {
                         // Requires conversion
-                        Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
+                        Debug( 1,"%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
                         avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), pixelFormat, inputWidth, inputHeight );
 

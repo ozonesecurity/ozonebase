@@ -38,7 +38,7 @@ int LocalFileDump::run()
                 for ( FrameQueue::iterator iter = mFrameQueue.begin(); iter != mFrameQueue.end(); iter++ )
                 {
                     const FeedFrame *frame = iter->get();
-                    Info( "F:%ld", frame->buffer().size() );
+                    Debug(1, "F:%ld", frame->buffer().size() );
                     if ( filePath.empty() )
                     {
                         filePath = stringtf( "%s/%s-%s", mLocation.c_str(), mName.c_str(), frame->provider()->cidentity() );

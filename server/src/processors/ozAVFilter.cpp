@@ -168,14 +168,14 @@ int VideoFilter::run()
         avfilter_inout_free( &inputs );
         avfilter_inout_free( &outputs );
 
-        Info( "Applying filter '%s'", mFilter.c_str() );
+        Debug( 1,"Applying filter '%s'", mFilter.c_str() );
 
         int outputWidth = width();
         int outputHeight = height();
         PixelFormat outputPixelFormat = pixelFormat();
         ByteBuffer outputBuffer;
 
-        Info( "Filtering from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, outputWidth, outputHeight, outputPixelFormat );
+        Debug(1, "Filtering from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, outputWidth, outputHeight, outputPixelFormat );
 
         // Make space for anything that is going to be output
         outputBuffer.size( avpicture_get_size( outputPixelFormat, outputWidth, outputHeight ) );

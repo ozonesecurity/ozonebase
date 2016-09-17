@@ -158,7 +158,7 @@ int MatrixVideo::run()
                         if ( frame )
                         {
                             const VideoFrame *inputVideoFrame = dynamic_cast<const VideoFrame *>(frame);
-                            Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
+                            Debug( 2,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
                             const VideoProvider *videoProvider = inputVideoFrame->videoProvider();
 
                             if ( !mInterFrames[i] )
@@ -211,8 +211,8 @@ int MatrixVideo::run()
                                 if ( !convertContext )
                                     Fatal( "Unable to create conversion context for provider %s", videoProvider->cidentity() );
             
-                                Info( "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, interWidth, interHeight, mPixelFormat );
-                                Info( "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, interWidth, interHeight ) );
+                                Debug( 1,"Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, interWidth, interHeight, mPixelFormat );
+                                Debug( 2, "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, interWidth, interHeight ) );
                             }
                             avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
 
@@ -324,7 +324,7 @@ int MatrixVideo::run()
             {
                 const VideoFrame *inputFrame = dynamic_cast<const VideoFrame *>(iter->get());
 
-                Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %d", cid(), inputFrame->provider()->cidentity(), inputFrame->originator()->cidentity(), inputFrame, inputFrame->id(), inputFrame->age(), inputFrame->buffer().size() );
+                Debug(1, "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %d", cid(), inputFrame->provider()->cidentity(), inputFrame->originator()->cidentity(), inputFrame, inputFrame->id(), inputFrame->age(), inputFrame->buffer().size() );
 
                 avInputFrameSize = avpicture_get_size( inputFrame->pixelFormat(), inputFrame->width(), inputFrame->height() );
                 avcodec_get_frame_defaults( &avInputFrame );

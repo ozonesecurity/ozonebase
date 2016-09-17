@@ -96,8 +96,8 @@ int JpegEncoder::run()
         struct SwsContext *convertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mCodecContext->width, mCodecContext->height, mCodecContext->pix_fmt, SWS_BICUBIC, NULL, NULL, NULL );
         if ( !convertContext )
             Fatal( "Unable to create conversion context for encoder" );
-        Info( "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mCodecContext->width, mCodecContext->height, mCodecContext->pix_fmt );
-        Info( "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height ) );
+        Debug(1, "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mCodecContext->width, mCodecContext->height, mCodecContext->pix_fmt );
+        Debug( 1,"%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height ) );
 
         int outSize = 0;
         double timeInterval = (double)mCodecContext->time_base.num/mCodecContext->time_base.den;
@@ -139,7 +139,7 @@ int JpegEncoder::run()
 
                     if ( inputVideoFrame )
                     {
-                        Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
+                        Debug( 1,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
 
                         //encodeFrame( frame );
                         avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
@@ -149,7 +149,7 @@ int JpegEncoder::run()
                         //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
 
                         // Reformat the input frame to fit the desired output format
-                        Info( "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
+                        Debug(1, "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
                         if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
                             Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 

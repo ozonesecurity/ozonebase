@@ -139,7 +139,7 @@ bool MemoryIO::queryMemory( SharedData *sharedData )
 void MemoryIO::attachMemory( int imageCount, AVPixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight )
 {
     Image tempImage( imageFormat, imageWidth, imageHeight, 0 );
-    Info( "Pixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
+    Debug( 1,"Pixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
     size_t imageSize = tempImage.size();
 
     mMemSize = sizeof(SharedData)

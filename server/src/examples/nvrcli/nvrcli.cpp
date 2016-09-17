@@ -449,7 +449,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    dbgInit( "nvrcli", "", 5 );
+    dbgInit( "nvrcli", "", 0 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";

@@ -36,13 +36,13 @@ int MemoryInput::run()
 
     while( !mStop )
     {
-        Info( "Querying memory" );
+        Debug( 2,"Querying memory" );
         if ( queryMemory( &sharedData ) && sharedData.valid )
             break;
         Info( "Can't query shared memory" );
         usleep( 500000 );
     }
-    Info( "SHV: %d", sharedData.valid );
+    Debug( 2,"SHV: %d", sharedData.valid );
     mImageFormat = sharedData.imageFormat;
     mImageWidth = sharedData.imageWidth;
     mImageHeight = sharedData.imageHeight;

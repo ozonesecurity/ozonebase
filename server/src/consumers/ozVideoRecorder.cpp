@@ -18,7 +18,7 @@ int VideoRecorder::run()
         setReady();
 
         FrameRate inputFrameRate = videoProvider()->frameRate();
-        Info( "Provider framerate = %d/%d", inputFrameRate.num, inputFrameRate.den );
+        Debug(1, "Provider framerate = %d/%d", inputFrameRate.num, inputFrameRate.den );
 
         //initEncoder();
         while( !mStop )

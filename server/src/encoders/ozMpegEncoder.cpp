@@ -151,10 +151,10 @@ int MpegEncoder::run()
     avDumpDict( opts );
     AVFrame *inputFrame = avcodec_alloc_frame();
 
-    Info( "%s:Waiting", cidentity() );
+    Debug(1, "%s:Waiting", cidentity() );
     if ( waitForProviders() )
     {
-        Info( "%s:Waited", cidentity() );
+        Debug( 1,"%s:Waited", cidentity() );
 
         // Find the source codec context
         uint16_t inputWidth = videoProvider()->width();
@@ -231,7 +231,7 @@ int MpegEncoder::run()
                 Debug( 5, "Encoding reports %d bytes", outSize );
                 if ( outSize > 0 )
                 {
-                    Info( "CPTS: %jd", mCodecContext->coded_frame->pts );
+                    Debug( 2,"CPTS: %jd", mCodecContext->coded_frame->pts );
                     outputBuffer.size( outSize );
                     //Debug( 5, "PTS2 %lld", mCodecContext->coded_frame->pts );
                     //av_rescale_q(cocontext->coded_frame->pts, cocontext->time_base, videostm->time_base); 

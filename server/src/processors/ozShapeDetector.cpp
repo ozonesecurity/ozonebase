@@ -60,7 +60,7 @@ int ShapeDetector::run()
         AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
-        Info( "pf:%d, %dx%d", pixelFormat, width, height );
+        Debug( 1,"pf:%d, %dx%d", pixelFormat, width, height );
 
         typedef dlib::scan_fhog_pyramid<dlib::pyramid_down<6> > image_scanner_type;
 
@@ -92,7 +92,7 @@ int ShapeDetector::run()
                         //dlib::pyramid_up(img);
                         //Info( "AFT: %d x %d", num_rows(img), num_columns(img) );
                         std::vector<dlib::rectangle> dets = detector(img);
-                        Info( "%jd @ %ju: Got %jd shapes", frame->id(), frame->timestamp(), dets.size() );
+                        Debug( 1,"%jd @ %ju: Got %jd shapes", frame->id(), frame->timestamp(), dets.size() );
 
                         if ( dets.size() > 0 && mShapeMarkup != OZ_SHAPE_MARKUP_NONE )
                         {

@@ -180,10 +180,10 @@ int H264Encoder::run()
     avDumpDict( opts );
     AVFrame *inputFrame = avcodec_alloc_frame();
 
-    Info( "%s:Waiting", cidentity() );
+    Debug(1, "%s:Waiting", cidentity() );
     if ( waitForProviders() )
     {
-        Info( "%s:Waited", cidentity() );
+        Debug(1, "%s:Waited", cidentity() );
 
         // Find the source codec context
         uint16_t inputWidth = videoProvider()->width();

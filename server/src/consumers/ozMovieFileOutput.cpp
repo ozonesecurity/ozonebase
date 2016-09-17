@@ -30,7 +30,7 @@ int MovieFileOutput::run()
         PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
         FrameRate inputFrameRate = videoProvider()->frameRate();
 
-        Info( "Provider framerate = %d/%d", inputFrameRate.num, inputFrameRate.den );
+        Debug(1, "Provider framerate = %d/%d", inputFrameRate.num, inputFrameRate.den );
 
         /* auto detect the output format from the name. default is mpeg. */
         AVOutputFormat *outputFormat = av_guess_format( mFormat.c_str(), NULL, NULL );
@@ -231,7 +231,7 @@ int MovieFileOutput::run()
 
                         if ( ( !audioStream || (audioTimeOffset >= mMaxLength) ) && ( !videoStream || (videoTimeOffset >= mMaxLength) ) )
                             fileComplete = true;
-                        Info( "PTS: %lf, %jd, %jd", videoTimeOffset, videoCodecContext->coded_frame->pts, videoStream->pts.val );
+                        Debug(1, "PTS: %lf, %jd, %jd", videoTimeOffset, videoCodecContext->coded_frame->pts, videoStream->pts.val );
 
                         const FeedFrame *frame = iter->get();
                         /* write interleaved audio and video frames */
@@ -259,7 +259,7 @@ int MovieFileOutput::run()
                         else
                         {
                             const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame);
-                            Info( "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );
+                            Debug(1, "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );
 
                             avpicture_fill( (AVPicture *)avInputFrame, videoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
                             // XXX - Hack???
@@ -287,7 +287,7 @@ int MovieFileOutput::run()
                             int result = 0;
                             if ( outputContext->oformat->flags & AVFMT_RAWPICTURE )
                             {
-                                Info( "Raw frame" );
+                                Debug(1, "Raw frame" );
                                 /* raw video case. The API will change slightly in the near futur for that */
                                 AVPacket pkt;
                                 av_init_packet(&pkt);
@@ -301,14 +301,14 @@ int MovieFileOutput::run()
                             }
                             else
                             {
-                                Info( "Encoded frame" );
+                                Debug( 1,"Encoded frame" );
                                 int outSize = 0;
                                 do
                                 {
                                     /* encode the image */
                                     outSize = avcodec_encode_video( videoCodecContext, videoBuffer.data(), videoBuffer.capacity(), avOutputFrame );
                                     /* if zero size, it means the image was buffered */
-                                    Info( "Outsize: %d", outSize );
+                                    Debug(1, "Outsize: %d", outSize );
                                     if ( outSize > 0 )
                                     {
                                         AVPacket pkt;

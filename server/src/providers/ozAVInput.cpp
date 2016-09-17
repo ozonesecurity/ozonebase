@@ -58,7 +58,7 @@ int AVInput::decodePacket( AVPacket &packet, int &frameComplete )
                 avpicture_layout( (AVPicture *)mVideoFrame, mVideoCodecContext->pix_fmt, mVideoCodecContext->width, mVideoCodecContext->height, mVideoFrameBuffer.data(), mVideoFrameBuffer.capacity() );
 
                 mLastTimestamp = mBaseTimestamp + (1000000.0L*timeOffset);
-                Info( "%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), mLastTimestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
+                Debug( 1,"%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), mLastTimestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
 
                 if ( mRealtime )
                 {
@@ -144,7 +144,7 @@ int AVInput::run()
 
         while ( !mStop )
         {
-            Info ("AVInput mStop is:%d",mStop);
+            //Info ("AVInput mStop is:%d",mStop);
             AVFormatContext *formatContext = NULL;
             if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/NULL ) !=0 )
                 Fatal( "Unable to open input %s due to: %s", mSource.c_str(), strerror(errno) );

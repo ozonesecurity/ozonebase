@@ -156,10 +156,10 @@ int H264Relay::run()
 
     //const unsigned char startCode[] = { 0x00, 0x00, 0x00, 0x01 };
 
-    Info( "%s:Waiting", cidentity() );
+    Debug( 1,"%s:Waiting", cidentity() );
     if ( waitForProviders() )
     {
-        Info( "%s:Waited", cidentity() );
+        Debug( 1,"%s:Waited", cidentity() );
 
         //uint16_t inputWidth = videoProvider()->width();
         //uint16_t inputHeight = videoProvider()->height();

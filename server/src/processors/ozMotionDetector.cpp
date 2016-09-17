@@ -117,7 +117,7 @@ int MotionDetector::run()
         AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
-        Info( "pf:%d, %dx%d", pixelFormat, width, height );
+        Debug( 2,"pf:%d, %dx%d", pixelFormat, width, height );
 
         if ( !mZones.size() )
         {
@@ -166,10 +166,11 @@ int MotionDetector::run()
                         //motionData.reset();
 
                         analyse( &image, motionData, &motionImage );
-                        if ( mAlarmed )
+                        /*if ( mAlarmed )
                         {
-                            Info( "ALARM" );
-                        }
+
+                           Info( "ALARM" );
+                        }*/
                         // XXX - Generate a new timestamp as using the original frame may be subject to process/decoding delays
                         // Need to check if there is a better way to handle this generally
                         MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, time64(), motionImage.buffer(), mAlarmed, motionData );
@@ -229,7 +230,7 @@ bool MotionDetector::analyse( const Image *compImage, MotionData *motionData, Im
         uint64_t motionScore = detectMotion( *compImage, detectedZones );
         if ( motionScore )
         {
-            Info( "Score: %ld", motionScore );
+            Debug(1, "Score: %ld", motionScore );
             if ( !mAlarmed )
             {
                 score += motionScore;

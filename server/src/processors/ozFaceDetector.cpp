@@ -61,7 +61,7 @@ int FaceDetector::run()
         AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
         int16_t width = videoProvider()->width();
         int16_t height = videoProvider()->height();
-        Info( "pf:%d, %dx%d", pixelFormat, width, height );
+        Debug( 2, "pf:%d, %dx%d", pixelFormat, width, height );
 
         // We need a face detector.  We will use this to get bounding boxes for
         // each face in an image.
@@ -98,7 +98,7 @@ int FaceDetector::run()
                         //dlib::pyramid_up(img);
                         //Info( "AFT: %d x %d", num_rows(img), num_columns(img) );
                         std::vector<dlib::rectangle> dets = detector(img);
-                        Info( "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
+                        Debug( 1, "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
 
                         if ( dets.size() > 0 && mFaceMarkup != OZ_FACE_MARKUP_NONE )
                         {
@@ -116,7 +116,7 @@ int FaceDetector::run()
                                 if ( mFaceMarkup & OZ_FACE_MARKUP_DETAIL )
                                 {
                                     dlib::full_object_detection shape = sp(img, dets[i]);
-                                    Info( "Face %u - %ju parts", i, shape.num_parts() );
+                                    Debug( 2, "Face %u - %ju parts", i, shape.num_parts() );
 
                                     // Around Chin. Ear to Ear
                                     for (unsigned long p = 1; p <= 16; ++p)

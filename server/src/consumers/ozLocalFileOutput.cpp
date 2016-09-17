@@ -44,7 +44,7 @@ int LocalFileOutput::run()
 bool LocalFileOutput::writeFrame( const FeedFrame *frame )
 {
     std::string path = stringtf( "%s/img-%s-%ju.jpg", mLocation.c_str(), mName.c_str(), frame->id() );
-    Info( "Path: %s", path.c_str() );
+    Debug( 1,"Path: %s", path.c_str() );
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame);
     //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());
     //Info( "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );

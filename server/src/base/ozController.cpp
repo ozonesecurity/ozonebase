@@ -11,7 +11,7 @@
 */
 void Controller::addStream( const std::string &streamName, const std::string &streamClass )
 {
-    Info( "Adding stream %s with class %s", streamName.c_str(), streamClass.c_str() );
+    Debug(1, "Adding stream %s with class %s", streamName.c_str(), streamClass.c_str() );
     std::pair<ApplicationClassMap::iterator,bool> result = mApplicationClasses.insert( ApplicationClassMap::value_type( streamName, streamClass ) );
     if ( !result.second )
         Fatal( "Unable to add stream %s with class %s", streamName.c_str(), streamClass.c_str() );
@@ -84,7 +84,7 @@ FeedProvider *Controller::findStream( const std::string &streamName, const std::
     if ( instanceIter != mApplicationClasses.end() )
     {
         std::string feedId = FeedProvider::makeIdentity( instanceIter->second, streamSource );
-        Info( "Looking for feed %s", feedId.c_str() );
+        Debug( 1,"Looking for feed %s", feedId.c_str() );
         return( FeedProvider::find( feedId ) );
     }
     Info( "Failed" );
