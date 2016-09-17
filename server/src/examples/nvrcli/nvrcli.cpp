@@ -4,8 +4,7 @@
 * This is an example of writing a simple command line NVR
 * The app is single process, which is often what one needs
 * for small systems. oZone can be used to create both
-* distributed systems (like ZoneMinder v1) or monolithic 
-* systems (not possible in ZoneMinder v1). 
+* distributed systems or monolithic systems.
 *
 *************************************************************/
 #include <iostream>
@@ -245,6 +244,10 @@ void cmd_add()
         
         nvrcam.event->registerProvider(*(nvrcam.face));
     }
+    else if (type == "p")
+    {
+        nvrcam.event->registerProvider(*(nvrcam.person));
+    }
     else if (type == "a")
     {
         
@@ -449,7 +452,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    dbgInit( "nvrcli", "", 0 );
+    dbgInit( "nvrcli", "", 2 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
