@@ -363,7 +363,7 @@ void cmd_delete()
     }
     cmd_list();
     string sx;
-    int x;
+    unsigned int x;
     cin.clear(); cin.sync();
     do {cout << "Delete index:"; getline(cin,sx); x=stoi(sx);} while (x > nvrcams.size());
     list<nvrCameras>::iterator i = nvrcams.begin();
