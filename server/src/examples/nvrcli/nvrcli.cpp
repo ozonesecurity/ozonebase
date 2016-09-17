@@ -29,7 +29,7 @@
 
 #define person_resize_w 1024
 #define person_resize_h 768
-#define person_refresh_rate 10 
+#define person_refresh_rate 5
 
 #define video_record_w 640
 #define video_record_h 480
@@ -180,7 +180,7 @@ void cmd_add()
         nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
     }
     else if (type=="p") // only instantiate people recog
     {
@@ -201,8 +201,8 @@ void cmd_add()
         nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate) );
-        nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
         nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
@@ -278,7 +278,7 @@ void cmd_add()
     }
     else if (type =="f")
     {
-        httpController->addStream("face",*(nvrcam.person));
+        httpController->addStream("face",*(nvrcam.face));
     }
     else if (type == "a")
     {
