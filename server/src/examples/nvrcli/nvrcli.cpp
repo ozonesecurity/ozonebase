@@ -13,6 +13,7 @@
 #include <cctype>
 #include <algorithm>
 #include <unordered_map>
+#include <map>
 #include <list>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -28,7 +29,7 @@
 
 #define person_resize_w 1024
 #define person_resize_h 768
-#define person_refresh_rate 10 
+#define person_refresh_rate 5
 
 #define video_record_w 640
 #define video_record_h 480
@@ -91,13 +92,13 @@ void destroyCam (nvrCameras& i)
     cout << "waiting for mutex lock..." << endl;
     mtx.lock();
     cout << "got mutex!" << endl;
-     if (i.cam) { cout << "cam kill"<< endl;  i.cam->stop(); }
-     if (i.motion) { cout<<  "motion kill"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); }
-     if (i.person) { cout<<  "person kill"<< endl;i.person->deregisterAllProviders();i.person->stop(); }
-     if (i.face) { cout<<  "face kill"<< endl;i.face->deregisterAllProviders();i.face->stop(); }
-     if (i.event) { cout << "event kill"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop();}
-     if (i.rate) { cout << "rate kill"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); }
-    cout << "mutex released" << endl;
+     if (i.cam) { cout << "removing camera"<< endl;  i.cam->stop(); }
+     if (i.motion) { cout<<  "stopping motion"<< endl;i.motion->deregisterAllProviders();i.motion->stop(); }
+     if (i.person) { cout<<  "stopping shape detection"<< endl;i.person->deregisterAllProviders();i.person->stop(); }
+     if (i.face) { cout<<  "stopping face detection"<< endl;i.face->deregisterAllProviders();i.face->stop(); }
+     if (i.event) { cout << "stopping event recorder"<< endl;notifier->deregisterProvider(*(i.event)); i.event->deregisterAllProviders();i.event->stop();}
+     if (i.rate) { cout << "stopping rate limiter"<< endl; i.rate->deregisterAllProviders();i.rate->stop(); }
+    cout << "all done, mutex released" << endl;
     mtx.unlock();
       
 }
@@ -152,23 +153,13 @@ void cmd_add()
     {
         type = "a";
     }
+
+
     cout << "Detection type is: ";
-    if (type=="f")
-    {
-        cout << "Face";
-    }
-    else if (type =="m")
-    {
-        cout << "Motion";
-    }
-    else if (type == "p")
-    {
-        cout << "Person";
-    }
-    else if (type=="a")
-    {
-        cout << "Face+Motion+Person";
-    }
+    if (type=="f"){cout << "Face";}
+    else if (type =="m"){cout << "Motion";}
+    else if (type == "p"){cout << "Person";}
+    else if (type=="a"){cout << "Face+Motion+Person";}
     cout << endl; 
     
     nvrCameras nvrcam;
@@ -189,7 +180,7 @@ void cmd_add()
         nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
     }
     else if (type=="p") // only instantiate people recog
     {
@@ -210,8 +201,8 @@ void cmd_add()
         nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate) );
-        nvrcam.face->registerProvider(*(nvrcam.rate) );
+        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
         nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
@@ -235,6 +226,9 @@ void cmd_add()
     VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
     AudioParms* audioParms = new AudioParms;
     nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
+#else
+    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
+#endif
     if (type=="m")
     { 
         nvrcam.event->registerProvider(*(nvrcam.motion));
@@ -255,31 +249,6 @@ void cmd_add()
         nvrcam.event->registerProvider(*(nvrcam.person));
     }
     notifier->registerProvider(*(nvrcam.event));
-#else
-    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
-
-    if (type=="m")
-    {
-        nvrcam.event->registerProvider(*(nvrcam.motion));
-    }
-    else if (type=="p")
-    {
-        nvrcam.event->registerProvider(*(nvrcam.person));
-    }
-    else if (type=="f")
-    {
-        nvrcam.event->registerProvider(*(nvrcam.face));
-    }
-    else if (type == "a")
-    {
-        
-        cout << "only registering shape detection events" << endl;
-        nvrcam.event->registerProvider(*(nvrcam.person));
-    }
-    notifier->registerProvider(*(nvrcam.event));
-
-#endif
-
     notifier->start();
     nvrcams.push_back(nvrcam); // add to list
     
@@ -287,28 +256,11 @@ void cmd_add()
     cout << nvrcams.back().cam->source() << endl;
 
     nvrcams.back().cam->start();
-    if (type=="m")
-    {
-        nvrcams.back().motion->start();
-    }
-    else if (type=="p")
-    {
-        nvrcams.back().rate->start();
-        nvrcams.back().person->start();
-    }
-    else if (type=="f")
-    {
-        nvrcams.back().rate->start();
-        nvrcams.back().face->start();
-    }
-    else if (type=="a")
-    {
-        nvrcams.back().motion->start();
-        nvrcams.back().rate->start();
-        nvrcams.back().person->start();
-        nvrcams.back().face->start();
-        nvrcams.back().fileOut->start();
-    }
+    if (nvrcams.back().motion != NULL){nvrcams.back().motion->start();}
+    if (nvrcams.back().rate != NULL) {nvrcams.back().rate->start();}
+    if (nvrcams.back().person != NULL) {nvrcams.back().person->start();}
+    if (nvrcams.back().face != NULL) {nvrcams.back().face->start();}
+    if (nvrcams.back().fileOut != NULL) {nvrcams.back().fileOut->start();}
 
     if (record == "y")
     {
@@ -326,9 +278,9 @@ void cmd_add()
     }
     else if (type =="f")
     {
-        httpController->addStream("face",*(nvrcam.person));
+        httpController->addStream("face",*(nvrcam.face));
     }
-else if (type == "a")
+    else if (type == "a")
     {
         httpController->addStream("debug",*(nvrcam.motion));
         httpController->addStream("debug",*(nvrcam.person));
@@ -393,7 +345,7 @@ void cmd_unknown()
 }
 
 
-
+// monitors active camera list and removes them if terminated
 void monitorStatus(Application app)
 {
     for (;;)
@@ -423,7 +375,6 @@ void monitorStatus(Application app)
 }
 
 //  This thread will listen to commands from users
-
 void cli(Application app)
 {
     unordered_map<std::string, std::function<void()>> cmd_map;
@@ -463,8 +414,8 @@ int main( int argc, const char *argv[] )
     avInit();
     mkdir (EVENT_REC_PATH, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     
-    avOptions.add("realtime",true);
-    avOptions.add("loop",true);
+    avOptions.add("realtime",true); // if file, honor fps, don't blaze through
+    avOptions.add("loop",true); // if file, loop on end
 
     listener = new Listener;
     httpController = new HttpController( "watch", 9292 );
