@@ -226,11 +226,11 @@ const char *avStrError( int error )
 */
 void avDumpDict( AVDictionary *dict )
 {
-    Info( "Dictionary" );
+    Debug( 2,"Dictionary" );
     const AVDictionaryEntry *entry = NULL;
     while( (entry = av_dict_get( dict, "", entry, AV_DICT_IGNORE_SUFFIX )) )
     {
-        Info( "Dict: %s = %s", entry->key, entry->value );
+        Debug( 1,"Dict: %s = %s", entry->key, entry->value );
     }
 }
 

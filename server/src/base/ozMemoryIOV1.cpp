@@ -143,7 +143,7 @@ void MemoryIOV1::attachMemory( int imageCount, AVPixelFormat imageFormat, uint16
         Fatal( "Unable to attach to shared memory, already attached" );
     mImageCount = imageCount;
     Image tempImage( imageFormat, imageWidth, imageHeight, 0 );
-    Info( "AVPixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
+    Debug( 1,"AVPixelformat converted from %d to %d", imageFormat, tempImage.pixelFormat() );
     size_t imageSize = tempImage.size();
 
     mMemSize = sizeof(SharedData)

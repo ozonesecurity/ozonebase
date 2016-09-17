@@ -198,7 +198,7 @@ int RawH264Input::run()
 
                     //DataFrame *dataFrame = new DataFrame( this, videoFrameCount, packet.pts, packet.data, packet.size );
                     //distributeFrame( FramePtr( dataFrame ) );
-                    Info( "In packet %d(%x)", packet.size, packet.size );
+                    Debug(1, "In packet %d(%x)", packet.size, packet.size );
                     Hexdump( 0, packet.data, packet.size>256?256:packet.size );
                     VideoFrame *videoFrame = new VideoFrame( this, videoFrameCount, packet.pts, packet.data, packet.size );
                     distributeFrame( FramePtr( videoFrame ) );

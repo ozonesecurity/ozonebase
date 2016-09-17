@@ -130,7 +130,7 @@ bool FeedConsumer::waitForProviders()
             {
                 if ( iter->first->wait() )
                 {
-                    Info( "%s: Provider %s not ready", cidentity(), iter->first->cidentity() );
+                    Debug(1, "%s: Provider %s not ready", cidentity(), iter->first->cidentity() );
                     waitCount++;
                 }
                 else

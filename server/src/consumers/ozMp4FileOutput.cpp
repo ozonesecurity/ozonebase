@@ -245,7 +245,7 @@ int Mp4FileOutput::run()
 								packet.size = frame->buffer().size();
 								//packet.pts = packet.dts = AV_NOPTS_VALUE;
 								packet.pts = packet.dts = (videoFrameCount * mVideoParms.frameRate().num * videoCodecContext->time_base.den) / (mVideoParms.frameRate().den * videoCodecContext->time_base.num);
-								Info( "vfc: %ju, vto: %.2lf, kf: %d, pts: %jd", videoFrameCount, videoTimeOffset, keyFrame, packet.pts );
+								Debug(1, "vfc: %ju, vto: %.2lf, kf: %d, pts: %jd", videoFrameCount, videoTimeOffset, keyFrame, packet.pts );
 
 								int result = av_interleaved_write_frame(outputContext, &packet);
 								if ( result != 0 )

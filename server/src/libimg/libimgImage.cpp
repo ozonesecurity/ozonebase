@@ -1337,7 +1337,7 @@ unsigned char Image::v( int x, int y ) const
 */
 void Image::dump( int lines, int cols ) const
 {
-    Info( "DUMP-F%d, %dx%d", mFormat, mWidth, mHeight );
+    Debug( 1,"DUMP-F%d, %dx%d", mFormat, mWidth, mHeight );
     if ( lines > 0 )
     {
         if ( lines > mHeight )
@@ -1346,7 +1346,7 @@ void Image::dump( int lines, int cols ) const
             cols = mWidth;
         if ( mPlanes == 1 )
         {
-            Info( "DUMP-%d channels", mChannels );
+            Debug( 1,"DUMP-%d channels", mChannels );
             for ( int y = 0; y < lines; y++ )
             {
                 Hexdump( 0, mBuffer.data()+(mStride*y), cols*mChannels*mPixelWidth );
@@ -1355,7 +1355,7 @@ void Image::dump( int lines, int cols ) const
         else
         {
             unsigned char *yPtr = mBuffer.data();
-            Info( "DUMP-Y-Channel" );
+            Debug( 1,"DUMP-Y-Channel" );
             for ( int y = 0; y < lines; y++ )
             {
                 Hexdump( 0, yPtr+(mStride*y), cols*mPixelWidth );
@@ -1363,7 +1363,7 @@ void Image::dump( int lines, int cols ) const
             if ( mChannels > 1 )
             {
                 unsigned char *uPtr = yPtr+mPlaneSize;
-                Info( "DUMP-U-Channel" );
+                Debug( 1,"DUMP-U-Channel" );
                 for ( int y = 0; y < lines; y++ )
                 {
                     Hexdump( 0, uPtr+(mStride*y), cols*mPixelWidth );

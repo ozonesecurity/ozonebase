@@ -51,7 +51,7 @@ int MemoryInputV1::run()
 
     while( !mStop )
     {
-        Info( "Querying memory" );
+        Debug( 2,"Querying memory" );
         if ( queryMemory( &sharedData ) && sharedData.valid )
             break;
         Info( "Can't query shared memory" );

@@ -69,8 +69,8 @@ int ImageConvert::run()
         if ( !mConvertContext )
             Fatal( "Unable to create conversion context" );
 
-        Info( "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat );
-        Info( "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+        Debug( 1, "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat );
+        Debug( 1,"%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
 
         // Make space for anything that is going to be output
         ByteBuffer outputBuffer;
@@ -94,7 +94,7 @@ int ImageConvert::run()
                     if ( mWidth != inputWidth || mHeight != inputHeight || mPixelFormat != inputPixelFormat )
                     {
                         // Requires conversion
-                        Info( "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
+                        Debug( 1, "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
                         avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
 
