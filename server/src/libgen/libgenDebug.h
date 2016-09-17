@@ -20,7 +20,7 @@
 #define DBG_PNC         -4
 
 /* Define the level at which messages go through syslog */
-#define DBG_SYSLOG      DBG_INF 
+#define DBG_SYSLOG      2
 
 #define dbgPrintf(level,params...)  {\
                     if ((level) <= dbgLevel)\
