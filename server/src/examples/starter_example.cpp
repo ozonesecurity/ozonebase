@@ -90,6 +90,5 @@ int main( int argc, const char *argv[] )
     httpController.addStream( "debug", trafficMatrix );
     
     listener.addController( &httpController );
-
     app.run();
 }
