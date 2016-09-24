@@ -187,7 +187,8 @@ void cmd_add()
         nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
         nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        //nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.person->registerProvider(*(nvrcam.cam),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
 }
     else if (type=="m") // only instantate motion detect
     {
@@ -213,43 +214,43 @@ void cmd_add()
     snprintf (path, 1999, "%s/%s",EVENT_REC_PATH,name.c_str());
     if (record == "y")
     {
-        cout << "Events recorded to: " << path << endl;
+         mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+    #if RECORD_VIDEO
+        VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
+        AudioParms* audioParms = new AudioParms;
+        nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
+    #else
+        nvrcam.event = new EventRecorder( "event-"+name,  path,30);
+    #endif
+        if (type=="m")
+        { 
+            nvrcam.event->registerProvider(*(nvrcam.motion));
+        }
+        else if (type == "f")
+        {
+            
+            nvrcam.event->registerProvider(*(nvrcam.face));
+        }
+        else if (type == "p")
+        {
+            nvrcam.event->registerProvider(*(nvrcam.person));
+        }
+        else if (type == "a")
+        {
+            
+            cout << "only registering person detection events" << endl;
+            nvrcam.event->registerProvider(*(nvrcam.person));
+        }
+        notifier->registerProvider(*(nvrcam.event));
+        notifier->start();
+       cout << "Events recorded to: " << path << endl;
     }
     else 
     {
         cout << "Recording will be skipped" << endl;
     }
 
-    mkdir (path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-
-#if RECORD_VIDEO
-    VideoParms* videoParms= new VideoParms( video_record_w, video_record_h );
-    AudioParms* audioParms = new AudioParms;
-    nvrcam.event = new VideoRecorder(name, path, "mp4", *videoParms, *audioParms, 30);
-#else
-    nvrcam.event = new EventRecorder( "event-"+name,  path,30);
-#endif
-    if (type=="m")
-    { 
-        nvrcam.event->registerProvider(*(nvrcam.motion));
-    }
-    else if (type == "f")
-    {
-        
-        nvrcam.event->registerProvider(*(nvrcam.face));
-    }
-    else if (type == "p")
-    {
-        nvrcam.event->registerProvider(*(nvrcam.person));
-    }
-    else if (type == "a")
-    {
-        
-        cout << "only registering person detection events" << endl;
-        nvrcam.event->registerProvider(*(nvrcam.person));
-    }
-    notifier->registerProvider(*(nvrcam.event));
-    notifier->start();
     nvrcams.push_back(nvrcam); // add to list
     
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
