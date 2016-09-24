@@ -186,8 +186,8 @@ void cmd_add()
     {
         nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
-        nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        //nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        //nvrcam.rate->registerProvider(*(nvrcam.cam) );
+        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
         nvrcam.person->registerProvider(*(nvrcam.cam),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
 }
     else if (type=="m") // only instantate motion detect
