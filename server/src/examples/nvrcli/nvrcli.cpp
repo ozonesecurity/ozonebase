@@ -177,18 +177,18 @@ void cmd_add()
     nvrcam.cam = new AVInput ( name, source,avOptions );
     if (type == "f") // only instantiate face recog
     {
-        nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
+        nvrcam.face = new FaceDetector( "face-"+name,"./shape_predictor_68_face_landmarks.dat");
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
-        nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.rate->registerProvider(*(nvrcam.cam), gQueuedVideoLink );
+        //gQueuedVideoLink
+        nvrcam.face->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
     }
     else if (type=="p") // only instantiate people recog
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
         //nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
-        nvrcam.person->registerProvider(*(nvrcam.cam),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.person->registerProvider(*(nvrcam.rate), gQueuedVideoLink);
 }
     else if (type=="m") // only instantate motion detect
     {
@@ -201,9 +201,9 @@ void cmd_add()
         nvrcam.face = new FaceDetector( "face-"+name, "./shape_predictor_68_face_landmarks.dat" );
         nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
-        nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
-        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.rate->registerProvider(*(nvrcam.cam),gQueuedVideoLink );
+        nvrcam.person->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
+        nvrcam.face->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
         nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
@@ -279,7 +279,7 @@ void cmd_add()
     }
     else if (type =="f")
     {
-        httpController->addStream("face",*(nvrcam.face));
+        httpController->addStream("debug",*(nvrcam.face));
     }
     else if (type == "a")
     {
