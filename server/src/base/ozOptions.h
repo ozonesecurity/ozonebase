@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <map>
+#include <sstream>
+#include <unistd.h>
 
 #include "../libgen/libgenUtils.h"
 #include "../libgen/libgenException.h"
@@ -17,6 +19,16 @@ protected:
 public:
     virtual ~_Option() 
     {
+    }
+    virtual const std::string type() const
+    {
+        static const std::string typeString = "null";
+        return( typeString );
+    }
+    virtual const std::string valueString() const
+    {
+        static const std::string valString = "(null)";
+        return( valString );
     }
 };
 
@@ -35,6 +47,16 @@ public:
     {
         return( mValue );
     }
+    const std::string valueString() const
+    {
+        std::ostringstream valString;
+        valString << mValue;
+        return( valString.str() );
+    }
+    const std::string type() const
+    {
+        return typeid(t).name();
+    }
 };
 
 class Options : public _Option
@@ -49,19 +71,16 @@ public:
     Options() {
     }
 
-    //bool add( const std::string &name, const Option *value )
-    //{
-        //std::pair<OptionMap::iterator,bool> result = mOptionMap.insert( OptionMap::value_type( name, option ) );
-        //return( result.second );
-    //}
+    unsigned int load( const std::string &prefix="OZ_OPT_" );
+    void dump( unsigned int depth=0 ) const;
+
+    bool add( const std::string &name, const char *value )
+    {
+        return( add( name, std::string(value) ) );
+    }
     template <typename t> bool add( const std::string &name, t value )
     {
         std::pair<OptionMap::iterator,bool> result = mOptionMap.insert( OptionMap::value_type( name, std::make_shared<Option<t>>( value ) ) );
-        return( result.second );
-    }
-    bool add( const std::string &name, const char *value )
-    {
-        std::pair<OptionMap::iterator,bool> result = mOptionMap.insert( OptionMap::value_type( name, std::make_shared<Option<const std::string>>( value ) ) );
         return( result.second );
     }
     bool remove( const std::string &name )
@@ -91,18 +110,21 @@ public:
         std::shared_ptr<Option<t>> optionPtr = std::dynamic_pointer_cast<Option<t>>( iter->second );
         Option<t> *option = optionPtr.get();
         if ( !option )
-            throw Exception( stringtf( "Option %s found, but of wrong type", name.c_str() ) );
+            throw Exception( stringtf( "Option %s found, but of wrong type. Expected %s, got %s.", name.c_str(), typeid(t).name(), iter->second->type().c_str() ) );
         return( std::pair<const t&,OptionMap::const_iterator>(option->value(),iter) );
+    }
+    const std::string &get( const std::string &name, const char *notFoundValue )
+    {
+        return( get( name, std::string(notFoundValue) ) );
     }
     template <typename t> const t &get( const std::string &name, const t &notFoundValue )
     {
         const std::pair<const t&,OptionMap::const_iterator> result = _get( name, notFoundValue );
         return( result.first );
     }
-    const std::string &get( const std::string &name, const char *&notFoundValue )
+    const std::string &extract( const std::string &name, const char *notFoundValue )
     {
-        const std::pair<const std::string&,OptionMap::const_iterator> result = _get( name, std::string(notFoundValue) );
-        return( result.first );
+        return( extract( name, std::string(notFoundValue) ) );
     }
     template <typename t> const t &extract( const std::string &name, const t &notFoundValue )
     {
@@ -111,12 +133,10 @@ public:
             mOptionMap.erase( result.second );
         return( result.first );
     }
-    const std::string &extract( const std::string &name, const char *&notFoundValue )
-    {
-        const std::pair<const std::string&,OptionMap::const_iterator> result = _get( name, std::string(notFoundValue) );
-        if ( result.second != mOptionMap.end() )
-            mOptionMap.erase( result.second );
-        return( result.first );
+
+    friend std::ostream& operator<< (std::ostream& stream, const Options& options ) {
+        stream << "options";
+        return ( stream );
     }
 };
 
