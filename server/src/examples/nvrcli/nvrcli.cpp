@@ -177,18 +177,17 @@ void cmd_add()
     nvrcam.cam = new AVInput ( name, source,avOptions );
     if (type == "f") // only instantiate face recog
     {
-        nvrcam.face = new FaceDetector( "person-"+name,"./shape_predictor_194_face_landmarks.dat",FaceDetector::OZ_FACE_MARKUP_OUTLINE );
+        nvrcam.face = new FaceDetector( "face-"+name,"./shape_predictor_68_face_landmarks.dat");
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
-        nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.rate->registerProvider(*(nvrcam.cam), gQueuedVideoLink );
+        nvrcam.face->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
     }
     else if (type=="p") // only instantiate people recog
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"shop.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
-        nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate );
-        //nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
-        nvrcam.person->registerProvider(*(nvrcam.cam),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
+        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+        nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate, true );
+        nvrcam.rate->registerProvider(*(nvrcam.cam), gQueuedVideoLink );
+        nvrcam.person->registerProvider(*(nvrcam.rate), gQueuedVideoLink);
 }
     else if (type=="m") // only instantate motion detect
     {
@@ -199,12 +198,12 @@ void cmd_add()
     {
         nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
         nvrcam.face = new FaceDetector( "face-"+name, "./shape_predictor_68_face_landmarks.dat" );
-        nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
+        //nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
-        nvrcam.rate->registerProvider(*(nvrcam.cam) );
-        nvrcam.person->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
-        nvrcam.face->registerProvider(*(nvrcam.rate),FeedLink( FEED_QUEUED, AudioVideoProvider::videoFramesOnly ) );
-        nvrcam.fileOut->registerProvider(*(nvrcam.face) );
+        nvrcam.rate->registerProvider(*(nvrcam.cam),gQueuedVideoLink );
+        nvrcam.person->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
+        nvrcam.face->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
+        //nvrcam.fileOut->registerProvider(*(nvrcam.face) );
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
@@ -257,32 +256,37 @@ void cmd_add()
     cout << nvrcams.back().cam->source() << endl;
 
     nvrcams.back().cam->start();
-    if (nvrcams.back().motion != NULL){nvrcams.back().motion->start();}
-    if (nvrcams.back().rate != NULL) {nvrcams.back().rate->start();}
-    if (nvrcams.back().person != NULL) {nvrcams.back().person->start();}
-    if (nvrcams.back().face != NULL) {nvrcams.back().face->start();}
-    if (nvrcams.back().fileOut != NULL) {nvrcams.back().fileOut->start();}
+    if (nvrcams.back().motion != NULL){nvrcams.back().motion->start(); cout << "starting motion"<< endl;}
+    if (nvrcams.back().rate != NULL) {nvrcams.back().rate->start(); cout << "starting rate" << endl;}
+    if (nvrcams.back().person != NULL) {nvrcams.back().person->start(); cout << "starting person" << endl;}
+    if (nvrcams.back().face != NULL) {nvrcams.back().face->start(); cout << "starting face" << endl;}
+    //if (nvrcams.back().fileOut != NULL) {nvrcams.back().fileOut->start();}
 
     if (record == "y")
     {
         nvrcams.back().event->start();
+        cout << "starting events" << endl;
     }
     listener->removeController(httpController);
     httpController->addStream("live",*(nvrcam.cam));
     if (type=="m")
     {
         httpController->addStream("debug",*(nvrcam.motion));
+        cout << "starting motion http" << endl;
     }
     else if (type == "p")
     {
         httpController->addStream("debug",*(nvrcam.person));
+        cout << "starting person http" << endl;
     }
     else if (type =="f")
     {
-        httpController->addStream("face",*(nvrcam.face));
+        httpController->addStream("debug",*(nvrcam.face));
+        cout << "starting face http" << endl;
     }
     else if (type == "a")
     {
+        cout << "starting motion+person+face http" << endl;
         httpController->addStream("debug",*(nvrcam.motion));
         httpController->addStream("debug",*(nvrcam.person));
         httpController->addStream("debug",*(nvrcam.face));
