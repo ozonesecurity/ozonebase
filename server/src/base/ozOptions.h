@@ -71,7 +71,7 @@ public:
     Options() {
     }
 
-    unsigned int load( const std::string &prefix="OZ_OPT_" );
+    unsigned int load( const std::string &prefix="OZ_OPT_", bool replace=false );
     void dump( unsigned int depth=0 ) const;
 
     bool add( const std::string &name, const char *value )

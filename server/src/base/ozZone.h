@@ -19,24 +19,49 @@ class Zone : public Region
 public:
     typedef enum { ACTIVE=1, INCLUSIVE, EXCLUSIVE, PRECLUSIVE, INACTIVE } ZoneType;
 
+public:
+    class Config
+    {
+    public:
+        Rgb             mAlarmRgb;
+        bool            mCheckBlobs;
+
+        double          mDiffThres;
+        double          mScoreThres;
+        unsigned long   mScoreBlend;
+
+        double          mMinAlarmPercent;
+        double          mMaxAlarmPercent;
+
+        unsigned long   mMinScore;
+        unsigned long   mMaxScore;
+
+        int             mScale;     // How much to shrink images for analysis
+
+    public:
+        // Set some useful defaults
+        Config( const Rgb alarmRgb=RGB_RED, int scale=2, bool checkBlobs=true, double diffThres=2.0, double scoreThres=1.41, unsigned long scoreBlend=64, double minAlarmPercent=2, double maxAlarmPercent=0, unsigned long minScore=50, unsigned long maxScore=0 ) :
+            mAlarmRgb( alarmRgb ),
+            mCheckBlobs( checkBlobs ),
+            mDiffThres( diffThres ),
+            mScoreThres( scoreThres ),
+            mScoreBlend( scoreBlend ),
+            mMinAlarmPercent( minAlarmPercent ),
+            mMaxAlarmPercent( maxAlarmPercent ),
+            mMinScore( minScore ),
+            mMaxScore( maxScore ),
+            mScale( scale )
+        {
+        }
+    };
+
 protected:
     ZoneType        mType;
     Mask            *mMask;
-    Rgb             mAlarmRgb;
-    bool            mCheckBlobs;
 
-    double          mDiffThres;
-    double          mScoreThres;
-    unsigned long   mScoreBlend;
+    Config          mConfig;
 
-    int             mMinAlarmPixels;
-    int             mMaxAlarmPixels;
-
-    unsigned long   mMinScore;
-    unsigned long   mMaxScore;
-
-    int             mScale;     // How much to shrink images for analysis
-    int             mScaleSq;   // The above, squared
+    int             mScaleSq;   // mScale squared
 
     uint32_t        mScore;
     bool            mAlarmed;       // Current alarm state
@@ -48,29 +73,35 @@ private:
     Image           *mThresImage;
 
 protected:
-    void setup( ZoneType type, const Rgb alarmRgb, bool checkBlobs, double diffThres, double scoreThres, unsigned long scoreBlen, int minAlarmPixels, int maxAlarmPixels, unsigned long minScore, unsigned long maxScore );
+    void setup();
 
 public:
-    Zone( int id, const char *label, ZoneType type, const Polygon &polygon, const Rgb alarmRgb, bool checkBlobs, double diffThres=2.0, double scoreThres=1.41, unsigned long scoreBlend=64, int minAlarmPixels=100, int maxAlarmPixels=0, unsigned long minScore=50, unsigned long maxScore=0 ) :
+    Zone( int id, const char *label, ZoneType type, const Polygon &polygon, const Config &config ) :
         Region( id, label, polygon ),
+        mType( type ),
+        mConfig( config ),
         mMotionData( NULL ),
         mThresImage( NULL )
     {
-        setup( type, alarmRgb, checkBlobs, diffThres, scoreThres, scoreBlend, minAlarmPixels, maxAlarmPixels, minScore, maxScore );
+        setup();
     }
-    Zone( int id, const char *label, const Polygon &polygon, const Rgb alarmRgb, bool checkBlobs, double diffThres=2.0, double scoreThres=1.41, unsigned long scoreBlend=64, int minAlarmPixels=100, int maxAlarmPixels=0, unsigned long minScore=50, unsigned long maxScore=0 ) :
+    Zone( int id, const char *label, const Polygon &polygon, const Config &config ) :
         Region( id, label, polygon ),
+        mType( ACTIVE ),
+        mConfig( config ),
         mMotionData( NULL ),
         mThresImage( NULL )
     {
-        setup( Zone::ACTIVE, alarmRgb, checkBlobs, diffThres, scoreThres, scoreBlend, minAlarmPixels, maxAlarmPixels, minScore, maxScore );
+        setup();
     }
     Zone( int id, const char *label, const Polygon &polygon ) :
         Region( id, label, polygon ),
+        mType( INACTIVE ),
+        mConfig( Config( RGB_BLACK, 1, false, 0.0, 0.0, 0, 0, 0, 0, 0 ) ),
         mMotionData( NULL ),
         mThresImage( NULL )
     {
-        setup( Zone::INACTIVE, RGB_BLACK, false, 0.0, 0.0, 0, 0, 0, 0, 0 );
+        setup();
     }
 
 public:

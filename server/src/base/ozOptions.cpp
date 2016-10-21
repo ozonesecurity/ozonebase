@@ -6,7 +6,7 @@
 
 const Options gNullOptions;
 
-unsigned int Options::load( const std::string &prefix )
+unsigned int Options::load( const std::string &prefix, bool replace )
 {
     char **envPtr = environ;
     int numOptions = 0;
@@ -19,6 +19,8 @@ unsigned int Options::load( const std::string &prefix )
             if  ( env.substr( 0, prefix.length() ) == prefix )
             {
                 std::string name = env.substr( prefix.length(), pos-prefix.length() );
+                if ( replace )
+                    mOptionMap.erase( name );
                 std::string value = env.substr( pos+1 );
                 if ( value == "true" || value == "false" )
                 {
