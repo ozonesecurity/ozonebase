@@ -1,20 +1,21 @@
 /** @addtogroup Processors */
 /*@{*/
 
-
 #ifndef OZ_MOTION_DETECTOR_H
 #define OZ_MOTION_DETECTOR_H
 
 #include "../base/ozDetector.h"
+#include "../base/ozZone.h"
+#include "../base/ozOptions.h"
 
 #include <set>
 #include <map>
 #include <list>
+
 #define SIGNAL_CAUSE "Signal"
 #define MOTION_CAUSE "Motion"
 #define LINKED_CAUSE "Linked"
 
-class Zone;
 class MotionData;
 
 ///
@@ -32,18 +33,15 @@ private:
     typedef std::list<Zone *> ZoneList;
 
 private:
-    //unsigned int    mWidth;                 // Normally the same as the camera, but not if partly rotated
-    //unsigned int    mHeight;                // Normally the same as the camera, but not if partly rotated
-    //AVPixelFormat     mPixelFormat;
-    int             mFastStart;             // Whether to progressively blend images until the full blend ratios reached
-    int             mPreEventCount;         // How many images to hold and prepend to an alarm event
-    int             mPostEventCount;        // How many unalarmed images must occur before the alarm state is reset
-    int             mFrameSkip;             // How many frames to skip in continuous modes
-    int             mCaptureDelay;          // How long we wait between capture frames
-    int             mAlarmCaptureDelay;     // How long we wait between capture frames when in alarm state
-    int             mAlarmFrameCount;       // How many alarm frames are required before an event is triggered
+    Options         mOptions;
 
-    int             mAnalysisScale;
+    Zone::Config    mZoneDefaults;          // Default zone config
+
+    int             mFastStart;             // Whether to progressively blend images until the full blend ratios reached
+
+    bool            mBlendAlarmedImages;
+
+    int             mAnalysisScale;         // How much to scale down the difference image before detection
     int             mRefBlend;              // Inverse ratio new image going into reference image.
     int             mVarBlend;              // Inverse ratio new image going into variance buffer.
     int             mVarDeltaShift;         // Shift derived from above
@@ -53,15 +51,12 @@ private:
     uint8_t         mNoiseLevel;            // Base level of noise in images
     uint32_t        mNoiseLevelSq;          // Base level of noise in images, squared and shifted to long fixed point
 
-    Rgb             mSignalCheckColour;     // The colour that the camera will emit when no video signal detected
-
     //Image           mImage;
     Image           mRefImage;
     Uint32Buffer    mVarBuffer;
     Image           *mVarImage;
 
     int             mAlarmCount;
-    //int             mAlarmFrameCount;
 
     int             mImageCount;
     int             mReadyCount;
@@ -72,6 +67,10 @@ private:
 
     ZoneSet         mZones;
 
+    bool            mDebugStreams;
+    bool            mDebugImages;
+    std::string     mDebugLocation;
+
     SlaveVideo      *mCompImageSlave;
     SlaveVideo      *mRefImageSlave;
     SlaveVideo      *mDeltaImageSlave;
@@ -81,8 +80,8 @@ private:
     void construct();
 
 public:
-    MotionDetector( const std::string &name );
-    MotionDetector( VideoProvider &provider, const FeedLink &link=gQueuedVideoLink );
+    MotionDetector( const std::string &name, const Options &options=gNullOptions );
+    MotionDetector( VideoProvider &provider, const Options &options=gNullOptions, const FeedLink &link=gQueuedVideoLink );
     ~MotionDetector();
 
     bool addZone( Zone *zone );

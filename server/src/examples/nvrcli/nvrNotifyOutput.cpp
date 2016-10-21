@@ -24,6 +24,7 @@ int NotifyOutput::run()
                     usleep( INTERFRAME_TIMEOUT );
                 }
             }
+            sleep(5);
     }
     cleanup();
     return( 0 );

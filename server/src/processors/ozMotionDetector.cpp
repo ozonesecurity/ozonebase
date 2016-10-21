@@ -6,16 +6,39 @@
 
 #include <sys/time.h>
 
-bool writeImages = false;
-std::string writeLocation = "/tmp/debug";
-
 /**
 * @brief 
 */
 void MotionDetector::construct()
 {
-    mRefBlend = 128;
-    mVarBlend = 512;
+    //
+    mDebugStreams = mOptions.get( "debug_streams", true );
+    // Write out images to see what is going on?
+    mDebugImages = mOptions.get( "debug_images", false );
+    // If so where?
+    mDebugLocation = mOptions.get( "debug_location", "/tmp" );
+
+    mRefBlend = 1 << mOptions.get( "options_refBlend", 7 ); // 128
+    mVarBlend = 1 << mOptions.get( "options_varBlend", 9 ); // 512
+
+    // Include alarmed images in the reference image?
+    mBlendAlarmedImages = mOptions.get( "options_blendAlarmedImages", true );
+
+    // Adjust for wholesale brightness changes?
+    mDeltaCorrection = mOptions.get( "options_deltaCorrection", false );
+
+    mAnalysisScale = mOptions.get( "options_analysisScale", 2 );
+
+    mZoneDefaults.mAlarmRgb = mOptions.get( "zone_default_color", (Rgb)RGB_RED );
+    mZoneDefaults.mCheckBlobs = mOptions.get( "zone_default_checkBlobs", true );
+    mZoneDefaults.mDiffThres = mOptions.get( "zone_default_diffThres", 2.0 );
+    mZoneDefaults.mScoreThres = mOptions.get( "zone_default_scoreThres", 1.41 );
+    mZoneDefaults.mScoreBlend = mOptions.get( "zone_default_scoreBlend", 64 );
+    mZoneDefaults.mMinAlarmPercent = mOptions.get( "zone_default_alarmPercent_min", 5.0 );
+    mZoneDefaults.mMaxAlarmPercent = mOptions.get( "zone_default_alarmPercent_max", 0.0 );
+    mZoneDefaults.mMinScore = mOptions.get( "zone_default_score_min", 50 );
+    mZoneDefaults.mMaxScore = mOptions.get( "zone_default_score_max", 0 );
+    mZoneDefaults.mScale = mAnalysisScale;
 
     mColourDeltas = false;
 
@@ -26,11 +49,6 @@ void MotionDetector::construct()
     mLastAlarmCount = 0;
     mAlarmed = false;
 
-    //if ( mAlarmFrameCount < 1 )
-        mAlarmFrameCount = 1;
-
-    //mAnalysisScale = config.analysis_scale;
-    mAnalysisScale = 2;
     mNoiseLevel = 8;
     mNoiseLevelSq = (mNoiseLevel*mNoiseLevel) << 16;
 
@@ -47,9 +65,10 @@ void MotionDetector::construct()
 *
 * @param name
 */
-MotionDetector::MotionDetector( const std::string &name ) :
+MotionDetector::MotionDetector( const std::string &name, const Options &options ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
+    mOptions( options ),
     mVarImage( NULL ),
     mCompImageSlave( NULL ),
     mRefImageSlave( NULL ),
@@ -62,10 +81,11 @@ MotionDetector::MotionDetector( const std::string &name ) :
 /**
 * @brief 
 */
-MotionDetector::MotionDetector( VideoProvider &provider, const FeedLink &link ) :
+MotionDetector::MotionDetector( VideoProvider &provider, const Options &options, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
     Thread( identity() ),
+    mOptions( options ),
     mVarImage( NULL ),
     mCompImageSlave( NULL ),
     mRefImageSlave( NULL ),
@@ -108,9 +128,6 @@ bool MotionDetector::addZone( Zone *zone )
 */
 int MotionDetector::run()
 {
-    config.dir_events = "/transfer";
-    config.record_diag_images = true;
-
     // Wait for encoder to be ready
     if ( waitForProviders() )
     {
@@ -122,14 +139,14 @@ int MotionDetector::run()
         if ( !mZones.size() )
         {
             Coord coords[4] = { Coord( 0, 0 ), Coord( width-1, 0 ), Coord( width-1, height-1 ), Coord( 0, height-1 ) };
-            addZone( new Zone( 0, "All", Zone::ACTIVE, Polygon( sizeof(coords)/sizeof(*coords), coords ), RGB_RED, true, 2.0, 1.41, 64, 1200, 0, 50, 0 ) );
+            addZone( new Zone( 0, "All", Zone::ACTIVE, Polygon( sizeof(coords)/sizeof(*coords), coords ), mZoneDefaults ) );
         }
 
         mCompImageSlave->prepare( videoProvider()->frameRate() );
         mRefImageSlave->prepare( videoProvider()->frameRate() );
         mDeltaImageSlave->prepare( videoProvider()->frameRate() );
         mVarImageSlave->prepare( videoProvider()->frameRate() );
-      
+
         while ( !mStop )
         {
             if ( mStop )
@@ -149,11 +166,11 @@ int MotionDetector::run()
                         //Image *image = new Image( Image::FMT_YUVP, width, height, packet->data() );
                         if ( mRefImage.empty() )
                         {
-                            if ( writeImages )
-                                image.writeJpeg( stringtf( "%s/image-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
+                            if ( mDebugImages )
+                                image.writeJpeg( stringtf( "%s/image-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                             mRefImage.assign( Image( Image::FMT_RGB48, image ) );
-                            if ( writeImages )
-                                mRefImage.writeJpeg( stringtf( "%s/ref-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), frame->id() ), 100 );
+                            if ( mDebugImages )
+                                mRefImage.writeJpeg( stringtf( "%s/ref-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), frame->id() ), 100 );
                         }
 
                         //struct timeval *timestamp = new struct timeval;
@@ -177,7 +194,7 @@ int MotionDetector::run()
 
                         distributeFrame( FramePtr( motionFrame ) );
 
-                        if ( config.blend_alarmed_images || !mAlarmed )
+                        if ( mBlendAlarmedImages || !mAlarmed )
                         {
                             int refBlend = mRefBlend;
                             if ( refBlend > (mFrameCount+1) )
@@ -330,16 +347,14 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
 
     if ( mZones.size() <= 0 ) return( alarm );
 
-    if ( config.record_diag_images )
+    if ( mDebugStreams )
     {
         mCompImageSlave->relayImage( compImage );
-        //compImage.writeJpeg( stringtf( "%s/diag-c.jpg", config.dir_events ) );
-        if ( writeImages )
-            compImage.writeJpeg( stringtf( "%s/comp-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+        if ( mDebugImages )
+            compImage.writeJpeg( stringtf( "%s/comp-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
         mRefImageSlave->relayImage( mRefImage );
-        //mRefImage.writeJpeg( stringtf( "%s/diag-r.jpg", config.dir_events ) );
-        if ( writeImages )
-            mRefImage.writeJpeg( stringtf( "%s/ref2-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+        if ( mDebugImages )
+            mRefImage.writeJpeg( stringtf( "%s/ref2-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
 
     // Get the difference between the captured image and the reference image
@@ -354,12 +369,11 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
     // Reduce the size of the diff image, also helps to despeckle
     if ( mAnalysisScale > 1 )
         deltaImage->shrink( mAnalysisScale );
-    if ( config.record_diag_images )
+    if ( mDebugStreams )
     {
         mDeltaImageSlave->relayImage( *deltaImage );
-        //deltaImage->writeJpeg( stringtf( "%s/diag-d.jpg", config.dir_events ), 100 );
-        if ( writeImages )
-            deltaImage->writeJpeg( stringtf( "%s/delta-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+        if ( mDebugImages )
+            deltaImage->writeJpeg( stringtf( "%s/delta-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     // Pre-populate the variance buffer with noise
     if ( mVarBuffer.empty() )
@@ -491,7 +505,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
         }
     }
 
-    if ( config.record_diag_images )
+    if ( mDebugStreams )
     {
         if ( !mVarImage )
             mVarImage = new Image( Image::FMT_GREY, deltaImage->width(), deltaImage->height() );
@@ -508,16 +522,15 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
             pBuf++;
         }
         mVarImageSlave->relayImage( *mVarImage );
-        //mVarImage->writeJpeg( stringtf( "%s/diag-v.jpg", config.dir_events ), 100 );
-        if ( writeImages )
-            mVarImage->writeJpeg( stringtf( "%s/var-%s-%ju.jpg", writeLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
+        if ( mDebugImages )
+            mVarImage->writeJpeg( stringtf( "%s/var-%s-%ju.jpg", mDebugLocation.c_str(), mName.c_str(), mFrameCount ), 100 );
     }
     delete deltaImage;
     //mRefImage.blend( compImage, mRefBlend );
 
     // This is a small and innocent hack to prevent scores of 0 being returned in alarm state
     return( score?score:alarm );
-} 
+}
 
 /**
 * @brief 
