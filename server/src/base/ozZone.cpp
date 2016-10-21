@@ -15,38 +15,25 @@
 * @param diffThres
 * @param scoreThres
 * @param scoreBlend
-* @param minAlarmPixels
-* @param maxAlarmPixels
+* @param minAlarmPercent
+* @param maxAlarmPercent
 * @param minScore
 * @param maxScore
 */
-void Zone::setup( ZoneType type, const Rgb alarmRgb, bool checkBlobs, double diffThres, double scoreThres, unsigned long scoreBlend, int minAlarmPixels, int maxAlarmPixels, unsigned long minScore, unsigned long maxScore )
+void Zone::setup()
 {
-	mType = type;
-	mAlarmRgb = alarmRgb;
-	mCheckBlobs = checkBlobs;
-	mDiffThres = diffThres;
-	mScoreThres = scoreThres;
-	mScoreBlend = scoreBlend;
-	mMinAlarmPixels = minAlarmPixels;
-	mMaxAlarmPixels = maxAlarmPixels;
-	mMinScore = minScore;
-	mMaxScore = maxScore;
-
     mScore = 0;
     mAlarmed = false;
 
-    // XXX - mScale = config.analysis_scale;
-    mScale = 2;
-    mScaleSq = mScale*mScale;
+    mScaleSq = mConfig.mScale*mConfig.mScale;
     
     mImageCount = 0;
 
-	Debug( 1, "Initialised zone %d/%s - %d - %dx%d - Rgb:%06x, cB:%d, dT:%.2f, sT:%.2f, sB:%lu, mnAP:%d, mxAP:%d, mnSC:%lu, mxSC:%lu", mId, mIdentity.c_str(), mType, mPolygon.width(), mPolygon.height(), mAlarmRgb, mCheckBlobs, mDiffThres, mScoreThres, mScoreBlend, mMinAlarmPixels, mMaxAlarmPixels, mMinScore, mMaxScore );
+	Debug( 1, "Initialised zone %d/%s - %d - %dx%d - Rgb:%06x, cB:%d, dT:%.2f, sT:%.2f, sB:%lu, mnA%%:%.2lf, mxAP%%:%.2lf, mnSC:%lu, mxSC:%lu", mId, mIdentity.c_str(), mType, mPolygon.width(), mPolygon.height(), mConfig.mAlarmRgb, mConfig.mCheckBlobs, mConfig.mDiffThres, mConfig.mScoreThres, mConfig.mScoreBlend, mConfig.mMinAlarmPercent, mConfig.mMaxAlarmPercent, mConfig.mMinScore, mConfig.mMaxScore );
 
     mMask = new PolyMask( mPolygon );
-    if ( mScale > 1 )
-        mMask->shrink( mScale );
+    if ( mConfig.mScale > 1 )
+        mMask->shrink( mConfig.mScale );
 
     if ( mType == ACTIVE || mType == INCLUSIVE )
         mMotionData = new MotionData( this );
@@ -88,6 +75,9 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
     delete mMotionImage;
     mMotionImage = NULL;
 
+    unsigned long minAlarmPixels = (deltaImage->pixels()*mConfig.mMinAlarmPercent)/100.0L;
+    unsigned long maxAlarmPixels = (deltaImage->pixels()*mConfig.mMaxAlarmPercent)/100.0L;
+
     const Image *maskImage = mMask->image();
     const ByteBuffer &maskBuffer = mMask->image()->buffer();
 
@@ -127,10 +117,10 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
                 unsigned short deltaSq = delta * delta;
 #if 1
                 unsigned char base = (unsigned char)sqrt(*pBuf>>16); // Expensive
-                if ( delta > (mDiffThres * base) )
+                if ( delta > (mConfig.mDiffThres * base) )
 #else
                 unsigned short base = (unsigned short)(*pBuf>>16);
-                if ( deltaSq > (mDiffThres * base) )
+                if ( deltaSq > (mConfig.mDiffThres * base) )
 #endif
                 {
                     *pThres = 0xff;
@@ -175,14 +165,14 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
     */
     Debug( 5, "Adjusted score is %u", mScore );
 
-    if ( mCheckBlobs )
+    if ( mConfig.mCheckBlobs )
     {
         //mThresImage->despeckleFilter( 2 );
         Image::BlobGroup blobGroup;
         // Adjust for scale
-        blobGroup.setFilter( mMinAlarmPixels/mScaleSq, mMaxAlarmPixels/mScaleSq );
-        //blobGroup.minSize( mMinAlarmPixels/mScaleSq );
-        //blobGroup.maxSize( mMaxAlarmPixels/mScaleSq );
+        blobGroup.setFilter( minAlarmPixels, maxAlarmPixels );
+        //blobGroup.minSize( mConfig.minAlarmPixels );
+        //blobGroup.maxSize( mConfig.maxAlarmPixels );
         int alarmBlobs = mThresImage->locateBlobs( blobGroup, mMask, true, true );
         if ( alarmBlobs )
         {
@@ -206,19 +196,19 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
                     mMotionImage->fill( RGB_YELLOW, blob->centre() );
                 }
                 mMotionImage->fill( RGB_GREEN, blobGroup.centre() );
-                if ( mScale > 1 )
-                    mMotionImage->swell( mScale );
+                if ( mConfig.mScale > 1 )
+                    mMotionImage->swell( mConfig.mScale );
                 //motionImage->writeJpeg( stringtf( "/transfer/edge2-%04d.jpg", mId ), 100 );
 
-                mMotionData->assign( blobGroup.pixels()*mScaleSq, mScore, blobGroup.extent()*mScale, blobGroup.centre()*mScale, blobGroup );
+                mMotionData->assign( blobGroup.pixels()*mScaleSq, mScore, blobGroup.extent()*mConfig.mScale, blobGroup.centre()*mConfig.mScale, blobGroup );
             }
             alarm = true;
         }
     }
     else
     {
-        //if ( (mMinAlarmPixels && (alarmPixels >= mMinAlarmPixels)) && (mMaxAlarmPixels && (alarmPixels <= mMaxAlarmPixels)) && motionData.score > (mScoreThres * (motionData.refScore>>32)) )
-        if ( (mMinAlarmPixels && (alarmPixels >= mMinAlarmPixels)) && (mMaxAlarmPixels && (alarmPixels <= mMaxAlarmPixels)) )
+        //if ( (minAlarmPixels && (alarmPixels >= minAlarmPixels)) && (maxAlarmPixels && (alarmPixels <= maxAlarmPixels)) && motionData.score > (mConfig.mScoreThres * (motionData.refScore>>32)) )
+        if ( (!minAlarmPixels || (alarmPixels >= minAlarmPixels)) && (!maxAlarmPixels || (alarmPixels <= maxAlarmPixels)) )
         {
             if ( mMotionData )
             {
@@ -226,10 +216,10 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
                 mMotionImage = new Image( Image::FMT_RGB, deltaImage->width(), deltaImage->height() );
                 mMotionImage->outline( RGB_RED, extent );
                 mMotionImage->fill( RGB_GREEN, extent.centre() );
-                if ( mScale > 1 )
+                if ( mConfig.mScale > 1 )
                 {
-                    mMotionImage->swell( mScale );
-                    extent *= mScale;
+                    mMotionImage->swell( mConfig.mScale );
+                    extent *= mConfig.mScale;
                 }
                 mMotionData->assign( alarmPixels*mScaleSq, mScore, extent, extent.centre() );
             }
@@ -237,7 +227,7 @@ bool Zone::checkMotion( const Image *deltaImage, const Uint32Buffer &varBuffer )
         }
     }
     mImageCount++;
-    //int scoreShift = getShift( mScoreBlend, mImageCount );
+    //int scoreShift = getShift( mConfig.mScoreBlend, mImageCount );
     //motionData.refScore = motionData.refScore - (motionData.refScore >> scoreShift) + ((unsigned long long)motionData.score << (32 - scoreShift));
 
 	return( alarm );
