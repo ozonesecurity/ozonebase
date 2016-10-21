@@ -42,7 +42,10 @@ int main( int argc, const char *argv[] )
     app.addThread( &people );
 
     // motion detect for traffic
-    MotionDetector trafficDetector( traffic );
+    Options motionOptions;
+    motionOptions.load( "OZ_OPT_MOTION_" );
+    motionOptions.dump();
+    MotionDetector trafficDetector( traffic, motionOptions );
     app.addThread( &trafficDetector );
 
     // rate limiter for people detector
