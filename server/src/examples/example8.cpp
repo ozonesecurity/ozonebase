@@ -1,6 +1,8 @@
 #include "../base/ozApp.h"
 #include "../base/ozListener.h"
 #include "../providers/ozMemoryInputV1.h"
+#include "../processors/ozFaceDetector.h"
+#include "../consumers/ozVideoRecorder.h"
 #include "../protocols/ozHttpController.h"
 #include "../protocols/ozRtspController.h"
 
@@ -23,24 +25,40 @@ int main( int argc, const char *argv[] )
     Listener listener;
     app.addThread( &listener );
 
-    RtspController rtspController( "p8554", 8554, RtspController::PortRange( 28000, 28998 ) );
+    RtspController rtspController( "rtsp", 8854, RtspController::PortRange( 28000, 28998 ) );
     listener.addController( &rtspController );
 
-    HttpController httpController( "p8080", 8080 );
+    HttpController httpController( "http", 8880 );
     listener.addController( &httpController );
 
-    const int maxMonitors = 1;
-    for ( int monitor = 1; monitor <= maxMonitors; monitor++ )
+    const int maxMonitors = 5;
+    for ( int monitor = 5; monitor <= maxMonitors; monitor++ )
     {
         char idString[32] = "";
 
-        // Get the individual images from shared memory
         sprintf( idString, "input%d", monitor );
-        MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 75, PIX_FMT_RGB24, 1920, 1080 );
+        // Get the individual images from shared memory
+		MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 50, PIX_FMT_RGB24, 640, 480 );
         app.addThread( input );
 
-        rtspController.addStream( "raw", *input );
-        httpController.addStream( "raw", *input );
+        rtspController.addStream( "input", *input );
+        httpController.addStream( "input", *input );
+
+        sprintf( idString, "detect%d", monitor );
+		FaceDetector *detector = new FaceDetector( idString ,"./shape_predictor_68_face_landmarks.dat");
+		detector->registerProvider( *input );
+		app.addThread( detector );
+
+        rtspController.addStream( "detect", *detector );
+        httpController.addStream( "detect", *detector );
+
+		VideoParms videoParms( 640, 480 );
+		AudioParms audioParms;
+
+        sprintf( idString, "record%d", monitor );
+		VideoRecorder *recorder = new VideoRecorder( idString , "/tmp", "mov", videoParms, audioParms );
+		recorder->registerProvider( *detector );
+		app.addThread( recorder );
     }
 
     app.run();
