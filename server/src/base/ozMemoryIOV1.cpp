@@ -65,7 +65,7 @@ bool MemoryIOV1::queryMemory( SharedData *sharedData )
     char memFile[PATH_MAX] = "";
 
     //snprintf( memFile, sizeof(memFile), "%s/oz.mmap.%d", config.path_map, mMemoryKey );
-    snprintf( memFile, sizeof(memFile), "%s/oz.mmap.%d", mLocation.c_str(), mMemoryKey );
+    snprintf( memFile, sizeof(memFile), "%s/zm.mmap.%d", mLocation.c_str(), mMemoryKey );
     int mapFd = open( memFile, O_RDWR, (mode_t)0600 );
     if ( mapFd < 0 )
     {
@@ -149,12 +149,13 @@ void MemoryIOV1::attachMemory( int imageCount, AVPixelFormat imageFormat, uint16
     mMemSize = sizeof(SharedData)
              + sizeof(TriggerData)
              + (mImageCount*sizeof(struct timeval))
-             + (mImageCount*imageSize);
+             + (mImageCount*imageSize)
+             + 64; // P{adding
 
     Debug( 1, "mem.size=%d", mMemSize );
 #if OZ_MEM_MAPPED
     //snprintf( mMemFile, sizeof(mMemFile), "%s/oz.mmap.%d", config.path_map, mMemoryKey );
-    snprintf( mMemFile, sizeof(mMemFile), "%s/oz.mmap.%d", mLocation.c_str(), mMemoryKey );
+    snprintf( mMemFile, sizeof(mMemFile), "%s/zm.mmap.%d", mLocation.c_str(), mMemoryKey );
     mMapFd = open( mMemFile, O_RDWR|O_CREAT, (mode_t)0600 );
     if ( mMapFd < 0 )
         Fatal( "Can't open memory map file %s, probably not enough space free: %s", mMemFile, strerror(errno) );

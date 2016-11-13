@@ -24,32 +24,47 @@ protected:
 
     typedef struct
     {
-        int size;
-        bool valid;
-        bool active;
-        bool signal;
-        State state;
-        int last_write_index;
-        int last_read_index;
-        time_t last_write_time;
-        time_t last_read_time;
-        int last_event;
-        int action;
-        int brightness;
-        int hue;
-        int colour;
-        int contrast;
-        int alarm_x;
-        int alarm_y;
-        char control_state[256];
+        uint32_t size;         /* +0  */
+        uint32_t last_write_index;   /* +4  */ 
+        uint32_t last_read_index;    /* +8  */
+        uint32_t state;        /* +12   */
+        uint32_t last_event;       /* +16   */
+        uint32_t action;         /* +20   */
+        int32_t brightness;      /* +24   */
+        int32_t hue;           /* +28   */
+        int32_t colour;        /* +32   */
+        int32_t contrast;        /* +36   */
+        int32_t alarm_x;         /* +40   */
+        int32_t alarm_y;         /* +44   */
+        uint8_t valid;         /* +48   */
+        uint8_t active;        /* +49   */
+        uint8_t signal;        /* +50   */
+        uint8_t format;        /* +51   */
+        uint32_t imagesize;      /* +52   */
+        uint32_t epadding1;      /* +56   */
+        uint32_t epadding2;      /* +60   */
+        /* 
+        ** This keeps 32bit time_t and 64bit time_t identical and compatible as long as time is before 2038.
+        ** Shared memory layout should be identical for both 32bit and 64bit and is multiples of 16.
+        */  
+        union {            /* +64  */
+            time_t last_write_time;
+            uint64_t extrapad1;
+        };
+        union {            /* +72   */
+            time_t last_read_time;
+            uint64_t extrapad2;
+        };
+        uint8_t control_state[256];  /* +80   */
     } SharedData;
 
     typedef enum { TRIGGER_CANCEL, TRIGGER_ON, TRIGGER_OFF } TriggerState;
     typedef struct
     {
-        int size;
-        TriggerState trigger_state;
-        int trigger_score;
+        uint32_t size;
+        uint32_t trigger_state;
+        uint32_t trigger_score;
+        uint32_t padding;
         char trigger_cause[32];
         char trigger_text[256];
         char trigger_showtext[256];
@@ -59,6 +74,7 @@ protected:
     {
         struct timeval  *timestamp;
         Image           *image;
+        void            *padding;
     };
 
 #if OZ_MEM_MAPPED
