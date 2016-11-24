@@ -56,7 +56,7 @@ AVRational double2Rational( double input, long maxden )
             break;  // AF: representation failure
         }
         loop++;
-    } 
+    }
     //printf( "L:%d\n", loop );
     if ( loop == 0 )
         return( (AVRational){ (int)input, 1 } );
@@ -166,8 +166,8 @@ static int ffmpegLockManager( void **mutex, enum AVLockOp op )
     Mutex **ffmpegMutex = (Mutex **)mutex;
     switch (op)
     {
-        case AV_LOCK_CREATE: 
-            //*pmutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t)); 
+        case AV_LOCK_CREATE:
+            //*pmutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
             //pthread_mutex_init(*pmutex, NULL);
             *ffmpegMutex = new Mutex;
             break;
@@ -303,3 +303,64 @@ void avSetH264Preset( AVDictionary **dict, const std::string &preset )
 {
     av_dict_set( dict, "preset", preset.c_str(), 0 );
 }
+
+enum AVPixelFormat choose_pixel_fmt(AVStream *st, AVCodecContext *enc_ctx, AVCodec *codec, enum AVPixelFormat target)
+{
+    if (codec && codec->pix_fmts) {
+        const enum AVPixelFormat *p = codec->pix_fmts;
+        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(target);
+        int has_alpha = desc ? desc->nb_components % 2 == 0 : 0;
+        enum AVPixelFormat best= AV_PIX_FMT_NONE;
+        static const enum AVPixelFormat mjpeg_formats[] =
+            { AV_PIX_FMT_YUVJ420P, AV_PIX_FMT_YUVJ422P, AV_PIX_FMT_YUV420P, AV_PIX_FMT_YUV422P, AV_PIX_FMT_NONE };
+        static const enum AVPixelFormat ljpeg_formats[] =
+            { AV_PIX_FMT_YUVJ420P, AV_PIX_FMT_YUVJ422P, AV_PIX_FMT_YUVJ444P, AV_PIX_FMT_YUV420P,
+              AV_PIX_FMT_YUV422P, AV_PIX_FMT_YUV444P, AV_PIX_FMT_BGRA, AV_PIX_FMT_NONE };
+
+        if (enc_ctx->strict_std_compliance <= FF_COMPLIANCE_UNOFFICIAL) {
+            if (enc_ctx->codec_id == AV_CODEC_ID_MJPEG) {
+                p = mjpeg_formats;
+            } else if (enc_ctx->codec_id == AV_CODEC_ID_LJPEG) {
+                p =ljpeg_formats;
+            }
+        }
+        for (; *p != AV_PIX_FMT_NONE; p++) {
+            best= avcodec_find_best_pix_fmt_of_2(best, *p, target, has_alpha, NULL);
+            if (*p == target)
+                break;
+        }
+        if (*p == AV_PIX_FMT_NONE) {
+            if (target != AV_PIX_FMT_NONE)
+                av_log(NULL, AV_LOG_WARNING,
+                       "Incompatible pixel format '%s' for codec '%s', auto-selecting format '%s'\n",
+                       av_get_pix_fmt_name(target),
+                       codec->name,
+                       av_get_pix_fmt_name(best));
+            return best;
+        }
+    }
+    return target;
+}
+
+void choose_sample_fmt(AVStream *st, AVCodec *codec)
+{
+    if (codec && codec->sample_fmts) {
+        const enum AVSampleFormat *p = codec->sample_fmts;
+        for (; *p != -1; p++) {
+            if (*p == st->codec->sample_fmt)
+                break;
+        }
+        if (*p == -1) {
+            if((codec->capabilities & AV_CODEC_CAP_LOSSLESS) && av_get_sample_fmt_name(st->codec->sample_fmt) > av_get_sample_fmt_name(codec->sample_fmts[0]))
+                av_log(NULL, AV_LOG_ERROR, "Conversion will not be lossless.\n");
+            if(av_get_sample_fmt_name(st->codec->sample_fmt))
+            av_log(NULL, AV_LOG_WARNING,
+                   "Incompatible sample format '%s' for codec '%s', auto-selecting format '%s'\n",
+                   av_get_sample_fmt_name(st->codec->sample_fmt),
+                   codec->name,
+                   av_get_sample_fmt_name(codec->sample_fmts[0]));
+            st->codec->sample_fmt = codec->sample_fmts[0];
+        }
+    }
+}
+

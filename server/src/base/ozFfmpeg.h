@@ -161,4 +161,7 @@ void avDictSet( AVDictionary **dict, const char *name, double value );
 void avSetH264Profile( AVDictionary **dict, const std::string &profile );
 void avSetH264Preset( AVDictionary **dict, const std::string &preset );
 
+enum AVPixelFormat choose_pixel_fmt(AVStream *st, AVCodecContext *enc_ctx, AVCodec *codec, enum AVPixelFormat target);
+void choose_sample_fmt(AVStream *st, AVCodec *codec);
+
 #endif // OZ_FFMPEG_H
