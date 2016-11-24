@@ -190,7 +190,8 @@ int MotionDetector::run()
                         }*/
                         // XXX - Generate a new timestamp as using the original frame may be subject to process/decoding delays
                         // Need to check if there is a better way to handle this generally
-                        MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, time64(), motionImage.buffer(), mAlarmed, motionData );
+                        //MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, time64(), motionImage.buffer(), mAlarmed, motionData );
+                        MotionFrame *motionFrame = new MotionFrame( this, *iter, mFrameCount, frame->timecode(), motionImage.buffer(), mAlarmed, motionData );
 
                         distributeFrame( FramePtr( motionFrame ) );
 

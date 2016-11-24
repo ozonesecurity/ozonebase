@@ -16,8 +16,8 @@ protected:
     const MotionData    *mMotionData;     ///< Pointer to motion data describing motion objects in this frame
 
 public:
-    MotionFrame( MotionDetector *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
-    MotionFrame( MotionDetector *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
+    MotionFrame( MotionDetector *provider, uint64_t id, uint64_t timecode, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
+    MotionFrame( MotionDetector *provider, FramePtr parent, uint64_t id, uint64_t timecode, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
     MotionFrame( MotionDetector *provider, FramePtr parent, bool alarmed, const MotionData *motionData );
 
     ~MotionFrame();

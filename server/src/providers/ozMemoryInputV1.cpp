@@ -109,7 +109,7 @@ const FeedFrame *MemoryInputV1::loadFrame()
     Image snapImage( *(snap->image) );
 
     uint64_t timestamp = ((uint64_t)snap->timestamp->tv_sec*1000000LL)+snap->timestamp->tv_usec;
-    VideoFrame *frame = new VideoFrame( this, mFrameCount, timestamp, snapImage.buffer() );
+    VideoFrame *frame = new VideoFrame( this, mFrameCount, mFrameCount, snapImage.buffer() );
 
     return( frame );
 }

@@ -18,13 +18,13 @@ protected:
     Urgency mUrgency;      ///< Indicates the urgency of this notification
 
 public:
-    NotifyFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, Urgency urgency ) :
-        DataFrame( provider, id, timestamp ),
+    NotifyFrame( FeedProvider *provider, uint64_t id, uint64_t timecode, Urgency urgency ) :
+        DataFrame( provider, id, timecode ),
         mUrgency( urgency )
     {
     }
-    NotifyFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, Urgency urgency ) :
-        DataFrame( provider, parent, id, timestamp ),
+    NotifyFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timecode, Urgency urgency ) :
+        DataFrame( provider, parent, id, timecode ),
         mUrgency( urgency )
     {
     }
@@ -94,13 +94,13 @@ protected:
 
 public:
     //! General constructors
-    DiskIONotification( FeedProvider *provider, uint64_t id, uint64_t timestamp, const DiskIODetail &detail ) :
-        NotifyFrame( provider, id, timestamp, detail.failure()?IMPORTANT:ADVISORY ),
+    DiskIONotification( FeedProvider *provider, uint64_t id, uint64_t timecode, const DiskIODetail &detail ) :
+        NotifyFrame( provider, id, timecode, detail.failure()?IMPORTANT:ADVISORY ),
         mDetail( detail )
     {
     }
-    DiskIONotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const DiskIODetail &detail ) :
-        NotifyFrame( provider, parent, id, timestamp, detail.failure()?IMPORTANT:ADVISORY ),
+    DiskIONotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timecode, const DiskIODetail &detail ) :
+        NotifyFrame( provider, parent, id, timecode, detail.failure()?IMPORTANT:ADVISORY ),
         mDetail( detail )
     {
     }
@@ -166,13 +166,13 @@ protected:
 
 public:
     //! General constructors
-    EventNotification( FeedProvider *provider, uint64_t id, uint64_t timestamp, const EventDetail &detail ) :
-        NotifyFrame( provider, id, timestamp, ADVISORY ),
+    EventNotification( FeedProvider *provider, uint64_t id, uint64_t timecode, const EventDetail &detail ) :
+        NotifyFrame( provider, id, timecode, ADVISORY ),
         mDetail( detail )
     {
     }
-    EventNotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const EventDetail &detail ) :
-        NotifyFrame( provider, parent, id, timestamp, ADVISORY ),
+    EventNotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timecode, const EventDetail &detail ) :
+        NotifyFrame( provider, parent, id, timecode, ADVISORY ),
         mDetail( detail )
     {
     }
