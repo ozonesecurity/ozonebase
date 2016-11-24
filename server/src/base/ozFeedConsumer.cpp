@@ -313,7 +313,10 @@ VideoConsumer::VideoConsumer()
 */
 VideoProvider *VideoConsumer::videoProvider() const
 {
-    return( mProviders.empty() ? NULL : dynamic_cast<VideoProvider *>(mProviders.begin()->first) );
+    VideoProvider *provider = mProviders.empty() ? NULL : dynamic_cast<VideoProvider *>(mProviders.begin()->first);
+    if ( !provider )
+        throw Exception( "No video provider found" );
+    return( provider );
 }
 
 /**
