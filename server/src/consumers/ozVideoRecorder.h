@@ -39,6 +39,7 @@ protected:
     AlarmState      mState;
     int             mEventCount;                ///< Temp, in lieu of DB event index
     int             mNotificationId;
+    uint64_t        mBaseTimecode;
     uint64_t        mAlarmTime;
 
     AVFormatContext *mOutputContext;
@@ -52,7 +53,7 @@ protected:
     ByteBuffer      mVideoBuffer;
     ByteBuffer      mAudioBuffer;
 
-    int             mVideoFrameCount;
+    uint64_t        mVideoFrameCount;
     int             mAudioFrameCount;
     double          mMinTime;
 
@@ -94,6 +95,7 @@ public:
         mState( IDLE ),
         mEventCount( 0 ),
         mNotificationId( 0 ),
+        mBaseTimecode( 0 ),
         mAlarmTime( 0 ),
         mOutputContext( NULL ),
         mConvertContext( NULL ),
