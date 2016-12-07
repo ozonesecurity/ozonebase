@@ -4,7 +4,7 @@
 #include "../processors/ozRateLimiter.h"
 #include "../processors/ozMotionDetector.h"
 #include "../processors/ozFaceDetector.h"
-#include "../processors/ozRecognizer.h"
+//#include "../processors/ozRecognizer.h"
 #include "../consumers/ozVideoRecorder.h"
 #include "../consumers/ozMemoryTriggerV1.h"
 #include "../protocols/ozHttpController.h"
