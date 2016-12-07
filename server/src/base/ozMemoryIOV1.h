@@ -11,7 +11,7 @@ protected:
     std::string     mLocation;
     int             mMemoryKey;
     bool            mOwner;
-    int             mImageCount;
+    int             mImageBufferCount;
 
     typedef enum
     {
@@ -93,12 +93,16 @@ protected:
 
 protected:
     bool queryMemory( SharedData *sharedData );
-    void attachMemory( int imageCount, AVPixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight );
+    void attachMemory( int imageBufferCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight );
+    void attachMemory();
     void detachMemory();
 
 public:
     MemoryIOV1( const std::string &location, int id, bool owner );
     ~MemoryIOV1();
+
+    bool setTrigger( uint32_t score, const std::string &cause, const std::string &detail );
+    bool clearTrigger();
 };
 
 #endif // OZ_MEMORY_IO_V1_H
