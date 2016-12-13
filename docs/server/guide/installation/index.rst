@@ -37,16 +37,14 @@ This is a great way to isolate your install from other libraries you may already
 
 	# ---- Optional: For ad-hoc in-source re-building----------------
 	cd server
-	cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON
+    cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON -DCMAKE_INCLUDE_PATH=$INSTALLDIR/include
 	make
 	make install
 
 	# ----- Optional: build nvrcli - a starter NVR example ----------
-	cd nvrcli
-	export LD_LIBRARY_PATH=$INSTALLDIR/lib/
-
-	# modify the library and header file paths
-	# in the Makefile to point to your path, then
+    cd server
+	edit src/examples/CMakeLists.txt and uncomment lines 14 and 27 (add_executable for nvrcli and target_link_libraries for nvrcli
+ 
 
 	make
 
