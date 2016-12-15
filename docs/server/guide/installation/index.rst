@@ -55,7 +55,7 @@ That's all!
 
 Dlib optimizations
 ===================
-If your processor supports AVX instructions, `(cat /proc/cpuinfo | grep avx)` then add `-mavx` in `server/CMakeLists.txt` to `CMAKE-C_FLAGS_RELEASE` and `CMAKE_CXX_FLAGS_RELEASE` and rebuild. Note, please check before you add it, otherwise your code may core dump.  
+If your processor supports AVX instructions, :code:`(cat /proc/cpuinfo | grep avx)` then add :code:`-mavx` in :code:`server/CMakeLists.txt` to :code:`CMAKE-C_FLAGS_RELEASE` and :code:`CMAKE_CXX_FLAGS_RELEASE` and rebuild. Note, please check before you add it, otherwise your code may core dump.  
 
 Building Documentation
 =======================
