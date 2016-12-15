@@ -31,7 +31,7 @@ One time setup:
 
 	# --------------- build & install --------------------------------
 	export INSTALLDIR=~/ozoneroot/ # change this to whatever you want
-    ./ozone-build.sh
+        ./ozone-build.sh
 
 
 Once the one time setup is done, you don't need to keep doing it (building external dependencies take a long time)
@@ -41,17 +41,21 @@ For subsequent changes, you can keep doing these steps:
 
 	# ---- Optional: For ad-hoc in-source re-building----------------
 	cd server
-    cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON -DCMAKE_INCLUDE_PATH=$INSTALLDIR/include
+        cmake -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DOZ_EXAMPLES=ON -DCMAKE_INCLUDE_PATH=$INSTALLDIR/include
 	make
 	make install
 
 	# ----- Optional: build nvrcli - a starter NVR example ----------
-    cd server
+    	cd server
 	edit src/examples/CMakeLists.txt and uncomment lines 14 and 27 (add_executable for nvrcli and target_link_libraries for nvrcli
  
 	make
 
 That's all!
+
+Dlib optimizations
+===================
+If your processor supports AVX instructions, `(cat /proc/cpuinfo | grep avx)` then add `-mavx` in `server/CMakeLists.txt` to `CMAKE-C_FLAGS_RELEASE` and `CMAKE_CXX_FLAGS_RELEASE` and rebuild. Note, please check before you add it, otherwise your code may core dump.  
 
 Building Documentation
 =======================
