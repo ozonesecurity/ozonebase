@@ -48,8 +48,8 @@ int main( int argc, const char *argv[] )
 	app.addThread(resizer);
 
     sprintf( idString, "detect%d", monitor );
-    //ShapeDetector *detector  = new ShapeDetector( idString,"../models/person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
-    FaceDetector *detector  = new FaceDetector( idString,"../models/shape_predictor_68_face_landmarks.dat" );
+    //ShapeDetector *detector  = new ShapeDetector( idString,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+    FaceDetector *detector  = new FaceDetector( idString,"shape_predictor_68_face_landmarks.dat" );
     detector->registerProvider( *resizer );
     //detector->registerProvider( *input );
     app.addThread( detector );
