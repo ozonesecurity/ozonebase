@@ -534,6 +534,17 @@ else(OZ_SUPERBUILD)
                 "oZone requires lapack but it was not found on your system")
     endif(LAPACK_LIBRARIES)
 
+    # openalpr (using find_library)
+    find_library(OPENALPR_LIBRARIES openalpr)
+    if(OPENALPR_LIBRARIES)
+        set(HAVE_LIBCOPENALPR 1)
+        list(APPEND OZ_BIN_LIBS "${OPENALPR_LIBRARIES}")
+        mark_as_advanced(FORCE OPENALPR_LIBRARIES)
+    else(OPENALPR_LIBRARIES)
+        message(FATAL_ERROR
+                "oZone requires openalpr but it was not found on your system")
+    endif(OPENALPR_LIBRARIES)
+
 endif(OZ_SUPERBUILD)
 
 # check include files
