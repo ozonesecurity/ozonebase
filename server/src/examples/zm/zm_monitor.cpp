@@ -4,6 +4,7 @@
 #include <processors/ozRateLimiter.h>
 #include <processors/ozShapeDetector.h>
 #include <processors/ozFaceDetector.h>
+#include <processors/ozMotionDetector.h>
 #include <processors/ozAVFilter.h>
 //#include processors/ozRecognizer.h>
 #include <consumers/ozVideoRecorder.h>
@@ -15,10 +16,6 @@
 #include <iostream>
 using namespace std;
 
-//
-// Make images from ZM V1 shared memory available over the network
-// You have to manually tune the shared mmemory sizes etc to match
-//
 int main( int argc, const char *argv[] )
 {
     debugInitialise( "zm_monitor", "", 1 );
@@ -41,9 +38,14 @@ int main( int argc, const char *argv[] )
     limiter->registerProvider( *input );
     app.addThread( limiter );
 
+    sprintf( idString, "motion%d", monitor );
+	MotionDetector *motion = new MotionDetector(idString);
+	motion->registerProvider(*limiter);
+	app.addThread(motion);
+
     sprintf( idString, "monitor%d", monitor );
 	// half
-	//VideoFilter *resizer = new VideoFilter("filter", "scale=iw/2:-1");
+	VideoFilter *resizer = new VideoFilter("filter", "scale=iw/2:-1");
 	// funky mirror
 	// VideoFilter *resizer = new VideoFilter("filter", "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack");
 	// waveform foo
@@ -51,15 +53,15 @@ int main( int argc, const char *argv[] )
 	// histogram
 	//VideoFilter *resizer = new VideoFilter("filter", "format=gbrp,split=4[a][b][c][d],[d]histogram=display_mode=0:level_height=244[dd],[a]waveform=m=1:d=0:r=0:c=7[aa],[b]waveform=m=0:d=0:r=0:c=7[bb],[c][aa]vstack[V],[bb][dd]vstack[V2],[V][V2]hstack");
 	//edge detection
-	VideoFilter *resizer = new VideoFilter("filter", "edgedetect=low=0.1:high=0.4");
-	resizer->registerProvider(*limiter);
-	app.addThread(resizer);
+	//VideoFilter *resizer = new VideoFilter("filter", "edgedetect=low=0.1:high=0.4");
+	//resizer->registerProvider(*limiter);
+	//app.addThread(resizer);
 
     sprintf( idString, "detect%d", monitor );
-    //ShapeDetector *detector  = new ShapeDetector( idString,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
-    FaceDetector *detector  = new FaceDetector( idString,"shape_predictor_68_face_landmarks.dat" );
-    detector->registerProvider( *resizer );
-    //detector->registerProvider( *input );
+    ShapeDetector *detector  = new ShapeDetector( idString,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+    //FaceDetector *detector  = new FaceDetector( idString,"shape_predictor_68_face_landmarks.dat" );
+    //detector->registerProvider( *resizer );
+    detector->registerProvider( *motion );
     app.addThread( detector );
 
 	// set up feeds you can view on the side
@@ -71,6 +73,7 @@ int main( int argc, const char *argv[] )
     HttpController httpController( "http", 9292 );
     httpController.addStream( "live",*input );
     httpController.addStream( "detect", *detector );
+    httpController.addStream( "detect", *motion );
     listener.addController( &httpController );
 
     cout << "Watching for shapes or faces in monitor:" << monitor << endl;
