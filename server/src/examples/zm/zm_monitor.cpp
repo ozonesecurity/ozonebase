@@ -42,8 +42,16 @@ int main( int argc, const char *argv[] )
     app.addThread( limiter );
 
     sprintf( idString, "monitor%d", monitor );
-	// Let's downsize image by half - dlib goes slow for large images
-	VideoFilter *resizer = new VideoFilter("filter", "scale=iw/2:-1");
+	// half
+	//VideoFilter *resizer = new VideoFilter("filter", "scale=iw/2:-1");
+	// funky mirror
+	// VideoFilter *resizer = new VideoFilter("filter", "crop=iw/2:ih:0:0,split[left][tmp];[tmp]hflip[right];[left][right] hstack");
+	// waveform foo
+	// VideoFilter *resizer = new VideoFilter("filter", "split[a][b];[a]waveform=e=3,split=3[c][d][e];[e]crop=in_w:20:0:235,lutyuv=v=180[low];[c]crop=in_w:16:0:0,lutyuv=y=val:v=180[high];[d]crop=in_w:220:0:16,lutyuv=v=110[mid] ; [b][high][mid][low]vstack=4");
+	// histogram
+	//VideoFilter *resizer = new VideoFilter("filter", "format=gbrp,split=4[a][b][c][d],[d]histogram=display_mode=0:level_height=244[dd],[a]waveform=m=1:d=0:r=0:c=7[aa],[b]waveform=m=0:d=0:r=0:c=7[bb],[c][aa]vstack[V],[bb][dd]vstack[V2],[V][V2]hstack");
+	//edge detection
+	VideoFilter *resizer = new VideoFilter("filter", "edgedetect=low=0.1:high=0.4");
 	resizer->registerProvider(*limiter);
 	app.addThread(resizer);
 
