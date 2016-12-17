@@ -21,7 +21,7 @@ using namespace std;
 //
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "example8", "", 2 );
+    debugInitialise( "zm_monitor", "", 1 );
 
     Info( "Starting" );
     avInit();

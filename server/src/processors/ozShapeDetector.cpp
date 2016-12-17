@@ -92,8 +92,8 @@ int ShapeDetector::run()
                         //dlib::pyramid_up(img);
                         //Info( "AFT: %d x %d", num_rows(img), num_columns(img) );
                         std::vector<dlib::rectangle> dets = detector(img);
-                        Debug( 1,"%jd @ %ju: Got %jd shapes", frame->id(), frame->timestamp(), dets.size() );
 
+                       	Debug( (dets.size() > 0) ? 1:2,"%jd @ %ju: Got %jd shapes", frame->id(), frame->timestamp(), dets.size() );
                         if ( dets.size() > 0 && mShapeMarkup != OZ_SHAPE_MARKUP_NONE )
                         {
                             // Now we will go ask the shape_predictor to tell us the pose of
@@ -110,6 +110,10 @@ int ShapeDetector::run()
                             //dlib::save_png( img, "/transfer/image.png" );
                             //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
                         }
+						else
+						{
+                        	Debug( 2,"%jd @ %ju: Got %jd shapes", frame->id(), frame->timestamp(), dets.size() );
+						}
                         // Move inside preceding 'if' to only output 'shape' frames
                         AlarmFrame *alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img), dets.size()>0 );
 
