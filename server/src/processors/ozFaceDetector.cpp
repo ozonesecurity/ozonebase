@@ -98,8 +98,8 @@ int FaceDetector::run()
                         //dlib::pyramid_up(img);
                         //Info( "AFT: %d x %d", num_rows(img), num_columns(img) );
                         std::vector<dlib::rectangle> dets = detector(img);
-                        Debug( 1, "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
 
+                       	Debug( (dets.size() > 0) ?1:2, "%jd @ %ju: Got %jd faces", frame->id(), frame->timestamp(), dets.size() );
                         if ( dets.size() > 0 && mFaceMarkup != OZ_FACE_MARKUP_NONE )
                         {
                             // Now we will go ask the shape_predictor to tell us the pose of
