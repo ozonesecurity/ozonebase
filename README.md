@@ -1,4 +1,4 @@
-# Ozone -  an east to use platform for Video Innovation
+# Ozone -  an easy to use platform for Video Innovation
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
 
@@ -12,6 +12,7 @@ oZone already provides key components and functionality like:
 * Recording service that can automatically create videos for events you define
 * Detection - Motion Detection, Face Detection (dlib), Shape Detection (dlib). Have your own amazing detection algorithm? Write a Processor for it.
 * Recognition - License plate recognition (OpenALPR), Tensor flow (image recognition - in progress) or write your own
+* Chaining - chain multiple components to incrementally add functionality (example, chain Shape Detection to Motion Detection to only reach if there is Motion AND it matches the shapes you are looking for)
 * Arbitrary Image Filters (ffmpeg) - for deep diving into image transformations (histograms/edge detection/scaling/time stamping/etc.)
 * Trigger framework - allows you to combine external triggers (example temperature/location/etc) with image triggers for complex processing
 
