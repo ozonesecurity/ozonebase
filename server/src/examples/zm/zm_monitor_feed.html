@@ -1,0 +1,40 @@
+<html>
+<head>
+   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+
+<body>
+	<div ng-app="starter" ng-controller="starterController">
+		
+      <!--LIVE:
+      <br/>
+	    <img src="{{baseurl}}/live/origmonitor4" width="500" />-->
+	    
+      MOTION:<br/>
+      <img src="{{baseurl}}/detect/motion4"  width="500" />
+      <br/>
+
+      DETECT:<br/>
+	    <img src="{{baseurl}}/detect/detect4" width="500"  />
+      <br/>
+
+
+      DETECT WITH FALLBACK COMBINED:<br/>
+      <img src="{{baseurl}}/fallback/fallback" width="500"  />
+      <br/>
+
+	  </div>
+
+    <script>
+    angular.module('starter', [])
+   .controller('starterController', function($scope) {
+        // change the IP address to point to your system
+       $scope.baseurl = "http://192.168.1.183:9292";
+       $scope.w = "400px";
+});
+
+    </script>
+</body>
+
+</html>
+

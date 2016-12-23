@@ -1,10 +1,10 @@
 /** @addtogroup Consumers */
 /*@{*/
-#ifndef OZ_MEMORY_OUTPUT_H
-#define OZ_MEMORY_OUTPUT_H
+#ifndef OZ_MEMORY_OUTPUT_V1_H
+#define OZ_MEMORY_OUTPUT_V1_H
 
 #include "../base/ozFeedConsumer.h"
-#include "../base/ozMemoryIO.h"
+#include "../base/ozMemoryIOV1.h"
 #include "../libgen/libgenThread.h"
 
 class Image;
@@ -15,21 +15,21 @@ class Image;
 /// frames. This allow easy reproduction of the traditional ZoneMinder, zmc, zma and
 /// zms behaviour.
 ///
-class MemoryOutput : public VideoConsumer, public MemoryIO, public Thread
+class MemoryOutputV1 : public VideoConsumer, public MemoryIOV1, public Thread
 {
-CLASSID(MemoryOutput);
+CLASSID(MemoryOutputV1);
 
 protected:
-    uint64_t            mImageCount;
+    uint64_t    mImageCount;
 
 protected:
     int run();
     bool storeFrame( FramePtr frame );
 
 public:
-    MemoryOutput( const std::string &name, const std::string &location, int memoryKey );
-    ~MemoryOutput();
+    MemoryOutputV1( const std::string &name, const std::string &location, int memoryKey );
+    ~MemoryOutputV1();
 };
 
-#endif // OZ_MEMORY_OUTPUT_H
+#endif // OZ_MEMORY_OUTPUT_V1_H
 /*@}*/

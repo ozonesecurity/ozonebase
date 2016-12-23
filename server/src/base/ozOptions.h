@@ -113,7 +113,7 @@ public:
             throw Exception( stringtf( "Option %s found, but of wrong type. Expected %s, got %s.", name.c_str(), typeid(t).name(), iter->second->type().c_str() ) );
         return( std::pair<const t&,OptionMap::const_iterator>(option->value(),iter) );
     }
-    const std::string &get( const std::string &name, const char *notFoundValue )
+    const std::string &get( const std::string &name, const char *&notFoundValue )
     {
         return( get( name, std::string(notFoundValue) ) );
     }

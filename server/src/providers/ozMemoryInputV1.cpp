@@ -2,6 +2,7 @@
 #include "ozMemoryInputV1.h"
 
 #include "../base/ozFeedFrame.h"
+#include <cmath>
 
 /**
 * @brief 
@@ -70,22 +71,27 @@ int MemoryInputV1::run()
     //mImageHeight = 576;
 
     attachMemory( mImageCount, mPixelFormat, mImageWidth, mImageHeight );
-    int lastWriteIndex = 0;
+
+    int index = mSharedData->last_write_index;
+    int lastIndex = (index+1)%mImageCount;
+    Snapshot *snap = &mImageBuffer[index];
+    int timeDiff = tvDiffUsec( *mImageBuffer[lastIndex].timestamp, *snap->timestamp );
+    mFrameRate = (int)std::lround((1000000.0*(mImageCount-1))/timeDiff);
+
+    int lastWriteIndex = mImageCount;
     while( !mStop )
     {
-        if ( !mSharedData || !mSharedData->valid )
+        if ( mSharedData && mSharedData->valid )
         {
-            stop();
-            break;
-        }
-        if ( mSharedData->last_write_index != lastWriteIndex )
-        {
-            const FeedFrame *frame = loadFrame();
-            //Info( "Sending frame %d", frame->id() );
-            lastWriteIndex = mSharedData->last_write_index;
-            distributeFrame( FramePtr( frame ) );
-            //delete frame;
-            mFrameCount++;
+            if ( mSharedData->last_write_index < mImageCount && mSharedData->last_write_index != lastWriteIndex )
+            {
+                const FeedFrame *frame = loadFrame();
+                //Info( "Sending frame %d", frame->id() );
+                lastWriteIndex = mSharedData->last_write_index;
+                distributeFrame( FramePtr( frame ) );
+                //delete frame;
+                mFrameCount++;
+            }
         }
         usleep( INTERFRAME_TIMEOUT );
     }

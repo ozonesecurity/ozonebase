@@ -52,5 +52,4 @@ public:
 
 #endif // OZ_MEMORY_INPUT_V1_H
 
-
 /*@}*/

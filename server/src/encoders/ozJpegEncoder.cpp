@@ -139,7 +139,7 @@ int JpegEncoder::run()
 
                     if ( inputVideoFrame )
                     {
-                        Debug( 1,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
+                        Debug( 2,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
 
                         //encodeFrame( frame );
                         avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
@@ -149,7 +149,7 @@ int JpegEncoder::run()
                         //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
 
                         // Reformat the input frame to fit the desired output format
-                        Debug(1, "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
+                        Debug(2, "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
                         if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
                             Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 

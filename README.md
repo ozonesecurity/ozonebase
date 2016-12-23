@@ -1,29 +1,35 @@
-# Ozone - state of the art framework for developing security and surveillance solutions for the Home, Commercial and more.
+# Ozone -  an easy to use platform for Video Innovation
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
 
+Ozone is a modern and fully component based approach to tying together some of the best opensource libraries in the world in the areas of image manipulation, recognition and deep learning under an abstract and easy interface. oZone makes it very easy to import data from _any_ video source (live/recorded/file/web/proprietary) and apply intelligent decisions on top that analyze and react to the data contained in the frames.
+
+Ozone is not a "Video Analytics" solution. There are many companies doing good work in this area. We are the 'unifying platform' underneath that makes it easy for you to take the best 3rd party libraries (many of which we already include) that server your purpose and build your app without learning new interfaces/languages or approach.
+
+Read/Follow our [Medium publication](https://medium.com/ozone-security) for interesting applications of oZone
+
+oZone already provides key components and functionality like:
+* **Any source** - we support many video formats already. Don't see yours? Add a Provider for it.
+* **Recording service** - that can automatically create videos for events you define
+* **Detection** - Motion Detection, Face Detection, Shape Detection (dlib). Have your own amazing detection algorithm? Write a Processor for it.
+* **Recognition** - License plate recognition, Tensor flow (image recognition - in progress) or write your own
+* **Chaining** - chain multiple components to incrementally add functionality (example, chain Shape Detection to Motion Detection to only reach if there is Motion AND it matches the shapes you are looking for)
+* **Arbitrary Image Filters** - for deep diving into image transformations (histograms/edge detection/scaling/time stamping/etc.)
+* **Trigger framework** - allows you to combine external triggers (example temperature/location/etc) with image triggers for complex processing
+
 ## Quick start
-[What is it?] (http://ozone.network)
+[Web] (http://ozone.network)
 
 [Key Concepts] (http://ozone-framework.readthedocs.io/en/latest/index.html)
 
 [Current API] (http://ozone.network/apidocs/index.html)
 
 
-## What is the goal?
-
-Ozone a more modern take and has been re-architected to serve as a UI-less framework at its core. We expect this to be the core framework for developing full fledged apps on top. Our hope is that this will form the base of many security solutions - developers can use this library to accelerate their own vision of security software. Over time, we will also offer our own fully running UI enabled version running over NodeJS/Angular.
-
-## Intended audience
-
-We expect OEMs, ISVs and 3rd party developers to use this library to build their own solutons powered by us. It is not an end consumer product, unlike V1.
-
-As of today, there is no roadmap to merge this with version 1. Version 1 has a seperate goal from Version 2 and we think its best to leave it that way for now.
-
 ## Who is developing and maintaining Ozone?
 The Ozonebase server framework was initially developed by [Philip Coombes](https://github.com/web2wire), the original developer of ZoneMinder. The codebase will be maintained and extended by Phil and [Pliable Pixels](https://github.com/pliablepixels) 
 
 Ozonebase part of a solution suite being developed by [Ozone Networks](http://ozone.network). The full solution suite will eventually include a server framework (this code), a mobile framework for white-labelled apps and a reference solution using them.
 
+## License
 Ozonebase is dual-licensed.
 Please refer to the [LICENSING](LICENSE.md) file for details.
