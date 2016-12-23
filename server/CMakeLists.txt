@@ -541,8 +541,7 @@ else(OZ_SUPERBUILD)
         list(APPEND OZ_BIN_LIBS "${OPENALPR_LIBRARIES}")
         mark_as_advanced(FORCE OPENALPR_LIBRARIES)
     else(OPENALPR_LIBRARIES)
-        message(FATAL_ERROR
-                "oZone requires openalpr but it was not found on your system")
+        message(WARNING "**** oZone uses OpenALPR for license plate recognition. It was not found on your system, so building without it.***") 
     endif(OPENALPR_LIBRARIES)
 
 endif(OZ_SUPERBUILD)
