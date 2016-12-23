@@ -20,7 +20,7 @@ DummyInput::DummyInput( const std::string &name, const Options &options ) :
     mHeight = mOptions.get( "height", 1080 );
     mPixelFormat = mOptions.get( "pixelFormat", (AVPixelFormat)PIX_FMT_YUV420P );
     mFrameRate = mOptions.get( "frameRate", 10 );
-    mColour = mOptions.get( "colour", "red" );
+    mColour = mOptions.get( "colour", "gray" );
     mText = mOptions.get( "text", "'%{localtime\\:%H\\\\\\:%M\\\\\\:%S}'" );
     mTextSize = mOptions.get( "textSize", 48 );
     mTextColour = mOptions.get( "textColour", "white" );
