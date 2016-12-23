@@ -1,11 +1,13 @@
 #include <base/ozApp.h>
 #include <base/ozListener.h>
 #include <providers/ozMemoryInputV1.h>
+#include <providers/ozDummyInput.h>
 #include <processors/ozRateLimiter.h>
 #include <processors/ozShapeDetector.h>
 #include <processors/ozFaceDetector.h>
 #include <processors/ozMotionDetector.h>
 #include <processors/ozAVFilter.h>
+#include <processors/ozInputFallback.h>
 //#include processors/ozRecognizer.h>
 #include <consumers/ozVideoRecorder.h>
 #include <consumers/ozMemoryTriggerV1.h>
@@ -15,6 +17,16 @@
 #include <stdio.h>
 #include <iostream>
 using namespace std;
+
+#define IMG_W 1280
+#define IMG_H 960
+
+bool alarmFramesOnly( FramePtr frame, const FeedConsumer * )
+{
+    const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
+	if (alarmFrame->alarmed()) { cout << "MOTION DETECTED"; }
+    return( alarmFrame->alarmed() );
+}
 
 int main( int argc, const char *argv[] )
 {
@@ -31,7 +43,7 @@ int main( int argc, const char *argv[] )
     char idString[32] = "";
     sprintf( idString, "origmonitor%d", monitor );
 	// you need to put in exact size here, also use 24bpp for now in ZM
-    MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 50, 1280, 960 );
+    MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 50,PIX_FMT_RGB24,  IMG_W, IMG_H );
     app.addThread( input );
     sprintf( idString, "limit%d", monitor );
     RateLimiter *limiter = new RateLimiter( idString , 10 );
@@ -39,7 +51,9 @@ int main( int argc, const char *argv[] )
     app.addThread( limiter );
 
     sprintf( idString, "motion%d", monitor );
-	MotionDetector *motion = new MotionDetector(idString);
+	Options mOptions;
+	mOptions.add( "zone_default_alarmPercent_min", 0.1);
+	MotionDetector *motion = new MotionDetector(idString,mOptions);
 	motion->registerProvider(*limiter);
 	app.addThread(motion);
 
@@ -61,7 +75,7 @@ int main( int argc, const char *argv[] )
     ShapeDetector *detector  = new ShapeDetector( idString,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
     //FaceDetector *detector  = new FaceDetector( idString,"shape_predictor_68_face_landmarks.dat" );
     //detector->registerProvider( *resizer );
-    detector->registerProvider( *motion );
+	detector->registerProvider( *motion, FeedLink(FEED_QUEUED, alarmFramesOnly) );
     app.addThread( detector );
 
 	// set up feeds you can view on the side
@@ -70,10 +84,24 @@ int main( int argc, const char *argv[] )
     trigger->registerProvider( *detector );
     app.addThread( trigger );
 
+	Options options;
+    options.add( "width", IMG_W );
+    options.add( "height", IMG_H );
+    options.add( "pixelFormat", (PixelFormat)AV_PIX_FMT_RGB24 );
+    DummyInput dummyInput( "dummy", options );
+    app.addThread( &dummyInput );
+
+	InputFallback fallbackInput( "fallback", 2.0 );
+    fallbackInput.registerProvider( *detector );
+    fallbackInput.registerProvider( dummyInput );
+    app.addThread( &fallbackInput );
+
     HttpController httpController( "http", 9292 );
     httpController.addStream( "live",*input );
     httpController.addStream( "detect", *detector );
     httpController.addStream( "detect", *motion );
+    httpController.addStream( "fallback", dummyInput );
+    httpController.addStream( "fallback", fallbackInput );
     listener.addController( &httpController );
 
     cout << "Watching for shapes or faces in monitor:" << monitor << endl;
