@@ -6,15 +6,23 @@
 <body>
 	<div ng-app="starter" ng-controller="starterController">
 		
-      LIVE:
-	    <img src="{{baseurl}}/live/origmonitor4" width="500" />
-	    <br/>
-      MOTION:
-      <img src="{{baseurl}}/detect/motion4"  />
+      <!--LIVE:
       <br/>
-      DETECT:
-	    <img src="{{baseurl}}/detect/detect4"  />
+	    <img src="{{baseurl}}/live/origmonitor4" width="500" />-->
+	    
+      MOTION:<br/>
+      <img src="{{baseurl}}/detect/motion4"  width="500" />
       <br/>
+
+      DETECT:<br/>
+	    <img src="{{baseurl}}/detect/detect4" width="500"  />
+      <br/>
+
+
+      DETECT WITH FALLBACK COMBINED:<br/>
+      <img src="{{baseurl}}/fallback/fallback" width="500"  />
+      <br/>
+
 	  </div>
 
     <script>
