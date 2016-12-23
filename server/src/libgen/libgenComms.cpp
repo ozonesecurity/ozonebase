@@ -976,7 +976,7 @@ int Select::wait()
     int nFound = select( mMaxFd+1, &rfds, &wfds, NULL, selectTimeout );
     if( nFound == 0 )
     {
-        Debug( 1, "Select timed out" );
+        Debug( 3, "Select timed out" );
     }
     else if ( nFound < 0)
     {

@@ -2,6 +2,7 @@
 #include "ozMemoryInputV1.h"
 
 #include "../base/ozFeedFrame.h"
+#include <cmath>
 
 /**
 * @brief 
@@ -18,7 +19,6 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
                               const std::string &location,
                               int memoryKey,
                               int imageCount,
-                              PixelFormat pixelFormat,
                               uint16_t imageWidth,
                               uint16_t imageHeight
 ) :
@@ -26,7 +26,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
     MemoryIOV1( location, memoryKey, false ),
     Thread( identity() ),
     mImageCount( imageCount ),
-    mPixelFormat( pixelFormat ),
+    mPixelFormat( PIX_FMT_RGB24 ),
     mImageWidth( imageWidth ),
     mImageHeight( imageHeight )
 {
@@ -70,6 +70,13 @@ int MemoryInputV1::run()
     //mImageHeight = 576;
 
     attachMemory( mImageCount, mPixelFormat, mImageWidth, mImageHeight );
+
+    int index = mSharedData->last_write_index;
+    int lastIndex = (index+1)%mImageCount;
+    Snapshot *snap = &mImageBuffer[index];
+    int timeDiff = tvDiffUsec( *mImageBuffer[lastIndex].timestamp, *snap->timestamp );
+    mFrameRate = (int)std::lround((1000000.0*(mImageCount-1))/timeDiff);
+
     int lastWriteIndex = mImageCount;
     while( !mStop )
     {

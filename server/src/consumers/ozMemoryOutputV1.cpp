@@ -1,5 +1,5 @@
 #include "../base/oz.h"
-#include "ozMemoryOutput.h"
+#include "ozMemoryOutputV1.h"
 
 #include "../base/ozFeedFrame.h"
 #include "../base/ozFeedProvider.h"
@@ -25,9 +25,9 @@
 * @param location
 * @param memoryKey
 */
-MemoryOutput::MemoryOutput( const std::string &name, const std::string &location, int memoryKey ) :
+MemoryOutputV1::MemoryOutputV1( const std::string &name, const std::string &location, int memoryKey ) :
     VideoConsumer( cClass(), name ),
-    MemoryIO( location, memoryKey, true ),
+    MemoryIOV1( location, memoryKey, true ),
     Thread( identity() ),
     mImageCount( 0 )
 {
@@ -36,7 +36,7 @@ MemoryOutput::MemoryOutput( const std::string &name, const std::string &location
 /**
 * @brief 
 */
-MemoryOutput::~MemoryOutput()
+MemoryOutputV1::~MemoryOutputV1()
 {
 }
 
@@ -45,7 +45,7 @@ MemoryOutput::~MemoryOutput()
 *
 * @return 
 */
-int MemoryOutput::run()
+int MemoryOutputV1::run()
 {
     if ( waitForProviders() )
     {
@@ -82,21 +82,20 @@ int MemoryOutput::run()
 *
 * @return 
 */
-bool MemoryOutput::storeFrame( FramePtr frame )
+bool MemoryOutputV1::storeFrame( FramePtr frame )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     Debug(2, "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );
 
     Image image( videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height(), frame->buffer().data() );
 
-    int index = mImageCount%mSharedData->imageCount;
-    *(mImageBuffer[index].timestamp) = videoFrame->timestamp();
+    int index = mImageCount%mImageBufferCount;
+    mImageBuffer[index].timestamp->tv_sec = videoFrame->timestamp()/1000000LL;
+    mImageBuffer[index].timestamp->tv_usec = videoFrame->timestamp()%1000000LL;
     mImageBuffer[index].image->copy( image );
 
-    mSharedData->lastWriteIndex = index;
-    mSharedData->lastWriteTime = videoFrame->timestamp();
-
-    mSharedData->frameRate = videoProvider()->frameRate();
+    mSharedData->last_write_index = index;
+    mSharedData->last_write_time = videoFrame->timestamp();
 
     mImageCount++;
 
