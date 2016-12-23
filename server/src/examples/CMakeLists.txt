@@ -10,6 +10,7 @@ add_executable(example7 example7.cpp)
 add_executable(example8 example8.cpp)
 add_executable(example9 example9.cpp)
 add_executable(example10 example10.cpp)
+add_executable(example11 example11.cpp)
 add_executable(starter_example starter_example.cpp)
 #add_executable(nvrcli/nvrcli nvrcli/nvrcli.cpp nvrcli/nvrNotifyOutput.cpp)
 
@@ -23,11 +24,12 @@ target_link_libraries(example7 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(example8 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(example9 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(example10 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
+target_link_libraries(example11 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(starter_example ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 #target_link_libraries(nvrcli/nvrcli ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 
 install(
-       TARGETS example1 example2 example3 example4 example5 example6 example7 example8 example9 example10 starter_example
+       TARGETS example1 example2 example3 example4 example5 example6 example7 example8 example9 example10 example11 starter_example
        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
        )
 
