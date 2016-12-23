@@ -36,6 +36,7 @@ public:
                    const std::string &location,
                    int memoryKey,
                    int imageCount,
+                   PixelFormat pixelFormat,
                    uint16_t imageWidth,
                    uint16_t imageHeight
     );

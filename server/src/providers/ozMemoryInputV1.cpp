@@ -19,6 +19,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
                               const std::string &location,
                               int memoryKey,
                               int imageCount,
+                              PixelFormat pixelFormat,
                               uint16_t imageWidth,
                               uint16_t imageHeight
 ) :
@@ -26,7 +27,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
     MemoryIOV1( location, memoryKey, false ),
     Thread( identity() ),
     mImageCount( imageCount ),
-    mPixelFormat( PIX_FMT_RGB24 ),
+    mPixelFormat( pixelFormat ),
     mImageWidth( imageWidth ),
     mImageHeight( imageHeight )
 {
@@ -77,21 +78,20 @@ int MemoryInputV1::run()
     int timeDiff = tvDiffUsec( *mImageBuffer[lastIndex].timestamp, *snap->timestamp );
     mFrameRate = (int)std::lround((1000000.0*(mImageCount-1))/timeDiff);
 
-    int lastWriteIndex = 0;
+    int lastWriteIndex = mImageCount;
     while( !mStop )
     {
-        if ( !mSharedData || !mSharedData->valid )
+        if ( mSharedData && mSharedData->valid )
         {
-            stop();
-            break;
-        }
-        if ( mSharedData->last_write_index != lastWriteIndex )
-        {
-            const FeedFrame *frame = loadFrame();
-            //Info( "Sending frame %d", frame->id() );
-            lastWriteIndex = mSharedData->last_write_index;
-            distributeFrame( FramePtr( frame ) );
-            mFrameCount++;
+            if ( mSharedData->last_write_index < mImageCount && mSharedData->last_write_index != lastWriteIndex )
+            {
+                const FeedFrame *frame = loadFrame();
+                //Info( "Sending frame %d", frame->id() );
+                lastWriteIndex = mSharedData->last_write_index;
+                distributeFrame( FramePtr( frame ) );
+                //delete frame;
+                mFrameCount++;
+            }
         }
         usleep( INTERFRAME_TIMEOUT );
     }

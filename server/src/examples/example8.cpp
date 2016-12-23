@@ -42,7 +42,7 @@ int main( int argc, const char *argv[] )
 
         sprintf( idString, "input%d", monitor );
         // Get the individual images from shared memory
-        MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shmX", monitor, 50, 704, 576 );
+        MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shmX", monitor, 50, PIX_FMT_RGB24, 704, 576 );
         app.addThread( input );
 
         rtspController.addStream( "input", *input );
