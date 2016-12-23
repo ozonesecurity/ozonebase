@@ -42,7 +42,7 @@ protected:
         registerProvider( provider, link );
     }
 
-    bool waitForProviders();                    ///< Return when all providers are ready to supply frames. Returns false
+    bool waitForProviders( unsigned int=0 );    ///< Return when all providers are ready to supply frames. Returns false
                                                 ///< if problems occur such as providers going away.
     bool checkProviders();                      ///< Verify that providers exist and are in good condition
     virtual void cleanup();                     ///< Tidy up relationships with providers etc before destruction.

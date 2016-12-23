@@ -104,8 +104,11 @@ bool FeedConsumer::hasProvider( FeedProvider &provider ) const
 *
 * @return 
 */
-bool FeedConsumer::waitForProviders()
+bool FeedConsumer::waitForProviders( unsigned int count )
 {
+    int waitFor = count ? count : mProviders.size();
+    int maxWaitCount = mProviders.size() - waitFor;
+
     mProviderMutex.lock();
     if ( mProviders.empty() )
     {
@@ -148,14 +151,14 @@ bool FeedConsumer::waitForProviders()
             }
         }
         mProviderMutex.unlock();
-        if ( waitCount > 0 && badCount == 0 )
+        if ( waitCount > maxWaitCount && badCount == 0 )
         {
             mQueueMutex.lock();
             mFrameQueue.clear();
             mQueueMutex.unlock();
             usleep( INTERFRAME_TIMEOUT );
         }
-    } while( waitCount > 0 && badCount == 0 );
+    } while( waitCount > maxWaitCount && badCount == 0 );
     //Info( "%s: Returning %d", cidentity(), readyCount > 0 && badCount == 0 );
     return( readyCount > 0 && badCount == 0 );
 }
