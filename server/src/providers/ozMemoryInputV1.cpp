@@ -70,22 +70,20 @@ int MemoryInputV1::run()
     //mImageHeight = 576;
 
     attachMemory( mImageCount, mPixelFormat, mImageWidth, mImageHeight );
-    int lastWriteIndex = 0;
+    int lastWriteIndex = mImageCount;
     while( !mStop )
     {
-        if ( !mSharedData || !mSharedData->valid )
+        if ( mSharedData && mSharedData->valid )
         {
-            stop();
-            break;
-        }
-        if ( mSharedData->last_write_index != lastWriteIndex )
-        {
-            const FeedFrame *frame = loadFrame();
-            //Info( "Sending frame %d", frame->id() );
-            lastWriteIndex = mSharedData->last_write_index;
-            distributeFrame( FramePtr( frame ) );
-            //delete frame;
-            mFrameCount++;
+            if ( mSharedData->last_write_index < mImageCount && mSharedData->last_write_index != lastWriteIndex )
+            {
+                const FeedFrame *frame = loadFrame();
+                //Info( "Sending frame %d", frame->id() );
+                lastWriteIndex = mSharedData->last_write_index;
+                distributeFrame( FramePtr( frame ) );
+                //delete frame;
+                mFrameCount++;
+            }
         }
         usleep( INTERFRAME_TIMEOUT );
     }
