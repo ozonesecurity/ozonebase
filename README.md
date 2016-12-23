@@ -7,14 +7,13 @@ Ozone is a modern and fully component based approach to tying together some of t
 Ozone is not a "Video Analytics" solution. There are many companies doing good work in this area. We are the 'unifying platform' underneath that makes it easy for you to take the best 3rd party libraries (many of which we already include) that server your purpose and build your app without learning new interfaces/languages or approach.
 
 oZone already provides key components and functionality like:
-* Abstract video sources - we support many video formats already. Don't see yours? Add a Provider for it.
-* Powerful framework for Frame processing (Video/Audio or Data)
-* Recording service that can automatically create videos for events you define
-* Detection - Motion Detection, Face Detection (dlib), Shape Detection (dlib). Have your own amazing detection algorithm? Write a Processor for it.
-* Recognition - License plate recognition (OpenALPR), Tensor flow (image recognition - in progress) or write your own
-* Chaining - chain multiple components to incrementally add functionality (example, chain Shape Detection to Motion Detection to only reach if there is Motion AND it matches the shapes you are looking for)
-* Arbitrary Image Filters (ffmpeg) - for deep diving into image transformations (histograms/edge detection/scaling/time stamping/etc.)
-* Trigger framework - allows you to combine external triggers (example temperature/location/etc) with image triggers for complex processing
+* **Any source** - we support many video formats already. Don't see yours? Add a Provider for it.
+* **Recording service** - that can automatically create videos for events you define
+* **Detection** - Motion Detection, Face Detection, Shape Detection (dlib). Have your own amazing detection algorithm? Write a Processor for it.
+* **Recognition** - License plate recognition, Tensor flow (image recognition - in progress) or write your own
+* **Chaining** - chain multiple components to incrementally add functionality (example, chain Shape Detection to Motion Detection to only reach if there is Motion AND it matches the shapes you are looking for)
+* **Arbitrary Image Filters** - for deep diving into image transformations (histograms/edge detection/scaling/time stamping/etc.)
+* **Trigger framework** - allows you to combine external triggers (example temperature/location/etc) with image triggers for complex processing
 
 ## Quick start
 [Web] (http://ozone.network)
