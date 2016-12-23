@@ -1,6 +1,7 @@
 # Ozone -  an easy to use platform for Video Innovation
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
+
 Read/Follow our [Medium publication](https://medium.com/ozone-security) for interesting applications of oZone
 
 Ozone is a modern and fully component based approach to tying together some of the best opensource libraries in the world in the areas of image manipulation, recognition and deep learning under an abstract and easy interface. oZone makes it very easy to import data from _any_ video source (live/recorded/file/web/proprietary) and apply intelligent decisions on top that analyze and react to the data contained in the frames.
