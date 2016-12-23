@@ -19,6 +19,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
                               const std::string &location,
                               int memoryKey,
                               int imageCount,
+                              PixelFormat pixelFormat,
                               uint16_t imageWidth,
                               uint16_t imageHeight
 ) :
@@ -26,7 +27,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
     MemoryIOV1( location, memoryKey, false ),
     Thread( identity() ),
     mImageCount( imageCount ),
-    mPixelFormat( PIX_FMT_RGB24 ),
+    mPixelFormat( pixelFormat ),
     mImageWidth( imageWidth ),
     mImageHeight( imageHeight )
 {
