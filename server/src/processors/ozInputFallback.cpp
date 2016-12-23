@@ -87,7 +87,7 @@ bool InputFallback::deregisterProvider( FeedProvider &provider, bool reciprocate
 int InputFallback::run()
 {
     // Wait for video source to be ready
-    if ( waitForProviders() )
+    if ( waitForProviders( 1 ) )
     {
         ProviderStats *providerStats = NULL;
         mCurrentProvider = dynamic_cast<const VideoProvider *>( mProviderList[0] );
@@ -106,7 +106,7 @@ int InputFallback::run()
                     providerStats->lastFrameTime = time64();
                     if ( providerStats->priority < mProviderStats[mCurrentProvider]->priority )
                     {
-                        Debug( 1, "Higher priority provider available, switching to %s", provider->cname() );
+                        Debug( 1, "Higher priority provider available, switching to '%s'", provider->cname() );
                         mCurrentProvider = dynamic_cast<const VideoProvider *>( provider );
                     }
                     if ( provider == mCurrentProvider )
@@ -129,7 +129,7 @@ int InputFallback::run()
                 for ( i = providerStats->priority+1; i < mProviderList.size(); i++ )
                 {
                     mCurrentProvider = dynamic_cast<const VideoProvider *>( mProviderList[i] );
-                    Debug( 1, "Current provider timed out, switching to %s", mCurrentProvider->cname() );
+                    Debug( 1, "Current provider timed out, switching to '%s'", mCurrentProvider->cname() );
                     break;
                 }
                 if ( i == mProviderList.size() )
