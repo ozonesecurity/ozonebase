@@ -6,6 +6,8 @@ Ozone is a modern and fully component based approach to tying together some of t
 
 Ozone is not a "Video Analytics" solution. There are many companies doing good work in this area. We are the 'unifying platform' underneath that makes it easy for you to take the best 3rd party libraries (many of which we already include) that server your purpose and build your app without learning new interfaces/languages or approach.
 
+Read/Follow our [Medium publication](https://medium.com/ozone-security) for interesting applications of oZone
+
 oZone already provides key components and functionality like:
 * **Any source** - we support many video formats already. Don't see yours? Add a Provider for it.
 * **Recording service** - that can automatically create videos for events you define
