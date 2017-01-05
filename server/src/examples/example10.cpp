@@ -25,7 +25,11 @@ int main( int argc, const char *argv[] )
     //AVInput input( "input", "mcem0_head.mpg" );
     app.addThread( &input );
 
-    FaceDetector detector( "detector" ,"./shape_predictor_68_face_landmarks.dat");
+    Options faceOptions;
+    faceOptions.set( "method", "hog" );
+    faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
+    FaceDetector detector( "detector", faceOptions );
     detector.registerProvider( input );
     app.addThread( &detector );
 
