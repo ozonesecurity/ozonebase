@@ -108,7 +108,7 @@ int FaceDetector::DlibHogDetector::detect( const ByteBuffer &inputBuffer, ByteBu
     // Don't really need to do this if nothing detected as will be the same as input buffer
     if ( dets.size() > 0 )
         outputBuffer.assign( (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img) );
-    return ( dets.size() > 0 );
+    return ( dets.size() );
 }
 
 void FaceDetector::construct()
