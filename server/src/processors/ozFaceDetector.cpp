@@ -102,6 +102,45 @@ int FaceDetector::DlibHogDetector::detect( const ByteBuffer &inputBuffer, ByteBu
             }
         }
 
+        //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
+        dlib::save_png( img, "/transfer/image.png" );
+    }
+    // Don't really need to do this if nothing detected as will be the same as input buffer
+    if ( dets.size() > 0 )
+        outputBuffer.assign( (uint8_t *)image_data(img), 3*num_rows(img)*num_columns(img) );
+    return ( dets.size() );
+}
+
+FaceDetector::DlibCnnDetector::DlibCnnDetector( FaceDetector *faceDetector, const std::string &dataFile, FaceMarkup markup ) :
+    DlibDetector( faceDetector, markup )
+{
+    dlib::deserialize( dataFile.c_str() ) >> mDetector;
+}
+
+int FaceDetector::DlibCnnDetector::detect( const ByteBuffer &inputBuffer, ByteBuffer &outputBuffer )
+{
+    dlib::matrix<dlib::rgb_pixel> img( mFaceDetector->height(), mFaceDetector->width() );
+    memcpy( image_data( img ), inputBuffer.data(), inputBuffer.size() );
+
+    //while(img.size() < 1800*1800)
+        //dlib::pyramid_up(img);
+
+    auto dets = mDetector(img);
+    //std::vector<dlib::rectangle> dets = mDetector(img);
+
+    if ( dets.size() > 0 && mMarkup != OZ_FACE_MARKUP_NONE )
+    {
+        // Now we will go ask the shape_predictor to tell us the pose of
+        // each face we detected.
+        std::vector<dlib::full_object_detection> shapes;
+        typedef std::pair<dlib::point,dlib::point> line_t;
+        std::vector<line_t> lines;
+        for ( unsigned int i = 0; i < dets.size(); i++ )
+        {
+            if ( mMarkup & OZ_FACE_MARKUP_OUTLINE )
+                draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
+        }
+
         //dlib::save_png( img, "/transfer/image.png" );
         //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
     }
@@ -120,8 +159,8 @@ void FaceDetector::construct()
     FaceMarkup markup = mOptions.get( "markup", OZ_FACE_MARKUP_OUTLINE );
     if ( method == "hog" )
         mDetector = new DlibHogDetector( this, dataFile, markup );
-    //else if ( method == "cnn" )
-        //mDetector = new CnnDetector( dataFile, markup );
+    else if ( method == "cnn" )
+        mDetector = new DlibCnnDetector( this, dataFile, markup );
     else
         throw "Invalid face detection method '"+method+"' specifed";
 }

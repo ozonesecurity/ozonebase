@@ -26,8 +26,10 @@ int main( int argc, const char *argv[] )
     app.addThread( &input );
 
     Options faceOptions;
-    faceOptions.set( "method", "hog" );
-    faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    //faceOptions.set( "method", "hog" );
+    //faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    faceOptions.set( "method", "cnn" );
+    faceOptions.set( "dataFile", "mmod_human_face_detector.dat" );
     faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
     FaceDetector detector( "detector", faceOptions );
     detector.registerProvider( input );

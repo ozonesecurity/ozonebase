@@ -10,6 +10,8 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <dlib/image_processing.h>
 #include <dlib/image_io.h>
+#include <dlib/data_io.h>
+#include <dlib/dnn.h>
 
 #include <set>
 #include <map>
@@ -53,6 +55,22 @@ private:
 		dlib::shape_predictor mShapePredictor;
 	public:
 		DlibHogDetector( FaceDetector *faceDetector, const std::string &dataFile, FaceMarkup markup );
+        int detect( const ByteBuffer &inputBuffer, ByteBuffer &outputBuffer );
+	};
+
+	class DlibCnnDetector : public DlibDetector {
+	private:
+        template <long num_filters, typename SUBNET> using con5d = dlib::con<num_filters,5,5,2,2,SUBNET>;
+        template <long num_filters, typename SUBNET> using con5  = dlib::con<num_filters,5,5,1,1,SUBNET>;
+
+        template <typename SUBNET> using downsampler  = dlib::relu<dlib::affine<con5d<32, dlib::relu<dlib::affine<con5d<32, dlib::relu<dlib::affine<con5d<16,SUBNET>>>>>>>>>;
+        template <typename SUBNET> using rcon5  = dlib::relu<dlib::affine<con5<45,SUBNET>>>;
+
+        using net_type = dlib::loss_mmod<dlib::con<1,9,9,1,1,rcon5<rcon5<rcon5<downsampler<dlib::input_rgb_image_pyramid<dlib::pyramid_down<6>>>>>>>>;
+	private:
+        net_type mDetector;
+	public:
+		DlibCnnDetector( FaceDetector *faceDetector, const std::string &dataFile, FaceMarkup markup );
         int detect( const ByteBuffer &inputBuffer, ByteBuffer &outputBuffer );
 	};
 
