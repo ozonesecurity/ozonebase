@@ -11,7 +11,7 @@ FaceDetector::DlibHogDetector::DlibHogDetector( FaceDetector *faceDetector, cons
 {
     // We need a face detector.  We will use this to get bounding boxes for
     // each face in an image.
-    dlib::frontal_face_detector mDetector = dlib::get_frontal_face_detector();
+    mDetector = dlib::get_frontal_face_detector();
 
     // And we also need a shape_predictor.  This is the tool that will predict face
     // landmark positions given an image and face bounding box.  Here we are just
