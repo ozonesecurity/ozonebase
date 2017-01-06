@@ -78,6 +78,10 @@ public:
     {
         return( add( name, std::string(value) ) );
     }
+    bool add( const std::string &name, char value[] )
+    {
+        return( add( name, std::string(value) ) );
+    }
     template <typename t> bool add( const std::string &name, t value )
     {
         std::pair<OptionMap::iterator,bool> result = mOptionMap.insert( OptionMap::value_type( name, std::make_shared<Option<t>>( value ) ) );
@@ -91,16 +95,25 @@ public:
     {
         mOptionMap.clear();
     }
-    /*
-    const Option &get( const std::string &name )
+
+    bool set( const std::string &name, const char *value )
+    {
+        return( set( name, std::string(value) ) );
+    }
+    bool set( const std::string &name, char value[] )
+    {
+        return( set( name, std::string(value) ) );
+    }
+    template <typename t> bool set( const std::string &name, t value )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
-        bool result = ( iter != mOptionMap.end() );
-        if ( !result )
-            return( gNullOption );
-        return( iter->second )
+        bool found = ( iter == mOptionMap.end() );
+        if ( found )
+            remove( name );
+        add( name, value );
+        return( !found );
     }
-    */
+
     template <typename t> const std::pair<const t&,OptionMap::const_iterator> _get( const std::string &name, const t &notFoundValue )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
@@ -115,6 +128,12 @@ public:
     }
     const std::string &get( const std::string &name, const char *&notFoundValue )
     {
+        //std::unique_ptr<std::string> temp( new std::string(notFoundValue) );
+        return( get( name, std::string(notFoundValue) ) );
+    }
+    const std::string &get( const std::string &name, const char notFoundValue[] )
+    {
+        //std::unique_ptr<std::string> temp( new std::string(notFoundValue) );
         return( get( name, std::string(notFoundValue) ) );
     }
     template <typename t> const t &get( const std::string &name, const t &notFoundValue )
