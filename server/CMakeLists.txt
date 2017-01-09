@@ -368,6 +368,16 @@ endif(DL_LIBRARIES)
                 "oZone requires lapack but it was not found on your system")
     endif(LAPACK_LIBRARIES)
 
+    # openalpr (using find_library)
+    find_library(OPENALPR_LIBRARIES openalpr)
+    if(OPENALPR_LIBRARIES)
+        set(HAVE_LIBCOPENALPR 1)
+        list(APPEND OZ_BIN_LIBS "${OPENALPR_LIBRARIES}")
+        mark_as_advanced(FORCE OPENALPR_LIBRARIES)
+    else(OPENALPR_LIBRARIES)
+        message(WARNING "**** oZone uses OpenALPR for license plate recognition. It was not found on your system, so building without it.***") 
+    endif(OPENALPR_LIBRARIES)
+
 
 # check include files
 foreach( INCVAR alloca fcntl inttypes limits memory netdb
