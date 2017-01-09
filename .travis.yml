@@ -17,6 +17,9 @@ branches:
 
 addons:
   apt:
+    sources:
+      - llvm-toolchain-precise
+      - ubuntu-toolchain-r-test
     packages:
       - nodejs-legacy
       - npm
@@ -39,6 +42,8 @@ addons:
       - libopenblas-dev
       - liblapack-dev
       - libatlas-base-dev
+      - g++-5
+      - gcc-5
 
 cache:
     directories:
@@ -58,6 +63,7 @@ install:
       - sudo make install 
 
 script:
+      - export CXX="g++-5" CC="gcc-5"
       - cd $TRAVIS_BUILD_DIR/server
       - cmake -DOZ_EXAMPLES=ON .
       - make
