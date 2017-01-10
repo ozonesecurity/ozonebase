@@ -57,6 +57,7 @@ install:
       - sudo make install 
       - sudo make install-libs
       - cd ../dlib
+      - git pull
       - mkdir -p build
       - cd build
       - cmake ..
