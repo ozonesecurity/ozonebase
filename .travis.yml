@@ -48,7 +48,6 @@ addons:
 cache:
     directories:
       - externals/ffmpeg
-      - externals/dlib
 
 install:
       - cd externals/ffmpeg
@@ -57,7 +56,6 @@ install:
       - sudo make install 
       - sudo make install-libs
       - cd ../dlib
-      - git pull
       - mkdir -p build
       - cd build
       - cmake ..
