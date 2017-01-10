@@ -58,7 +58,11 @@ int main( int argc, const char *argv[] )
 
     // people detect for people
     //ShapeDetector peopleDetector( "dlib_pedestrian_detector.svm", ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE, peopleLimiter );
-    FaceDetector peopleDetector( "shape_predictor_68_face_landmarks.dat", FaceDetector::OZ_FACE_MARKUP_ALL, peopleLimiter );
+    Options faceOptions;
+    faceOptions.set( "method", "hog" );
+    faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
+    FaceDetector peopleDetector( peopleLimiter, faceOptions );
     app.addThread( &peopleDetector );
 
     // Scale video down
