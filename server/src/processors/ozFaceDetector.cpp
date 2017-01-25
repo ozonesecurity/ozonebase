@@ -243,7 +243,7 @@ int FaceDetector::run()
                         if ( detected )
                             alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), detectBuffer, detected );
                         else
-                            alarmFrame = new AlarmFrame( this, *iter, detected );
+                            alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), convImage.buffer(), detected );
                         distributeFrame( FramePtr( alarmFrame ) );
                         mFrameCount++;
                     }
