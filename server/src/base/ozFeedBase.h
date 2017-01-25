@@ -81,7 +81,7 @@ public:
 };
 
 class FeedConsumer;
-typedef bool (*FeedComparator)( FramePtr, const FeedConsumer * );   ///< Typedef for functions that are used to run boolean operations on frames
+typedef bool (*FeedComparator)( const FramePtr &, const FeedConsumer * );   ///< Typedef for functions that are used to run boolean operations on frames
 
 typedef enum { FEED_QUEUED=0x01, FEED_POLLED=0x02 } FeedLinkType;   ///< The nature of the relationship between provider and consumer
 typedef std::list<FeedComparator>  FeedComparatorList;
@@ -124,7 +124,7 @@ public:
     bool isQueued() const { return( mLinkType & FEED_QUEUED ); }
     const FeedComparatorList &comparators() const { return( mComparators ); }
     bool hasComparators() const { return( !mComparators.empty() ); }
-    bool compare( FramePtr, const FeedConsumer * ) const;
+    bool compare( const FramePtr &, const FeedConsumer * ) const;
 
     FeedLink &operator=( const FeedLink &feedLink )
     {

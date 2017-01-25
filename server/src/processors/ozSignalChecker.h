@@ -42,8 +42,8 @@ protected:
     bool checkSignal( const Image &image );
 
 public:
-    static bool signalValid( FramePtr, const FeedConsumer * );
-    static bool signalInvalid( FramePtr, const FeedConsumer * );
+    static bool signalValid( const FramePtr &, const FeedConsumer * );
+    static bool signalInvalid( const FramePtr &, const FeedConsumer * );
 };
 
 #endif // OZ_SIGNAL_CHECKER_H

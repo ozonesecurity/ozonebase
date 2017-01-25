@@ -31,7 +31,7 @@ FeedProvider *FeedProvider::find( const std::string &identity )
 *
 * @return 
 */
-bool FeedProvider::videoFramesOnly( FramePtr frame, const FeedConsumer * )
+bool FeedProvider::videoFramesOnly( const FramePtr &frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     return( videoFrame != NULL );
@@ -45,7 +45,7 @@ bool FeedProvider::videoFramesOnly( FramePtr frame, const FeedConsumer * )
 *
 * @return 
 */
-bool FeedProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
+bool FeedProvider::audioFramesOnly( const FramePtr &frame, const FeedConsumer * )
 {
     const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame.get());
     return( audioFrame != NULL );
@@ -59,7 +59,7 @@ bool FeedProvider::audioFramesOnly( FramePtr frame, const FeedConsumer * )
 *
 * @return 
 */
-bool FeedProvider::dataFramesOnly( FramePtr frame, const FeedConsumer * )
+bool FeedProvider::dataFramesOnly( const FramePtr &frame, const FeedConsumer * )
 {
     const DataFrame *dataFrame = dynamic_cast<const DataFrame *>(frame.get());
     return( dataFrame != NULL );
@@ -209,7 +209,7 @@ bool FeedProvider::hasConsumer( FeedConsumer &consumer ) const
 *
 * @param frame
 */
-void FeedProvider::distributeFrame( FramePtr frame )
+void FeedProvider::distributeFrame( const FramePtr &frame )
 {
     setReady();
     mConsumerMutex.lock();

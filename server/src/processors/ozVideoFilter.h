@@ -20,7 +20,7 @@ public:
     DirectVideoFilter( AudioVideoProvider &provider );
     ~DirectVideoFilter();
 
-    bool queueFrame( FramePtr framePtr, FeedProvider *provider );
+    bool queueFrame( const FramePtr &framePtr, FeedProvider *provider );
 
     uint16_t width() const { return( videoProvider()->width() ); }
     uint16_t height() const { return( videoProvider()->height() ); }

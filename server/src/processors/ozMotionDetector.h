@@ -104,8 +104,8 @@ protected:
     bool alarmed() const { return( mAlarmed ); }
 
 public:
-    static bool inAlarm( FramePtr, const FeedConsumer * );
-    static bool notInAlarm( FramePtr, const FeedConsumer * );
+    static bool inAlarm( const FramePtr &, const FeedConsumer * );
+    static bool notInAlarm( const FramePtr &, const FeedConsumer * );
 };
 
 #endif // OZ_MOTION_DETECTOR_H

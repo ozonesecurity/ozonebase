@@ -34,7 +34,7 @@ protected:
 
 protected:
     int run();
-    bool processFrame( FramePtr frame );
+    bool processFrame( const FramePtr &frame );
 
 public:
     MemoryTriggerV1( const std::string &name, const std::string &location, int memoryKey, double minTime=0 );

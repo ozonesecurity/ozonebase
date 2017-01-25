@@ -51,19 +51,19 @@ protected:
     bool            mHasAudio;
 
 protected:
-    virtual void distributeFrame( FramePtr frame ); ///< Pass a frame on to all registered consumers
+    virtual void distributeFrame( const FramePtr &frame ); ///< Pass a frame on to all registered consumers
 
 public:
     static FeedProvider *find( const std::string &identity );  ///< Locate a provider with the given identity
     //static bool verify( const std::string &identity );
 
 public:
-    static bool videoFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only video frames.
-    static bool audioFramesOnly( FramePtr, const FeedConsumer * );  ///< Comparator function to allow consumers to select only audio frames.
-    static bool dataFramesOnly( FramePtr, const FeedConsumer * );   ///< Comparator function to allow consumers to select only data frames.
+    static bool videoFramesOnly( const FramePtr &, const FeedConsumer * );  ///< Comparator function to allow consumers to select only video frames.
+    static bool audioFramesOnly( const FramePtr &, const FeedConsumer * );  ///< Comparator function to allow consumers to select only audio frames.
+    static bool dataFramesOnly( const FramePtr &, const FeedConsumer * );   ///< Comparator function to allow consumers to select only data frames.
 
 public:
-    static bool noFrames( FramePtr, const FeedConsumer * )  /// Comparator function that can be used to suppress frames
+    static bool noFrames( const FramePtr &, const FeedConsumer * )  /// Comparator function that can be used to suppress frames
     {
         return( false );
     }

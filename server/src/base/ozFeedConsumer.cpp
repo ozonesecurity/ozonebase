@@ -216,7 +216,7 @@ bool FeedConsumer::checkProviders()
 *
 * @return 
 */
-bool FeedConsumer::queueFrame( FramePtr frame, FeedProvider *provider )
+bool FeedConsumer::queueFrame( const FramePtr &frame, FeedProvider *provider )
 {
     bool result = true;
     mQueueMutex.lock();

@@ -114,7 +114,7 @@ HttpImageStream::~HttpImageStream()
 *
 * @return 
 */
-bool HttpImageStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
+bool HttpImageStream::sendFrame( Select::CommsList &writeable, const FramePtr &frame )
 {
     const ByteBuffer &packet = frame->buffer();
 
@@ -179,7 +179,7 @@ HttpDataStream::~HttpDataStream()
 *
 * @return 
 */
-bool HttpDataStream::sendFrame( Select::CommsList &writeable, FramePtr frame )
+bool HttpDataStream::sendFrame( Select::CommsList &writeable, const FramePtr &frame )
 {
     const ByteBuffer &packet = frame->buffer();
 

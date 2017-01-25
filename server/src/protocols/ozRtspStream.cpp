@@ -180,7 +180,7 @@ bool ready = false;
 *
 * @param frame
 */
-void RtspStream::packetiseFrame( FramePtr frame )
+void RtspStream::packetiseFrame( const FramePtr &frame )
 {
     Debug( 1, "Got %zd byte frame to packetise", frame->buffer().size() );
 

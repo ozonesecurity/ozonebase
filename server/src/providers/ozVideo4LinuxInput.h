@@ -92,26 +92,26 @@ private:
     /// Convert a V4L2 palette into the ffmpeg equivalent
     static PixelFormat getPixelFormatFromV4lPalette( int palette );
     /// Comparator function used by channel comparators below to filter frames for specific channel
-    static bool channelFrames( FramePtr, const FeedConsumer *, int channel );
+    static bool channelFrames( const FramePtr &, const FeedConsumer *, int channel );
 
 public:
     /// Channel comparators. Used by consumer to limit video to one specific channel if prpvider is generating several.
-    static bool channelFrames0( FramePtr, const FeedConsumer * );
-    static bool channelFrames1( FramePtr, const FeedConsumer * );
-    static bool channelFrames2( FramePtr, const FeedConsumer * );
-    static bool channelFrames3( FramePtr, const FeedConsumer * );
-    static bool channelFrames4( FramePtr, const FeedConsumer * );
-    static bool channelFrames5( FramePtr, const FeedConsumer * );
-    static bool channelFrames6( FramePtr, const FeedConsumer * );
-    static bool channelFrames7( FramePtr, const FeedConsumer * );
-    static bool channelFrames8( FramePtr, const FeedConsumer * );
-    static bool channelFrames9( FramePtr, const FeedConsumer * );
-    static bool channelFrames10( FramePtr, const FeedConsumer * );
-    static bool channelFrames11( FramePtr, const FeedConsumer * );
-    static bool channelFrames12( FramePtr, const FeedConsumer * );
-    static bool channelFrames13( FramePtr, const FeedConsumer * );
-    static bool channelFrames14( FramePtr, const FeedConsumer * );
-    static bool channelFrames15( FramePtr, const FeedConsumer * );
+    static bool channelFrames0( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames1( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames2( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames3( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames4( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames5( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames6( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames7( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames8( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames9( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames10( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames11( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames12( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames13( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames14( const FramePtr &, const FeedConsumer * );
+    static bool channelFrames15( const FramePtr &, const FeedConsumer * );
          
 public:
     Video4LinuxInput( const std::string &name, const std::string &device, int standard, int palette, int width, int height, uint32_t channelMask=CHANNEL_0 );
