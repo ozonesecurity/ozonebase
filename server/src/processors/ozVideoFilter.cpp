@@ -31,7 +31,7 @@ DirectVideoFilter::~DirectVideoFilter()
 *
 * @return 
 */
-bool DirectVideoFilter::queueFrame( FramePtr framePtr, FeedProvider *provider )
+bool DirectVideoFilter::queueFrame( const FramePtr &framePtr, FeedProvider *provider )
 {
     distributeFrame( framePtr );
     return( true );

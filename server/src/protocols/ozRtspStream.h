@@ -141,7 +141,7 @@ public:
         return( mFormatContext );
     }
 
-    void packetiseFrame( FramePtr frame );
+    void packetiseFrame( const FramePtr &frame );
  
 protected:
     int run();

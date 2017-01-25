@@ -17,8 +17,8 @@ protected:
 
 public:
     MotionFrame( MotionDetector *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
-    MotionFrame( MotionDetector *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
-    MotionFrame( MotionDetector *provider, FramePtr parent, bool alarmed, const MotionData *motionData );
+    MotionFrame( MotionDetector *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, bool alarmed, const MotionData *motionData );
+    MotionFrame( MotionDetector *provider, const FramePtr &parent, bool alarmed, const MotionData *motionData );
 
     ~MotionFrame();
 

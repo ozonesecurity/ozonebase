@@ -50,7 +50,7 @@ int VideoRecorder::run()
 *
 * @return 
 */
-bool VideoRecorder::processFrame( FramePtr frame )
+bool VideoRecorder::processFrame( const FramePtr &frame )
 {
     const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
     //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());

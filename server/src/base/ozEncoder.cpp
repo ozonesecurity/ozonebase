@@ -50,7 +50,7 @@ void Encoder::cleanup()
 *
 * @return 
 */
-bool Encoder::queueFrame( FramePtr frame, FeedProvider *provider )
+bool Encoder::queueFrame( const FramePtr &frame, FeedProvider *provider )
 {
     if ( mPooled && ((time( NULL ) - mLastUse) > POOL_TIMEOUT) )
     {

@@ -147,7 +147,7 @@ bool SignalChecker::checkSignal( const Image &image )
 *
 * @return 
 */
-bool SignalChecker::signalValid( FramePtr frame, const FeedConsumer * )
+bool SignalChecker::signalValid( const FramePtr &frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     const SignalChecker *signalChecker = dynamic_cast<const SignalChecker *>( videoFrame->provider() );
@@ -165,7 +165,7 @@ bool SignalChecker::signalValid( FramePtr frame, const FeedConsumer * )
 *
 * @return 
 */
-bool SignalChecker::signalInvalid( FramePtr frame, const FeedConsumer * )
+bool SignalChecker::signalInvalid( const FramePtr &frame, const FeedConsumer * )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     const SignalChecker *signalChecker = dynamic_cast<const SignalChecker *>( videoFrame->provider() );

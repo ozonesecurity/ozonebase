@@ -24,7 +24,7 @@ protected:
 
 protected:
     int run();
-    bool storeFrame( FramePtr frame );
+    bool storeFrame( const FramePtr &frame );
 
 public:
     MemoryOutputV1( const std::string &name, const std::string &location, int memoryKey );

@@ -105,7 +105,7 @@ ByteBuffer *RtmpStream::buildPacket( uint32_t chunkStreamStreamId, uint8_t messa
     return( packet );
 }
 
-bool RtmpStream::sendFrame( FramePtr frame )
+bool RtmpStream::sendFrame( const FramePtr &frame )
 {
     Debug( 1, "Got %zd byte frame to packetise, timestamp %jd", frame->buffer().size(), frame->timestamp() );
 

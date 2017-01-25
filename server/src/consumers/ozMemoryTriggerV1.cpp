@@ -75,7 +75,7 @@ int MemoryTriggerV1::run()
     return( 0 );
 }
 
-bool MemoryTriggerV1::processFrame( FramePtr frame )
+bool MemoryTriggerV1::processFrame( const FramePtr &frame )
 {
     const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
     static uint64_t mLastAlarmTime;
