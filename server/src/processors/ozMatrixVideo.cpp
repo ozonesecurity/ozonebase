@@ -110,8 +110,8 @@ int MatrixVideo::run()
     Debug( 2, "Time base = %d/%d", mFrameRate.num, mFrameRate.den );
     Debug( 2, "Pix fmt = %d", mPixelFormat );
 
-    AVFrame *inputFrame = avcodec_alloc_frame();
-    AVFrame *outputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
+    AVFrame *outputFrame = av_frame_alloc();
 
     // Wait for video source to be ready
     if ( waitForProviders() )
@@ -163,7 +163,7 @@ int MatrixVideo::run()
 
                             if ( !mInterFrames[i] )
                             {
-                                AVFrame *interFrame = mInterFrames[i] = avcodec_alloc_frame();
+                                AVFrame *interFrame = mInterFrames[i] = av_frame_alloc();
                                 avpicture_fill( (AVPicture *)interFrame, outputBuffer.data(), mPixelFormat, interWidth, interHeight );
 
                                 int x = i % mTilesX;

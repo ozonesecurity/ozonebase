@@ -43,7 +43,11 @@ public:
     }
     FrameRate frameRate() const
     {
-        return( mStream?mStream->r_frame_rate:FrameRate(0,0) );
+        return( mStream ? mStream->r_frame_rate : FrameRate(0,0) );
+    }
+    TimeBase videoTimeBase() const
+    {
+        return( mCodecContext ? mCodecContext->time_base : TimeBase(0,0) );
     }
 
 protected:

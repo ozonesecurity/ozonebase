@@ -76,7 +76,7 @@ bool Controller::verifyStreamName( const std::string &streamName )
 */
 FeedProvider *Controller::findStream( const std::string &streamName, const std::string &streamSource )
 {
-    Info( "Find stream %s with source %s", streamName.c_str(), streamSource.c_str() );
+    Info( "Finding stream %s with source %s", streamName.c_str(), streamSource.c_str() );
     ApplicationInstanceMap::iterator classIter = mApplicationInstances.find( makePath( streamName, streamSource ) );
     if ( classIter != mApplicationInstances.end() )
         return( classIter->second );

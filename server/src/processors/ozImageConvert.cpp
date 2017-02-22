@@ -55,8 +55,8 @@ ImageConvert::~ImageConvert()
 */
 int ImageConvert::run()
 {
-    AVFrame *inputFrame = avcodec_alloc_frame();
-    AVFrame *outputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
+    AVFrame *outputFrame = av_frame_alloc();
 
     if ( waitForProviders() )
     {

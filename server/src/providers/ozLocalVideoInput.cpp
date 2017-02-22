@@ -115,7 +115,7 @@ int LocalVideoInput::run()
     //AVFrame *savedFrame = avcodec_alloc_frame();
 
     // Allocate space for the native video frame
-    AVFrame *frame = avcodec_alloc_frame();
+    AVFrame *frame = av_frame_alloc();
 
     // Determine required buffer size and allocate buffer
     int pictureSize = avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height );

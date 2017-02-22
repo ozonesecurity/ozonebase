@@ -9,14 +9,14 @@ AVInput::AVInput( const std::string &name, const std::string &source, const Opti
     Thread( identity() ),
     mSource( source ),
     mOptions( options ),
-    mVideoCodecContext( NULL ),
-    mAudioCodecContext( NULL ),
-    mVideoStream( NULL ),
-    mAudioStream( NULL ),
+    mVideoCodecContext( nullptr ),
+    mAudioCodecContext( nullptr ),
+    mVideoStream( nullptr ),
+    mAudioStream( nullptr ),
     mVideoStreamId( -1 ),
     mAudioStreamId( -1 ),
-    mVideoFrame( NULL ),
-    mAudioFrame( NULL ),
+    mVideoFrame( nullptr ),
+    mAudioFrame( nullptr ),
     mBaseTimestamp( 0 ),
     mLastTimestamp( 0 )
 {
@@ -58,7 +58,7 @@ int AVInput::decodePacket( AVPacket &packet, int &frameComplete )
                 avpicture_layout( (AVPicture *)mVideoFrame, mVideoCodecContext->pix_fmt, mVideoCodecContext->width, mVideoCodecContext->height, mVideoFrameBuffer.data(), mVideoFrameBuffer.capacity() );
 
                 mLastTimestamp = mBaseTimestamp + (1000000.0L*timeOffset);
-                Debug( 1,"%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), mLastTimestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
+                Debug( 4,"%ld: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), mLastTimestamp, packet.pts, (uint64_t)(1000000.0L*timeOffset), timeOffset );
 
                 if ( mRealtime )
                 {
@@ -93,10 +93,11 @@ int AVInput::decodePacket( AVPacket &packet, int &frameComplete )
 
                 double timeOffset = pts * av_q2d(mAudioStream->time_base);
 
-                int audioFrameSize = av_samples_get_buffer_size( mAudioFrame->linesize, mAudioCodecContext->channels, mAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 ) + FF_INPUT_BUFFER_PADDING_SIZE;
+                //int audioFrameSize = av_samples_get_buffer_size( mAudioFrame->linesize, mAudioCodecContext->channels, mAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 ) + FF_INPUT_BUFFER_PADDING_SIZE;
+                int audioFrameSize = av_samples_get_buffer_size( mAudioFrame->linesize, mAudioCodecContext->channels, mAudioFrame->nb_samples, mAudioCodecContext->sample_fmt, 1 );
                 mAudioFrameBuffer.size( audioFrameSize );
 
-                Debug( 3, "Got audio frame %d, pts %jd (%.3f)", mAudioCodecContext->frame_number, pts, timeOffset );
+                Debug( 3, "Got audio frame %d, %d samples, pts %jd (%.3f)", mAudioCodecContext->frame_number, mAudioFrame->nb_samples, pts, timeOffset );
 
                 mLastTimestamp = mBaseTimestamp + (1000000.0L*timeOffset);
                 //Debug( 3, "%d: TS: %jd, TS1: %jd, TS2: %jd, TS3: %.3f", time( 0 ), mLastTimestamp, packet.pts, ((1000000LL*packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den), (((double)packet.pts*mAudioStream->time_base.num)/mAudioStream->time_base.den) );
@@ -131,26 +132,27 @@ int AVInput::run()
         if ( !format.empty() )
         {
             inputFormat = av_find_input_format( format.c_str() );
-            if ( inputFormat == NULL)
+            if ( inputFormat == nullptr)
                 Fatal( "Can't load input format" );
         }
 
         bool loop = mOptions.get( "loop", false );
 
-        //AVDictionary *dict = NULL;
+        //AVDictionary *dict = nullptr;
         //int dictRet = av_dict_set(&dict,"xxx","yyy",0);
         //int dictRet = av_dict_set(&dict,"standard","ntsc",0);
         //dictRet = av_dict_set(&dict,"video_size","320x240",0);
+        mBaseTimestamp = time64();
 
         while ( !mStop )
         {
             //Info ("AVInput mStop is:%d",mStop);
-            AVFormatContext *formatContext = NULL;
-            if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/NULL ) !=0 )
+            AVFormatContext *formatContext = nullptr;
+            if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/nullptr ) !=0 )
                 Fatal( "Unable to open input %s due to: %s", mSource.c_str(), strerror(errno) );
 
             // Locate stream info from input
-            if ( avformat_find_stream_info( formatContext, /*&dict*/NULL ) < 0 )
+            if ( avformat_find_stream_info( formatContext, /*&dict*/nullptr ) < 0 )
                 Fatal( "Unable to find stream info from %s due to: %s", mSource.c_str(), strerror(errno) );
 
             if ( dbgLevel > DBG_INF )
@@ -172,8 +174,8 @@ int AVInput::run()
                 }
             }
 
-            mVideoStream = NULL;
-            mAudioStream = NULL;
+            mVideoStream = nullptr;
+            mAudioStream = nullptr;
 
             if ( mVideoStreamId >= 0 )
             {
@@ -194,18 +196,18 @@ int AVInput::run()
                 Warning( "Unable to locate audio stream in %s", mSource.c_str() );
 
             // Try and get the codec from the codec context
-            AVCodec *videoCodec = NULL;
+            AVCodec *videoCodec = nullptr;
             if ( mHasVideo )
             {
-                if ( (videoCodec = avcodec_find_decoder( mVideoCodecContext->codec_id )) == NULL )
+                if ( (videoCodec = avcodec_find_decoder( mVideoCodecContext->codec_id )) == nullptr )
                     Fatal( "Can't find codec for video stream from %s", mSource.c_str() );
 
                 Debug( 2, "Video Info - Pixel Format: %s, Size %dx%d, Frame Rate: %d/%d (%.2lf), GOP Size: %d, Bit Rate: %d, Frame Size: %d",
                     av_get_pix_fmt_name(mVideoCodecContext->pix_fmt),
                     mVideoCodecContext->width,
                     mVideoCodecContext->height,
-                    mVideoStream->r_frame_rate.num,
-                    mVideoStream->r_frame_rate.den,
+                    mVideoStream->avg_frame_rate.num,
+                    mVideoStream->avg_frame_rate.den,
                     (double)mVideoStream->r_frame_rate.num/mVideoStream->r_frame_rate.den,
                     mVideoCodecContext->gop_size,
                     mVideoCodecContext->bit_rate,
@@ -213,37 +215,39 @@ int AVInput::run()
                 );
 
                 // Open the codec
-                if ( avcodec_open2( mVideoCodecContext, videoCodec, /*&dict*/NULL ) < 0 )
+                if ( avcodec_open2( mVideoCodecContext, videoCodec, /*&dict*/nullptr ) < 0 )
                     Fatal( "Unable to open codec for video stream from %s", mSource.c_str() );
-                Debug( 1, "Opened video codec %s (%s)", videoCodec->name, videoCodec->long_name );
+                Debug( 1, "Opened input video codec %s (%s)", videoCodec->name, videoCodec->long_name );
             }
 
-            AVCodec *audioCodec = NULL;
+            AVCodec *audioCodec = nullptr;
             if ( mHasAudio )
             {
-                if ( (audioCodec = avcodec_find_decoder( mAudioCodecContext->codec_id )) == NULL )
-                    Fatal( "Can't find codec for video stream from %s", mSource.c_str() );
+                if ( (audioCodec = avcodec_find_decoder( mAudioCodecContext->codec_id )) == nullptr )
+                    Fatal( "Can't find codec for audio stream from %s", mSource.c_str() );
 
-                Debug( 2, "Audio Info - Sample Format: %s, Bit Rate: %d, Sample Rate: %d, Channels: %d, Frame Size: %d",
+                Debug( 2, "Audio Info - Sample Format: %s, Bit Rate: %d, Sample Rate: %d, Time Base: %d/%d, Channels: %d(%d), Frame Size: %d",
                     av_get_sample_fmt_name(mAudioCodecContext->sample_fmt),
                     mAudioCodecContext->bit_rate,
                     mAudioCodecContext->sample_rate,
+                    mAudioCodecContext->time_base.num, mAudioCodecContext->time_base.den,
                     mAudioCodecContext->channels,
+                    mAudioCodecContext->channel_layout,
                     mAudioCodecContext->frame_size
                 );
 
                 // some formats want stream headers to be separate
-                if ( avcodec_open2( mAudioCodecContext, audioCodec, /*&dict*/NULL ) < 0 )
+                if ( avcodec_open2( mAudioCodecContext, audioCodec, /*&dict*/nullptr ) < 0 )
                     Fatal( "Unable to open codec for video stream from %s", mSource.c_str() );
-                Debug( 1, "Opened audio codec %s (%s)", audioCodec->name, audioCodec->long_name );
+                Debug( 1, "Opened input audio codec %s (%s)", audioCodec->name, audioCodec->long_name );
             }
 
             //if (oc->oformat->flags & AVFMT_GLOBALHEADER)
                 //c->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
             // Allocate space for the native video frame
-            mVideoFrame = NULL;
-            mAudioFrame = NULL;
+            mVideoFrame = nullptr;
+            mAudioFrame = nullptr;
 
             // Determine required buffer size and allocate buffer
             int videoFrameSize = 0;
@@ -259,7 +263,8 @@ int AVInput::run()
             if ( mHasAudio )
             {
                 mAudioFrame = av_frame_alloc();
-                audioFrameSize = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
+                //audioFrameSize = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
+                audioFrameSize = AVCODEC_MAX_AUDIO_FRAME_SIZE;
             }
 
             mVideoFrameBuffer.size( videoFrameSize );
@@ -286,7 +291,7 @@ int AVInput::run()
                 }
                 if ( mStop )
                     break;
-                packet.data = NULL;
+                packet.data = nullptr;
                 packet.size = 0;
                 do {
                     decodePacket( packet, frameComplete );
@@ -312,27 +317,27 @@ int AVInput::run()
             if ( mHasVideo && !mStop)
             {
                 av_freep( &mVideoFrame );
-                mVideoStream = NULL;
+                mVideoStream = nullptr;
                 if ( mVideoCodecContext )
                 {
                     avcodec_close( mVideoCodecContext );
-                    mVideoCodecContext = NULL; // Freed by avformat_close_input
+                    mVideoCodecContext = nullptr; // Freed by avformat_close_input
                 }
             }
             if ( mHasAudio && !mStop)
             {
                 av_freep( &mAudioFrame );
-                mAudioStream = NULL;
+                mAudioStream = nullptr;
                 if ( mAudioCodecContext )
                 {
                     avcodec_close( mAudioCodecContext );
-                    mAudioCodecContext = NULL; // Freed by avformat_close_input
+                    mAudioCodecContext = nullptr; // Freed by avformat_close_input
                 }
             }
             if ( formatContext && !mStop)
             {
                 avformat_close_input( &formatContext );
-                formatContext = NULL;
+                formatContext = nullptr;
                 //av_free( formatContext );
             }
             if ( loop && !mStop)

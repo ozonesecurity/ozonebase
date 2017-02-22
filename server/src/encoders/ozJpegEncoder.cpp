@@ -76,7 +76,7 @@ int JpegEncoder::run()
     if ( avcodec_open2( mCodecContext, codec, NULL ) < 0 )
         Fatal( "Unable to open encoder codec" );
 
-    AVFrame *inputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
 
     // Wait for video source to be ready
     if ( waitForProviders() )
@@ -87,7 +87,7 @@ int JpegEncoder::run()
         PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
 
         // Make space for anything that is going to be output
-        AVFrame *outputFrame = avcodec_alloc_frame();
+        AVFrame *outputFrame = av_frame_alloc();
         ByteBuffer outputBuffer;
         outputBuffer.size( avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height ) );
         avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height );
@@ -139,17 +139,18 @@ int JpegEncoder::run()
 
                     if ( inputVideoFrame )
                     {
-                        Debug( 2,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
+                        Debug( 5,"PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
 
                         //encodeFrame( frame );
                         avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
 
-                        outputFrame->pts = inputVideoFrame->timestamp() * av_q2d(mCodecContext->time_base);
+                        //outputFrame->pts = inputVideoFrame->timestamp() * av_q2d(mCodecContext->time_base);
+                        outputFrame->pts = inputVideoFrame->timestamp();
                         Debug( 5, "TS:%jd, PTS %jd", inputVideoFrame->timestamp(), outputFrame->pts );
                         //outputFrame->pts = av_rescale_q( inputVideo.timestamp, mCodecContext->time_base, sourceCodecContext->time_base );
 
                         // Reformat the input frame to fit the desired output format
-                        Debug(2, "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
+                        Debug( 5, "oFd:%p, oFls:%d", outputFrame->data, *(outputFrame->linesize) );
                         if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
                             Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 

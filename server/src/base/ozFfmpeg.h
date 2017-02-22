@@ -14,6 +14,7 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libavdevice/avdevice.h>
 #include <libswscale/swscale.h>
+#include <libswresample/swresample.h>
 #include <libavfilter/avfiltergraph.h>
 #include <libavfilter/buffersink.h>
 #include <libavfilter/buffersrc.h>
@@ -132,6 +133,10 @@ inline uint64_t FrameRate::intervalPTS( const TimeBase &timeBase ) const
     return( (den*timeBase.den)/(num*timeBase.num) );
 }
 
+extern Rational gNullRational;
+extern FrameRate gNullFrameRate;
+extern TimeBase gNullTimeBase;
+
 /* NAL unit types */
 typedef enum {
     NAL_SLICE=1,
@@ -163,5 +168,9 @@ void avSetH264Preset( AVDictionary **dict, const std::string &preset );
 
 enum AVPixelFormat choose_pixel_fmt(AVStream *st, AVCodecContext *enc_ctx, AVCodec *codec, enum AVPixelFormat target);
 void choose_sample_fmt(AVStream *st, AVCodec *codec);
+
+int check_sample_fmt(AVCodec *codec, enum AVSampleFormat sample_fmt);
+int select_sample_rate(AVCodec *codec);
+int select_channel_layout(AVCodec *codec);
 
 #endif // OZ_FFMPEG_H

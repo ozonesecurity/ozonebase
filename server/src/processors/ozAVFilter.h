@@ -33,6 +33,7 @@ public:
     uint16_t height() const;
     AVPixelFormat pixelFormat() const;
     FrameRate frameRate() const;
+    TimeBase videoTimeBase() const;
 
     const std::string &filter() const { return( mFilter ); }
 

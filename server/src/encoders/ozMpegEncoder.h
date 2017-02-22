@@ -45,6 +45,7 @@ public:
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }
+    TimeBase videoTimeBase() const { return( mFrameRate.timeBase() ); }
     uint32_t bitRate() const { return( mBitRate ); }
     AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
     uint8_t quality() const { return( mQuality ); }

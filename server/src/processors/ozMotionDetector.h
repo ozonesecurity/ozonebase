@@ -89,6 +89,7 @@ public:
     uint16_t height() const { return( videoProvider()->height() ); }
     AVPixelFormat pixelFormat() const { return( Image::getNativePixelFormat( videoProvider()->pixelFormat() ) ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
+    TimeBase videoTimeBase() const { return( videoProvider()->videoTimeBase() ); }
 
     VideoProvider *compImageSlave() const { return( mCompImageSlave ); }
     VideoProvider *refImageSlave() const { return( mRefImageSlave ); }

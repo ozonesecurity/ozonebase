@@ -25,6 +25,7 @@ void FeedConsumer::cleanup()
 bool FeedConsumer::deregisterAllProviders()
 {
     cleanup();
+    return( true );
 }
 
 /**
@@ -243,7 +244,7 @@ bool FeedConsumer::queueFrame( const FramePtr &frame, FeedProvider *provider )
 DataConsumer::DataConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
-     setIdentity( cl4ss, name );
+    setIdentity( cl4ss, name );
 }
 
 /**
@@ -256,7 +257,7 @@ DataConsumer::DataConsumer( const std::string &cl4ss, const std::string &name, i
 DataConsumer::DataConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
-     setIdentity( cl4ss, provider.name() );
+    setIdentity( cl4ss, provider.name() );
 }
 
 /**
@@ -273,7 +274,10 @@ DataConsumer::DataConsumer()
 */
 DataProvider *DataConsumer::dataProvider() const
 {
-    return( mProviders.empty() ? NULL : dynamic_cast<DataProvider *>(mProviders.begin()->first) );
+    DataProvider *provider = mProviders.empty() ? NULL : dynamic_cast<DataProvider *>(mProviders.begin()->first);
+    if ( !provider )
+        throw Exception( "No data provider found" );
+    return( provider );
 }
 
 /**
@@ -286,7 +290,7 @@ DataProvider *DataConsumer::dataProvider() const
 VideoConsumer::VideoConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
-     setIdentity( cl4ss, name );
+    setIdentity( cl4ss, name );
 }
 
 /**
@@ -299,7 +303,7 @@ VideoConsumer::VideoConsumer( const std::string &cl4ss, const std::string &name,
 VideoConsumer::VideoConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
-     setIdentity( cl4ss, provider.name() );
+    setIdentity( cl4ss, provider.name() );
 }
 
 /**
@@ -332,7 +336,7 @@ VideoProvider *VideoConsumer::videoProvider() const
 AudioConsumer::AudioConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
     FeedConsumer( providerLimit )
 {
-     setIdentity( cl4ss, name );
+    setIdentity( cl4ss, name );
 }
 
 /**
@@ -345,7 +349,7 @@ AudioConsumer::AudioConsumer( const std::string &cl4ss, const std::string &name,
 AudioConsumer::AudioConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
-     setIdentity( cl4ss, provider.name() );
+    setIdentity( cl4ss, provider.name() );
 }
 
 /**
@@ -362,7 +366,43 @@ AudioConsumer::AudioConsumer()
 */
 AudioProvider *AudioConsumer::audioProvider() const
 {
-    return( mProviders.empty() ? NULL : dynamic_cast<AudioProvider *>(mProviders.begin()->first) );
+    AudioProvider *provider = mProviders.empty() ? NULL : dynamic_cast<AudioProvider *>(mProviders.begin()->first);
+    if ( !provider )
+        throw Exception( "No audio provider found" );
+    return( provider );
+}
+
+/**
+* @brief 
+*
+* @param cl4ss
+* @param name
+* @param providerLimit
+*/
+AudioVideoConsumer::AudioVideoConsumer( const std::string &cl4ss, const std::string &name, int providerLimit ) :
+    FeedConsumer( providerLimit )
+{
+    setIdentity( cl4ss, name );
+}
+
+/**
+* @brief 
+*
+* @param cl4ss
+* @param provider
+* @param link
+*/
+AudioVideoConsumer::AudioVideoConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
+    FeedConsumer( provider, link )
+{
+    setIdentity( cl4ss, provider.name() );
+}
+
+/**
+* @brief 
+*/
+AudioVideoConsumer::AudioVideoConsumer()
+{
 }
 
 /**
@@ -388,7 +428,7 @@ GeneralConsumer::GeneralConsumer( const std::string &cl4ss, const std::string &n
 GeneralConsumer::GeneralConsumer( const std::string &cl4ss, FeedProvider &provider, const FeedLink &link ) :
     FeedConsumer( provider, link )
 {
-     setIdentity( cl4ss, provider.name() );
+    setIdentity( cl4ss, provider.name() );
 }
 
 /**

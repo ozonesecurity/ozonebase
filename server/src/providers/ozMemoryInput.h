@@ -39,6 +39,7 @@ public:
     uint16_t width() const { return( mImageWidth ); }
     uint16_t height() const { return( mImageHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }
+    TimeBase videoTimeBase() const { return( mFrameRate.timeBase() ); }
 };
 
 #endif // OZ_MEMORY_INPUT_H

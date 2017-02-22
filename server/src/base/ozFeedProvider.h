@@ -162,7 +162,8 @@ public:
     virtual AVPixelFormat pixelFormat() const=0;    ///< Return the image format of video frames supplied by this provider
     virtual uint16_t width() const=0;               ///< Return the width (in pixels) of video frames supplied by this provider
     virtual uint16_t height() const=0;              ///< Return the height (in pixels) of video frames supplied by this provider
-    virtual FrameRate frameRate() const=0;          ///< Return the frame rate at this this provider supplies frames. May not be available or accurate.
+    virtual FrameRate frameRate() const=0;    ///< Return the frame rate at which this provider supplies frames. May not be available or accurate.
+    virtual TimeBase videoTimeBase() const=0; ///< Return the time base for this provider. May not be available or accurate.
 };
 
 ///
@@ -177,9 +178,11 @@ protected:
 
 public:
     virtual AVSampleFormat sampleFormat() const=0;  ///< Return the sample format of audio frames supplied by this provider
-    virtual uint32_t sampleRate() const=0;          ///< Return the sample rate (samples/sec) of audio frames supplied by this provider
+    virtual int sampleRate() const=0;               ///< Return the sample rate (samples/sec) of audio frames supplied by this provider
+    virtual int64_t channelLayout() const=0;        ///< Return the audio channel layout in audio frames supplied by this provider
     virtual uint8_t channels() const=0;             ///< Return the number of audio channels in audio frames supplied by this provider
     virtual uint16_t samples() const=0;             ///< Return the number of samples in audio frames supplied by this provider. May not be available or accurate.
+    virtual TimeBase audioTimeBase() const=0; ///< Return the time base for this provider. May not be available or accurate.
 };
 
 ///

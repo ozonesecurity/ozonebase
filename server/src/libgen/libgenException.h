@@ -2,8 +2,9 @@
 #define LIBGEN_EXCEPTION_H
 
 #include <string>
+#include <stdexcept>
 
-class Exception
+class Exception : public std::runtime_error
 {
 protected:
     typedef enum { INFO, WARNING, ERROR, FATAL } Severity;
@@ -13,7 +14,10 @@ protected:
     Severity mSeverity;
 
 public:
-    Exception( const std::string &message, Severity severity=ERROR ) : mMessage( message ), mSeverity( severity )
+    Exception( const std::string &message, Severity severity=ERROR ) :
+        std::runtime_error( message ),
+        mMessage( message ),
+        mSeverity( severity )
     {
     }
 

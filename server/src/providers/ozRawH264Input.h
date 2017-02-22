@@ -52,6 +52,12 @@ public:
             return( mVideoStream->r_frame_rate );
         return( 0 );
     }
+    TimeBase videoTimeBase() const
+    {
+        if ( mVideoCodecContext )
+            return( mVideoCodecContext->time_base );
+        return( 0 );
+    }
     AVSampleFormat sampleFormat() const
     {
         return( mAudioCodecContext->sample_fmt );

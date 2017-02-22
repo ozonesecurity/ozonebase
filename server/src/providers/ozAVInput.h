@@ -62,39 +62,55 @@ nvrcam.cam = new AVInput ( name, source,avOptions );
 
     PixelFormat pixelFormat() const
     {
-        return( mVideoCodecContext->pix_fmt );
+        return( mVideoCodecContext ? mVideoCodecContext->pix_fmt : AV_PIX_FMT_NONE );
     }
     uint16_t width() const
     {
-        return( mVideoCodecContext->width );
+        return( mVideoCodecContext ? mVideoCodecContext->width : 0 );
     }
     uint16_t height() const
     {
-        return( mVideoCodecContext->height );
+        return( mVideoCodecContext ? mVideoCodecContext->height : 0 );
     }
     FrameRate frameRate() const
     {
-        if ( mVideoStream )
-            return( mVideoStream->r_frame_rate );
-        return( 0 );
+        if ( !mAudioStream )
+            return( gNullFrameRate );
+        if ( mAudioStream->avg_frame_rate.den )
+            return( FrameRate( mAudioStream->avg_frame_rate.den, mAudioStream->avg_frame_rate.den ) );
+        else if ( mAudioStream->r_frame_rate.den )
+            return( FrameRate( mAudioStream->r_frame_rate.den, mAudioStream->r_frame_rate.den ) );
+        return( mAudioStream->time_base );
+    }
+    TimeBase videoTimeBase() const
+    {
+        return( mVideoStream ? mVideoStream->time_base : gNullTimeBase );
     }
     AVSampleFormat sampleFormat() const
     {
-        return( mAudioCodecContext->sample_fmt );
+        return( mAudioCodecContext ? mAudioCodecContext->sample_fmt : AV_SAMPLE_FMT_NONE );
     }
-    uint32_t sampleRate() const
+    int sampleRate() const
     {
-        return( mAudioCodecContext->sample_rate );
+        return( mAudioCodecContext ? mAudioCodecContext->sample_rate : 0 );
+    }
+    int64_t channelLayout() const
+    {
+        return( mAudioCodecContext ? mAudioCodecContext->channel_layout : 0 );
     }
     uint8_t channels() const
     {
-        return( mAudioCodecContext->channels );
+        return( mAudioCodecContext ? mAudioCodecContext->channels : 0 );
     }
     uint16_t samples() const
     {
-        return( mAudioCodecContext->frame_size );   // Not sure about this
+        return( mAudioCodecContext ? mAudioCodecContext->frame_size : 0 );   // Not sure about this
     }
-    
+    TimeBase audioTimeBase() const
+    {
+        return( mAudioStream ? mAudioStream->time_base : gNullTimeBase );
+    }
+
 protected:
     int decodePacket( AVPacket &packet, int &frameComplete );
 

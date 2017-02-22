@@ -4,6 +4,11 @@
 #include "../libgen/libgenDebug.h"
 #include "../libgen/libgenThread.h"
 
+// Utility globals for returning empty values
+Rational gNullRational;
+FrameRate gNullFrameRate;
+TimeBase gNullTimeBase;
+
 /*
 ** find rational approximation to given real number
 ** David Eppstein / UC Irvine / 8 Aug 1993
@@ -364,3 +369,55 @@ void choose_sample_fmt(AVStream *st, AVCodec *codec)
     }
 }
 
+/* check that a given sample format is supported by the encoder */
+int check_sample_fmt(AVCodec *codec, enum AVSampleFormat sample_fmt)
+{
+    const enum AVSampleFormat *p = codec->sample_fmts;
+
+    while (*p != AV_SAMPLE_FMT_NONE) {
+        if (*p == sample_fmt)
+            return 1;
+        p++;
+    }
+    return 0;
+}
+
+/* just pick the highest supported samplerate */
+int select_sample_rate(AVCodec *codec)
+{
+    const int *p;
+    int best_samplerate = 0;
+
+    if (!codec->supported_samplerates)
+        return 44100;
+
+    p = codec->supported_samplerates;
+    while (*p) {
+        best_samplerate = FFMAX(*p, best_samplerate);
+        p++;
+    }
+    return best_samplerate;
+}
+
+/* select layout with the highest channel count */
+int select_channel_layout(AVCodec *codec)
+{
+    const uint64_t *p;
+    uint64_t best_ch_layout = 0;
+    int best_nb_channels   = 0;
+
+    if (!codec->channel_layouts)
+        return AV_CH_LAYOUT_STEREO;
+
+    p = codec->channel_layouts;
+    while (*p) {
+        int nb_channels = av_get_channel_layout_nb_channels(*p);
+
+        if (nb_channels > best_nb_channels) {
+            best_ch_layout    = *p;
+            best_nb_channels = nb_channels;
+        }
+        p++;
+    }
+    return best_ch_layout;
+}

@@ -98,7 +98,7 @@ class DataProvider;
 ///
 /// Specialised base class for video consumers
 ///
-class DataConsumer : public FeedConsumer
+class DataConsumer : virtual public FeedConsumer
 {
 protected:
     DataConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
@@ -115,7 +115,7 @@ class VideoProvider;
 ///
 /// Specialised base class for video consumers
 ///
-class VideoConsumer : public FeedConsumer
+class VideoConsumer : virtual public FeedConsumer
 {
 protected:
     VideoConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
@@ -132,7 +132,7 @@ class AudioProvider;
 ///
 /// Specialised base class for video consumers
 ///
-class AudioConsumer : public FeedConsumer
+class AudioConsumer : virtual public FeedConsumer
 {
 protected:
     AudioConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
@@ -145,9 +145,20 @@ public:
 };
 
 ///
+/// Specialised abstract base class for consumers of both VideoFrame and AudioFrame objects.
+///
+class AudioVideoConsumer : public VideoConsumer, public AudioConsumer
+{
+protected:
+    AudioVideoConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );
+    AudioVideoConsumer( const std::string &tag, FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
+    AudioVideoConsumer();
+};
+
+///
 /// General base class for consumers of all frames
 ///
-class GeneralConsumer : public FeedConsumer
+class GeneralConsumer : virtual public FeedConsumer
 {
 protected:
 	GeneralConsumer( const std::string &tag, const std::string &id, int providerLimit=1 );

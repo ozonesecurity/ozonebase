@@ -87,6 +87,11 @@ FrameRate VideoFilter::frameRate() const
     return( lastFilterLink( mBufferSinkContext )->frame_rate );
 }
 
+TimeBase VideoFilter::videoTimeBase() const
+{
+    return( lastFilterLink( mBufferSinkContext )->time_base );
+}
+
 /**
 * @brief 
 *

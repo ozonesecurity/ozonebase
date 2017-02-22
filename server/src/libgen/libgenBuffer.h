@@ -5,9 +5,9 @@
 
 //#include <new>
 //#include <malloc.h>
+#include <utility>
+#include <cstring>
 #include <stdint.h>
-#include <string.h>
-#include <sys/types.h>
 
 template <class T> class Buffer
 {
@@ -113,13 +113,13 @@ public:
 
     void erase()
     {
-        memset( mStorage, 0, mAllocation );
+        std::memset( mStorage, 0, mAllocation );
     }
 
     void fill( T value )
     {
         if ( sizeof(T) == sizeof(char) )
-            memset( mStorage, value, sizeof(T)*mSize );
+            std::memset( mStorage, value, sizeof(T)*mSize );
         else
         {
             T *pStor = mHead;
@@ -142,7 +142,7 @@ public:
         mHead = mStorage;
         mTail = mHead + mSize;
         if ( sizeof(T) == sizeof(char) )
-            memset( mHead, value, sizeof(T)*mSize );
+            std::memset( mHead, value, sizeof(T)*mSize );
         else
         {
             T *pStor = mHead;
@@ -224,12 +224,12 @@ public:
         int headSpace = mHead - mStorage;
         int tailSpace = spare - headSpace;
         int width = mTail - mHead;
-        if ( spare > count )
+        if ( spare > (int)count )
         {
-            if ( tailSpace < count )
+            if ( tailSpace < (int)count )
             {
-                memmove( mStorage, mHead, sizeof(T)*mSize );
-                memset( mStorage+sizeof(T)*mSize, 0, sizeof(T)*(mAllocation-mSize) );
+                std::memmove( mStorage, mHead, sizeof(T)*mSize );
+                std::memset( mStorage+sizeof(T)*mSize, 0, sizeof(T)*(mAllocation-mSize) );
                 mHead = mStorage;
                 mTail = mHead + width;
             }
@@ -240,13 +240,13 @@ public:
             T *newStorage = new T[mAllocation];
             if ( mStorage )
             {
-                memcpy( newStorage, mHead, sizeof(T)*mSize );
-                memset( newStorage+sizeof(T)*mSize, 0, sizeof(T)*(mAllocation-mSize) );
+                std::memcpy( newStorage, mHead, sizeof(T)*mSize );
+                std::memset( newStorage+sizeof(T)*mSize, 0, sizeof(T)*(mAllocation-mSize) );
                 delete[] mStorage;
             }
             else
             {
-                memset( newStorage, 0, sizeof(T)*mAllocation );
+                std::memset( newStorage, 0, sizeof(T)*mAllocation );
             }
             mStorage = newStorage;
             mHead = mStorage;
@@ -275,7 +275,7 @@ public:
         if ( mAdopted )
             Panic( "Cannot append to adopted buffer" );
         expand( size );
-        memcpy( mTail, storage, sizeof(T)*size );
+        std::memcpy( mTail, storage, sizeof(T)*size );
         mTail += size;
         mSize += size;
         return( mSize );
@@ -289,8 +289,8 @@ public:
         if ( mAdopted )
             Panic( "Cannot insert into adopted buffer" );
         expand( size );
-        memmove( mHead+size, mHead, mSize );
-        memcpy( mHead, storage, sizeof(T)*size );
+        std::memmove( mHead+size, mHead, mSize );
+        std::memcpy( mHead, storage, sizeof(T)*size );
         mTail += size;
         mSize += size;
         return( mSize );
@@ -313,7 +313,7 @@ public:
     {
         return( append( buffer.mHead, buffer.mSize ) );
     }
-    void tidy( bool level=0 )
+    void tidy( int level )
     {
         if ( mHead != mStorage )
         {
@@ -325,13 +325,13 @@ public:
                     return;
                 if ( (mHead-mStorage) > mSize )
                 {
-                    memcpy( mStorage, mHead, sizeof(T)*mSize );
+                    std::memcpy( mStorage, mHead, sizeof(T)*mSize );
                     mHead = mStorage;
                     mTail = mHead + mSize;
                 }
                 else if ( level >= 2 )
                 {
-                    memmove( mStorage, mHead, sizeof(T)*mSize );
+                    std::memmove( mStorage, mHead, sizeof(T)*mSize );
                     mHead = mStorage;
                     mTail = mHead + mSize;
                 }
@@ -345,12 +345,12 @@ public:
         {
             if ( size )
             {
-                memcpy( dest, mHead, size );
+                std::memcpy( dest, mHead, size );
                 return( size );
             }
             else
             {
-                memcpy( dest, mHead, mSize );
+                std::memcpy( dest, mHead, mSize );
                 return( mSize );
             }
         }

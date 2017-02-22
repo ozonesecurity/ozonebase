@@ -149,7 +149,7 @@ int MpegEncoder::run()
         Fatal( "Unable to open encoder codec" );
 
     avDumpDict( opts );
-    AVFrame *inputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
 
     Debug(1, "%s:Waiting", cidentity() );
     if ( waitForProviders() )
@@ -167,7 +167,7 @@ int MpegEncoder::run()
         //);
 
         // Make space for anything that is going to be output
-        AVFrame *outputFrame = avcodec_alloc_frame();
+        AVFrame *outputFrame = av_frame_alloc();
         ByteBuffer outputBuffer;
         outputBuffer.size( avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height ) );
         avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height );

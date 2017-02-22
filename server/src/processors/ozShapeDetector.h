@@ -50,6 +50,7 @@ public:
     uint16_t height() const { return( videoProvider()->height() ); }
     AVPixelFormat pixelFormat() const { return( Image::getFfPixFormat( Image::FMT_RGB ) ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
+    TimeBase videoTimeBase() const { return( videoProvider()->videoTimeBase() ); }
 
 protected:
     int run();

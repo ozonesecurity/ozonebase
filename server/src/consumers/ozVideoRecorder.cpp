@@ -268,7 +268,7 @@ void VideoRecorder::initEncoder()
             Fatal( "Could not open video codec" );
         avDumpDict( mEncodeOpts );
 
-        mAvInputFrame = avcodec_alloc_frame();
+        mAvInputFrame = av_frame_alloc();
 
         if ( !(mOutputContext->oformat->flags & AVFMT_RAWPICTURE) )
         {
@@ -277,7 +277,7 @@ void VideoRecorder::initEncoder()
         if ( mConvertContext )
         {
             // Make space for anything that is going to be output
-            mAvInterFrame = avcodec_alloc_frame();
+            mAvInterFrame = av_frame_alloc();
             mInterBuffer.size( avpicture_get_size( mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() ) );
             avpicture_fill( (AVPicture *)mAvInterFrame, mInterBuffer.data(), mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() );
         }

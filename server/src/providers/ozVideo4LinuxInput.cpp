@@ -120,7 +120,7 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
         //case V4L2_PIX_FMT_YVYU :
         default :
         {
-            Fatal( "Can't find pixel format for palette %d", palette );
+            Fatal( "Can't find pixel format for palette %08x", palette );
             break;
             // These are all spare and may match some of the above
             pixFormat = PIX_FMT_YUVJ420P;

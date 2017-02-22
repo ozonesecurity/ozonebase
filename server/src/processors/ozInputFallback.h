@@ -39,6 +39,7 @@ public:
     uint16_t width() const { return( mCurrentProvider->width() ); }
     uint16_t height() const { return( mCurrentProvider->height() ); }
     FrameRate frameRate() const { return( mCurrentProvider->frameRate() ); }
+    TimeBase videoTimeBase() const { return( mCurrentProvider->videoTimeBase() ); }
 
     bool registerProvider( FeedProvider &provider, const FeedLink &link=gQueuedFeedLink );
     bool deregisterProvider( FeedProvider &provider, bool reciprocate=true );

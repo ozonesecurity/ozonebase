@@ -48,6 +48,10 @@ public:
     {
         return( mFrameRate );
     }
+    TimeBase videoTimeBase() const
+    {
+        return( mFrameRate.timeBase() );
+    }
 
 protected:
     int run();

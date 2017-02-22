@@ -74,6 +74,11 @@ public:
     unsigned int load( const std::string &prefix="OZ_OPT_", bool replace=false );
     void dump( unsigned int depth=0 ) const;
 
+    bool exists( const std::string &name )
+    {
+        OptionMap::const_iterator iter = mOptionMap.find( name );
+        return( iter != mOptionMap.end() );
+    }
     bool add( const std::string &name, const char *value )
     {
         return( add( name, std::string(value) ) );
@@ -107,7 +112,7 @@ public:
     template <typename t> bool set( const std::string &name, t value )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
-        bool found = ( iter == mOptionMap.end() );
+        bool found = ( iter != mOptionMap.end() );
         if ( found )
             remove( name );
         add( name, value );
@@ -117,8 +122,8 @@ public:
     template <typename t> const std::pair<const t&,OptionMap::const_iterator> _get( const std::string &name, const t &notFoundValue )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
-        bool result = ( iter != mOptionMap.end() );
-        if ( !result )
+        bool found = ( iter != mOptionMap.end() );
+        if ( !found )
             return( std::pair<const t&,OptionMap::const_iterator>(notFoundValue,iter) );
         std::shared_ptr<Option<t>> optionPtr = std::dynamic_pointer_cast<Option<t>>( iter->second );
         Option<t> *option = optionPtr.get();
