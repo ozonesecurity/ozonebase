@@ -1,6 +1,8 @@
 # Ozone -  an easy to use platform for Video Innovation
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
+[Join our Slack Channel - Developers only](https://ozone.herokuapp.com)
+
 
 Read/Follow our [Medium publication](https://medium.com/ozone-security) for interesting applications of oZone
 
