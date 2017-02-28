@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Philip Coombes <phil@web2wire.com>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y \

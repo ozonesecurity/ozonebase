@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 #include <iostream>
+#include <fstream>
 
 const Options gNullOptions;
 
@@ -68,4 +69,124 @@ void Options::dump( unsigned int level ) const
             //printf( "%*s%s (%s) => %s\n", level*2, "", iter->first.c_str(), iter->second->type().c_str(), iter->second->valueString().c_str() );
         }
     }
+}
+
+void to_json( json &j, const Options &o )
+{
+	o.jsonDump( j );
+}
+
+void Options::jsonDump( json &j ) const
+{
+	for ( OptionMap::const_iterator iter = mOptionMap.begin(); iter != mOptionMap.end(); iter++ )
+	{
+		iter->second->jsonDump( j, iter->first );
+	}
+}
+
+void from_json( const json &j, Options &o )
+{
+    // Not used
+}
+
+void Options::jsonLoad( const json &j )
+{
+	for ( json::const_iterator iter = j.begin(); iter != j.end(); iter++ )
+	{
+		printf( "%s = ", iter.key().c_str() );
+		if ( iter->is_null() )
+		{
+			printf( "null" );
+		}
+		if ( iter->is_boolean() )
+		{
+			printf( "bool" );
+            add( iter.key(), iter->get<bool>() );
+		}
+		else if ( iter->is_number() )
+		{
+			printf( "number_" );
+		    if ( iter->is_number_integer() )
+		    {
+			    printf( "integer" );
+                add( iter.key(), iter->get<int>() );
+		    }
+		    else if ( iter->is_number_unsigned() )
+		    {
+			    printf( "unsigned" );
+                add( iter.key(), iter->get<unsigned int>() );
+		    }
+		    else if ( iter->is_number_float() )
+		    {
+			    printf( "float" );
+                add( iter.key(), iter->get<double>() );
+            }
+            else
+            {
+			    printf( "unknown" );
+            }
+		}
+		else if ( iter->is_string() )
+		{
+			printf( "string/%s", iter->get<std::string>().c_str() );
+            add( iter.key(), iter->get<std::string>() );
+		}
+		else if ( iter->is_object() )
+		{
+			printf( "object" );
+            Options options;
+            options.jsonLoad( *iter );
+            add( iter.key(), options );
+
+		}
+		else if ( iter->is_array() )
+		{
+			printf( "array" );
+		}
+        else
+        {
+			printf( "unknown" );
+		}
+		printf( "\n" );
+		//iter->second->jsonDump( j, iter->first );
+	}
+}
+
+bool Options::readFile( const std::string &filename )
+{
+	try {
+        std::ifstream file;
+        file.exceptions ( std::ifstream::badbit );
+        file.open( filename );
+	    json j;
+	    file >> j;
+	    jsonLoad( j );
+    }
+    catch ( const std::exception &e )
+    {
+        Error( "Unable to read options from file '%s': %s (%s)", filename.c_str(), e.what(), std::strerror(errno) );
+        return( false );
+    }
+    return( true );
+}
+
+bool Options::writeFile( const std::string &filename, bool pretty )
+{
+	try {
+        std::ofstream file;
+        file.exceptions ( std::ofstream::failbit | std::ofstream::badbit );
+        file.open( filename );
+	    json j;
+	    jsonDump( j );
+        if ( pretty )
+            file << std::setw(2) << j << std::endl;
+        else
+            file << j << std::endl;
+    }
+    catch ( const std::exception &e )
+    {
+        Error( "Unable to write options to file '%s': %s (%s)", filename.c_str(), e.what(), std::strerror(errno) );
+        return( false );
+    }
+    return( true );
 }
