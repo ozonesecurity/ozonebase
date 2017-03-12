@@ -103,7 +103,7 @@ int FaceDetector::DlibHogDetector::detect( const ByteBuffer &inputBuffer, ByteBu
         }
 
         //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
-        dlib::save_png( img, "/transfer/image.png" );
+        //dlib::save_png( img, "/transfer/image.png" );
     }
     // Don't really need to do this if nothing detected as will be the same as input buffer
     if ( dets.size() > 0 )
@@ -141,8 +141,8 @@ int FaceDetector::DlibCnnDetector::detect( const ByteBuffer &inputBuffer, ByteBu
                 draw_rectangle( img, dets[i], dlib::rgb_pixel( 255, 0, 0 ), 1 );
         }
 
-        //dlib::save_png( img, "/transfer/image.png" );
         //Info( "%d x %d = %d", num_rows(img), num_columns(img), 3*num_rows(img)*num_columns(img) );
+        //dlib::save_png( img, "/transfer/image.png" );
     }
     // Don't really need to do this if nothing detected as will be the same as input buffer
     if ( dets.size() > 0 )
@@ -243,7 +243,7 @@ int FaceDetector::run()
                         if ( detected )
                             alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), detectBuffer, detected );
                         else
-                            alarmFrame = new AlarmFrame( this, *iter, detected );
+                            alarmFrame = new AlarmFrame( this, *iter, frame->id(), frame->timestamp(), convImage.buffer(), detected );
                         distributeFrame( FramePtr( alarmFrame ) );
                         mFrameCount++;
                     }

@@ -82,7 +82,7 @@ int MemoryOutput::run()
 *
 * @return 
 */
-bool MemoryOutput::storeFrame( FramePtr frame )
+bool MemoryOutput::storeFrame( const FramePtr &frame )
 {
     const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame.get());
     Debug(2, "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );

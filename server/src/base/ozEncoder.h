@@ -46,7 +46,7 @@ public:
     Encoder( const std::string &cl4ss, const std::string &name );
     ~Encoder();
 
-    bool queueFrame( FramePtr, FeedProvider * );
+    bool queueFrame( const FramePtr &, FeedProvider * );
 
     virtual const std::string &sdpString( int trackId ) const ///< Virtual as some encoders may need to generate it first
     {
@@ -57,7 +57,7 @@ protected:
     void cleanup();
     virtual void poolingExpired()=0;
 
-    void distributeFrame( FramePtr frame )
+    void distributeFrame( const FramePtr &frame )
     {
         mLastUse = time( NULL );
         FeedProvider::distributeFrame( frame );

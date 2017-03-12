@@ -69,7 +69,7 @@ protected:
     {
     }
     /// Create a new empty frame and relate it to a parent frame
-    FeedFrame( FeedProvider *provider, FramePtr parent, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
+    FeedFrame( FeedProvider *provider, const FramePtr &parent, FeedType mediaType, uint64_t id, uint64_t timestamp ) :
         mProvider( provider ),
         mFeedType( mediaType ),
         mId( id ),
@@ -78,7 +78,7 @@ protected:
     {
     }
     /// Create a new frame from a data buffer and relate it to a parent frame
-    FeedFrame( FeedProvider *provider, FramePtr parent, FeedType mediaType, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+    FeedFrame( FeedProvider *provider, const FramePtr &parent, FeedType mediaType, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
         mProvider( provider ),
         mFeedType( mediaType ),
         mId( id ),
@@ -88,7 +88,7 @@ protected:
     {
     }
     /// Create a new frame from a data pointer and relate it to a parent frame
-    FeedFrame( FeedProvider *provider, FramePtr parent, FeedType mediaType, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+    FeedFrame( FeedProvider *provider, const FramePtr &parent, FeedType mediaType, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
         mProvider( provider ),
         mFeedType( mediaType ),
         mId( id ),
@@ -97,7 +97,7 @@ protected:
         mParent( parent )
     {
     }
-    FeedFrame( FeedProvider *provider, FramePtr parent ) :
+    FeedFrame( FeedProvider *provider, const FramePtr &parent ) :
         mProvider( provider ),
         mFeedType( parent->mFeedType ),
         mId( parent->mId ),
@@ -181,9 +181,9 @@ protected:
 public:
     VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
-    VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    VideoFrame( VideoProvider *provider, FramePtr parent );
+    VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
+    VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    VideoFrame( VideoProvider *provider, const FramePtr &parent );
 
     const VideoProvider *videoProvider() const { return( mVideoProvider ); }
     AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
@@ -206,9 +206,9 @@ protected:
 public:
     AudioFrame( AudioProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples );
     AudioFrame( AudioProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size, uint16_t samples );
-    AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples );
-    AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size, uint16_t samples );
-    AudioFrame( AudioProvider *provider, FramePtr parent );
+    AudioFrame( AudioProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples );
+    AudioFrame( AudioProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size, uint16_t samples );
+    AudioFrame( AudioProvider *provider, const FramePtr &parent );
 
     const AudioProvider *audioProvider() const { return( mAudioProvider ); }
     AVSampleFormat sampleFormat() const { return( mSampleFormat ); }
@@ -226,10 +226,10 @@ public:
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp );
-    DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
-    DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    DataFrame( FeedProvider *provider, FramePtr parent );
+    DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp );
+    DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
+    DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( FeedProvider *provider, const FramePtr &parent );
 };
 
 #if 0 // Not used a data frame should probably be able to come from anywhere, maybe.
@@ -244,9 +244,9 @@ protected:
 public:
     DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
     DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
-    DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
-    DataFrame( DataProvider *provider, FramePtr parent );
+    DataFrame( DataProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer );
+    DataFrame( DataProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size );
+    DataFrame( DataProvider *provider, const FramePtr &parent );
 
     const DataProvider *dataProvider() const { return( mDataProvider ); }
 };

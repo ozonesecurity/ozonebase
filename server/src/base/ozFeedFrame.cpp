@@ -47,7 +47,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp
 * @param timestamp
 * @param buffer
 */
-VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer ),
     mVideoProvider( provider ),
     mPixelFormat( provider->pixelFormat() ),
@@ -66,7 +66,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, u
 * @param buffer
 * @param size
 */
-VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer, size ),
     mVideoProvider( provider ),
     mPixelFormat( provider->pixelFormat() ),
@@ -81,7 +81,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent, uint64_t id, u
 * @param provider
 * @param parent
 */
-VideoFrame::VideoFrame( VideoProvider *provider, FramePtr parent ) :
+VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent ) :
     FeedFrame( provider, parent ),
     mVideoProvider( provider ),
     mPixelFormat( provider->pixelFormat() ),
@@ -130,7 +130,7 @@ AudioFrame::AudioFrame( AudioProvider *provider, uint64_t id, uint64_t timestamp
 * @param buffer
 * @param samples
 */
-AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples ) :
+AudioFrame::AudioFrame( AudioProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer, uint16_t samples ) :
     FeedFrame( provider, parent, FRAME_TYPE_AUDIO, id, timestamp, buffer ),
     mAudioProvider( provider ),
     mSampleFormat( provider->sampleFormat() ),
@@ -146,7 +146,7 @@ AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent, uint64_t id, u
 * @param provider
 * @param parent
 */
-AudioFrame::AudioFrame( AudioProvider *provider, FramePtr parent ) :
+AudioFrame::AudioFrame( AudioProvider *provider, const FramePtr &parent ) :
     FeedFrame( provider, parent ),
     mAudioProvider( provider ),
     mSampleFormat( provider->sampleFormat() ),
@@ -215,7 +215,7 @@ DataFrame::DataFrame( FeedProvider *provider, uint64_t id, uint64_t timestamp, c
 * @param id
 * @param timestamp
 */
-DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp ) :
+DataFrame::DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp )
 {
 }
@@ -229,7 +229,7 @@ DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint
 * @param timestamp
 * @param buffer
 */
-DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+DataFrame::DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer )
 {
 }
@@ -244,7 +244,7 @@ DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint
 * @param buffer
 * @param size
 */
-DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+DataFrame::DataFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer, size )
 {
 }
@@ -255,7 +255,7 @@ DataFrame::DataFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint
 * @param provider
 * @param parent
 */
-DataFrame::DataFrame( FeedProvider *provider, FramePtr parent ) :
+DataFrame::DataFrame( FeedProvider *provider, const FramePtr &parent ) :
     FeedFrame( provider, parent )
 {
 }
@@ -280,19 +280,19 @@ DataFrame::DataFrame( DataProvider *provider, uint64_t id, uint64_t timestamp, c
 {
 }
 
-DataFrame::DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
+DataFrame::DataFrame( DataProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer ),
     mDataProvider( provider )
 {
 }
 
-DataFrame::DataFrame( DataProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
+DataFrame::DataFrame( DataProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_DATA, id, timestamp, buffer, size ),
     mDataProvider( provider )
 {
 }
 
-DataFrame::DataFrame( DataProvider *provider, FramePtr parent ) :
+DataFrame::DataFrame( DataProvider *provider, const FramePtr &parent ) :
     FeedFrame( provider, parent ),
     mDataProvider( provider )
 {

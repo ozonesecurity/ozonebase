@@ -540,7 +540,7 @@ uint32_t MotionDetector::detectMotion( const Image &compImage, ZoneSet &motionZo
 *
 * @return 
 */
-bool MotionDetector::inAlarm( FramePtr frame, const FeedConsumer * )
+bool MotionDetector::inAlarm( const FramePtr &frame, const FeedConsumer * )
 {
     const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
     //const MotionDetector *motionDetector = dynamic_cast<const MotionDetector *>( videoFrame->provider() );

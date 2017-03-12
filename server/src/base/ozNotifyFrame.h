@@ -23,12 +23,12 @@ public:
         mUrgency( urgency )
     {
     }
-    NotifyFrame( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, Urgency urgency ) :
+    NotifyFrame( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, Urgency urgency ) :
         DataFrame( provider, parent, id, timestamp ),
         mUrgency( urgency )
     {
     }
-    NotifyFrame( FeedProvider *provider, FramePtr parent, Urgency urgency ) :
+    NotifyFrame( FeedProvider *provider, const FramePtr &parent, Urgency urgency ) :
         DataFrame( provider, parent ),
         mUrgency( urgency )
     {
@@ -99,12 +99,12 @@ public:
         mDetail( detail )
     {
     }
-    DiskIONotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const DiskIODetail &detail ) :
+    DiskIONotification( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const DiskIODetail &detail ) :
         NotifyFrame( provider, parent, id, timestamp, detail.failure()?IMPORTANT:ADVISORY ),
         mDetail( detail )
     {
     }
-    DiskIONotification( FeedProvider *provider, FramePtr parent, const DiskIODetail &detail ) :
+    DiskIONotification( FeedProvider *provider, const FramePtr &parent, const DiskIODetail &detail ) :
         NotifyFrame( provider, parent, detail.failure()?IMPORTANT:ADVISORY ),
         mDetail( detail )
     {
@@ -171,12 +171,12 @@ public:
         mDetail( detail )
     {
     }
-    EventNotification( FeedProvider *provider, FramePtr parent, uint64_t id, uint64_t timestamp, const EventDetail &detail ) :
+    EventNotification( FeedProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const EventDetail &detail ) :
         NotifyFrame( provider, parent, id, timestamp, ADVISORY ),
         mDetail( detail )
     {
     }
-    EventNotification( FeedProvider *provider, FramePtr parent, const EventDetail &detail ) :
+    EventNotification( FeedProvider *provider, const FramePtr &parent, const EventDetail &detail ) :
         NotifyFrame( provider, parent, ADVISORY ),
         mDetail( detail )
     {

@@ -46,7 +46,7 @@ int EventRecorder::run()
 *
 * @return 
 */
-bool EventRecorder::processFrame( FramePtr frame )
+bool EventRecorder::processFrame( const FramePtr &frame )
 {
     const AlarmFrame *alarmFrame = dynamic_cast<const AlarmFrame *>(frame.get());
     //const VideoProvider *provider = dynamic_cast<const VideoProvider *>(frame->provider());

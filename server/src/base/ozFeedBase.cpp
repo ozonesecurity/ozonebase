@@ -21,7 +21,7 @@ FeedLink gPolledDataLink( FEED_POLLED, FeedProvider::dataFramesOnly );
 *
 * @return 
 */
-bool FeedLink::compare( FramePtr frame, const FeedConsumer *consumer ) const
+bool FeedLink::compare( const FramePtr &frame, const FeedConsumer *consumer ) const
 {
     for ( FeedComparatorList::const_iterator iter = mComparators.begin(); iter != mComparators.end(); iter++ )
         if ( !(*iter)( frame, consumer ) )

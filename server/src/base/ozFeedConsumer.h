@@ -89,7 +89,7 @@ public:
     /// Place the given frame onto this consumers frame queue, the supplying provider is also given. Used by
     /// providers for distributing frames.
     ///
-    virtual bool queueFrame( FramePtr, FeedProvider * );
+    virtual bool queueFrame( const FramePtr &, FeedProvider * );
     //virtual bool writeFrame( const FeedFrame * )=0;
 };
 

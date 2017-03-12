@@ -40,7 +40,7 @@ protected:
 
 protected:
     int run();
-    bool processFrame( FramePtr );
+    bool processFrame( const FramePtr & );
 
 public:
 /**

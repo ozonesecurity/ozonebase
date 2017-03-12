@@ -43,7 +43,7 @@ public:
     //{
         //return( mStreamName );
     //}
-    bool sendFrame( FramePtr frame );
+    bool sendFrame( const FramePtr &frame );
  
 protected:
     ByteBuffer *buildPacket( uint32_t chunkStream, uint8_t messageTypeId, uint32_t messageStreamId, uint32_t timestamp, ByteBuffer &payload, int packetType );

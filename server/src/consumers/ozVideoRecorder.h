@@ -56,10 +56,9 @@ protected:
     int             mAudioFrameCount;
     double          mMinTime;
 
-
 protected:
     int run();
-    bool processFrame( FramePtr );
+    bool processFrame( const FramePtr & );
     void initEncoder(); 
     void deinitEncoder(); 
     void openVideoFile( const std::string &filename );
