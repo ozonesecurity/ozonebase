@@ -21,7 +21,6 @@ addons:
       - llvm-toolchain-precise
       - ubuntu-toolchain-r-test
     packages:
-      - npm
       - build-essential
       - make
       - git
