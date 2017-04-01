@@ -20,11 +20,11 @@ oZone already provides key components and functionality like:
 * **Trigger framework** - allows you to combine external triggers (example temperature/location/etc) with image triggers for complex processing
 
 ## Quick start
-[Web] (http://ozone.network)
+[Web](http://ozone.network) & [Blog](https://medium.com/ozone-security)
 
-[Key Concepts] (http://ozone-framework.readthedocs.io/en/latest/index.html)
+[Key Concepts](http://ozone-framework.readthedocs.io/en/latest/index.html)
 
-[Current API] (http://ozone.network/apidocs/index.html)
+[C++ API](http://ozone.network/apidocs/index.html)
 
 
 ## Who is developing and maintaining Ozone?
