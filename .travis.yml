@@ -8,7 +8,7 @@ dist: trusty
 compiler: gcc
 
 notifications:
-  slack: ozonesecurity:c3kGxR60pP42b9Kr91QPtJQU
+  slack: ozonesecurity:G1nKPaoZHfRCvC6GjnvRUB2J
   on_success: never
   on_failure: always
 
