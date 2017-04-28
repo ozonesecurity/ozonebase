@@ -9,6 +9,12 @@
 #include "../libgen/libgenUtils.h"
 #include "../libgen/libgenException.h"
 
+
+#include "../../../externals/json/src/json.hpp"
+
+// for convenience
+using json = nlohmann::json;
+
 // Base class for option
 class _Option
 {
@@ -29,6 +35,10 @@ public:
     {
         static const std::string valString = "(null)";
         return( valString );
+    }
+    virtual const void jsonDump( json &j, const std::string &name ) const
+    {
+        j[name] = nullptr;
     }
 };
 
@@ -57,6 +67,10 @@ public:
     {
         return typeid(t).name();
     }
+    const void jsonDump( json &j, const std::string &name ) const
+    {
+        j[name] = mValue;
+    }
 };
 
 class Options : public _Option
@@ -74,6 +88,14 @@ public:
     unsigned int load( const std::string &prefix="OZ_OPT_", bool replace=false );
     void dump( unsigned int depth=0 ) const;
 
+    bool readFile( const std::string &filename );
+    bool writeFile( const std::string &filename, bool pretty=false );
+
+    bool exists( const std::string &name )
+    {
+        OptionMap::const_iterator iter = mOptionMap.find( name );
+        return( iter != mOptionMap.end() );
+    }
     bool add( const std::string &name, const char *value )
     {
         return( add( name, std::string(value) ) );
@@ -107,7 +129,7 @@ public:
     template <typename t> bool set( const std::string &name, t value )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
-        bool found = ( iter == mOptionMap.end() );
+        bool found = ( iter != mOptionMap.end() );
         if ( found )
             remove( name );
         add( name, value );
@@ -117,8 +139,8 @@ public:
     template <typename t> const std::pair<const t&,OptionMap::const_iterator> _get( const std::string &name, const t &notFoundValue )
     {
         OptionMap::const_iterator iter = mOptionMap.find( name );
-        bool result = ( iter != mOptionMap.end() );
-        if ( !result )
+        bool found = ( iter != mOptionMap.end() );
+        if ( !found )
             return( std::pair<const t&,OptionMap::const_iterator>(notFoundValue,iter) );
         std::shared_ptr<Option<t>> optionPtr = std::dynamic_pointer_cast<Option<t>>( iter->second );
         Option<t> *option = optionPtr.get();
@@ -153,10 +175,17 @@ public:
         return( result.first );
     }
 
-    friend std::ostream& operator<< (std::ostream& stream, const Options& options ) {
+    friend std::ostream& operator<< (std::ostream& stream, const Options& options )
+    {
         stream << "options";
         return ( stream );
     }
+
+    friend void to_json( json &j, const Options &o );
+    void jsonDump( json &j ) const;
+
+    friend void from_json( const json &j, Options &o );
+    void jsonLoad( const json &j );
 };
 
 extern const Options gNullOptions;
