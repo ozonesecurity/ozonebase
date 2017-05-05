@@ -19,6 +19,17 @@ if [ "$1" == 'help' ] || [ "$1" == 'h' ]; then
     exit
 fi
 
+os=`uname`
+if [ "$os" == "Darwin" ];
+then
+        echo "------------- OSX dirty hack warning ------------------"
+        echo "There are several steps for a correct OSX compilation and its not a very clean/tested process today"
+        echo "1. Make sure you have brew installed and required libs"
+        echo "2. Make sure you modify OPENSSL_ROOT_DIR to the right path where OpenSSL is installed"
+        echo "3. Pray your OSX environment is the same as mine"
+        echo "-------------------------------------------------------"
+fi
+
 
 if [ "$1" ==  "debug" ];
 then
@@ -35,13 +46,15 @@ fi
 echo "dlib build mode is: ${DLIBBUILDMODE}"
 echo "Ozone build mode is: ${OZBUILDMODE}"
 
-os=`uname`
+# Disable V4L if on mac
+# Also, on mac, we need gcc/g++ not clang.
 echo "uname reports Operating System is: ${os}"
 if [ "$os" != "Darwin" ];
 then
         usev4l="--enable-libv4l2"
         forcecompiler=""
-else
+else # hacky stuff for OSX
+        export OPENSSL_ROOT_DIR=/usr/local/opt/openssl/
         usev4l=""
         forcecompiler="-DCMAKE_C_COMPILER=/usr/local/bin/gcc-6  -DCMAKE_CXX_COMPILER=/usr/local/bin/g++-6"
         echo "We need to force GCC/+6 in OSX for oZone. setting compiler settings to ${forcecompiler}"
