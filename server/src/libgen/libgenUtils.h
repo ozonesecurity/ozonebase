@@ -71,7 +71,7 @@ bool getBoolEnv( const char *varName, const char *defaultValue=0 );
 class StringTokenList
 {
 protected:
-    typedef const char *(*StrFn)( char *, const char * );
+    typedef char *(*StrFn)( char *, const char * );
 
 public:
     typedef std::deque<std::string> TokenList;

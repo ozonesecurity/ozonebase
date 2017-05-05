@@ -592,10 +592,10 @@ bool getBoolEnv( const char *varName, const char *defaultValue )
 */
 void StringTokenList::splitIntoTokens( const char* str, const char *sep, int flags )
 {
-    //char *pos;
-    //char *current = (char*)str;
-    const char *pos;
-    const char *current = (char*)str;
+    char *pos;
+    char *current = (char*)str;
+    //const char *pos;
+    //const char *current = (char*)str;
 
     StrFn strfn = 0;
     int seplen = 0;
