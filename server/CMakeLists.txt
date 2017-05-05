@@ -40,7 +40,8 @@ endif(NOT CMAKE_BUILD_TYPE)
 #set(CMAKE_INSTALL_ALWAYS ON)
 
 # Default CLFAGS and CXXFLAGS:
-set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
+set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3")
+#set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
 set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
 set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
 set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
