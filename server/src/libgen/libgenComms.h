@@ -3,6 +3,7 @@
 
 #include "libgenDebug.h"
 #include "libgenException.h"
+#include "oz.h"
 
 #include <unistd.h>
 #include <netdb.h>

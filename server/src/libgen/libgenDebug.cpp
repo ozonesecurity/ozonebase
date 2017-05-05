@@ -8,7 +8,11 @@
 #include <syslog.h>
 #include <signal.h>
 #include <stdarg.h>
+#ifdef __APPLE__
+#include <sys/syscall.h>
+#else
 #include <syscall.h>
+#endif
 #include <errno.h>
 #include <stdexcept>
 

@@ -6,6 +6,10 @@
 #include <sstream>
 #include <unistd.h>
 
+#ifdef __APPLE__
+#include <cstdlib>
+#endif
+
 #include "../libgen/libgenUtils.h"
 #include "../libgen/libgenException.h"
 
