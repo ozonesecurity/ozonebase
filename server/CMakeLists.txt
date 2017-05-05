@@ -41,10 +41,9 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 # Default CLFAGS and CXXFLAGS:
 set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3")
-#set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
-set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
-set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3")
+set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 

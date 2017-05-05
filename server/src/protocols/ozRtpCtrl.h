@@ -113,6 +113,7 @@ private:
             // BYE
             struct Bye
             {
+                uint32_t dummy;
                 uint32_t srcN[];     // list of sources
                 // can't express trailing text for reason (what does this mean? it's not even english!)
             } bye;

@@ -892,6 +892,7 @@ void Image::copyBGR2RGB( unsigned char *pDst, const unsigned char *pSrc, int wid
 *
 * @return 
 */
+#ifdef HAVE_LINUX_VIDEODEV2_H
 Image::Format Image::getFormatFromPalette( int palette )
 {
     Format format = FMT_UNDEF;
@@ -922,6 +923,7 @@ Image::Format Image::getFormatFromPalette( int palette )
     }
     return( format );
 }
+#endif
 
 /**
 * @brief 
@@ -2198,6 +2200,7 @@ Image::Image( Format format, int width, int height, unsigned char *data, bool ad
 * @param width
 * @param height
 */
+#ifdef HAVE_LINUX_VIDEODEV2_H
 size_t Image::calcBufferSize( int v4lPalette, int width, int height )
 {
     size_t pixels = width*height;
@@ -2230,6 +2233,7 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
     Panic( "No conversion for unexpected V4L2 palette %08x", v4lPalette );
     return( 0 );
 }
+#endif
 
 /**
 * @brief 
@@ -2239,6 +2243,7 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
 * @param height
 * @param data
 */
+#ifdef HAVE_LINUX_VIDEODEV2_H
 Image::Image( int v4lPalette, int width, int height, unsigned char *data )
 {
     if ( !smInitialised )
@@ -2353,6 +2358,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
     assign( format, width, height, imageData );
     delete[] tempData;
 }
+#endif
 
 /**
 * @brief 

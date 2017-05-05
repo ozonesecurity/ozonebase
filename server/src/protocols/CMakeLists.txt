@@ -2,16 +2,13 @@
 
 set(OZ_PROTOCOLS_SRC_FILES
     ozHttp.cpp ozHttpConnection.cpp ozHttpController.cpp ozHttpSession.cpp
-    ozHttpStream.cpp ozRtmp.cpp ozRtmpAmf.cpp ozRtmpConnection.cpp
-    ozRtmpController.cpp ozRtmpRequest.cpp ozRtmpSession.cpp ozRtmpStream.cpp
-    ozRtsp.cpp ozRtspConnection.cpp ozRtspController.cpp ozRtspSession.cpp
-    ozRtspStream.cpp ozRtpCtrl.cpp ozRtpData.cpp ozRtpSession.cpp
+    ozHttpStream.cpp ozRtsp.cpp ozRtspConnection.cpp ozRtspController.cpp 
+    ozRtspSession.cpp ozRtspStream.cpp ozRtpCtrl.cpp ozRtpData.cpp ozRtpSession.cpp
    )
 
 set(OZ_PROTOCOLS_HDR_FILES
     ozHttp.h ozHttpConnection.h ozHttpController.h ozHttpSession.h
-    ozHttpStream.h ozRtmp.h ozRtmpAmf.h ozRtmpConnection.h
-    ozRtmpController.h ozRtmpRequest.h ozRtmpSession.h ozRtmpStream.h
+    ozHttpStream.h
     ozRtsp.h ozRtspConnection.h ozRtspController.h ozRtspSession.h
     ozRtspStream.h ozRtpCtrl.h ozRtpData.h ozRtpSession.h
    )
