@@ -7,6 +7,7 @@ fi
 
 OZBUILDMODE="Release"
 DLIBBUILDMODE="Release"
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${INSTALLDIR}/lib/
 
 if [ "$1" == 'help' ] || [ "$1" == 'h' ]; then
     echo "usage: $0 [release|debug|alldebug]"
@@ -39,13 +40,12 @@ echo "uname reports Operating System is: ${os}"
 if [ "$os" != "Darwin" ];
 then
         usev4l="--enable-libv4l2"
-        forcecompiler="-DCMAKE_C_COMPILER=/usr/local/bin/gcc-6  --DCMAKE_CXX_COMPILER=/usr/local/bin/g++-6"
-        echo "We need to force GCC/+6 in OSX for oZone. setting compiler settings to ${forcecompiler}"
+        forcecompiler=""
 else
         usev4l=""
-        forcecompiler=""
+        forcecompiler="-DCMAKE_C_COMPILER=/usr/local/bin/gcc-6  -DCMAKE_CXX_COMPILER=/usr/local/bin/g++-6"
+        echo "We need to force GCC/+6 in OSX for oZone. setting compiler settings to ${forcecompiler}"
 fi
-exit
 
 mkdir -p $INSTALLDIR
 
@@ -53,10 +53,9 @@ git submodule update --init --recursive
 echo "==================== Building OPENH264 ====================="
 ( cd externals/openh264/ && make PREFIX="$INSTALLDIR" install )
 echo "==================== Building FFMPEG ====================="
-( cd externals/ffmpeg && PKG_CONFIG_PATH=$INSTALLDIR/lib/pkgconfig ./configure --enable-shared --enable-libv4l2 --enable-libopenh264 --enable-libfreetype --enable-libfontconfig ${usev4l}  --prefix=$INSTALLDIR && make install )
+( cd externals/ffmpeg && PKG_CONFIG_PATH=$INSTALLDIR/lib/pkgconfig ./configure --enable-shared --enable-libopenh264 --enable-libfreetype --enable-libfontconfig ${usev4l}  --prefix=$INSTALLDIR && make install )
 echo "==================== Building DLIB ====================="
-( cd externals/dlib/examples && mkdir -p build && cd build && cmake .. ${forcecompiler} -DCMAKE_PREFIX_PATH=$INSTALLDIR -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib -DUSE_AVX_INSTRUCTIONS=ON -DCMAKE_VERBOSE_MAKEFILE=ON && cmake --build . --config ${DLIBBUILDMODE} )
-#( cd externals/dlib && mkdir -p build && cd build && cmake .. -DCMAKE_PREFIX_PATH=$INSTALLDIR -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib -DUSE_AVX_INSTRUCTIONS=ON -DCMAKE_VERBOSE_MAKEFILE=ON && cmake --build . --config ${DLIBBUILDMODE} && make install )
+( cd externals/dlib && mkdir -p build && cd build && cmake .. ${forcecompiler} -DCMAKE_PREFIX_PATH=$INSTALLDIR -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib -DUSE_AVX_INSTRUCTIONS=ON -DCMAKE_VERBOSE_MAKEFILE=ON && cmake --build . --config ${DLIBBUILDMODE} )
 echo "==================== Building JSON ===================="
 ( cmake ${forcecompiler} -DCMAKE_INCLUDE_PATH=$INSTALLDIR/include -DCMAKE_PREFIX_PATH=$INSTALLDIR  -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib  . && make install )
 echo "==================== Building OZONE ====================="
