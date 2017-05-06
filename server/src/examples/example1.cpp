@@ -1,28 +1,27 @@
 #include "../base/ozApp.h"
-#include "../providers/ozLocalVideoInput.h"
-#include "../consumers/ozMemoryOutput.h"
+#include "../base/ozListener.h"
+#include "../providers/ozAVInput.h"
+#include "../processors/ozMotionDetector.h"
+#include "../processors/ozMatrixVideo.h"
+#include "../protocols/ozHttpController.h"
 
 #include "../libgen/libgenDebug.h"
 
-//
-// Capture from local V4L2 device and write to ZM V2 compatible shared memory
-//
 int main( int argc, const char *argv[] )
 {
-    debugInitialise( "example1", "", 0 );
+    debugInitialise( "example1", "", 5 );
 
     Info( "Starting" );
 
     avInit();
 
     Application app;
+    Options avOptions;
+    avOptions.add("format","avfoundation");
+    avOptions.add("framerate","30");
 
-    LocalVideoInput input( "input1", "/dev/video0" );
+    AVInput input( "input", "0",avOptions );
     app.addThread( &input );
-
-    MemoryOutput memoryOutput( input.cname(), "/dev/shm", 10 );
-    memoryOutput.registerProvider( input );
-    app.addThread( &memoryOutput );
 
     app.run();
 }
