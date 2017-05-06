@@ -12,7 +12,7 @@ add_executable(example9 example9.cpp)
 add_executable(example10 example10.cpp)
 add_executable(example11 example11.cpp)
 add_executable(starter_example starter_example.cpp)
-#add_executable(nvrcli/nvrcli nvrcli/nvrcli.cpp nvrcli/nvrNotifyOutput.cpp)
+add_executable(nvrcli/nvrcli nvrcli/nvrcli.cpp nvrcli/nvrNotifyOutput.cpp)
 
 set (EXAMPLES example1 example2 example3 example4 example5 example6 example7 example8 example9 example10 example11 starter_example)
 
@@ -34,7 +34,7 @@ target_link_libraries(example9 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(example10 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(example11 ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 target_link_libraries(starter_example ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
-#target_link_libraries(nvrcli/nvrcli ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
+target_link_libraries(nvrcli/nvrcli ${OZ_EXTRA_LIBS} ${OZ_BIN_LIBS} ${OZ_LIBS})
 
 
 
