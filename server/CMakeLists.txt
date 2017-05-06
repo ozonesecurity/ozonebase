@@ -61,6 +61,7 @@ include(CheckIncludeFileCXX)
 include(TestSignalType)
 include(CheckPrototypeExists)
 include(TestSTDC)
+include(FindV4L2)
 
 # Configuration options
 #
@@ -393,6 +394,11 @@ else (MACOSX)
         list (APPEND INCVARLIST "values")
 endif (MACOSX)
 
+if(V4L2_FOUND)
+	set(HAVE_LINUX_VIDEODEV2_H 1)
+	set(OZ_V4L 1)
+endif(V4L2_FOUND)
+
 if (OZ_V4L)
         list (APPEND INCVARLIST "linux/videodev2")
 endif (OZ_V4L)
@@ -407,11 +413,6 @@ foreach( INCVAR  ${INCVARLIST})
             "${INCVAR} header file not found and this project requires it.")
     endif (NOT HAVE_${INCVAR_U}_H)
 endforeach(INCVAR)
-
-if (HAVE_LINUX_VIDEODEV2_H)
-    set(OZ_V4L 1)
-endif (HAVE_LINUX_VIDEODEV2_H)
-
 if(HAVE_SYS_MMAN_H)
     set(OZ_MEM_MAPPED 1)
 endif(HAVE_SYS_MMAN_H)
