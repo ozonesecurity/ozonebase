@@ -129,7 +129,7 @@ int AVInput::run()
         AVInputFormat *inputFormat = 0;
         const std::string format = mOptions.get( "format", "" );
         const std::string framerate = mOptions.get( "framerate","" );
-        Info ("framerate is:%s",framerate);
+        Info ("framerate is:%s",framerate.c_str());
       
         if ( !format.empty() )
         {
