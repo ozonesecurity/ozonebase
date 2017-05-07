@@ -123,7 +123,7 @@ void cmd_add()
     name = "";
     cout << "RTSP source (ENTER for default, or 'osx' for OSX faceTime camera):";
     getline(cin,source);
-    cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll) (ENTER for default = a):";
+    cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll/[n]one) (ENTER for default = a):";
     getline (cin, type);
     cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
     getline (cin, record);
@@ -149,7 +149,7 @@ void cmd_add()
     }
     cout << "Recording will be " << (record=="n"?"skipped":"stored") << " for:" << name << endl;
     
-    if (type.size() ==0 || (type != "m" && type != "f" && type != "a" && type !="p"))
+    if (type.size() ==0 || (type != "m" && type != "f" && type != "a" && type !="p" && type !="n"))
     {
         type = "a";
     }
@@ -160,6 +160,7 @@ void cmd_add()
     else if (type =="m"){cout << "Motion";}
     else if (type == "p"){cout << "Person";}
     else if (type=="a"){cout << "Face+Motion+Person";}
+    else if (type=="n"){cout << "None";}
     cout << endl; 
     
     nvrCameras nvrcam;
@@ -206,7 +207,7 @@ void cmd_add()
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
-    else // face/motion/person - turn them all on
+    else if (type!="n") // face/motion/person - turn them all on
     {
     	Options faceOptions;
     	faceOptions.set( "method", "cnn" );
