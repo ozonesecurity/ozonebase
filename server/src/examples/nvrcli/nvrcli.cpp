@@ -175,14 +175,16 @@ void cmd_add()
     nvrcam.fileOut = NULL;
     nvrcam.scheduleDelete = false;
 
+    Options camOptions ;
+
     if (source == "osx")
     {
     	cout << "Setting correct AV sources for facetime";
-    	avOptions.add("format","avfoundation");
-    	avOptions.add("framerate","30");
+    	camOptions.add("format","avfoundation");
+    	camOptions.add("framerate","30");
     	source="0";
     }
-    nvrcam.cam = new AVInput ( name, source,avOptions );
+    nvrcam.cam = new AVInput ( name, source,camOptions );
     if (type == "f") // only instantiate face recog
     {
     	Options faceOptions;
@@ -274,7 +276,9 @@ void cmd_add()
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
     cout << nvrcams.back().cam->source() << endl;
 
-    nvrcams.back().cam->start();
+    //nvrcams.back().cam->start();
+    nvrcam.cam->start();
+
     if (nvrcams.back().motion != NULL){nvrcams.back().motion->start(); cout << "starting motion"<< endl;}
     if (nvrcams.back().rate != NULL) {nvrcams.back().rate->start(); cout << "starting rate" << endl;}
     if (nvrcams.back().person != NULL) {nvrcams.back().person->start(); cout << "starting person" << endl;}
@@ -427,7 +431,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    dbgInit( "nvrcli", "", 2 );
+    dbgInit( "nvrcli", "", 5 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";
