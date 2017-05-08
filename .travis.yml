@@ -46,6 +46,7 @@ addons:
 cache:
     directories:
       - externals/ffmpeg
+      - externals/dlib
 
 install: true
       #- cd externals/ffmpeg
@@ -62,7 +63,7 @@ install: true
 script:
       - export CXX="g++-5" CC="gcc-5"
       - mkdir -p ~/ozoneroot
-      - export $INSTALL_DIR=~/ozoneroot
+      - export $INSTALLDIR=~/ozoneroot
       - cd $TRAVIS_BUILD_DIR/
       - ./ozone-build.sh
       #- cd $TRAVIS_BUILD_DIR/server
