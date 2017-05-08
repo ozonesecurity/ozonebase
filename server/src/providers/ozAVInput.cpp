@@ -129,6 +129,7 @@ int AVInput::run()
         AVInputFormat *inputFormat = 0;
         const std::string format = mOptions.get( "format", "" );
         const std::string framerate = mOptions.get( "framerate","" );
+        const std::string videosize = mOptions.get( "videosize","" );
         Info ("framerate is:%s",framerate.c_str());
       
         if ( !format.empty() )
@@ -145,6 +146,12 @@ int AVInput::run()
         if (!framerate.empty())
         {
                 av_dict_set(&dict, "framerate", framerate.c_str(), 0);
+        }
+
+        if (!videosize.empty())
+        {
+                av_dict_set(&dict, "video_size", videosize.c_str(), 0);
+
         }
 
         //int dictRet = av_dict_set(&dict,"xxx","yyy",0);

@@ -2,6 +2,7 @@
 #include "../base/ozListener.h"
 #include "../providers/ozAVInput.h"
 #include "../processors/ozMotionDetector.h"
+#include "../processors/ozImageConvert.h"
 #include "../processors/ozMatrixVideo.h"
 #include "../protocols/ozHttpController.h"
 
@@ -14,6 +15,8 @@ class nvrCamera
 public:
     AVInput *cam;
     Detector *motion; 
+    ImageConvert *convert;
+
 };
 
 
@@ -44,14 +47,17 @@ int main( int argc, const char *argv[] )
     Options avOptions;
     avOptions.add("format","avfoundation");
     avOptions.add("framerate","30");
+    avOptions.add("videosize","640x480");
 
    
     nvrcam.cam = new AVInput ( "cam0", "0",avOptions );
-
-
+    nvrcam.convert = new ImageConvert ( "convert",PIX_FMT_RGB24, 640,480 );
     nvrcam.motion = new MotionDetector( "modect-cam0" );
-    nvrcam.motion->registerProvider(*(nvrcam.cam) );
+    nvrcam.convert->registerProvider(*(nvrcam.cam) );
+    nvrcam.motion->registerProvider(*(nvrcam.convert) );
+     //nvrcam.motion->registerProvider(*(nvrcam.cam) );
 
+    nvrcam.convert->start();
     nvrcam.motion->start();
     nvrcam.cam->start();
 
