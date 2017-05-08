@@ -128,6 +128,10 @@ int AVInput::run()
     {
         AVInputFormat *inputFormat = 0;
         const std::string format = mOptions.get( "format", "" );
+        const std::string framerate = mOptions.get( "framerate","" );
+        const std::string videosize = mOptions.get( "videosize","" );
+        Info ("framerate is:%s",framerate.c_str());
+      
         if ( !format.empty() )
         {
             inputFormat = av_find_input_format( format.c_str() );
@@ -137,7 +141,19 @@ int AVInput::run()
 
         bool loop = mOptions.get( "loop", false );
 
-        //AVDictionary *dict = NULL;
+        AVDictionary *dict = NULL;
+
+        if (!framerate.empty())
+        {
+                av_dict_set(&dict, "framerate", framerate.c_str(), 0);
+        }
+
+        if (!videosize.empty())
+        {
+                av_dict_set(&dict, "video_size", videosize.c_str(), 0);
+
+        }
+
         //int dictRet = av_dict_set(&dict,"xxx","yyy",0);
         //int dictRet = av_dict_set(&dict,"standard","ntsc",0);
         //dictRet = av_dict_set(&dict,"video_size","320x240",0);
@@ -146,7 +162,7 @@ int AVInput::run()
         {
             //Info ("AVInput mStop is:%d",mStop);
             AVFormatContext *formatContext = NULL;
-            if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, /*&dict*/NULL ) !=0 )
+            if ( avformat_open_input( &formatContext, mSource.c_str(), inputFormat, &dict ) !=0 )
                 Fatal( "Unable to open input %s due to: %s", mSource.c_str(), strerror(errno) );
 
             // Locate stream info from input
@@ -346,6 +362,7 @@ int AVInput::run()
             }
         }
         Info ("cleanup in AVInput");
+        av_dict_free(&dict);
         cleanup();
         return( !ended() );
     } // try

@@ -6,6 +6,25 @@
 
 bool gZmReload = false;
 
+#if defined(__x86_64__)
+#ifdef __FreeBSD_kernel__
+#define IP (void *)(uc->uc_mcontext.mc_rip)
+#elif __APPLE__
+#define IP (void *)(uc->uc_mcontext->__ss.__rip)
+#else
+#define IP (void *)(uc->uc_mcontext.gregs[REG_RIP])
+#endif
+#else
+ #ifdef __FreeBSD_kernel__
+#define IP (void *)(uc->uc_mcontext.mc_eip);
+#elif __APPLE_
+#define IP (void *)(uc->uc_mcontext->__ss.__rip)
+#else
+#define IP (void *)(uc->uc_mcontext.gregs[REG_EIP])
+ #endif
+#endif				
+
+
 /**
 * @brief 
 *
@@ -57,7 +76,11 @@ RETSIGTYPE oz_term_handler( int signal )
 */
 RETSIGTYPE oz_die_handler( int signal, struct sigcontext context )
 #elif ( HAVE_SIGINFO_T && HAVE_UCONTEXT_T )
+#ifdef __APPLE__
+#include <sys/ucontext.h>
+#else
 #include <ucontext.h>
+#endif
 /**
 * @brief 
 *
@@ -116,11 +139,11 @@ RETSIGTYPE oz_die_handler( int signal )
     {
         ucontext_t *uc = (ucontext_t *)context;
 
-        Error( "Signal address is %p, from %p", info->si_addr, uc->uc_mcontext.gregs[REG_EIP] );
+        Error( "Signal address is %p, from %p", info->si_addr, IP );
 
         trace_size = backtrace( trace, TRACE_SIZE );
         // overwrite sigaction with caller's address
-        trace[1] = (void *) uc->uc_mcontext.gregs[REG_EIP];
+        trace[1] = IP;
     }
 #endif // HAVE_STRUCT_SIGCONTEXT
 #if HAVE_DECL_BACKTRACE

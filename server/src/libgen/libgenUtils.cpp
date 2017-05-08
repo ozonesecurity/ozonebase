@@ -8,8 +8,31 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <stdarg.h>
+#ifdef __APPLE__
+#include <sys/_endian.h>
+#else
 #include <endian.h>
+#endif
+
+// credit: https://gist.github.com/atr000/249599
+//
+#ifdef __APPLE__
+#define __bswap_16(value) \
+((((value) & 0xff) << 8) | ((value) >> 8))
+
+#define __bswap_32(value) \
+(((uint32_t)__bswap_16((uint16_t)((value) & 0xffff)) << 16) | \
+(uint32_t)__bswap_16((uint16_t)((value) >> 16)))
+
+#define __bswap_64(value) \
+(((uint64_t)__bswap_32((uint32_t)((value) & 0xffffffff)) \
+<< 32) | \
+(uint64_t)__bswap_32((uint32_t)((value) >> 32)))
+#else
 #include <byteswap.h>
+#endif
+
+
 
 /**
 * @brief 
@@ -571,6 +594,8 @@ void StringTokenList::splitIntoTokens( const char* str, const char *sep, int fla
 {
     char *pos;
     char *current = (char*)str;
+    //const char *pos;
+    //const char *current = (char*)str;
 
     StrFn strfn = 0;
     int seplen = 0;

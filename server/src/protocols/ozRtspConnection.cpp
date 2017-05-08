@@ -15,6 +15,10 @@
 
 #include <sys/uio.h>
 
+#ifndef HOST_NAME_MAX
+#define HOST_NAME_MAX 64
+#endif
+
 /**
 * @brief 
 *

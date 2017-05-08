@@ -21,7 +21,7 @@ One time setup:
 
 	sudo apt-get update
 	sudo apt-get install git cmake nasm libjpeg-dev libssl-dev 
-	sudo apt-get install libatlas-base-dev
+	sudo apt-get install libatlas-base-dev libfontconfig1-dev lib4l-dev
 
 	# ---------------------clone codebase----------------------------
 
@@ -32,6 +32,8 @@ One time setup:
 	# --------------- build & install --------------------------------
 	export INSTALLDIR=~/ozoneroot/ # change this to whatever you want
         ./ozone-build.sh
+
+.. note:: if you face compilation issues with ffmpeg not finding fontconfig or other package files, you need to search for libv4l2.pc, fontconfig.pc files and copy then to the lib/pkgconfig directory of your INSTALL_DIR path
 
 
 Once the one time setup is done, you don't need to keep doing it (building external dependencies take a long time)

@@ -24,7 +24,7 @@
 
 #define MAX_CAMS 10
 #define RECORD_VIDEO 1 // 1 if video is on
-#define SHOW_FFMPEG_LOG 0
+#define SHOW_FFMPEG_LOG 1
 #define EVENT_REC_PATH "nvrcli_events"
 
 #define person_resize_w 1024
@@ -121,9 +121,9 @@ void cmd_add()
     cin.clear(); cin.sync();
     
     name = "";
-    cout << "RTSP source (ENTER for default):";
+    cout << "RTSP source (ENTER for default, or 'osx' for OSX faceTime camera):";
     getline(cin,source);
-    cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll) (ENTER for default = a):";
+    cout << "Detection type ([m]otion/[f]ace/[p]erson/[a]ll/[n]one) (ENTER for default = a):";
     getline (cin, type);
     cout << "Record events? ([y]es/[n]o) (ENTER for default = n):";
     getline (cin, record);
@@ -149,7 +149,7 @@ void cmd_add()
     }
     cout << "Recording will be " << (record=="n"?"skipped":"stored") << " for:" << name << endl;
     
-    if (type.size() ==0 || (type != "m" && type != "f" && type != "a" && type !="p"))
+    if (type.size() ==0 || (type != "m" && type != "f" && type != "a" && type !="p" && type !="n"))
     {
         type = "a";
     }
@@ -160,6 +160,7 @@ void cmd_add()
     else if (type =="m"){cout << "Motion";}
     else if (type == "p"){cout << "Person";}
     else if (type=="a"){cout << "Face+Motion+Person";}
+    else if (type=="n"){cout << "None";}
     cout << endl; 
     
     nvrCameras nvrcam;
@@ -174,17 +175,31 @@ void cmd_add()
     nvrcam.fileOut = NULL;
     nvrcam.scheduleDelete = false;
 
-    nvrcam.cam = new AVInput ( name, source,avOptions );
+    Options camOptions ;
+
+    if (source == "osx")
+    {
+    	cout << "Setting correct AV sources for facetime";
+    	camOptions.add("format","avfoundation");
+    	camOptions.add("framerate","30");
+    	source="0";
+    }
+    nvrcam.cam = new AVInput ( name, source,camOptions );
     if (type == "f") // only instantiate face recog
     {
-        nvrcam.face = new FaceDetector( "face-"+name,"./shape_predictor_68_face_landmarks.dat");
+    	Options faceOptions;
+    	faceOptions.set( "method", "cnn" );
+    	faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    	faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
+        nvrcam.face = new FaceDetector( "face-"+name,faceOptions);
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam), gQueuedVideoLink );
         nvrcam.face->registerProvider(*(nvrcam.rate),gQueuedVideoLink );
     }
     else if (type=="p") // only instantiate people recog
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
+    	
+        nvrcam.person = new ShapeDetector( "person-"+name, "person.svm" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate, true );
         nvrcam.rate->registerProvider(*(nvrcam.cam), gQueuedVideoLink );
         nvrcam.person->registerProvider(*(nvrcam.rate), gQueuedVideoLink);
@@ -194,10 +209,16 @@ void cmd_add()
         nvrcam.motion = new MotionDetector( "modect-"+name );
         nvrcam.motion->registerProvider(*(nvrcam.cam) );
     }
-    else // face/motion/person - turn them all on
+    else if (type!="n") // face/motion/person - turn them all on
     {
-        nvrcam.person = new ShapeDetector( "person-"+name,"person.svm",ShapeDetector::OZ_SHAPE_MARKUP_OUTLINE  );
-        nvrcam.face = new FaceDetector( "face-"+name, "./shape_predictor_68_face_landmarks.dat" );
+    	Options faceOptions;
+    	faceOptions.set( "method", "cnn" );
+    	faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
+    	faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
+        nvrcam.face = new FaceDetector( "face-"+name,faceOptions);
+
+        nvrcam.person = new ShapeDetector( "person-"+name, "person.svm" );
+
         //nvrcam.fileOut = new LocalFileOutput( "file-"+name, "/tmp" );
         nvrcam.rate = new RateLimiter( "rate-"+name,person_refresh_rate,true );
         nvrcam.rate->registerProvider(*(nvrcam.cam),gQueuedVideoLink );
@@ -255,7 +276,9 @@ void cmd_add()
     cout << "Added:"<<nvrcams.back().cam->name() << endl;
     cout << nvrcams.back().cam->source() << endl;
 
-    nvrcams.back().cam->start();
+    //nvrcams.back().cam->start();
+    nvrcam.cam->start();
+
     if (nvrcams.back().motion != NULL){nvrcams.back().motion->start(); cout << "starting motion"<< endl;}
     if (nvrcams.back().rate != NULL) {nvrcams.back().rate->start(); cout << "starting rate" << endl;}
     if (nvrcams.back().person != NULL) {nvrcams.back().person->start(); cout << "starting person" << endl;}
@@ -408,7 +431,7 @@ void cli(Application app)
 
 int main( int argc, const char *argv[] )
 {
-    dbgInit( "nvrcli", "", 2 );
+    dbgInit( "nvrcli", "", 5 );
     cout << " \n---------------------- NVRCLI ------------------\n"
              " Type help to get started\n"
              " ------------------------------------------------\n\n";

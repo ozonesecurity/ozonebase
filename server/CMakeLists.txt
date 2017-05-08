@@ -7,6 +7,10 @@ cmake_minimum_required (VERSION 2.8)
 project (ozonebase)
 set(ozonebase_VERSION "2.0.0a")
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+            set(MACOSX TRUE)
+endif()
+
 #
 # If we choose to use git submodules, then place a check for the appropraitate submodules here
 #
@@ -36,10 +40,10 @@ endif(NOT CMAKE_BUILD_TYPE)
 #set(CMAKE_INSTALL_ALWAYS ON)
 
 # Default CLFAGS and CXXFLAGS:
-set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3")
-set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3")
-set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
-set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0")
+set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -O3 -fpermissive")
+set(CMAKE_C_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
+set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -Wall -D__STDC_CONSTANT_MACROS -g -O0 -fpermissive")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
@@ -57,6 +61,7 @@ include(CheckIncludeFileCXX)
 include(TestSignalType)
 include(CheckPrototypeExists)
 include(TestSTDC)
+include(FindV4L2)
 
 # Configuration options
 #
@@ -380,12 +385,25 @@ endif(DL_LIBRARIES)
 
 
 # check include files
-foreach( INCVAR alloca fcntl inttypes limits memory netdb
-         string strings execinfo stdbool stddef stdint syslog
-         unistd values "sys/types" "sys/time" "sys/stat" "sys/socket"
-         "sys/select" "sys/param" "sys/mman" "linux/videodev2" "sys/ioctl"
-         "netinet/in"
-       )
+#set (INCVARLIST "alloca;fcntl;inttypes;limits;memory;netdb;string;strings;execinfo;stdbool;stddef;stdint;syslog;unistd;values;\"sys/types\";\"sys/time\";\"sys/stat\";\"sys/socket\";\"sys/select\";\"sys/param\";\"sys/mman\";\"linux/videodev2\";\"sys/ioctl\";\"netinet/in\"" )
+list (APPEND INCVARLIST "alloca" "fcntl" "inttypes" "limits" "memory" "netdb" "string" "strings" "execinfo" "stdbool" "stddef" "stdint" "syslog" "unistd" "sys/types" "sys/time" "sys/stat" "sys/socket" "sys/select" "sys/param" "sys/mman"  "sys/ioctl" "netinet/in")
+
+if (MACOSX)
+        list (APPEND INCVARLIST "float")
+else (MACOSX)
+        list (APPEND INCVARLIST "values")
+endif (MACOSX)
+
+if(V4L2_FOUND)
+	set(HAVE_LINUX_VIDEODEV2_H 1)
+	set(OZ_V4L 1)
+endif(V4L2_FOUND)
+
+if (OZ_V4L)
+        list (APPEND INCVARLIST "linux/videodev2")
+endif (OZ_V4L)
+       
+foreach( INCVAR  ${INCVARLIST})
     string( TOUPPER ${INCVAR} INCVAR_U )
     string( REPLACE "/" "_" INCVAR_U ${INCVAR_U} )
     check_include_file("${INCVAR}.h" HAVE_${INCVAR_U}_H)
@@ -395,11 +413,6 @@ foreach( INCVAR alloca fcntl inttypes limits memory netdb
             "${INCVAR} header file not found and this project requires it.")
     endif (NOT HAVE_${INCVAR_U}_H)
 endforeach(INCVAR)
-
-if (HAVE_LINUX_VIDEODEV2_H)
-    set(OZ_V4L 1)
-endif (HAVE_LINUX_VIDEODEV2_H)
-
 if(HAVE_SYS_MMAN_H)
     set(OZ_MEM_MAPPED 1)
 endif(HAVE_SYS_MMAN_H)

@@ -5,6 +5,10 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef __APPLE__
+extern char **environ;
+#endif
+
 const Options gNullOptions;
 
 unsigned int Options::load( const std::string &prefix, bool replace )

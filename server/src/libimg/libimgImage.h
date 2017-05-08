@@ -618,7 +618,9 @@ public:
     }
 
 public:
+#ifdef HAVE_LINUX_VIDEODEV2_H
     static Format getFormatFromPalette( int palette );
+#endif
     static AVPixelFormat getFfPixFormat( Format format );
     static Format getFormatFromPixelFormat( AVPixelFormat pixelFormat );
     static AVPixelFormat getNativePixelFormat( AVPixelFormat pixelFormat )
@@ -655,14 +657,18 @@ public:
     Image();
     Image( const char *filename );
     Image( Format format, int width, int height, unsigned char *data=NULL, bool adoptData=false );
+#ifdef HAVE_LINUX_VIDEODEV2_H
     Image( int v4lPalette, int width, int height, unsigned char *data=NULL );
+#endif
     Image( AVPixelFormat ffFormat, int width, int height, unsigned char *data=NULL );
     Image( const Image &image );
     Image( Format format, const Image &image );
     ~Image();
 
 public:
+#ifdef HAVE_LINUX_VIDEODEV2_H
     static size_t calcBufferSize( int v4lPalette, int width, int height );
+#endif
     static size_t calcBufferSize( AVPixelFormat pixFormat, int width, int height );
 
 public:

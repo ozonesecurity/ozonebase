@@ -1,0 +1,10 @@
+brew install nasm (later version needed for macho64)
+remove lib4vl2 in osx for ffmpeg (will add later)
+
+oz build
+========
+export OPENSSL_ROOT_DIR=/usr/local/opt/openssl/
+cmake -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++  -DCMAKE_INCLUDE_PATH=$INSTALLDIR/include -DCMAKE_PREFIX_PATH=$INSTALLDIR -DOZ_EXAMPLES=ON -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DCMAKE_INSTALL_RPATH=$INSTALLDIR/lib -DCMAKE_BUILD_TYPE=${OZBUILDMODE}
+
+
+
