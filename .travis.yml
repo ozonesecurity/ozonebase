@@ -62,7 +62,7 @@ install: true
 script:
       - export CXX="g++-5" CC="gcc-5"
       - mkdir -p ~/ozoneroot
-      - export $INSTALL_DIR=~/ozoneroot
+      - export INSTALL_DIR=~/ozoneroot
       - cd $TRAVIS_BUILD_DIR/
       - ./ozone-build.sh
       #- cd $TRAVIS_BUILD_DIR/server
