@@ -43,6 +43,7 @@ addons:
       - g++-5
       - gcc-5
       - nasm
+      - lib4vl-dev
 
 cache:
     directories:
