@@ -4,7 +4,7 @@
 
 language: cpp
 sudo: required
-dist: trusty
+#dist: trusty
 compiler: gcc
 
 notifications:
@@ -43,7 +43,9 @@ addons:
       - g++-5
       - gcc-5
       - nasm
-      - lib4vl-dev
+      
+before_install:
+      - sudo apt-get install libv4l-dev v4l-utils
 
 cache:
     directories:
