@@ -45,12 +45,16 @@ addons:
       - nasm
       
 before_install:
-      - sudo apt-get install libv4l-dev v4l-utils
+      # this is not present in travis' apt cache
+      - sudo apt-get -qq update
+      - sudo apt-get install -y libv4l-dev v4l-utils
 
 cache:
     directories:
       - externals/ffmpeg
       - externals/dlib
+      - externals/openh264
+      - externals/json
 
 
 script:
