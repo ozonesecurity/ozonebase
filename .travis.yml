@@ -1,4 +1,4 @@
-##
+###
 # travis configuration for oZone
 ###
 
@@ -42,31 +42,26 @@ addons:
       - libatlas-base-dev
       - g++-5
       - gcc-5
+      - nasm
+      
+before_install:
+      # this is not present in travis' apt cache
+      - sudo apt-get -qq update
+      - sudo apt-get install -y libv4l-dev v4l-utils
 
 cache:
     directories:
       - externals/ffmpeg
+      - externals/dlib
+      - externals/openh264
+      - externals/json
 
-install: true
-      #- cd externals/ffmpeg
-      #- ./configure --enable-shared
-      #- make -j `grep processor /proc/cpuinfo|wc -l` 
-      #- sudo make install 
-      #- sudo make install-libs
-      #- cd ../dlib
-      #- mkdir -p build
-      #- cd build
-      #- cmake ..
-      #- sudo make install 
 
 script:
       - export CXX="g++-5" CC="gcc-5"
       - mkdir -p ~/ozoneroot
-      - export INSTALL_DIR=~/ozoneroot
+      - export INSTALLDIR=~/ozoneroot
       - cd $TRAVIS_BUILD_DIR/
       - ./ozone-build.sh
-      #- cd $TRAVIS_BUILD_DIR/server
-      #- cmake -DOZ_EXAMPLES=ON .
-      #- make
-      #- sudo make install
+
 
