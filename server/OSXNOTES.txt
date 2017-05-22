@@ -12,25 +12,40 @@ Brew packages
 ==============
 Here is a list of packages I have installed in brew. You may not need all of them. I'll eventually get to doing a clean list - this is just the output of 'brew bundle dump'
 
-tap "caskroom/cask"
-tap "homebrew/bundle"
-tap "homebrew/core"
-brew "openssl"
-brew "coreutils"
-brew "mpfr"
-brew "gcc"
-brew "jpeg"
-brew "gdb"
-brew "gflags"
-brew "glog"
-brew "graphviz"
-brew "ideviceinstaller"
-brew "ilmbase"
-brew "ios-webkit-debug-proxy"
-brew "snappy"
-brew "leveldb"
-brew "lmdb"
-brew "mysql"
-brew "nasm"
-brew "openexr"
-brew "protobuf"
+gdbm			
+nasm			
+gflags			
+libmpc						
+libpng			
+gperftools		
+libtasn1		
+openexr			
+cmake			
+graphviz		
+libtiff			
+openssl			
+coreutils					
+libtool			
+pcre			
+watchman							
+pkg-config		
+webp
+fontconfig		
+ilmbase			
+libxml2			
+protobuf		
+wget
+freetype		
+libzip						
+xz
+gcc			
+isl			
+lmdb			
+gd			
+jpeg			
+mpfr			
+readline
+gdb			
+leveldb						
+snappy
+
