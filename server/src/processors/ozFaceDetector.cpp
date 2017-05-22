@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+
+
 FaceDetector::DlibHogDetector::DlibHogDetector( FaceDetector *faceDetector, const std::string &dataFile, FaceMarkup markup ) :
     DlibDetector( faceDetector, markup )
 {
@@ -17,7 +19,11 @@ FaceDetector::DlibHogDetector::DlibHogDetector( FaceDetector *faceDetector, cons
     // landmark positions given an image and face bounding box.  Here we are just
     // loading the model from the shape_predictor_68_face_landmarks.dat file you gave
     // as a command line argument.
+    
+    //std::cout << "---------- HOLY MOOLA" << std::endl;
     dlib::deserialize( dataFile.c_str() ) >> mShapePredictor;
+    //dlib::deserialize( "shape_predictor_68_face_landmarks.dat" ) >> mShapePredictor;
+    //dlib::deserialize( dataFile ) >> mShapePredictor;
 }
 
 int FaceDetector::DlibHogDetector::detect( const ByteBuffer &inputBuffer, ByteBuffer &outputBuffer )
@@ -114,7 +120,8 @@ int FaceDetector::DlibHogDetector::detect( const ByteBuffer &inputBuffer, ByteBu
 FaceDetector::DlibCnnDetector::DlibCnnDetector( FaceDetector *faceDetector, const std::string &dataFile, FaceMarkup markup ) :
     DlibDetector( faceDetector, markup )
 {
-    dlib::deserialize( dataFile.c_str() ) >> mDetector;
+     //Debug (1, "SERIALIZING %s",dataFile.c_str());
+     dlib::deserialize( dataFile.c_str() ) >> mDetector;
 }
 
 int FaceDetector::DlibCnnDetector::detect( const ByteBuffer &inputBuffer, ByteBuffer &outputBuffer )

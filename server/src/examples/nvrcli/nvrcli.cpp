@@ -188,7 +188,7 @@ void cmd_add()
     if (type == "f") // only instantiate face recog
     {
     	Options faceOptions;
-    	faceOptions.set( "method", "cnn" );
+    	faceOptions.set( "method", "hog" );
     	faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
     	faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
         nvrcam.face = new FaceDetector( "face-"+name,faceOptions);
@@ -212,7 +212,8 @@ void cmd_add()
     else if (type!="n") // face/motion/person - turn them all on
     {
     	Options faceOptions;
-    	faceOptions.set( "method", "cnn" );
+    	faceOptions.set( "method", "hog" );
+        //faceOptions.set( "method", "cnn" );
     	faceOptions.set( "dataFile", "shape_predictor_68_face_landmarks.dat" );
     	faceOptions.set( "markup", FaceDetector::OZ_FACE_MARKUP_ALL );
         nvrcam.face = new FaceDetector( "face-"+name,faceOptions);
