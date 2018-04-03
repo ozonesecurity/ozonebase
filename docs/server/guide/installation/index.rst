@@ -90,6 +90,6 @@ And then all you need to do is :code:`make html` inside :code:`ozonebase/docs/se
 Using oZone libraries in your own app
 =========================================
 
-Take a look at nvrcli's Makefile `here <https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/nvrcli/Makefile>`_ and modify it for your needs.
+Take a look at nvrcli's sample Makefile `here <https://github.com/ozonesecurity/ozonebase/blob/master/server/src/examples/nvrcli/Makefile.sample>`_ and modify it for your needs.
 
 
