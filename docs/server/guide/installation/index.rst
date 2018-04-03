@@ -21,7 +21,7 @@ One time setup:
 
 	sudo apt-get update
 	sudo apt-get install git cmake nasm libjpeg-dev libssl-dev 
-	sudo apt-get install libatlas-base-dev libfontconfig1-dev lib4l-dev
+	sudo apt-get install libatlas-base-dev libfontconfig1-dev libv4l-dev
 
 	# ---------------------clone codebase----------------------------
 
@@ -57,7 +57,7 @@ That's all!
 
 Dlib optimizations
 ===================
-If your processor supports AVX instructions, :code:`(cat /proc/cpuinfo | grep avx)` then add :code:`-mavx` in :code:`server/CMakeLists.txt` to :code:`CMAKE-C_FLAGS_RELEASE` and :code:`CMAKE_CXX_FLAGS_RELEASE` and rebuild. Note, please check before you add it, otherwise your code may core dump.  
+If your processor supports AVX instructions, :code:`(cat /proc/cpuinfo | grep avx)` then add :code:`-mavx` in :code:`server/CMakeLists.txt` to :code:`CMAKE_C_FLAGS_RELEASE` and :code:`CMAKE_CXX_FLAGS_RELEASE` and rebuild. Note, please check before you add it, otherwise your code may core dump.  
 
 Building Documentation
 =======================
