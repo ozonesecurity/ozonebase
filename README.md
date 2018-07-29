@@ -1,3 +1,8 @@
+
+# Notice
+
+Due to a change in priority in our personal lives, ozone is not actively maintained at the moment. It's pretty stable and well documented but we are not active in support/patches. That being said, if this project is useful for you, feel free to contribute/PR. This status may change if either Phil or I get freed up again.
+
 # Ozone -  an easy to use platform for Video Innovation
 
 [![Build Status](https://travis-ci.org/ozonesecurity/ozonebase.svg?branch=master)](https://travis-ci.org/ozonesecurity/ozonebase)
