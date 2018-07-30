@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <sys/un.h>
 #include <arpa/inet.h>
+#include <sys/uio.h>
 
 #include <set>
 #include <vector>
