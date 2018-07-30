@@ -273,8 +273,8 @@ protected:
     };
 
 public:
-    enum { CHAR_HEIGHT=11, CHAR_WIDTH=6 };
-    enum { LINE_HEIGHT=CHAR_HEIGHT+0 };
+    enum { OZ_CHAR_HEIGHT=11, OZ_CHAR_WIDTH=6 };
+    enum { LINE_HEIGHT=OZ_CHAR_HEIGHT+0 };
 
     typedef enum { FMT_UNDEF, /*FMT_BITMAP,*/ FMT_GREY, FMT_GREY16, /*FMT_HSV,*/ FMT_RGB, FMT_RGB48, FMT_YUV, FMT_YUVJ, FMT_YUVP, FMT_YUVJP } Format;
     typedef enum { CS_UNDEF, /*CS_BITMAP,*/ CS_GREY, CS_YUV, CS_YUVJ, /*CS_HSV,*/ CS_RGB } ColourSpace;
