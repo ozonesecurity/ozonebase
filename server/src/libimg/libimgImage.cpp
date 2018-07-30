@@ -9170,7 +9170,7 @@ const Coord Image::textCentreCoord( const char *text )
         line = text+index;
         lineNo++;
     }
-    int x = (mWidth - (maxLineLen * CHAR_WIDTH) ) / 2;
+    int x = (mWidth - (maxLineLen * OZ_CHAR_WIDTH) ) / 2;
     int y = (mHeight - (lineNo * LINE_HEIGHT) ) / 2;
     return( Coord( x, y ) );
 }
@@ -9205,7 +9205,7 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
 
     while ( (index < textLen) && (lineLen = strcspn( line, "\n" )) )
     {
-        int lineWidth = lineLen * CHAR_WIDTH;
+        int lineWidth = lineLen * OZ_CHAR_WIDTH;
 
         int loLineX = coord.x();
         int loLineY = coord.y() + (lineNo * LINE_HEIGHT);
@@ -9241,13 +9241,13 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
                 unsigned char fgColY = RGB2YUVJ_Y(fgColR,fgColG,fgColB);
                 unsigned char bgColY = RGB2YUVJ_Y(bgColR,bgColG,bgColB);
                 unsigned char *ptr = mBuffer.data()+((loLineY*mStride)+(loLineX*mPixelStep));
-                for ( int y = loLineY, row = 0; y < hiLineY && row < CHAR_HEIGHT; y++, row++, ptr += mStride )
+                for ( int y = loLineY, row = 0; y < hiLineY && row < OZ_CHAR_HEIGHT; y++, row++, ptr += mStride )
                 {
                     unsigned char *tempPtr = ptr;
                     for ( int x = loLineX, c = 0; x < hiLineX && c < lineLen; c++ )
                     {
-                        int f = fontdata[(line[c] * CHAR_HEIGHT) + row];
-                        for ( int i = 0; i < CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
+                        int f = fontdata[(line[c] * OZ_CHAR_HEIGHT) + row];
+                        for ( int i = 0; i < OZ_CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
                         {
                             if ( f & (0x80 >> i) )
                             {
@@ -9266,13 +9266,13 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
             case FMT_RGB :
             {
                 unsigned char *ptr = mBuffer.data()+(((loLineY*mWidth)+loLineX)*mChannels);
-                for ( int y = loLineY, row = 0; y < hiLineY && row < CHAR_HEIGHT; y++, row++, ptr += mStride )
+                for ( int y = loLineY, row = 0; y < hiLineY && row < OZ_CHAR_HEIGHT; y++, row++, ptr += mStride )
                 {
                     unsigned char *tempPtr = ptr;
                     for ( int x = loLineX, c = 0; x < hiLineX && c < lineLen; c++ )
                     {
-                        int f = fontdata[(line[c] * CHAR_HEIGHT) + row];
-                        for ( int i = 0; i < CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
+                        int f = fontdata[(line[c] * OZ_CHAR_HEIGHT) + row];
+                        for ( int i = 0; i < OZ_CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
                         {
                             if ( f & (0x80 >> i) )
                             {
@@ -9297,13 +9297,13 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
             case FMT_RGB48 :
             {
                 unsigned char *ptr = mBuffer.data()+(((loLineY*mWidth)+loLineX)*mChannels);
-                for ( int y = loLineY, row = 0; y < hiLineY && row < CHAR_HEIGHT; y++, row++, ptr += mStride )
+                for ( int y = loLineY, row = 0; y < hiLineY && row < OZ_CHAR_HEIGHT; y++, row++, ptr += mStride )
                 {
                     unsigned char *tempPtr = ptr;
                     for ( int x = loLineX, c = 0; x < hiLineX && c < lineLen; c++ )
                     {
-                        int f = fontdata[(line[c] * CHAR_HEIGHT) + row];
-                        for ( int i = 0; i < CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
+                        int f = fontdata[(line[c] * OZ_CHAR_HEIGHT) + row];
+                        for ( int i = 0; i < OZ_CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
                         {
                             if ( f & (0x80 >> i) )
                             {
@@ -9338,13 +9338,13 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
                 unsigned char bgColU = convFuncs.U(bgColR,bgColG,bgColB);
                 unsigned char bgColV = convFuncs.V(bgColR,bgColG,bgColB);
                 unsigned char *ptr = mBuffer.data()+(((loLineY*mWidth)+loLineX)*mChannels);
-                for ( int y = loLineY, row = 0; y < hiLineY && row < CHAR_HEIGHT; y++, row++, ptr += mStride )
+                for ( int y = loLineY, row = 0; y < hiLineY && row < OZ_CHAR_HEIGHT; y++, row++, ptr += mStride )
                 {
                     unsigned char *tempPtr = ptr;
                     for ( int x = loLineX, c = 0; x < hiLineX && c < lineLen; c++ )
                     {
-                        int f = fontdata[(line[c] * CHAR_HEIGHT) + row];
-                        for ( int i = 0; i < CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
+                        int f = fontdata[(line[c] * OZ_CHAR_HEIGHT) + row];
+                        for ( int i = 0; i < OZ_CHAR_WIDTH && x < hiLineX; i++, x++, tempPtr += mPixelStep )
                         {
                             if ( f & (0x80 >> i) )
                             {
@@ -9377,15 +9377,15 @@ void Image::annotate( const char *text, const Coord &coord, const Rgb fgColour, 
                 unsigned char bgColU = convFuncs.U(bgColR,bgColG,bgColB);
                 unsigned char bgColV = convFuncs.V(bgColR,bgColG,bgColB);
                 unsigned char *pDstY = mBuffer.data()+((loLineY*mWidth)+loLineX);
-                for ( int y = loLineY, row = 0; y < hiLineY && row < CHAR_HEIGHT; y++, row++, pDstY += mStride )
+                for ( int y = loLineY, row = 0; y < hiLineY && row < OZ_CHAR_HEIGHT; y++, row++, pDstY += mStride )
                 {
                     unsigned char *tempDstY = pDstY;
                     unsigned char *tempDstU = tempDstY + mPlaneSize;
                     unsigned char *tempDstV = tempDstU + mPlaneSize;
                     for ( int x = loLineX, c = 0; x < hiLineX && c < lineLen; c++ )
                     {
-                        int f = fontdata[(line[c] * CHAR_HEIGHT) + row];
-                        for ( int i = 0; i < CHAR_WIDTH && x < hiLineX; i++, x++, tempDstY += mPixelStep, tempDstU += mPixelStep, tempDstV += mPixelStep )
+                        int f = fontdata[(line[c] * OZ_CHAR_HEIGHT) + row];
+                        for ( int i = 0; i < OZ_CHAR_WIDTH && x < hiLineX; i++, x++, tempDstY += mPixelStep, tempDstU += mPixelStep, tempDstV += mPixelStep )
                         {
                             if ( f & (0x80 >> i) )
                             {
