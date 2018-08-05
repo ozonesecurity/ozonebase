@@ -898,14 +898,14 @@ Image::Format Image::getFormatFromPalette( int palette )
     Format format = FMT_UNDEF;
     switch( palette )
     {
-        case V4L2_AV_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_BGR24 :
             format = FMT_RGB;
             break;
         case V4L2_PIX_FMT_GREY :
             format = FMT_GREY;
             break;
-        case V4L2_AV_PIX_FMT_YUV422P :
-        case V4L2_AV_PIX_FMT_YUV411P :
+        case V4L2_PIX_FMT_YUV422P :
+        case V4L2_PIX_FMT_YUV411P :
         case V4L2_PIX_FMT_YUV410 :
         case V4L2_PIX_FMT_YUV420 :
             format = FMT_YUVP;
@@ -2208,17 +2208,17 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
     {
         case V4L2_PIX_FMT_YUV420 :
         case V4L2_PIX_FMT_YUV410 :
-        case V4L2_AV_PIX_FMT_YUV422P :
-        case V4L2_AV_PIX_FMT_YUV411P :
+        case V4L2_PIX_FMT_YUV422P :
+        case V4L2_PIX_FMT_YUV411P :
         case V4L2_PIX_FMT_YUYV :
         case V4L2_PIX_FMT_UYVY :
         {
             // Converts to YUV expanded planar format
             return( pixels*3 );
         }
-        case V4L2_AV_PIX_FMT_RGB555 :
-        case V4L2_AV_PIX_FMT_RGB565 :
-        case V4L2_AV_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_RGB555 :
+        case V4L2_PIX_FMT_RGB565 :
+        case V4L2_PIX_FMT_BGR24 :
         case V4L2_PIX_FMT_RGB24 :
         {
             // Converts to RGB format
@@ -2273,7 +2273,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_YUV422P :
+        case V4L2_PIX_FMT_YUV422P :
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2281,7 +2281,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_YUV411P :
+        case V4L2_PIX_FMT_YUV411P :
         {
             format = FMT_YUVP;
             if ( !data ) break;
@@ -2305,7 +2305,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_RGB555 :
+        case V4L2_PIX_FMT_RGB555 :
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2313,7 +2313,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_RGB565 :
+        case V4L2_PIX_FMT_RGB565 :
         {
             format = FMT_RGB;
             if ( !data ) break;
@@ -2321,7 +2321,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_BGR24 :
         {
             format = FMT_RGB;
             if ( !data ) break;

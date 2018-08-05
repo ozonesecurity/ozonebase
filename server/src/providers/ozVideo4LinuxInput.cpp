@@ -23,27 +23,27 @@ AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
     AVPixelFormat pixFormat = AV_PIX_FMT_NONE;
     switch( palette )
     {
-#ifdef V4L2_AV_PIX_FMT_RGB444
-        case V4L2_AV_PIX_FMT_RGB444 :
+#ifdef V4L2_PIX_FMT_RGB444
+        case V4L2_PIX_FMT_RGB444 :
             pixFormat = AV_PIX_FMT_RGB32;
             break;
-#endif // V4L2_AV_PIX_FMT_RGB444
-        case V4L2_AV_PIX_FMT_RGB555 :
+#endif // V4L2_PIX_FMT_RGB444
+        case V4L2_PIX_FMT_RGB555 :
             pixFormat = AV_PIX_FMT_RGB555;
             break;
-        case V4L2_AV_PIX_FMT_RGB565 :
+        case V4L2_PIX_FMT_RGB565 :
             pixFormat = AV_PIX_FMT_RGB565;
             break;
-        case V4L2_AV_PIX_FMT_BGR24 :
+        case V4L2_PIX_FMT_BGR24 :
             pixFormat = AV_PIX_FMT_BGR24;
             break;
         case V4L2_PIX_FMT_RGB24 :
             pixFormat = AV_PIX_FMT_RGB24;
             break;
-        case V4L2_AV_PIX_FMT_BGR32 :
+        case V4L2_PIX_FMT_BGR32 :
             pixFormat = AV_PIX_FMT_BGR32;
             break;
-        case V4L2_AV_PIX_FMT_RGB32 :
+        case V4L2_PIX_FMT_RGB32 :
             pixFormat = AV_PIX_FMT_RGB32;
             break;
         case V4L2_PIX_FMT_GREY :
@@ -55,10 +55,10 @@ AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
         case V4L2_PIX_FMT_UYVY :
             pixFormat = AV_PIX_FMT_UYVY422;
             break;
-        case V4L2_AV_PIX_FMT_YUV422P :
+        case V4L2_PIX_FMT_YUV422P :
             pixFormat = AV_PIX_FMT_YUV422P;
             break;
-        case V4L2_AV_PIX_FMT_YUV411P :
+        case V4L2_PIX_FMT_YUV411P :
             pixFormat = AV_PIX_FMT_YUV411P;
             break;
 #ifdef V4L2_PIX_FMT_YUV444
@@ -86,8 +86,8 @@ AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
         // See if you can match any of the ones in the default clause below!?
         case V4L2_PIX_FMT_VYUY :
         case V4L2_PIX_FMT_RGB332 :
-        case V4L2_AV_PIX_FMT_RGB555X :
-        case V4L2_AV_PIX_FMT_RGB565X :
+        case V4L2_PIX_FMT_RGB555X :
+        case V4L2_PIX_FMT_RGB565X :
         //case V4L2_PIX_FMT_Y16 :
         //case V4L2_PIX_FMT_PAL8 :
         case V4L2_PIX_FMT_YVU410 :
@@ -95,8 +95,8 @@ AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
         //case V4L2_PIX_FMT_YUV555 :
         //case V4L2_PIX_FMT_YUV565 :
         //case V4L2_PIX_FMT_YUV32 :
-        case V4L2_AV_PIX_FMT_NV12 :
-        case V4L2_AV_PIX_FMT_NV21 :
+        case V4L2_PIX_FMT_NV12 :
+        case V4L2_PIX_FMT_NV21 :
         case V4L2_PIX_FMT_YYUV :
         case V4L2_PIX_FMT_HI240 :
         case V4L2_PIX_FMT_HM12 :
