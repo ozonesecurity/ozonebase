@@ -61,8 +61,8 @@ int MemoryInputV1::run()
     //Info( "SHV: %d", sharedData.valid );
     //mImageCount = 40;
     //mAVPixelFormat = sharedData.imageFormat;
-    //mAVPixelFormat = PIX_FMT_UYVY422;
-    //mAVPixelFormat = PIX_FMT_YUYV422;
+    //mAVPixelFormat = AV_PIX_FMT_UYVY422;
+    //mAVPixelFormat = AV_PIX_FMT_YUYV422;
     //mAVPixelFormat = AV_PIX_FMT_RGB24;
     //mFrameRate = 15;
     ////mImageWidth = sharedData.imageWidth;
