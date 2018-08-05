@@ -37,7 +37,7 @@ AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
         case V4L2_PIX_FMT_BGR24 :
             pixFormat = PIX_FMT_BGR24;
             break;
-        case V4L2_AV_PIX_FMT_RGB24 :
+        case V4L2_PIX_FMT_RGB24 :
             pixFormat = AV_PIX_FMT_RGB24;
             break;
         case V4L2_PIX_FMT_BGR32 :

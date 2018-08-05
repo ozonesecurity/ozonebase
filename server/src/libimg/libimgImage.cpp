@@ -2219,7 +2219,7 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
         case V4L2_PIX_FMT_RGB555 :
         case V4L2_PIX_FMT_RGB565 :
         case V4L2_PIX_FMT_BGR24 :
-        case V4L2_AV_PIX_FMT_RGB24 :
+        case V4L2_PIX_FMT_RGB24 :
         {
             // Converts to RGB format
             return( pixels*3 );
@@ -2329,7 +2329,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_AV_PIX_FMT_RGB24 :
+        case V4L2_PIX_FMT_RGB24 :
         {
             // Nothing to do
             format = FMT_RGB;
