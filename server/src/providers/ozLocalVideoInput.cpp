@@ -51,7 +51,7 @@ int LocalVideoInput::run()
     formatParameters.channels = 1;
     formatParameters.channel = 0;
     formatParameters.standard = "PAL";
-    formatParameters.pix_fmt = PIX_FMT_RGB24;
+    formatParameters.pix_fmt = AV_PIX_FMT_RGB24;
     //formatParameters.time_base.num = 1;
     //formatParameters.time_base.den = 10;
     formatParameters.width = 352;
@@ -112,10 +112,10 @@ int LocalVideoInput::run()
     if ( avcodec_open2( mCodecContext, codec, &opts ) < 0 )
         Fatal( "Unable to open codec for video stream from %s", mSource.c_str() );
 
-    //AVFrame *savedFrame = avcodec_alloc_frame();
+    //AVFrame *savedFrame = av_frame_alloc();
 
     // Allocate space for the native video frame
-    AVFrame *frame = avcodec_alloc_frame();
+    AVFrame *frame = av_frame_alloc();
 
     // Determine required buffer size and allocate buffer
     int pictureSize = avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height );

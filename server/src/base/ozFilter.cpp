@@ -12,11 +12,11 @@
 * @param provider
 * @param link
 */
-ImageFilter::ImageFilter( const std::string &filter, uint16_t width, uint16_t height, PixelFormat pixelFormat ) :
+ImageFilter::ImageFilter( const std::string &filter, uint16_t width, uint16_t height, AVPixelFormat pixelFormat ) :
     mFilter( filter ),
     mInputWidth( width ),
     mInputHeight( height ),
-    mInputPixelFormat( pixelFormat ),
+    mInputAVPixelFormat( pixelFormat ),
     mBufferSrcContext( NULL ),
     mBufferSinkContext( NULL ),
     mFilterGraph( NULL )
@@ -39,7 +39,7 @@ ImageFilter::ImageFilter( const std::string &filter, uint16_t width, uint16_t he
     char args[512];
     snprintf( args, sizeof(args),
             "video_size=%dx%d:pix_fmt=%d:time_base=1/25",
-            mInputWidth, mInputHeight, mInputPixelFormat );
+            mInputWidth, mInputHeight, mInputAVPixelFormat );
     if ( avfilter_graph_create_filter( &mBufferSrcContext, mFilterBufferSource, "in", args, NULL, mFilterGraph ) < 0 )
         Fatal( "Can't create filter buffer source '%s'", args );
     mSignature = mFilter+":"+args;
@@ -48,7 +48,7 @@ ImageFilter::ImageFilter( const std::string &filter, uint16_t width, uint16_t he
     if ( avfilter_graph_create_filter( &mBufferSinkContext, mFilterBufferSink, "out", NULL, NULL, mFilterGraph ) < 0 )
         Fatal( "Can't create filter buffer sink '%s'", args );
 
-    enum AVPixelFormat pix_fmts[] = { mInputPixelFormat, AV_PIX_FMT_NONE };
+    enum AVPixelFormat pix_fmts[] = { mInputAVPixelFormat, AV_PIX_FMT_NONE };
     if ( av_opt_set_int_list( mBufferSinkContext, "pix_fmts", pix_fmts, AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN ) < 0 )
         Fatal( "Can't set filter output pixel format" );
 
@@ -93,16 +93,16 @@ ImageFilter::ImageFilter( const std::string &filter, uint16_t width, uint16_t he
 
     mOutputWidth = lastFilterLink->w;
     mOutputHeight = lastFilterLink->h;
-    mOutputPixelFormat = (PixelFormat)lastFilterLink->format;
+    mOutputAVPixelFormat = (AVPixelFormat)lastFilterLink->format;
 
-    Debug( 1, "Filtering from %d x %d @ %d -> %d x %d @ %d", mInputWidth, mInputHeight, mInputPixelFormat, mOutputWidth, mOutputHeight, mOutputPixelFormat );
+    Debug( 1, "Filtering from %d x %d @ %d -> %d x %d @ %d", mInputWidth, mInputHeight, mInputAVPixelFormat, mOutputWidth, mOutputHeight, mOutputAVPixelFormat );
 
     // Make space for anything that is going to be output
-    mOutputBuffer.size( avpicture_get_size( mOutputPixelFormat, mOutputWidth, mOutputHeight ) );
+    mOutputBuffer.size( avpicture_get_size( mOutputAVPixelFormat, mOutputWidth, mOutputHeight ) );
 
     mInputFrame->width = mInputWidth;
     mInputFrame->height = mInputHeight;
-    mInputFrame->format = mInputPixelFormat;
+    mInputFrame->format = mInputAVPixelFormat;
 }
 
 ImageFilter::ImageFilter( const std::string &filter, const Image &image ) : 
@@ -131,13 +131,13 @@ ImageFilter::~ImageFilter()
 */
 Image *ImageFilter::execute( const Image &inputImage )
 {
-    if ( inputImage.width() != mInputWidth || inputImage.height() != mInputHeight || inputImage.pixelFormat() != mInputPixelFormat )
+    if ( inputImage.width() != mInputWidth || inputImage.height() != mInputHeight || inputImage.pixelFormat() != mInputAVPixelFormat )
         Fatal( "Invalid image %d x %d @ %d sent to filter, expecting %d x %d @ %d", 
             inputImage.width(), inputImage.height(), inputImage.pixelFormat(),
-            mInputWidth, mInputHeight, mInputPixelFormat
+            mInputWidth, mInputHeight, mInputAVPixelFormat
         );
 
-    avpicture_fill( (AVPicture *)mInputFrame, inputImage.buffer().data(), mInputPixelFormat, mInputWidth, mInputHeight );
+    avpicture_fill( (AVPicture *)mInputFrame, inputImage.buffer().data(), mInputAVPixelFormat, mInputWidth, mInputHeight );
 
     if ( av_buffersrc_add_frame( mBufferSrcContext, mInputFrame ) < 0 )
     {
@@ -153,10 +153,10 @@ Image *ImageFilter::execute( const Image &inputImage )
             break; // Done?
         if ( result < 0 )
             Fatal( "Error while extracting from filtergraph" );
-        avpicture_layout( (const AVPicture *)mFilterFrame, mOutputPixelFormat, mOutputWidth, mOutputHeight, mOutputBuffer.data(), mOutputBuffer.size() );
+        avpicture_layout( (const AVPicture *)mFilterFrame, mOutputAVPixelFormat, mOutputWidth, mOutputHeight, mOutputBuffer.data(), mOutputBuffer.size() );
         if ( outputImage )
             delete outputImage;
-        outputImage = new Image( mOutputPixelFormat, mOutputWidth, mOutputHeight, mOutputBuffer );
+        outputImage = new Image( mOutputAVPixelFormat, mOutputWidth, mOutputHeight, mOutputBuffer );
         av_frame_unref( mFilterFrame );
     }
     return( outputImage );

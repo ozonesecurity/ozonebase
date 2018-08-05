@@ -43,7 +43,7 @@ int main( int argc, const char *argv[] )
     char idString[32] = "";
     sprintf( idString, "origmonitor%d", monitor );
 	// you need to put in exact size here, also use 24bpp for now in ZM
-    MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 50,PIX_FMT_RGB24,  IMG_W, IMG_H );
+    MemoryInputV1 *input = new MemoryInputV1( idString, "/dev/shm", monitor, 50,AV_PIX_FMT_RGB24,  IMG_W, IMG_H );
     app.addThread( input );
     sprintf( idString, "limit%d", monitor );
     RateLimiter *limiter = new RateLimiter( idString , 10 );
@@ -87,7 +87,7 @@ int main( int argc, const char *argv[] )
 	Options options;
     options.add( "width", IMG_W );
     options.add( "height", IMG_H );
-    options.add( "pixelFormat", (PixelFormat)AV_PIX_FMT_RGB24 );
+    options.add( "pixelFormat", (AVPixelFormat)AV_PIX_FMT_RGB24 );
     DummyInput dummyInput( "dummy", options );
     app.addThread( &dummyInput );
 

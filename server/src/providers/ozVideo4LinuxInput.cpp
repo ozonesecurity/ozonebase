@@ -18,9 +18,9 @@
 *
 * @return 
 */
-PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
+AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
 {
-    PixelFormat pixFormat = PIX_FMT_NONE;
+    AVPixelFormat pixFormat = AV_PIX_FMT_NONE;
     switch( palette )
     {
 #ifdef V4L2_PIX_FMT_RGB444
@@ -37,8 +37,8 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
         case V4L2_PIX_FMT_BGR24 :
             pixFormat = PIX_FMT_BGR24;
             break;
-        case V4L2_PIX_FMT_RGB24 :
-            pixFormat = PIX_FMT_RGB24;
+        case V4L2_AV_PIX_FMT_RGB24 :
+            pixFormat = AV_PIX_FMT_RGB24;
             break;
         case V4L2_PIX_FMT_BGR32 :
             pixFormat = PIX_FMT_BGR32;
@@ -74,7 +74,7 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
             //break;
         case V4L2_PIX_FMT_YUV420 :
         case V4L2_PIX_FMT_YVU420 :
-            pixFormat = PIX_FMT_YUV420P;
+            pixFormat = AV_PIX_FMT_YUV420P;
             break;
         //case V4L2_PIX_FMT_YVU420 :
             //pixFormat = PIX_FMT_YVU420P;
@@ -123,7 +123,7 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
             Fatal( "Can't find pixel format for palette %d", palette );
             break;
             // These are all spare and may match some of the above
-            pixFormat = PIX_FMT_YUVJ420P;
+            pixFormat = AV_PIX_FMT_YUVJ420P;
             pixFormat = PIX_FMT_YUVJ422P;
             pixFormat = PIX_FMT_XVMC_MPEG2_MC;
             pixFormat = PIX_FMT_XVMC_MPEG2_IDCT;
@@ -173,7 +173,7 @@ Video4LinuxInput::Video4LinuxInput( const std::string &name, const std::string &
     mPalette( palette ),
     mWidth( width ),
     mHeight( height ),
-    mPixelFormat( getPixelFormatFromV4lPalette( mPalette ) ),
+    mAVPixelFormat( getAVPixelFormatFromV4lPalette( mPalette ) ),
     mChannelMask( channelMask )
 {
     uint32_t channelFlag = 1;

@@ -17,7 +17,7 @@ class ImageConvert : public VideoConsumer, public VideoProvider, public Thread
 CLASSID(ImageConvert);
 
 private:
-    PixelFormat     mPixelFormat;
+    AVPixelFormat     mAVPixelFormat;
     int             mWidth;
     int             mHeight;
     FrameRate       mFrameRate;
@@ -25,11 +25,11 @@ private:
     struct SwsContext *mConvertContext;
 
 public:
-    ImageConvert( const std::string &name, PixelFormat pixelFormat, int width, int height );
-    ImageConvert( PixelFormat pixelFormat, int width, int height, VideoProvider &provider, const FeedLink &link=gQueuedFeedLink );
+    ImageConvert( const std::string &name, AVPixelFormat pixelFormat, int width, int height );
+    ImageConvert( AVPixelFormat pixelFormat, int width, int height, VideoProvider &provider, const FeedLink &link=gQueuedFeedLink );
     ~ImageConvert();
 
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mAVPixelFormat ); }
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }

@@ -972,7 +972,7 @@ AVPixelFormat Image::getFfPixFormat( Format format )
 *
 * @return 
 */
-Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
+Image::Format Image::getFormatFromAVPixelFormat( AVPixelFormat pixelFormat )
 {
     Format format = FMT_UNDEF;
 
@@ -1023,7 +1023,7 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
         }
         default :
         {
-            Panic( "Can't convert PixelFormat %d to image format", pixelFormat );
+            Panic( "Can't convert AVPixelFormat %d to image format", pixelFormat );
             break;
         }
     }
@@ -2219,7 +2219,7 @@ size_t Image::calcBufferSize( int v4lPalette, int width, int height )
         case V4L2_PIX_FMT_RGB555 :
         case V4L2_PIX_FMT_RGB565 :
         case V4L2_PIX_FMT_BGR24 :
-        case V4L2_PIX_FMT_RGB24 :
+        case V4L2_AV_PIX_FMT_RGB24 :
         {
             // Converts to RGB format
             return( pixels*3 );
@@ -2329,7 +2329,7 @@ Image::Image( int v4lPalette, int width, int height, unsigned char *data )
             imageData = tempData;
             break;
         }
-        case V4L2_PIX_FMT_RGB24 :
+        case V4L2_AV_PIX_FMT_RGB24 :
         {
             // Nothing to do
             format = FMT_RGB;

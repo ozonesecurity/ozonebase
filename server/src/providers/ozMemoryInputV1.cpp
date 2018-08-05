@@ -19,7 +19,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
                               const std::string &location,
                               int memoryKey,
                               int imageCount,
-                              PixelFormat pixelFormat,
+                              AVPixelFormat pixelFormat,
                               uint16_t imageWidth,
                               uint16_t imageHeight
 ) :
@@ -27,7 +27,7 @@ MemoryInputV1::MemoryInputV1( const std::string &id,
     MemoryIOV1( location, memoryKey, false ),
     Thread( identity() ),
     mImageCount( imageCount ),
-    mPixelFormat( pixelFormat ),
+    mAVPixelFormat( pixelFormat ),
     mImageWidth( imageWidth ),
     mImageHeight( imageHeight )
 {
@@ -60,17 +60,17 @@ int MemoryInputV1::run()
     }
     //Info( "SHV: %d", sharedData.valid );
     //mImageCount = 40;
-    //mPixelFormat = sharedData.imageFormat;
-    //mPixelFormat = PIX_FMT_UYVY422;
-    //mPixelFormat = PIX_FMT_YUYV422;
-    //mPixelFormat = PIX_FMT_RGB24;
+    //mAVPixelFormat = sharedData.imageFormat;
+    //mAVPixelFormat = PIX_FMT_UYVY422;
+    //mAVPixelFormat = PIX_FMT_YUYV422;
+    //mAVPixelFormat = AV_PIX_FMT_RGB24;
     //mFrameRate = 15;
     ////mImageWidth = sharedData.imageWidth;
     //mImageWidth = 720;
     ////mImageHeight = sharedData.imageHeight;
     //mImageHeight = 576;
 
-    attachMemory( mImageCount, mPixelFormat, mImageWidth, mImageHeight );
+    attachMemory( mImageCount, mAVPixelFormat, mImageWidth, mImageHeight );
 
     int index = mSharedData->last_write_index;
     int lastIndex = (index+1)%mImageCount;

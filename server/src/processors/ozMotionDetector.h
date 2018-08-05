@@ -87,7 +87,7 @@ public:
     bool addZone( Zone *zone );
     uint16_t width() const { return( videoProvider()->width() ); }
     uint16_t height() const { return( videoProvider()->height() ); }
-    AVPixelFormat pixelFormat() const { return( Image::getNativePixelFormat( videoProvider()->pixelFormat() ) ); }
+    AVPixelFormat pixelFormat() const { return( Image::getNativeAVPixelFormat( videoProvider()->pixelFormat() ) ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
 
     VideoProvider *compImageSlave() const { return( mCompImageSlave ); }

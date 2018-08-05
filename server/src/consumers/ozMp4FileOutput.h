@@ -53,7 +53,7 @@ public:
 
 //class AudioVideoParms : public AudioParms, public VideoParms
 //{
-    //AudioVideoParms( PixelFormat pixelFormat, uint16_t width=320, uint16_t height=240, const FrameRate &frameRate=FrameRate(1,25), uint32_t bitRate=90000, uint8_t quality=70 ) :
+    //AudioVideoParms( AVPixelFormat pixelFormat, uint16_t width=320, uint16_t height=240, const FrameRate &frameRate=FrameRate(1,25), uint32_t bitRate=90000, uint8_t quality=70 ) :
 //}
 
 ///

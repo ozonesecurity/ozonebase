@@ -60,7 +60,7 @@ nvrcam.cam = new AVInput ( name, source,avOptions );
 
     const std::string& source() const { return( mSource ); } 
 
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
         return( mVideoCodecContext->pix_fmt );
     }

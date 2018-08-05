@@ -49,7 +49,7 @@ int MemoryOutput::run()
 {
     if ( waitForProviders() )
     {
-        PixelFormat pixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
         uint16_t width = videoProvider()->width();
         uint16_t height = videoProvider()->height();
 

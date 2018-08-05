@@ -46,13 +46,13 @@ int FilterSwapUV::run()
     {
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
         ByteBuffer tempBuffer;
         int yChannelSize = inputWidth*inputHeight;
         int uvChannelSize = yChannelSize/4;
 
-        if ( inputPixelFormat != PIX_FMT_YUV420P )
-            Fatal( "Can't swap UV for pixel format %d", inputPixelFormat );
+        if ( inputAVPixelFormat != AV_PIX_FMT_YUV420P )
+            Fatal( "Can't swap UV for pixel format %d", inputAVPixelFormat );
 
         while ( !mStop )
         {
@@ -68,7 +68,7 @@ int FilterSwapUV::run()
 
                     Debug(1, "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
-                    //Image image( inputPixelFormat, inputWidth, inputHeight, frame->buffer().data() );
+                    //Image image( inputAVPixelFormat, inputWidth, inputHeight, frame->buffer().data() );
 
                     tempBuffer.size( frame->buffer().size() );
                     memcpy( tempBuffer.data(), frame->buffer().data(), yChannelSize );

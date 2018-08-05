@@ -76,7 +76,7 @@ int main( int argc, const char *argv[] )
     //app.addThread( &peopleFilter );
 
     // Let's make a mux/stitched handler for traffic and people and its debugs
-    MatrixVideo trafficMatrix( "traffic-matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    MatrixVideo trafficMatrix( "traffic-matrix", AV_PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
     trafficMatrix.registerProvider( *trafficDetector.compImageSlave() );
     trafficMatrix.registerProvider( *trafficDetector.refImageSlave() );
     trafficMatrix.registerProvider( *trafficDetector.varImageSlave() );

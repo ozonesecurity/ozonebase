@@ -50,7 +50,7 @@ int ImageTimestamper::run()
     {
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
 
         while ( !mStop )
         {
@@ -66,7 +66,7 @@ int ImageTimestamper::run()
 
                     Debug(1, "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
-                    Image image( inputPixelFormat, inputWidth, inputHeight, frame->buffer().data() );
+                    Image image( inputAVPixelFormat, inputWidth, inputHeight, frame->buffer().data() );
 
                     if ( timestampImage( &image, frame->timestamp() ) )
                     {

@@ -172,7 +172,7 @@ void VideoRecorder::initEncoder()
     /* add the audio and video streams using the default format codecs and initialize the codecs */
     mVideoStream = NULL;
     AVCodecContext *videoCodecContext = NULL;
-    if ( provider()->hasVideo() && (outputFormat->video_codec != CODEC_ID_NONE) )
+    if ( provider()->hasVideo() && (outputFormat->video_codec != AV_CODEC_ID_NONE) )
     {
         //mVideoStream = av_new_stream( mOutputContext, 0 );
         mVideoStream = avformat_new_stream( mOutputContext, NULL );
@@ -212,20 +212,20 @@ void VideoRecorder::initEncoder()
 
     uint16_t inputWidth = videoProvider()->width();
     uint16_t inputHeight = videoProvider()->height();
-    PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+    AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
 
     mConvertContext = NULL;
     if ( inputWidth != mVideoParms.width() || inputHeight != mVideoParms.height() )
     {
         // Prepare for image format and size conversions
-        mConvertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mVideoParms.width(), mVideoParms.height(), mVideoParms.pixelFormat(), SWS_BICUBIC, NULL, NULL, NULL );
+        mConvertContext = sws_getContext( inputWidth, inputHeight, inputAVPixelFormat, mVideoParms.width(), mVideoParms.height(), mVideoParms.pixelFormat(), SWS_BICUBIC, NULL, NULL, NULL );
         if ( !mConvertContext )
             Fatal( "Unable to create conversion context for encoder" );
     }
 
     mAudioStream = NULL;
     AVCodecContext *audioCodecContext = NULL;
-    if ( provider()->hasAudio() && (outputFormat->audio_codec != CODEC_ID_NONE) )
+    if ( provider()->hasAudio() && (outputFormat->audio_codec != AV_CODEC_ID_NONE) )
     {
         //mAudioStream = av_new_stream( mOutputContext, 1 );
         mAudioStream = avformat_new_stream( mOutputContext, NULL );
@@ -268,7 +268,7 @@ void VideoRecorder::initEncoder()
             Fatal( "Could not open video codec" );
         avDumpDict( mEncodeOpts );
 
-        mAvInputFrame = avcodec_alloc_frame();
+        mAvInputFrame = av_frame_alloc();
 
         if ( !(mOutputContext->oformat->flags & AVFMT_RAWPICTURE) )
         {
@@ -277,7 +277,7 @@ void VideoRecorder::initEncoder()
         if ( mConvertContext )
         {
             // Make space for anything that is going to be output
-            mAvInterFrame = avcodec_alloc_frame();
+            mAvInterFrame = av_frame_alloc();
             mInterBuffer.size( avpicture_get_size( mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() ) );
             avpicture_fill( (AVPicture *)mAvInterFrame, mInterBuffer.data(), mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() );
         }
@@ -382,18 +382,19 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
     if ( frame->mediaType() == FeedFrame::FRAME_TYPE_AUDIO )
     {
         AVCodecContext *audioCodecContext = mAudioStream->codec;
-        const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame);
+        const AVFrame *audioFrame = dynamic_cast<const AVFrame *>(frame);
 
         AVPacket pkt;
         av_init_packet( &pkt );
+        pkt.data = mAudioBuffer.data();
+        int frame_empty = 0;
 
-        pkt.size = avcodec_encode_audio( audioCodecContext, mAudioBuffer.data(), mAudioBuffer.size(), (const int16_t *)audioFrame->buffer().data() );
+        pkt.size = avcodec_encode_audio2( audioCodecContext, &pkt, audioFrame, &frame_empty );
 
         if ( audioCodecContext->coded_frame->pts != AV_NOPTS_VALUE )
             pkt.pts = av_rescale_q( audioCodecContext->coded_frame->pts, audioCodecContext->time_base, mAudioStream->time_base );
         pkt.flags |= AV_PKT_FLAG_KEY;
         pkt.stream_index = mAudioStream->index;
-        pkt.data = mAudioBuffer.data();
 
         /* write the compressed frame in the media file */
         if ( av_interleaved_write_frame( mOutputContext, &pkt ) != 0)
@@ -412,8 +413,8 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
 
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
-        avpicture_fill( (AVPicture *)mAvInputFrame, videoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
+        avpicture_fill( (AVPicture *)mAvInputFrame, videoFrame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
         // XXX - Hack???
         mAvInputFrame->pts = (mVideoFrameCount * inputFrameRate.den * videoCodecContext->time_base.den) / (inputFrameRate.num * videoCodecContext->time_base.num);
 
@@ -431,7 +432,7 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
             if ( mConvertContext )
             {
                 if ( sws_scale( mConvertContext, mAvInputFrame->data, mAvInputFrame->linesize, 0, inputHeight, mAvInterFrame->data, mAvInterFrame->linesize ) < 0 )
-                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, mVideoFrameCount );
+                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputAVPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, mVideoFrameCount );
                 avOutputFrame = mAvInterFrame;
                 mAvInterFrame->pts = mAvInputFrame->pts;
             }
@@ -457,8 +458,14 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
             int outSize = 0;
             do
             {
+            	/* moved to support change to avcodec_encode_video2 */
+                AVPacket pkt;
+                av_init_packet(&pkt);
+                pkt.data = mVideoBuffer.data();
+                int frame_empty = 0;
+                
                 /* encode the image */
-                outSize = avcodec_encode_video( videoCodecContext, mVideoBuffer.data(), mVideoBuffer.capacity(), avOutputFrame );
+                outSize = avcodec_encode_video2( videoCodecContext, &pkt, avOutputFrame, &frame_empty );
                 Debug( 5, "Outsize: %d", outSize );
                 if ( outSize < 0 )
                 {
@@ -466,15 +473,13 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
                 }
                 else if ( outSize > 0 )
                 {
-                    AVPacket pkt;
-                    av_init_packet(&pkt);
+
 
                     if ( videoCodecContext->coded_frame->pts != AV_NOPTS_VALUE )
                         pkt.pts = av_rescale_q( videoCodecContext->coded_frame->pts, videoCodecContext->time_base, mVideoStream->time_base );
                     if ( videoCodecContext->coded_frame->key_frame )
                         pkt.flags |= AV_PKT_FLAG_KEY;
                     pkt.stream_index = mVideoStream->index;
-                    pkt.data = mVideoBuffer.data();
                     pkt.size = outSize;
 
                     /* write the compressed frame in the media file */

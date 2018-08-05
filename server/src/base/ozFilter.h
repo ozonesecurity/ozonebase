@@ -20,11 +20,11 @@ private:
 
     uint16_t        mInputWidth;
     uint16_t        mInputHeight;
-    PixelFormat     mInputPixelFormat;
+    AVPixelFormat     mInputAVPixelFormat;
 
     uint16_t        mOutputWidth;
     uint16_t        mOutputHeight;
-    PixelFormat     mOutputPixelFormat;
+    AVPixelFormat     mOutputAVPixelFormat;
 
     std::string     mSignature;
 
@@ -45,7 +45,7 @@ private:
     ByteBuffer      mOutputBuffer;
 
 public:
-    ImageFilter( const std::string &filter, uint16_t inputWidth, uint16_t inputHeight, PixelFormat inputPixelFormat );
+    ImageFilter( const std::string &filter, uint16_t inputWidth, uint16_t inputHeight, AVPixelFormat inputAVPixelFormat );
     ImageFilter( const std::string &filter, const Image &inputImage );
     ~ImageFilter();
 

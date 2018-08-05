@@ -66,7 +66,7 @@ int ImageScale::run()
     {
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat pixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat pixelFormat = videoProvider()->pixelFormat();
 
         mWidth = inputWidth * mScale;
         mHeight = inputHeight * mScale;

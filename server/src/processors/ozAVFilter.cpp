@@ -103,7 +103,7 @@ int VideoFilter::run()
     {
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
         AVRational timeBase = videoProvider()->frameRate().timeBase();
 
         char args[512];
@@ -111,7 +111,7 @@ int VideoFilter::run()
         AVFilter *filterBufferSink = avfilter_get_by_name( "buffersink" );
         AVFilterInOut *outputs = avfilter_inout_alloc();
         AVFilterInOut *inputs  = avfilter_inout_alloc();
-        enum AVPixelFormat pix_fmts[] = { inputPixelFormat, AV_PIX_FMT_NONE };
+        enum AVPixelFormat pix_fmts[] = { inputAVPixelFormat, AV_PIX_FMT_NONE };
         mFilterGraph = avfilter_graph_alloc();
         if ( !outputs || !inputs || !mFilterGraph )
             Fatal( "Can't allocate filter memory" );
@@ -119,12 +119,12 @@ int VideoFilter::run()
         /* buffer video source: the decoded frames from the decoder will be inserted here. */
         //snprintf( args, sizeof(args),
                 //"video_size=%dx%d:pix_fmt=%d:time_base=%d/%d:inputPixel_aspect=%d/%d",
-                //inputWidth, inputHeight, inputPixelFormat,
+                //inputWidth, inputHeight, inputAVPixelFormat,
                 //timeBase.num, timeBase.den,
                 //dec_ctx->sample_aspect_ratio.num, dec_ctx->sample_aspect_ratio.den );
         snprintf( args, sizeof(args),
                 "video_size=%dx%d:pix_fmt=%d:time_base=%d/%d",
-                inputWidth, inputHeight, inputPixelFormat,
+                inputWidth, inputHeight, inputAVPixelFormat,
                 timeBase.num, timeBase.den );
         if ( avfilter_graph_create_filter( &mBufferSrcContext, filterBufferSource, "in", args, NULL, mFilterGraph ) < 0 )
             Fatal( "Can't create filter buffer source '%s'", args );
@@ -172,13 +172,13 @@ int VideoFilter::run()
 
         int outputWidth = width();
         int outputHeight = height();
-        PixelFormat outputPixelFormat = pixelFormat();
+        AVPixelFormat outputAVPixelFormat = pixelFormat();
         ByteBuffer outputBuffer;
 
-        Debug(1, "Filtering from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, outputWidth, outputHeight, outputPixelFormat );
+        Debug(1, "Filtering from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputAVPixelFormat, outputWidth, outputHeight, outputAVPixelFormat );
 
         // Make space for anything that is going to be output
-        outputBuffer.size( avpicture_get_size( outputPixelFormat, outputWidth, outputHeight ) );
+        outputBuffer.size( avpicture_get_size( outputAVPixelFormat, outputWidth, outputHeight ) );
 
         while ( !mStop )
         {
@@ -195,9 +195,9 @@ int VideoFilter::run()
 
                     inputFrame->width = inputWidth;
                     inputFrame->height = inputHeight;
-                    inputFrame->format = inputPixelFormat;
+                    inputFrame->format = inputAVPixelFormat;
                     inputFrame->pts = frame->timestamp();
-                    avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+                    avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
 
                     if ( av_buffersrc_add_frame( mBufferSrcContext, inputFrame ) < 0 )
                     {
@@ -217,7 +217,7 @@ int VideoFilter::run()
                             mStop = true;
                             break;
                         }
-                        avpicture_layout( (const AVPicture *)filterFrame, outputPixelFormat, outputWidth, outputHeight, outputBuffer.data(), outputBuffer.size() );
+                        avpicture_layout( (const AVPicture *)filterFrame, outputAVPixelFormat, outputWidth, outputHeight, outputBuffer.data(), outputBuffer.size() );
                         VideoFrame *videoFrame = new VideoFrame( this, *iter, mFrameCount, frame->timestamp(), outputBuffer );
                         distributeFrame( FramePtr( videoFrame ) );
                         av_frame_unref( filterFrame );

@@ -27,13 +27,13 @@ int main( int argc, const char *argv[] )
     HttpController httpController( "p9280", 9280 );
     listener.addController( &httpController );
 
-    MemoryInputV1 memoryInput( "memory", "/dev/shmX", 1, 50, PIX_FMT_RGB24, 704, 576 );
+    MemoryInputV1 memoryInput( "memory", "/dev/shmX", 1, 50, AV_PIX_FMT_RGB24, 704, 576 );
     app.addThread( &memoryInput );
 
     Options options;
     options.add( "width", 704 );
     options.add( "height", 576 );
-    options.add( "pixelFormat", (PixelFormat)AV_PIX_FMT_RGB24 );
+    options.add( "pixelFormat", (AVPixelFormat)AV_PIX_FMT_RGB24 );
     DummyInput dummyInput( "dummy", options );
     app.addThread( &dummyInput );
 

@@ -14,7 +14,7 @@
 VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, FRAME_TYPE_VIDEO, id, timestamp, buffer ),
     mVideoProvider( provider ),
-    mPixelFormat( provider->pixelFormat() ),
+    mAVPixelFormat( provider->pixelFormat() ),
     mWidth( provider->width() ),
     mHeight( provider->height() )
 {
@@ -32,7 +32,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp
 VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, FRAME_TYPE_VIDEO, id, timestamp, buffer, size ),
     mVideoProvider( provider ),
-    mPixelFormat( provider->pixelFormat() ),
+    mAVPixelFormat( provider->pixelFormat() ),
     mWidth( provider->width() ),
     mHeight( provider->height() )
 {
@@ -50,7 +50,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, uint64_t id, uint64_t timestamp
 VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const ByteBuffer &buffer ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer ),
     mVideoProvider( provider ),
-    mPixelFormat( provider->pixelFormat() ),
+    mAVPixelFormat( provider->pixelFormat() ),
     mWidth( provider->width() ),
     mHeight( provider->height() )
 {
@@ -69,7 +69,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_
 VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_t id, uint64_t timestamp, const uint8_t *buffer, size_t size ) :
     FeedFrame( provider, parent, FRAME_TYPE_VIDEO, id, timestamp, buffer, size ),
     mVideoProvider( provider ),
-    mPixelFormat( provider->pixelFormat() ),
+    mAVPixelFormat( provider->pixelFormat() ),
     mWidth( provider->width() ),
     mHeight( provider->height() )
 {
@@ -84,7 +84,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent, uint64_
 VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent ) :
     FeedFrame( provider, parent ),
     mVideoProvider( provider ),
-    mPixelFormat( provider->pixelFormat() ),
+    mAVPixelFormat( provider->pixelFormat() ),
     mWidth( provider->width() ),
     mHeight( provider->height() )
 {
@@ -94,7 +94,7 @@ VideoFrame::VideoFrame( VideoProvider *provider, const FramePtr &parent ) :
 VideoFrame::VideoFrame( const VideoFrame &frame ) :
     FeedFrame( frame ),
     mVideoProvider( frame.mVideoProvider ),
-    mPixelFormat( frame.mPixelFormat ),
+    mAVPixelFormat( frame.mAVPixelFormat ),
     mWidth( frame.mWidth ),
     mHeight( frame.mHeight )
 {

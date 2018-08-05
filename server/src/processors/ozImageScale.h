@@ -31,7 +31,7 @@ public:
 
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
-    PixelFormat pixelFormat() const { return( videoProvider()->pixelFormat() ); }
+    AVPixelFormat pixelFormat() const { return( videoProvider()->pixelFormat() ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
 
     const Rational &scale() const { return( mScale ); }

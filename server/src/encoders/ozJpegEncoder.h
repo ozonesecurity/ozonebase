@@ -20,7 +20,7 @@ protected:
     uint16_t        mWidth;
     uint16_t        mHeight;
     FrameRate       mFrameRate;
-    AVPixelFormat   mPixelFormat;
+    AVPixelFormat   mAVPixelFormat;
     uint8_t         mQuality;
 
 public:
@@ -33,7 +33,7 @@ public:
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }
-    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mAVPixelFormat ); }
     uint8_t quality() const { return( mQuality ); }
 
 protected:

@@ -40,7 +40,7 @@ H264Encoder::H264Encoder( const std::string &name, uint16_t width, uint16_t heig
     mHeight( height ),
     mFrameRate( frameRate ),
     mBitRate( bitRate ),
-    mPixelFormat( AV_PIX_FMT_YUV420P ),
+    mAVPixelFormat( AV_PIX_FMT_YUV420P ),
     mQuality( quality ),
     mAvcLevel( 0 ),
     mAvcProfile( 0 )
@@ -165,7 +165,7 @@ int H264Encoder::run()
     //mCodecContext->time_base = TimeBase( 1, 90000 );
     mCodecContext->time_base = mFrameRate.timeBase();
     mCodecContext->bit_rate = mBitRate;
-    mCodecContext->pix_fmt = mPixelFormat;
+    mCodecContext->pix_fmt = mAVPixelFormat;
 
     mCodecContext->gop_size = 24;
     //mCodecContext->max_b_frames = 1;
@@ -178,7 +178,7 @@ int H264Encoder::run()
         Fatal( "Unable to open encoder codec" );
 
     avDumpDict( opts );
-    AVFrame *inputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
 
     Debug(1, "%s:Waiting", cidentity() );
     if ( waitForProviders() )
@@ -188,21 +188,21 @@ int H264Encoder::run()
         // Find the source codec context
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        AVPixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
         //FrameRate inputFrameRate = videoProvider()->frameRate();
         //Info( "CONVERT: %d-%dx%d -> %d-%dx%d",
-            //inputPixelFormat, inputWidth, inputHeight,
-            //mPixelFormat, mWidth, mHeight
+            //inputAVPixelFormat, inputWidth, inputHeight,
+            //mAVPixelFormat, mWidth, mHeight
         //);
 
         // Make space for anything that is going to be output
-        AVFrame *outputFrame = avcodec_alloc_frame();
+        AVFrame *outputFrame = av_frame_alloc();
         ByteBuffer outputBuffer;
         outputBuffer.size( avpicture_get_size( mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height ) );
         avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height );
 
         // Prepare for image format and size conversions
-        struct SwsContext *convertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mCodecContext->width, mCodecContext->height, mCodecContext->pix_fmt, SWS_BICUBIC, NULL, NULL, NULL );
+        struct SwsContext *convertContext = sws_getContext( inputWidth, inputHeight, inputAVPixelFormat, mCodecContext->width, mCodecContext->height, mCodecContext->pix_fmt, SWS_BICUBIC, NULL, NULL, NULL );
         if ( !convertContext )
             Fatal( "Unable to create conversion context for encoder" );
 
@@ -245,7 +245,7 @@ int H264Encoder::run()
                 //Info( "Provider: %s, Source: %s, Frame: %d", inputVideoFrame->provider()->cidentity(), inputVideoFrame->originator()->cidentity(), inputVideoFrame->id() );
                 //Info( "PF:%d @ %dx%d", inputVideoFrame->pixelFormat(), inputVideoFrame->width(), inputVideoFrame->height() );
 
-                avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+                avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
 
                 //outputFrame->pts = currTime;
                 //Debug( 5, "PTS %jd", outputFrame->pts );
@@ -253,10 +253,14 @@ int H264Encoder::run()
                 // Reformat the input frame to fit the desired output format
                 //Info( "SCALE: %d -> %d", int(inputFrame->data[0])%16, int(outputFrame->data[0])%16 );
                 if ( sws_scale( convertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
+                    Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputAVPixelFormat, inputWidth, inputHeight, mCodecContext->pix_fmt, mCodecContext->width, mCodecContext->height, mFrameCount );
 
                 // Encode the image
-                outSize = avcodec_encode_video( mCodecContext, outputBuffer.data(), outputBuffer.capacity(), outputFrame );
+                AVPacket pkt;
+                av_init_packet(&pkt);
+                pkt.data = outputBuffer.data();
+                int empty_frame = 0;
+                outSize = avcodec_encode_video2( mCodecContext, &pkt, outputFrame, &empty_frame );
                 Debug( 5, "Encoding reports %d bytes", outSize );
                 if ( outSize > 0 )
                 {

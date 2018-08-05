@@ -65,7 +65,7 @@ int main( int argc, const char *argv[] )
 
 
 	// Let's make a mux/stitched handler for cam1 and cam2 and its debugs
-	MatrixVideo matrixVideo( "quadcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+	MatrixVideo matrixVideo( "quadcammux", AV_PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
    	matrixVideo.registerProvider( cam1 );
    	matrixVideo.registerProvider( *motionDetector1.deltaImageSlave() );
    	matrixVideo.registerProvider( cam2 );
