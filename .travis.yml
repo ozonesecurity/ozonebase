@@ -1,5 +1,5 @@
 ###
-# travis configuration for oZone
+## travis configuration for oZone
 ###
 
 language: cpp
