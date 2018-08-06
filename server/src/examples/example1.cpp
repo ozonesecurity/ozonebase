@@ -24,4 +24,5 @@ int main( int argc, const char *argv[] )
     app.addThread( &input );
 
     app.run();
+    // should not come here
 }
