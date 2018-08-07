@@ -39,6 +39,3 @@ The Ozonebase server framework was initially developed by [Philip Coombes](https
 
 Ozonebase part of a solution suite being developed by [Ozone Networks](http://ozone.network). The full solution suite will eventually include a server framework (this code), a mobile framework for white-labelled apps and a reference solution using them.
 
-## License
-Ozonebase is dual-licensed.
-Please refer to the [LICENSING](LICENSE.md) file for details.
