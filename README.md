@@ -37,5 +37,4 @@ oZone already provides key components and functionality like:
 ## Who is developing and maintaining Ozone?
 The Ozonebase server framework was initially developed by [Philip Coombes](https://github.com/web2wire), the original developer of ZoneMinder. The codebase will be maintained and extended by Phil and [Pliable Pixels](https://github.com/pliablepixels) 
 
-Ozonebase part of a solution suite being developed by [Ozone Networks](http://ozone.network). The full solution suite will eventually include a server framework (this code), a mobile framework for white-labelled apps and a reference solution using them.
 
