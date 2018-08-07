@@ -30,4 +30,4 @@ SOFTWARE.
 * This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the <a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> 
 * This software also uses OpenH264 for encoding. OpenH264 is licensed as per [LICENSE](https://github.com/cisco/openh264/blob/master/LICENSE)
 
-* Certain parts of oZone have code common to ZoneMinder. Any such code was originally developed by Philip Coombes for the ZoneMinder project. Philip has granted all rights to use this code under non GPL terms for the oZone project (this project).
+* Certain parts of oZone have code common to ZoneMinder. Any such code was originally developed by Philip Coombes for the ZoneMinder project. Philip has granted all rights to use this code under MIT terms for the oZone project (this project).
