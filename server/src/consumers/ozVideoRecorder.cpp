@@ -386,7 +386,7 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
 
         AVPacket pkt;
         av_init_packet( &pkt );
-        pkt.data = mAudioBuffer.data();
+        pkt.data = NULL;
         int frame_empty = 0;
 
         pkt.size = avcodec_encode_audio2( audioCodecContext, &pkt, audioFrame, &frame_empty );
@@ -461,7 +461,8 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
             	/* moved to support change to avcodec_encode_video2 */
                 AVPacket pkt;
                 av_init_packet(&pkt);
-                pkt.data = mVideoBuffer.data();
+                /* setting pkt.data to NULL so avcodec_encode_video2 will set the size automatically */
+                pkt.data = NULL;
                 int frame_empty = 0;
                 
                 /* encode the image */
@@ -471,7 +472,8 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
                 {
                     Fatal( "Encoding failed" );
                 }
-                else if ( outSize > 0 )
+                /* new avcodec_encode_video2 uses 0 on success and negative error codes on failure */
+                else if ( outSize == 0 )
                 {
 
 
@@ -480,7 +482,7 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
                     if ( videoCodecContext->coded_frame->key_frame )
                         pkt.flags |= AV_PKT_FLAG_KEY;
                     pkt.stream_index = mVideoStream->index;
-                    pkt.size = outSize;
+                    //pkt.size = outSize;
 
                     /* write the compressed frame in the media file */
                     result = av_interleaved_write_frame( mOutputContext, &pkt );
@@ -490,7 +492,8 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
                     /* if zero size, it means the image was buffered */
                 }
                 avOutputFrame = NULL;
-            } while ( outSize > 0 && result == 0 );
+                /* new avcodec_encode_video2 uses 0 on success and negative error codes on failure */
+            } while ( outSize == 0 && result == 0 );
         }
         if ( result != 0 )
             Fatal( "Error while writing video frame: %d", result );
