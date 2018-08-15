@@ -386,10 +386,11 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
 
         AVPacket pkt;
         av_init_packet( &pkt );
+        pkt.size = 0;
         pkt.data = NULL;
         int frame_empty = 0;
 
-        pkt.size = avcodec_encode_audio2( audioCodecContext, &pkt, audioFrame, &frame_empty );
+        avcodec_encode_audio2( audioCodecContext, &pkt, audioFrame, &frame_empty );
 
         if ( audioCodecContext->coded_frame->pts != AV_NOPTS_VALUE )
             pkt.pts = av_rescale_q( audioCodecContext->coded_frame->pts, audioCodecContext->time_base, mAudioStream->time_base );
@@ -462,6 +463,7 @@ void VideoRecorder::encodeFrame( const VideoFrame *frame )
                 AVPacket pkt;
                 av_init_packet(&pkt);
                 /* setting pkt.data to NULL so avcodec_encode_video2 will set the size automatically */
+				pkt.size = 0;
                 pkt.data = NULL;
                 int frame_empty = 0;
                 
