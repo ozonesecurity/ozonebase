@@ -1,4 +1,6 @@
 
+# **** oZone is not actively maintained anymore as of 2020 ****
+
 # Notice
 
 **oZone is now MIT licensed**
