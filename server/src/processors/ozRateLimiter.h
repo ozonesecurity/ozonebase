@@ -42,7 +42,7 @@ public:
 
     uint16_t width() const { return( videoProvider()->width() ); }
     uint16_t height() const { return( videoProvider()->height() ); }
-    PixelFormat pixelFormat() const { return( videoProvider()->pixelFormat() ); }
+    AVPixelFormat pixelFormat() const { return( videoProvider()->pixelFormat() ); }
 
     FrameRate frameRate() const { return( mFrameRate ); }
 

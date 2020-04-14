@@ -22,7 +22,7 @@ private:
     typedef std::vector<FeedProvider *>   ProviderList;
 
 private:
-    PixelFormat     mPixelFormat;
+    AVPixelFormat     mAVPixelFormat;
     int             mWidth;
     int             mHeight;
     FrameRate       mFrameRate;
@@ -48,7 +48,7 @@ public:
 * @param yTiles n (of mxn tiles)
 
 \code
-    MatrixVideo matrixVideo( "matrixcammux", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    MatrixVideo matrixVideo( "matrixcammux", AV_PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
     matrixVideo.registerProvider( cam1 );
     matrixVideo.registerProvider( *motionDetector1.deltaImageSlave() );
     matrixVideo.registerProvider( cam2 );
@@ -59,10 +59,10 @@ public:
 
 
 */
-    MatrixVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles=2, int yTiles=2 );
+    MatrixVideo( const std::string &name, AVPixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles=2, int yTiles=2 );
     ~MatrixVideo();
 
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mAVPixelFormat ); }
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }

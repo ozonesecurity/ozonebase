@@ -51,7 +51,7 @@ int main( int argc, const char *argv[] )
 
    
     nvrcam.cam = new AVInput ( "cam0", "0",avOptions );
-    nvrcam.convert = new ImageConvert ( "convert",PIX_FMT_RGB24, 640,480 );
+    nvrcam.convert = new ImageConvert ( "convert",AV_PIX_FMT_RGB24, 640,480 );
     nvrcam.motion = new MotionDetector( "modect-cam0" );
     nvrcam.convert->registerProvider(*(nvrcam.cam) );
     nvrcam.motion->registerProvider(*(nvrcam.convert) );

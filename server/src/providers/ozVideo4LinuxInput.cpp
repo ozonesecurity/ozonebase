@@ -18,69 +18,69 @@
 *
 * @return 
 */
-PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
+AVPixelFormat Video4LinuxInput::getAVPixelFormatFromV4lPalette( int palette )
 {
-    PixelFormat pixFormat = PIX_FMT_NONE;
+    AVPixelFormat pixFormat = AV_PIX_FMT_NONE;
     switch( palette )
     {
 #ifdef V4L2_PIX_FMT_RGB444
         case V4L2_PIX_FMT_RGB444 :
-            pixFormat = PIX_FMT_RGB32;
+            pixFormat = AV_PIX_FMT_RGB32;
             break;
 #endif // V4L2_PIX_FMT_RGB444
         case V4L2_PIX_FMT_RGB555 :
-            pixFormat = PIX_FMT_RGB555;
+            pixFormat = AV_PIX_FMT_RGB555;
             break;
         case V4L2_PIX_FMT_RGB565 :
-            pixFormat = PIX_FMT_RGB565;
+            pixFormat = AV_PIX_FMT_RGB565;
             break;
         case V4L2_PIX_FMT_BGR24 :
-            pixFormat = PIX_FMT_BGR24;
+            pixFormat = AV_PIX_FMT_BGR24;
             break;
         case V4L2_PIX_FMT_RGB24 :
-            pixFormat = PIX_FMT_RGB24;
+            pixFormat = AV_PIX_FMT_RGB24;
             break;
         case V4L2_PIX_FMT_BGR32 :
-            pixFormat = PIX_FMT_BGR32;
+            pixFormat = AV_PIX_FMT_BGR32;
             break;
         case V4L2_PIX_FMT_RGB32 :
-            pixFormat = PIX_FMT_RGB32;
+            pixFormat = AV_PIX_FMT_RGB32;
             break;
         case V4L2_PIX_FMT_GREY :
-            pixFormat = PIX_FMT_GRAY8;
+            pixFormat = AV_PIX_FMT_GRAY8;
             break;
         case V4L2_PIX_FMT_YUYV :
-            pixFormat = PIX_FMT_YUYV422;
+            pixFormat = AV_PIX_FMT_YUYV422;
             break;
         case V4L2_PIX_FMT_UYVY :
-            pixFormat = PIX_FMT_UYVY422;
+            pixFormat = AV_PIX_FMT_UYVY422;
             break;
         case V4L2_PIX_FMT_YUV422P :
-            pixFormat = PIX_FMT_YUV422P;
+            pixFormat = AV_PIX_FMT_YUV422P;
             break;
         case V4L2_PIX_FMT_YUV411P :
-            pixFormat = PIX_FMT_YUV411P;
+            pixFormat = AV_PIX_FMT_YUV411P;
             break;
 #ifdef V4L2_PIX_FMT_YUV444
         case V4L2_PIX_FMT_YUV444 :
-            pixFormat = PIX_FMT_YUV444P;
+            pixFormat = AV_PIX_FMT_YUV444P;
             break;
 #endif // V4L2_PIX_FMT_YUV444
         case V4L2_PIX_FMT_YUV410 :
-            pixFormat = PIX_FMT_YUV410P;
+            pixFormat = AV_PIX_FMT_YUV410P;
             break;
         //case V4L2_PIX_FMT_YVU410 :
             //pixFormat = PIX_FMT_YVU410P;
             //break;
         case V4L2_PIX_FMT_YUV420 :
         case V4L2_PIX_FMT_YVU420 :
-            pixFormat = PIX_FMT_YUV420P;
+            pixFormat = AV_PIX_FMT_YUV420P;
             break;
         //case V4L2_PIX_FMT_YVU420 :
             //pixFormat = PIX_FMT_YVU420P;
             //break;
         case V4L2_PIX_FMT_JPEG :
-            pixFormat = PIX_FMT_YUVJ444P;
+            pixFormat = AV_PIX_FMT_YUVJ444P;
             break;
         // These don't seem to have ffmpeg equivalents
         // See if you can match any of the ones in the default clause below!?
@@ -123,29 +123,29 @@ PixelFormat Video4LinuxInput::getPixelFormatFromV4lPalette( int palette )
             Fatal( "Can't find pixel format for palette %d", palette );
             break;
             // These are all spare and may match some of the above
-            pixFormat = PIX_FMT_YUVJ420P;
-            pixFormat = PIX_FMT_YUVJ422P;
-            pixFormat = PIX_FMT_XVMC_MPEG2_MC;
-            pixFormat = PIX_FMT_XVMC_MPEG2_IDCT;
-            //pixFormat = PIX_FMT_UYVY422;
-            pixFormat = PIX_FMT_UYYVYY411;
-            pixFormat = PIX_FMT_BGR565;
-            pixFormat = PIX_FMT_BGR555;
-            pixFormat = PIX_FMT_BGR8;
-            pixFormat = PIX_FMT_BGR4;
-            pixFormat = PIX_FMT_BGR4_BYTE;
-            pixFormat = PIX_FMT_RGB8;
-            pixFormat = PIX_FMT_RGB4;
-            pixFormat = PIX_FMT_RGB4_BYTE;
-            pixFormat = PIX_FMT_NV12;
-            pixFormat = PIX_FMT_NV21;
-            pixFormat = PIX_FMT_RGB32_1;
-            pixFormat = PIX_FMT_BGR32_1;
-            pixFormat = PIX_FMT_GRAY16BE;
-            pixFormat = PIX_FMT_GRAY16LE;
-            pixFormat = PIX_FMT_YUV440P;
-            pixFormat = PIX_FMT_YUVJ440P;
-            pixFormat = PIX_FMT_YUVA420P;
+            pixFormat = AV_PIX_FMT_YUVJ420P;
+            pixFormat = AV_PIX_FMT_YUVJ422P;
+            pixFormat = AV_PIX_FMT_XVMC_MPEG2_MC;
+            pixFormat = AV_PIX_FMT_XVMC_MPEG2_IDCT;
+            //pixFormat = AV_PIX_FMT_UYVY422;
+            pixFormat = AV_PIX_FMT_UYYVYY411;
+            pixFormat = AV_PIX_FMT_BGR565;
+            pixFormat = AV_PIX_FMT_BGR555;
+            pixFormat = AV_PIX_FMT_BGR8;
+            pixFormat = AV_PIX_FMT_BGR4;
+            pixFormat = AV_PIX_FMT_BGR4_BYTE;
+            pixFormat = AV_PIX_FMT_RGB8;
+            pixFormat = AV_PIX_FMT_RGB4;
+            pixFormat = AV_PIX_FMT_RGB4_BYTE;
+            pixFormat = AV_PIX_FMT_NV12;
+            pixFormat = AV_PIX_FMT_NV21;
+            pixFormat = AV_PIX_FMT_RGB32_1;
+            pixFormat = AV_PIX_FMT_BGR32_1;
+            pixFormat = AV_PIX_FMT_GRAY16BE;
+            pixFormat = AV_PIX_FMT_GRAY16LE;
+            pixFormat = AV_PIX_FMT_YUV440P;
+            pixFormat = AV_PIX_FMT_YUVJ440P;
+            pixFormat = AV_PIX_FMT_YUVA420P;
             //pixFormat = PIX_FMT_VDPAU_H264;
             //pixFormat = PIX_FMT_VDPAU_MPEG1;
             //pixFormat = PIX_FMT_VDPAU_MPEG2;
@@ -173,7 +173,7 @@ Video4LinuxInput::Video4LinuxInput( const std::string &name, const std::string &
     mPalette( palette ),
     mWidth( width ),
     mHeight( height ),
-    mPixelFormat( getPixelFormatFromV4lPalette( mPalette ) ),
+    mAVPixelFormat( getAVPixelFormatFromV4lPalette( mPalette ) ),
     mChannelMask( channelMask )
 {
     uint32_t channelFlag = 1;

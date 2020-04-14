@@ -36,7 +36,7 @@ LocalFileInput::LocalFileInput( const std::string &name, const std::string &patt
     mWidth( 0 ),
     mHeight( 0 ),
     mFrameRate( frameRate ),
-    mPixelFormat( PIX_FMT_NONE )
+    mAVPixelFormat( AV_PIX_FMT_NONE )
 {
 }
 
@@ -93,7 +93,7 @@ int LocalFileInput::run()
             {
                 mWidth = image.width();
                 mHeight = image.height();
-                mPixelFormat = image.pixelFormat();
+                mAVPixelFormat = image.pixelFormat();
             }
 
             VideoFrame *videoFrame = new VideoFrame( this, ++mFrameCount, currTime, image.buffer() );

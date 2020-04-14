@@ -165,13 +165,13 @@ int RawH264Input::run()
         // Allocate space for the native video frame
         if ( mHasVideo )
         {
-            avVideoFrame = avcodec_alloc_frame();
+            avVideoFrame = av_frame_alloc();
             videoFrameSize = avpicture_get_size( mVideoCodecContext->pix_fmt, mVideoCodecContext->width, mVideoCodecContext->height );
         }
 
         if ( mHasAudio )
         {
-            avAudioFrame = avcodec_alloc_frame();
+            avAudioFrame = av_frame_alloc();
             audioFrameSize = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
         }
 

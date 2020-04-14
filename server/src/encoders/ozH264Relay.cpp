@@ -40,7 +40,7 @@ H264Relay::H264Relay( const std::string &name, uint16_t width, uint16_t height, 
     mHeight( height ),
     mFrameRate( frameRate ),
     mBitRate( bitRate ),
-    mPixelFormat( PIX_FMT_YUV420P ),
+    mAVPixelFormat( AV_PIX_FMT_YUV420P ),
     mQuality( quality ),
     mAvcLevel( 31 ),
     mAvcProfile( 66 )
@@ -135,7 +135,7 @@ bool H264Relay::deregisterConsumer( FeedConsumer &consumer, bool reciprocate )
 int H264Relay::run()
 {
     // Make sure ffmpeg is compiled with libx264 support
-    AVCodec *codec = avcodec_find_encoder( CODEC_ID_H264 );
+    AVCodec *codec = avcodec_find_encoder( AV_CODEC_ID_H264 );
     if ( !codec )
         Fatal( "Can't find encoder codec" );
 
@@ -146,7 +146,7 @@ int H264Relay::run()
     //mCodecContext->time_base = TimeBase( 1, 90000 );
     mCodecContext->time_base = mFrameRate.timeBase();
     mCodecContext->bit_rate = mBitRate;
-    mCodecContext->pix_fmt = mPixelFormat;
+    mCodecContext->pix_fmt = mAVPixelFormat;
 
     mCodecContext->gop_size = 24;
     //mCodecContext->max_b_frames = 1;
@@ -163,7 +163,7 @@ int H264Relay::run()
 
         //uint16_t inputWidth = videoProvider()->width();
         //uint16_t inputHeight = videoProvider()->height();
-        //PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        //AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
         //FrameRate inputFrameRate = videoProvider()->frameRate();
 
         uint64_t startTime = 0;

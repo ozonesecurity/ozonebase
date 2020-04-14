@@ -34,7 +34,7 @@ public:
     const AVCodecContext *videoCodecContext() const { return( mVideoCodecContext ); }
     const AVCodecContext *audioCodecContext() const { return( mAudioCodecContext ); }
 
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
         return( mVideoCodecContext->pix_fmt );
     }

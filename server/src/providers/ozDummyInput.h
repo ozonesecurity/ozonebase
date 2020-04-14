@@ -21,7 +21,7 @@ private:
 	Options			mOptions;       ///< Various options
     int             mWidth;         ///< Requested video width, applies to all channels
     int             mHeight;        ///< Requested video height, applies to all channels
-    AVPixelFormat   mPixelFormat;   ///< FFmpeg equivalent image format
+    AVPixelFormat   mAVPixelFormat;   ///< FFmpeg equivalent image format
     FrameRate       mFrameRate;     ///< Requested frame rate
     std::string     mColour;        ///< Frame background colour
     std::string     mText;          ///< Text to show in the frame
@@ -40,9 +40,9 @@ public:
     {
         return( mHeight );
     }
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
-        return( mPixelFormat );
+        return( mAVPixelFormat );
     }
     FrameRate frameRate() const
     {

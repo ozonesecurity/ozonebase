@@ -972,7 +972,7 @@ AVPixelFormat Image::getFfPixFormat( Format format )
 *
 * @return 
 */
-Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
+Image::Format Image::getFormatFromAVPixelFormat( AVPixelFormat pixelFormat )
 {
     Format format = FMT_UNDEF;
 
@@ -1023,7 +1023,7 @@ Image::Format Image::getFormatFromPixelFormat( AVPixelFormat pixelFormat )
         }
         default :
         {
-            Panic( "Can't convert PixelFormat %d to image format", pixelFormat );
+            Panic( "Can't convert AVPixelFormat %d to image format", pixelFormat );
             break;
         }
     }
@@ -2538,8 +2538,8 @@ Image::Image( AVPixelFormat pixFormat, int width, int height, unsigned char *dat
             imageData = tempData;
             break;
         }
-        //case AV_PIX_FMT_GRAY16BE :  ///<        Y        , 16bpp, big-endian
-        //case AV_PIX_FMT_GRAY16LE :  ///<        Y        , 16bpp, little-endian
+        //case AV_AV_PIX_FMT_GRAY16BE :  ///<        Y        , 16bpp, big-endian
+        //case AV_AV_PIX_FMT_GRAY16LE :  ///<        Y        , 16bpp, little-endian
         case AV_PIX_FMT_GRAY16 :
         {
             // Ok 'as is'

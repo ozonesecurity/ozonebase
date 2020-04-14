@@ -15,7 +15,7 @@ SlaveVideo::SlaveVideo( const std::string &id, uint16_t width, uint16_t height, 
     mInitialised( true ),
     mImageWidth( width ),
     mImageHeight( height ),
-    mPixelFormat( pixelFormat ),
+    mAVPixelFormat( pixelFormat ),
     mFrameRate( frameRate )
 {
 }
@@ -30,7 +30,7 @@ SlaveVideo::SlaveVideo( const std::string &id ) :
     mInitialised( false ),
     mImageWidth( 0 ),
     mImageHeight( 0 ),
-    mPixelFormat( PIX_FMT_NONE )
+    mAVPixelFormat( AV_PIX_FMT_NONE )
 {
 }
 
@@ -50,7 +50,7 @@ void SlaveVideo::prepare( uint16_t width, uint16_t height, AVPixelFormat pixelFo
 {
     mImageWidth = width;
     mImageHeight = height;
-    mPixelFormat = pixelFormat;
+    mAVPixelFormat = pixelFormat;
     mFrameRate = frameRate;
     mInitialised = true;
 }
@@ -77,11 +77,11 @@ void SlaveVideo::relayImage( const Image &image )
     {
         Fatal( "Unable to relay image when not initialised" );
     }
-    else if ( mImageWidth == 0 || mImageHeight == 0 || mPixelFormat == PIX_FMT_NONE )  /// FIXME - Ugly, make your mind up
+    else if ( mImageWidth == 0 || mImageHeight == 0 || mAVPixelFormat == AV_PIX_FMT_NONE )  /// FIXME - Ugly, make your mind up
     {
         mImageWidth = image.width();
         mImageHeight = image.height();
-        mPixelFormat = image.pixelFormat();
+        mAVPixelFormat = image.pixelFormat();
     }
 
     struct timeval now;

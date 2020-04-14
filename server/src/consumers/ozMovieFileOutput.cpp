@@ -27,7 +27,7 @@ int MovieFileOutput::run()
         // Find the source codec context
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
         FrameRate inputFrameRate = videoProvider()->frameRate();
 
         Debug(1, "Provider framerate = %d/%d", inputFrameRate.num, inputFrameRate.den );
@@ -65,7 +65,7 @@ int MovieFileOutput::run()
             /* add the audio and video streams using the default format codecs and initialize the codecs */
             AVStream *videoStream = NULL;
             AVCodecContext *videoCodecContext = NULL;
-            if ( provider()->hasVideo() && (outputFormat->video_codec != CODEC_ID_NONE) )
+            if ( provider()->hasVideo() && (outputFormat->video_codec != AV_CODEC_ID_NONE) )
             {
                 //videoStream = av_new_stream( outputContext, 0 );
                 videoStream = avformat_new_stream( outputContext, NULL );
@@ -103,17 +103,17 @@ int MovieFileOutput::run()
             }
 
             struct SwsContext *convertContext = NULL;
-            if ( inputWidth != mVideoParms.width() || inputHeight != mVideoParms.height() || inputPixelFormat != mVideoParms.pixelFormat() )
+            if ( inputWidth != mVideoParms.width() || inputHeight != mVideoParms.height() || inputAVPixelFormat != mVideoParms.pixelFormat() )
             {
                 // Prepare for image format and size conversions
-                convertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mVideoParms.width(), mVideoParms.height(), mVideoParms.pixelFormat(), SWS_BICUBIC, NULL, NULL, NULL );
+                convertContext = sws_getContext( inputWidth, inputHeight, inputAVPixelFormat, mVideoParms.width(), mVideoParms.height(), mVideoParms.pixelFormat(), SWS_BICUBIC, NULL, NULL, NULL );
                 if ( !convertContext )
                     Fatal( "Unable to create conversion context for encoder" );
             }
 
             AVStream *audioStream = NULL;
             AVCodecContext *audioCodecContext = NULL;
-            if ( provider()->hasAudio() && (outputFormat->audio_codec != CODEC_ID_NONE) )
+            if ( provider()->hasAudio() && (outputFormat->audio_codec != AV_CODEC_ID_NONE) )
             {
                 //audioStream = av_new_stream( outputContext, 1 );
                 audioStream = avformat_new_stream( outputContext, NULL );
@@ -159,7 +159,7 @@ int MovieFileOutput::run()
                 if ( avcodec_open2( videoCodecContext, codec, &opts ) < 0 )
                     Fatal( "Could not open video codec" );
 
-                avInputFrame = avcodec_alloc_frame();
+                avInputFrame = av_frame_alloc();
 
                 if ( !(outputContext->oformat->flags & AVFMT_RAWPICTURE) )
                 {
@@ -168,7 +168,7 @@ int MovieFileOutput::run()
                 if ( convertContext )
                 {
                     // Make space for anything that is going to be output
-                    avInterFrame = avcodec_alloc_frame();
+                    avInterFrame = av_frame_alloc();
                     interBuffer.size( avpicture_get_size( mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() ) );
                     avpicture_fill( (AVPicture *)avInterFrame, interBuffer.data(), mVideoParms.pixelFormat(), mVideoParms.width(), mVideoParms.height() );
                 }
@@ -238,18 +238,21 @@ int MovieFileOutput::run()
                         //if ( !videoStream || (videoStream && audioStream && audioTimeOffset < videoTimeOffset) )
                         if ( frame->mediaType() == FeedFrame::FRAME_TYPE_AUDIO )
                         {
-                            const AudioFrame *audioFrame = dynamic_cast<const AudioFrame *>(frame);
+                            const AVFrame *audioFrame = dynamic_cast<const AVFrame *>(frame);
 
                             AVPacket pkt;
                             av_init_packet( &pkt );
+                            /* avcodec_encode_audeo2 requires an AVPacket, so moved it up here */
+                            pkt.data = audioBuffer.data();
+                            int frame_empty = 0;
 
-                            pkt.size = avcodec_encode_audio( audioCodecContext, audioBuffer.data(), audioBuffer.size(), (const int16_t *)audioFrame->buffer().data() );
+                            pkt.size = avcodec_encode_audio2( audioCodecContext, &pkt, audioFrame, &frame_empty );
 
                             if ( audioCodecContext->coded_frame->pts != AV_NOPTS_VALUE )
                                 pkt.pts = av_rescale_q( audioCodecContext->coded_frame->pts, audioCodecContext->time_base, audioStream->time_base );
                             pkt.flags |= AV_PKT_FLAG_KEY;
                             pkt.stream_index = audioStream->index;
-                            pkt.data = audioBuffer.data();
+                            
 
                             /* write the compressed frame in the media file */
                             if ( av_interleaved_write_frame( outputContext, &pkt ) != 0)
@@ -261,7 +264,7 @@ int MovieFileOutput::run()
                             const VideoFrame *videoFrame = dynamic_cast<const VideoFrame *>(frame);
                             Debug(1, "PF:%d @ %dx%d", videoFrame->pixelFormat(), videoFrame->width(), videoFrame->height() );
 
-                            avpicture_fill( (AVPicture *)avInputFrame, videoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+                            avpicture_fill( (AVPicture *)avInputFrame, videoFrame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
                             // XXX - Hack???
                             avInputFrame->pts = (videoFrameCount * inputFrameRate.den * videoCodecContext->time_base.den) / (inputFrameRate.num * videoCodecContext->time_base.num);
 
@@ -279,7 +282,7 @@ int MovieFileOutput::run()
                                 if ( convertContext )
                                 {
                                     if ( sws_scale( convertContext, avInputFrame->data, avInputFrame->linesize, 0, inputHeight, avInterFrame->data, avInterFrame->linesize ) < 0 )
-                                        Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, videoFrameCount );
+                                        Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputAVPixelFormat, inputWidth, inputHeight, videoCodecContext->pix_fmt, videoCodecContext->width, videoCodecContext->height, videoFrameCount );
                                     avOutputFrame = avInterFrame;
                                     avInterFrame->pts = avInputFrame->pts;
                                 }
@@ -303,23 +306,25 @@ int MovieFileOutput::run()
                             {
                                 Debug( 1,"Encoded frame" );
                                 int outSize = 0;
+                                int empty_frame = 0;
                                 do
                                 {
+                                	/* avcodec_encode_video2 requires an AVPacket, so moved it up here */
+                                	AVPacket pkt;
+                                    av_init_packet(&pkt);
+                                    pkt.data = videoBuffer.data();
                                     /* encode the image */
-                                    outSize = avcodec_encode_video( videoCodecContext, videoBuffer.data(), videoBuffer.capacity(), avOutputFrame );
+                                    outSize = avcodec_encode_video2( videoCodecContext, &pkt, avOutputFrame, &empty_frame );
                                     /* if zero size, it means the image was buffered */
                                     Debug(1, "Outsize: %d", outSize );
                                     if ( outSize > 0 )
                                     {
-                                        AVPacket pkt;
-                                        av_init_packet(&pkt);
 
                                         if ( videoCodecContext->coded_frame->pts != AV_NOPTS_VALUE )
                                             pkt.pts = av_rescale_q( videoCodecContext->coded_frame->pts, videoCodecContext->time_base, videoStream->time_base );
                                         if ( videoCodecContext->coded_frame->key_frame )
                                             pkt.flags |= AV_PKT_FLAG_KEY;
                                         pkt.stream_index = videoStream->index;
-                                        pkt.data = videoBuffer.data();
                                         pkt.size = outSize;
 
                                         /* write the compressed frame in the media file */

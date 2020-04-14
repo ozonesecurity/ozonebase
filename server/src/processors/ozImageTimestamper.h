@@ -53,7 +53,7 @@ public:
 
     uint16_t width() const { return( videoProvider()->width() ); }
     uint16_t height() const { return( videoProvider()->height() ); }
-    PixelFormat pixelFormat() const { return( Image::getNativePixelFormat( videoProvider()->pixelFormat() ) ); }
+    AVPixelFormat pixelFormat() const { return( Image::getNativeAVPixelFormat( videoProvider()->pixelFormat() ) ); }
     FrameRate frameRate() const { return( videoProvider()->frameRate() ); }
 
 protected:

@@ -33,7 +33,7 @@ int SignalChecker::run()
 {
     if ( waitForProviders() )
     {
-        PixelFormat producerPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat producerAVPixelFormat = videoProvider()->pixelFormat();
         uint16_t producerWidth = videoProvider()->width();
         uint16_t producerHeight = videoProvider()->height();
 
@@ -48,7 +48,7 @@ int SignalChecker::run()
                 {
                     const VideoFrame *frame = dynamic_cast<const VideoFrame *>(iter->get());
 
-                    Image image( producerPixelFormat, producerWidth, producerHeight, frame->buffer().data() );
+                    Image image( producerAVPixelFormat, producerWidth, producerHeight, frame->buffer().data() );
 
                     mSignal = checkSignal( image );
                     if ( mSignal && !lastSignal )

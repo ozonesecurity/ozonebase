@@ -11,10 +11,10 @@
 * @param width
 * @param height
 */
-ImageConvert::ImageConvert( const std::string &name, PixelFormat pixelFormat, int width, int height ) :
+ImageConvert::ImageConvert( const std::string &name, AVPixelFormat pixelFormat, int width, int height ) :
     VideoProvider( cClass(), name ),
     Thread( identity() ),
-    mPixelFormat( pixelFormat ),
+    mAVPixelFormat( pixelFormat ),
     mWidth( width ),
     mHeight( height ),
     mConvertContext( NULL )
@@ -30,11 +30,11 @@ ImageConvert::ImageConvert( const std::string &name, PixelFormat pixelFormat, in
 * @param provider
 * @param link
 */
-ImageConvert::ImageConvert( PixelFormat pixelFormat, int width, int height, VideoProvider &provider, const FeedLink &link ) :
+ImageConvert::ImageConvert( AVPixelFormat pixelFormat, int width, int height, VideoProvider &provider, const FeedLink &link ) :
     VideoConsumer( cClass(), provider, link ),
     VideoProvider( cClass(), provider.name() ),
     Thread( identity() ),
-    mPixelFormat( pixelFormat ),
+    mAVPixelFormat( pixelFormat ),
     mWidth( width ),
     mHeight( height ),
     mConvertContext( NULL )
@@ -55,29 +55,29 @@ ImageConvert::~ImageConvert()
 */
 int ImageConvert::run()
 {
-    AVFrame *inputFrame = avcodec_alloc_frame();
-    AVFrame *outputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
+    AVFrame *outputFrame = av_frame_alloc();
 
     if ( waitForProviders() )
     {
         uint16_t inputWidth = videoProvider()->width();
         uint16_t inputHeight = videoProvider()->height();
-        PixelFormat inputPixelFormat = videoProvider()->pixelFormat();
+        AVPixelFormat inputAVPixelFormat = videoProvider()->pixelFormat();
 
         // Prepare for image format and size conversions
-        mConvertContext = sws_getContext( inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
+        mConvertContext = sws_getContext( inputWidth, inputHeight, inputAVPixelFormat, mWidth, mHeight, mAVPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
         if ( !mConvertContext )
             Fatal( "Unable to create conversion context" );
 
-        Debug( 1, "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, mWidth, mHeight, mPixelFormat );
-        Debug( 1,"%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+        Debug( 1, "Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputAVPixelFormat, mWidth, mHeight, mAVPixelFormat );
+        Debug( 1,"%d bytes -> %d bytes",  avpicture_get_size( inputAVPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mAVPixelFormat, mWidth, mHeight ) );
 
         // Make space for anything that is going to be output
         ByteBuffer outputBuffer;
-        outputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+        outputBuffer.size( avpicture_get_size( mAVPixelFormat, mWidth, mHeight ) );
 
         // To get offsets only
-        avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mPixelFormat, mWidth, mHeight );
+        avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mAVPixelFormat, mWidth, mHeight );
 
         while ( !mStop )
         {
@@ -91,16 +91,16 @@ int ImageConvert::run()
                     //FramePtr framePtr( *iter );
                     const FeedFrame *frame = (*iter).get();
 
-                    if ( mWidth != inputWidth || mHeight != inputHeight || mPixelFormat != inputPixelFormat )
+                    if ( mWidth != inputWidth || mHeight != inputHeight || mAVPixelFormat != inputAVPixelFormat )
                     {
                         // Requires conversion
                         Debug( 1, "%s / Provider: %s, Source: %s, Frame: %p (%ju / %.3f) - %lu", cname(), frame->provider()->cidentity(), frame->originator()->cidentity(), frame, frame->id(), frame->age(), frame->buffer().size() );
 
-                        avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+                        avpicture_fill( (AVPicture *)inputFrame, frame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
 
                         // Reformat the input frame to fit the desired output format
                         if ( sws_scale( mConvertContext, inputFrame->data, inputFrame->linesize, 0, inputHeight, outputFrame->data, outputFrame->linesize ) < 0 )
-                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, mWidth, mHeight, mFrameCount );
+                            Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputAVPixelFormat, inputWidth, inputHeight, mAVPixelFormat, mWidth, mHeight, mFrameCount );
 
                         VideoFrame *videoFrame = new VideoFrame( this, *iter, mFrameCount, frame->timestamp(), outputBuffer );
                         distributeFrame( FramePtr( videoFrame ) );

@@ -21,7 +21,7 @@ class MemoryInput : public VideoProvider, public MemoryIO, public Thread
 CLASSID(MemoryInput);
 
 protected:
-    PixelFormat mImageFormat;
+    AVPixelFormat mImageFormat;
     uint16_t    mImageWidth;
     uint16_t    mImageHeight;
     FrameRate	mFrameRate;
@@ -35,7 +35,7 @@ public:
     ~MemoryInput();
 
 public:
-    PixelFormat pixelFormat() const { return( mImageFormat ); }
+    AVPixelFormat pixelFormat() const { return( mImageFormat ); }
     uint16_t width() const { return( mImageWidth ); }
     uint16_t height() const { return( mImageHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }

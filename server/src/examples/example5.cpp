@@ -29,7 +29,7 @@ int main( int argc, const char *argv[] )
     AVInput input4( "input", "/tmp/movie.mp4" );
     app.addThread( &input4 );
 
-    MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    MatrixVideo matrixVideo( "matrix", AV_PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
     matrixVideo.registerProvider( input1 );
     matrixVideo.registerProvider( input2 );
     matrixVideo.registerProvider( input3 );

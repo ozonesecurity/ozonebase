@@ -14,16 +14,16 @@ struct VideoParms
 public:
     uint16_t        mWidth;
     uint16_t        mHeight;
-    PixelFormat     mPixelFormat;
+    AVPixelFormat     mAVPixelFormat;
     FrameRate       mFrameRate;
     uint32_t        mBitRate;
     uint8_t         mQuality;
 
 public:
-    VideoParms( uint16_t width=320, uint16_t height=240, PixelFormat pixelFormat=PIX_FMT_YUV420P, const FrameRate &frameRate=25, uint32_t bitRate=200000, uint8_t quality=70 ) :
+    VideoParms( uint16_t width=320, uint16_t height=240, AVPixelFormat pixelFormat=AV_PIX_FMT_YUV420P, const FrameRate &frameRate=25, uint32_t bitRate=200000, uint8_t quality=70 ) :
         mWidth( width ),
         mHeight( height ),
-        mPixelFormat( pixelFormat ),
+        mAVPixelFormat( pixelFormat ),
         mFrameRate( frameRate ),
         mBitRate( bitRate ),
         mQuality( quality )
@@ -31,7 +31,7 @@ public:
     }
     uint16_t width() const { return( mWidth ); }
     uint16_t height() const { return( mHeight ); }
-    PixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mAVPixelFormat ); }
     uint16_t bitRate() const { return( mBitRate ); }
     FrameRate frameRate() const { return( mFrameRate ); }
 };
@@ -63,7 +63,7 @@ public:
 
 //class AudioVideoParms : public AudioParms, public VideoParms
 //{
-    //AudioVideoParms( PixelFormat pixelFormat, uint16_t width=320, uint16_t height=240, const FrameRate &frameRate=FrameRate(1,25), uint32_t bitRate=90000, uint8_t quality=70 ) :
+    //AudioVideoParms( AVPixelFormat pixelFormat, uint16_t width=320, uint16_t height=240, const FrameRate &frameRate=FrameRate(1,25), uint32_t bitRate=90000, uint8_t quality=70 ) :
 //}
 
 #endif // OZ_PARAMETERS_H

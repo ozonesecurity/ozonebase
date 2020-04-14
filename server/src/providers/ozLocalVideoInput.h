@@ -37,7 +37,7 @@ public:
     {
         return( mCodecContext->height );
     }
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
         return( mCodecContext->pix_fmt );
     }

@@ -28,7 +28,7 @@ int main( int argc, const char *argv[] )
     //EventRecorder eventRecorder( "/transfer/ozx" );
     app.addThread( &motionDetector );
 
-    MatrixVideo matrixVideo( "matrix", PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
+    MatrixVideo matrixVideo( "matrix", AV_PIX_FMT_YUV420P, 640, 480, FrameRate( 1, 10 ), 2, 2 );
     matrixVideo.registerProvider( *motionDetector.refImageSlave() );
     matrixVideo.registerProvider( *motionDetector.compImageSlave() );
     matrixVideo.registerProvider( *motionDetector.deltaImageSlave() );

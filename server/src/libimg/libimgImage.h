@@ -622,10 +622,10 @@ public:
     static Format getFormatFromPalette( int palette );
 #endif
     static AVPixelFormat getFfPixFormat( Format format );
-    static Format getFormatFromPixelFormat( AVPixelFormat pixelFormat );
-    static AVPixelFormat getNativePixelFormat( AVPixelFormat pixelFormat )
+    static Format getFormatFromAVPixelFormat( AVPixelFormat pixelFormat );
+    static AVPixelFormat getNativeAVPixelFormat( AVPixelFormat pixelFormat )
     {
-        return( getFfPixFormat( getFormatFromPixelFormat( pixelFormat ) ) );
+        return( getFfPixFormat( getFormatFromAVPixelFormat( pixelFormat ) ) );
     }
 
 protected:

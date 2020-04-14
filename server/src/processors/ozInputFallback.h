@@ -35,7 +35,7 @@ public:
     InputFallback( const std::string &name, double timeout=3.0 );
     ~InputFallback();
 
-    PixelFormat pixelFormat() const { return( mCurrentProvider->pixelFormat() ); }
+    AVPixelFormat pixelFormat() const { return( mCurrentProvider->pixelFormat() ); }
     uint16_t width() const { return( mCurrentProvider->width() ); }
     uint16_t height() const { return( mCurrentProvider->height() ); }
     FrameRate frameRate() const { return( mCurrentProvider->frameRate() ); }

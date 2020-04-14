@@ -14,7 +14,7 @@ add_executable(example11 example11.cpp)
 add_executable(starter_example starter_example.cpp)
 add_executable(nvrcli/nvrcli nvrcli/nvrcli.cpp nvrcli/nvrNotifyOutput.cpp)
 
-set (EXAMPLES example1 example2 example3 example4 example5 example6 example7 example8 example9 example10 example11 starter_example)
+set (EXAMPLES example1 example2 example3 example4 example5 example6 example7 example8 example9 example10 example11 starter_example nvrcli/nvrcli)
 
 if(MACOSX)
         add_executable(example_osx example_osx.cpp)

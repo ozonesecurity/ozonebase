@@ -21,7 +21,7 @@ private:
     int             mWidth;         ///< Requested video width, applies to all channels
     int             mHeight;        ///< Requested video height, applies to all channels
     FrameRate       mFrameRate;     ///< Requested frame rate
-    PixelFormat     mPixelFormat;   ///< FFmpeg equivalent image format
+    AVPixelFormat     mAVPixelFormat;   ///< FFmpeg equivalent image format
 
 public:
     LocalFileInput( const std::string &name, const std::string &pattern, const FrameRate &frameRate );
@@ -35,9 +35,9 @@ public:
     {
         return( mHeight );
     }
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
-        return( mPixelFormat );
+        return( mAVPixelFormat );
     }
     FrameRate frameRate() const
     {

@@ -93,7 +93,7 @@ protected:
 
 protected:
     bool queryMemory( SharedData *sharedData );
-    void attachMemory( int imageBufferCount, PixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight );
+    void attachMemory( int imageBufferCount, AVPixelFormat imageFormat, uint16_t imageWidth, uint16_t imageHeight );
     void attachMemory();
     void detachMemory();
 

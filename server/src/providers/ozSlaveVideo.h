@@ -21,7 +21,7 @@ protected:
     bool            mInitialised;
     uint16_t        mImageWidth;
     uint16_t        mImageHeight;
-    AVPixelFormat   mPixelFormat;
+    AVPixelFormat   mAVPixelFormat;
     FrameRate       mFrameRate;
 
 public:
@@ -34,7 +34,7 @@ public:
     void prepare( const FrameRate &frameRate );
     void relayImage( const Image &image );
 
-    AVPixelFormat pixelFormat() const { return( mPixelFormat ); }
+    AVPixelFormat pixelFormat() const { return( mAVPixelFormat ); }
     uint16_t width() const { return( mImageWidth ); }
     uint16_t height() const { return( mImageHeight ); }
     FrameRate frameRate() const { return( mFrameRate ); }

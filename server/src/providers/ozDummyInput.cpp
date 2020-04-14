@@ -10,7 +10,7 @@ DummyInput::DummyInput( const std::string &name, const Options &options ) :
     mOptions( options )
     //mWidth( 0 ),
     //mHeight( 0 ),
-    //mPixelFormat( PIX_FMT_NONE ),
+    //mAVPixelFormat( AV_PIX_FMT_NONE ),
     //mFrameRate( 0 ),
     //mColour( "black" ),
     //mTestSize( 0 ),
@@ -18,7 +18,7 @@ DummyInput::DummyInput( const std::string &name, const Options &options ) :
 {
     mWidth = mOptions.get( "width", 1920 );
     mHeight = mOptions.get( "height", 1080 );
-    mPixelFormat = mOptions.get( "pixelFormat", (AVPixelFormat)PIX_FMT_YUV420P );
+    mAVPixelFormat = mOptions.get( "pixelFormat", (AVPixelFormat)AV_PIX_FMT_YUV420P );
     mFrameRate = mOptions.get( "frameRate", 10 );
     mColour = mOptions.get( "colour", "gray" );
     mText = mOptions.get( "text", "'%{localtime\\:%H\\\\\\:%M\\\\\\:%S}'" );
@@ -53,7 +53,7 @@ int DummyInput::run()
     AVFilter *filterBufferSink = avfilter_get_by_name( "buffersink" );
     AVFilterInOut *outputs = avfilter_inout_alloc();
     AVFilterInOut *inputs  = avfilter_inout_alloc();
-    enum AVPixelFormat pix_fmts[] = { mPixelFormat, AV_PIX_FMT_NONE };
+    enum AVPixelFormat pix_fmts[] = { mAVPixelFormat, AV_PIX_FMT_NONE };
     filterGraph = avfilter_graph_alloc();
     if ( !outputs || !inputs || !filterGraph )
         Fatal( "Can't allocate filter memory" );
@@ -120,13 +120,13 @@ int DummyInput::run()
 
     int outputWidth = filterLink->w;
     int outputHeight = filterLink->h;
-    PixelFormat outputPixelFormat = (PixelFormat)filterLink->format;
+    AVPixelFormat outputAVPixelFormat = (AVPixelFormat)filterLink->format;
     FrameRate outputFrameRate = filterLink->frame_rate;
 
     ByteBuffer outputBuffer;
 
     // Make space for anything that is going to be output
-    outputBuffer.size( avpicture_get_size( outputPixelFormat, outputWidth, outputHeight ) );
+    outputBuffer.size( avpicture_get_size( outputAVPixelFormat, outputWidth, outputHeight ) );
 
     uint64_t timeInterval = mFrameRate.intervalUsec();
     uint64_t currTime = time64();
@@ -153,7 +153,7 @@ int DummyInput::run()
                 mStop = true;
                 break;
             }
-            avpicture_layout( (const AVPicture *)outputFrame, outputPixelFormat, outputWidth, outputHeight, outputBuffer.data(), outputBuffer.size() );
+            avpicture_layout( (const AVPicture *)outputFrame, outputAVPixelFormat, outputWidth, outputHeight, outputBuffer.data(), outputBuffer.size() );
             VideoFrame *videoFrame = new VideoFrame( this, mFrameCount, currTime, outputBuffer );
             distributeFrame( FramePtr( videoFrame ) );
             av_frame_unref( outputFrame );

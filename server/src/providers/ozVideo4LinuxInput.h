@@ -72,7 +72,7 @@ private:
     int             mWidth;         ///< Requested video width, applies to all channels
     int             mHeight;        ///< Requested video height, applies to all channels
     FrameRate       mFrameRate;     ///< Requested frame rate
-    PixelFormat     mPixelFormat;   ///< FFmpeg equivalent image format
+    AVPixelFormat     mAVPixelFormat;   ///< FFmpeg equivalent image format
     uint32_t        mChannelMask;   ///< Bit mask indicating what channels are to be used
     ChannelList     mChannels;      ///< List of channels used
     int             mCurrentChannel;///< The current channel being decoded
@@ -90,7 +90,7 @@ private:
         return( result );
     }
     /// Convert a V4L2 palette into the ffmpeg equivalent
-    static PixelFormat getPixelFormatFromV4lPalette( int palette );
+    static AVPixelFormat getAVPixelFormatFromV4lPalette( int palette );
     /// Comparator function used by channel comparators below to filter frames for specific channel
     static bool channelFrames( const FramePtr &, const FeedConsumer *, int channel );
 
@@ -125,9 +125,9 @@ public:
     {
         return( mHeight );
     }
-    PixelFormat pixelFormat() const
+    AVPixelFormat pixelFormat() const
     {
-        return( mPixelFormat );
+        return( mAVPixelFormat );
     }
     FrameRate frameRate() const
     {

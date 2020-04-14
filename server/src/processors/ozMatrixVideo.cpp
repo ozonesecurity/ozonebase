@@ -14,11 +14,11 @@
 * @param xTiles
 * @param yTiles
 */
-MatrixVideo::MatrixVideo( const std::string &name, PixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
+MatrixVideo::MatrixVideo( const std::string &name, AVPixelFormat pixelFormat, int width, int height, FrameRate frameRate, int xTiles, int yTiles ) :
     VideoConsumer( cClass(), name, xTiles*yTiles ),
     VideoProvider( cClass(), name ),
     Thread( identity() ),
-    mPixelFormat( pixelFormat ),
+    mAVPixelFormat( pixelFormat ),
     mWidth( width ),
     mHeight( height ),
     mFrameRate( frameRate ),
@@ -103,15 +103,15 @@ bool MatrixVideo::deregisterProvider( FeedProvider &provider, bool reciprocate )
 int MatrixVideo::run()
 {
     // Make sure ffmpeg is compiled with mpjpeg support
-    AVCodec *codec = avcodec_find_encoder( CODEC_ID_MJPEG );
+    AVCodec *codec = avcodec_find_encoder( AV_CODEC_ID_MJPEG );
     if ( !codec )
         Fatal( "Can't find encoder codec" );
 
     Debug( 2, "Time base = %d/%d", mFrameRate.num, mFrameRate.den );
-    Debug( 2, "Pix fmt = %d", mPixelFormat );
+    Debug( 2, "Pix fmt = %d", mAVPixelFormat );
 
-    AVFrame *inputFrame = avcodec_alloc_frame();
-    AVFrame *outputFrame = avcodec_alloc_frame();
+    AVFrame *inputFrame = av_frame_alloc();
+    AVFrame *outputFrame = av_frame_alloc();
 
     // Wait for video source to be ready
     if ( waitForProviders() )
@@ -120,10 +120,10 @@ int MatrixVideo::run()
 
         // Make space for anything that is going to be output
         ByteBuffer outputBuffer;
-        outputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
+        outputBuffer.size( avpicture_get_size( mAVPixelFormat, mWidth, mHeight ) );
 
         // To get offsets only
-        avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mPixelFormat, mWidth, mHeight );
+        avpicture_fill( (AVPicture *)outputFrame, outputBuffer.data(), mAVPixelFormat, mWidth, mHeight );
 
         double timeInterval = (double)mFrameRate.num/mFrameRate.den;
         struct timeval now;
@@ -132,7 +132,7 @@ int MatrixVideo::run()
         long double nextTime = currTime;
         uint16_t interWidth = mWidth/mTilesX;    // Per tile
         uint16_t interHeight = mHeight/mTilesY;
-        const AVPixFmtDescriptor &interFormatDesc = av_pix_fmt_descriptors[mPixelFormat];
+        const AVPixFmtDescriptor *interFormatDesc = av_pix_fmt_desc_get(mAVPixelFormat);
         while ( !mStop )
         {
             // Synchronise the output with the desired output frame rate
@@ -163,8 +163,8 @@ int MatrixVideo::run()
 
                             if ( !mInterFrames[i] )
                             {
-                                AVFrame *interFrame = mInterFrames[i] = avcodec_alloc_frame();
-                                avpicture_fill( (AVPicture *)interFrame, outputBuffer.data(), mPixelFormat, interWidth, interHeight );
+                                AVFrame *interFrame = mInterFrames[i] = av_frame_alloc();
+                                avpicture_fill( (AVPicture *)interFrame, outputBuffer.data(), mAVPixelFormat, interWidth, interHeight );
 
                                 int x = i % mTilesX;
                                 int y = i / mTilesX;
@@ -183,7 +183,7 @@ int MatrixVideo::run()
                                         else
                                         {
                                             //planeWidth = -((-interWidth ) >> interFormatDesc.log2_chroma_w);
-                                            planeHeight = -((-interHeight ) >> interFormatDesc.log2_chroma_h);
+                                            planeHeight = -((-interHeight ) >> interFormatDesc->log2_chroma_h);
                                         }
                                         Debug( 5, "Moving image %d, plane %d", i, plane );
 
@@ -202,23 +202,23 @@ int MatrixVideo::run()
 
                             uint16_t inputWidth = videoProvider->width();
                             uint16_t inputHeight = videoProvider->height();
-                            PixelFormat inputPixelFormat = videoProvider->pixelFormat();
+                            AVPixelFormat inputAVPixelFormat = videoProvider->pixelFormat();
 
                             if ( !mConvertContexts[i] )
                             {
                                 // Prepare for image format and size conversions
-                                struct SwsContext *convertContext =  mConvertContexts[i] = sws_getContext( inputWidth, inputHeight, inputPixelFormat, interWidth, interHeight, mPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
+                                struct SwsContext *convertContext =  mConvertContexts[i] = sws_getContext( inputWidth, inputHeight, inputAVPixelFormat, interWidth, interHeight, mAVPixelFormat, SWS_BICUBIC, NULL, NULL, NULL );
                                 if ( !convertContext )
                                     Fatal( "Unable to create conversion context for provider %s", videoProvider->cidentity() );
             
-                                Debug( 1,"Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputPixelFormat, interWidth, interHeight, mPixelFormat );
-                                Debug( 2, "%d bytes -> %d bytes",  avpicture_get_size( inputPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mPixelFormat, interWidth, interHeight ) );
+                                Debug( 1,"Converting from %d x %d @ %d -> %d x %d @ %d", inputWidth, inputHeight, inputAVPixelFormat, interWidth, interHeight, mAVPixelFormat );
+                                Debug( 2, "%d bytes -> %d bytes",  avpicture_get_size( inputAVPixelFormat, inputWidth, inputHeight ), avpicture_get_size( mAVPixelFormat, interWidth, interHeight ) );
                             }
-                            avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputPixelFormat, inputWidth, inputHeight );
+                            avpicture_fill( (AVPicture *)inputFrame, inputVideoFrame->buffer().data(), inputAVPixelFormat, inputWidth, inputHeight );
 
                             // Reformat the input frame to fit the desired output format
                             if ( sws_scale( mConvertContexts[i], inputFrame->data, inputFrame->linesize, 0, inputHeight, mInterFrames[i]->data, mInterFrames[i]->linesize ) < 0 )
-                                Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputPixelFormat, inputWidth, inputHeight, mPixelFormat, interWidth, interHeight, mFrameCount );
+                                Fatal( "Unable to convert input frame (%d@%dx%d) to output frame (%d@%dx%d) at frame %ju", inputAVPixelFormat, inputWidth, inputHeight, mAVPixelFormat, interWidth, interHeight, mFrameCount );
                         }
                     }
                 }
@@ -268,7 +268,7 @@ int MatrixVideo::run()
     AVFilterInOut *outputs = avfilter_inout_alloc();
     AVFilterInOut *inputs  = avfilter_inout_alloc();
 
-    enum PixelFormat pixelFormats[] = { mPixelFormat };
+    enum AVPixelFormat pixelFormats[] = { mAVPixelFormat };
     AVFilterGraph *filterGraph = avfilter_graph_alloc();
 
     /* color video source: default background colour. */
@@ -305,14 +305,14 @@ int MatrixVideo::run()
     }
 
     AVFrame avInputFrame;
-    size_t avInputFrameSize = avpicture_get_size( mPixelFormat, mWidth, mHeight ); // Just a guess at this point
+    size_t avInputFrameSize = avpicture_get_size( mAVPixelFormat, mWidth, mHeight ); // Just a guess at this point
     ByteBuffer avInputFrameBuffer( avInputFrameSize );
 
     // Make space for anything that is going to be output
     AVFrame avOutputFrame;
     ByteBuffer avOutputBuffer;
-    avOutputBuffer.size( avpicture_get_size( mPixelFormat, mWidth, mHeight ) );
-    avpicture_fill( (AVPicture *)&avOutputFrame, avOutputBuffer.data(), mPixelFormat, mWidth, mHeight );
+    avOutputBuffer.size( avpicture_get_size( mAVPixelFormat, mWidth, mHeight ) );
+    avpicture_fill( (AVPicture *)&avOutputFrame, avOutputBuffer.data(), mAVPixelFormat, mWidth, mHeight );
                      
     while ( !mStop )
     {
